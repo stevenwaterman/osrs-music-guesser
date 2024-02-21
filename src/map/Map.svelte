@@ -9,8 +9,12 @@
   let map: L.Map;
 
   export let zoom: number = 0;
-  $: map?.on("zoom", (event) => {
-    zoom = event.target.getZoom();
+  $: map?.on("zoomstart", (event) => {
+    setTimeout(() => {
+      const newZoom = event.target.getZoom();
+      const zoomingIn = newZoom > zoom;
+      zoom = newZoom;
+    })
   });
 </script>
 

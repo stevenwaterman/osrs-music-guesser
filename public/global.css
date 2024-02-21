@@ -9,3 +9,7 @@
   font-weight: bold;
   src: url("RuneScape-Chat-Bold-07.woff2") format("woff2");
 }
+
+.leaflet-bottom.leaflet-right {
+  display: none;
+}

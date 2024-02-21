@@ -166,7 +166,7 @@ export const locations = [
     coords: [3104, 9312, 0],
     size: "default",
   },
-  { name: "Entrana", coords: [2843, 3378, 0], size: "large" },
+  { name: "Entrana", coords: [2843, 3378, 0], size: "medium" },
   { name: "Etceteria", coords: [2609, 3874, 0], size: "medium" },
   { name: "Exam Centre", coords: [3363, 3339, 0], size: "default" },
   { name: "Falador", coords: [3004, 3361, 0], size: "medium" },

@@ -32,20 +32,22 @@
     return lines.join("\n");
   }
 
-  let tooltips: L.Tooltip[] = locations.filter(location => coordInMap(location.coords[0], location.coords[1])).map(({ name, coords, size }) => {
-    const content = wrapAfter(name, 16);
-    return new L.Tooltip(
-      convert.coordinate.toLeaflet(coords as [number, number]),
-      {
-        interactive: false,
-        className: `tooltip ${size ?? "default"}`,
-        content,
-        permanent: true,
-        direction: "right",
-        opacity: 1,
-      }
-    );
-  });
+  let tooltips: L.Tooltip[] = locations
+    .filter((location) => coordInMap(location.coords[0], location.coords[1]))
+    .map(({ name, coords, size }) => {
+      const content = wrapAfter(name, 12);
+      return new L.Tooltip(
+        convert.coordinate.toLeaflet(coords as [number, number]),
+        {
+          interactive: false,
+          className: `tooltip ${size ?? "default"}`,
+          content,
+          permanent: true,
+          direction: "center",
+          pane: "overlayPane"
+        }
+      );
+    });
   $: tooltips.forEach((tooltip) => tooltip.addTo(layer));
 </script>
 
@@ -61,24 +63,16 @@
     white-space: pre;
     filter: drop-shadow(-1.5px 1.5px 0px black);
     line-height: 1.1;
-    translate: -50%;
-    transition: 200ms font-size;
-  }
-
-  :global(.tooltip::before) {
-    display: none;
   }
 
   :global(.tooltip.default) {
-    color: white;
+    color: transparent;
     font-size: 14pt;
-    display: none;
   }
 
   :global(.tooltip.medium) {
-    color: white;
+    color: transparent;
     font-size: 20pt;
-    display: none;
   }
 
   :global(.tooltip.large) {
@@ -86,31 +80,20 @@
     font-size: 26pt;
   }
 
-  :global(.zoom0 .tooltip.large) {
-    font-size: 22pt;
-  }
-
-  :global(.zoom-1 .tooltip.large) {
-    font-size: 14pt;
-  }
-
-  :global(.zoom-2 .tooltip.large) {
-    font-size: 6pt;
-  }
-
+  :global(.zoom-1 .tooltip.large),
+  :global(.zoom-2 .tooltip.large),
   :global(.zoom-3 .tooltip.large) {
-    display: none;
+    color: transparent;
   }
 
   :global(.zoom1 .tooltip.medium),
   :global(.zoom2 .tooltip.medium),
   :global(.zoom3 .tooltip.medium) {
-    display: initial;
+    color: white;
   }
 
   :global(.zoom2 .tooltip.default),
   :global(.zoom3 .tooltip.default) {
-    display: initial;
+    color: white;
   }
-  
 </style>
