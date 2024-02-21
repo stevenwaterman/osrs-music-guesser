@@ -25,6 +25,7 @@
     right: 1rem;
     background-color: var(--semi-transparent-black);
     font-size: 1.5rem;
+    border-collapse: collapse;
   }
 
   th,
