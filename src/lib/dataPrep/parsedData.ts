@@ -55,6 +55,5 @@ type Combined = Pick<ExtractedData, "title" | "file"> & {
 export const mapped: Record<string, Combined> = {};
 extracted.forEach(e => mapped[e.title] = { title: e.title, file: e.file, polygons: [] })
 extracted.forEach(e => mapped[e.title].polygons.push({ coordinates: e.polygon, inMap: e.inMap }));
-console.log(mapped);
 
 export const outsideMap = Object.values(mapped).filter(combined => combined.polygons.filter(poly => !poly.inMap).length).map(combined => combined.title)

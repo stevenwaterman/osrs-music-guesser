@@ -1,28 +1,31 @@
 <script lang="ts">
-  import Map from "./Map.svelte";
-import { testClosest } from "./lib/geometry";
+  import Audio from "./map/controls/Audio.svelte";
+  import Map from "./map/Map.svelte";
+  import ConfirmGuess from "./map/controls/ConfirmGuess.svelte";
+  import ScoreDisplay from "./map/controls/ScoreDisplay.svelte";
+  import StartButton from "./map/controls/StartButton.svelte";
+  import WikiDisplay from "./map/controls/WikiDisplay.svelte";
+  import FinalScoreDisplay from "./map/controls/FinalScoreDisplay.svelte";
 
-  function test() {
-    testClosest();
-  }
+  let zoom: number;
 </script>
 
 <main>
-  <Map/>
+  <div class={`col zoom${zoom}`}>
+    <Map bind:zoom />
+    <ScoreDisplay />
+    <ConfirmGuess />
+    <StartButton />
+    <WikiDisplay />
+    <FinalScoreDisplay />
+    <Audio />
+  </div>
 </main>
 
 <style>
-  .container {
-    width: 100%;
-    height: 100%;
-  }
-
-  .grid {
-    display: grid;
-    /* grid-template-rows: 1fr; */
-    grid-template-rows: 1fr 1fr 1fr;
-    max-width: 100%;
-    height: fit-content;
-    max-height: 100%;
+  .col {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
   }
 </style>
