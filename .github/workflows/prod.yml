@@ -21,6 +21,7 @@ jobs:
         git config --local user.name "GitHub Action"
         git checkout --orphan gh-pages
         git reset
+        rm index.html
         git add dist/* -f
         git mv dist/* ./ -k
         touch .nojekyll
