@@ -6,6 +6,7 @@
   import StartButton from "./map/controls/StartButton.svelte";
   import WikiDisplay from "./map/controls/WikiDisplay.svelte";
   import FinalScoreDisplay from "./map/controls/FinalScoreDisplay.svelte";
+  import PreviousScores from "./map/controls/PreviousScores.svelte";
 
   let zoom: number;
 </script>
@@ -18,6 +19,7 @@
     <StartButton />
     <WikiDisplay />
     <FinalScoreDisplay />
+    <PreviousScores />
     <Audio />
   </div>
 </main>

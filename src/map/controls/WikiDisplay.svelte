@@ -14,6 +14,7 @@
       <div class="infoBox" transition:fade>
         <a
           class="title"
+          target="_blank"
           href={`https://oldschool.runescape.wiki/w/${songTitle}`}>{song}</a
         >
         <div class="info">
