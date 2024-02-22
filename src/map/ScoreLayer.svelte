@@ -37,11 +37,11 @@
       return leafletPoly;
     });
 
-    const durationMs = 3000 - score / 2;
-    map.setView(guessLatLng, 0, { animate: true });
+    const durationMs = 3500 - score / 2;
+    map.setView(guessLatLng, 5, { animate: true });
 
     setTimeout(() => {
-      map.flyTo(convert.coordinate.toLeaflet(closest), 2, { animate: true, duration: durationMs / 1000 });
+      map.flyTo(convert.coordinate.toLeaflet(closest), 3, { animate: true, duration: durationMs / 1000 });
     }, 750);
 
     setTimeout(() => {

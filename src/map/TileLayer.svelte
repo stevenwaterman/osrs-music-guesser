@@ -44,7 +44,8 @@
   $: tileLayer = L.tileLayer("{tileUrl}", {
     bounds: tileBounds,
     minZoom: -3,
-    maxZoom: 3,
+    maxZoom: 5,
+    maxNativeZoom: 3,
     keepBuffer: 10,
     noWrap: true,
     ...{
