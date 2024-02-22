@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { finishedData } from "../../lib/cleanedData";
   import { allScoresStore } from "../../lib/stores";
   import { fade } from "svelte/transition";
 </script>
@@ -10,8 +11,11 @@
       <th>Score</th>
     </tr>
     {#each $allScoresStore as score (score.song)}
-      <tr in:fade={{ delay: 5000, duration: 300 }}>
-        <td>{score.song}</td>
+      <tr in:fade|global={{ delay: 5000, duration: 300 }}>
+        <td><a
+          target="_blank"
+          href={`https://oldschool.runescape.wiki/w/${finishedData[score.song].file}`}>{score.song}</a
+        ></td>
         <td>{score.score.score}</td>
       </tr>
     {/each}
