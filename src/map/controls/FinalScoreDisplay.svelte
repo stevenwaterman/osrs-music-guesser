@@ -53,13 +53,6 @@
     justify-self: center;
   }
 
-  @media only screen and (max-width: 1000px) {
-    .wrapper {
-      grid-column: 1;
-      grid-row: 5;
-    }
-  }
-
   .label {
     font-size: 4rem;
     font-weight: bold;
@@ -102,5 +95,28 @@
     align-self: flex-start;
     justify-self: flex-start;
     pointer-events: initial;
+  }
+
+  @media only screen and (max-width: 1000px) {
+    .wrapper {
+      grid-column: 1;
+      grid-row: 1;
+      align-self: center;
+    }
+
+    .score {
+      grid-template-columns: repeat(5, 3.5rem);
+    }
+
+    .digit {
+      font-size: 6rem;
+    }
+
+    .mainMenu {
+      grid-column: 1;
+      grid-row: 3;
+      align-self: center;
+      justify-self: center;
+    }
   }
 </style>

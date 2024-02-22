@@ -54,7 +54,8 @@
   @media only screen and (max-width: 1000px) {
     .wrapper {
       grid-column: 1;
-      grid-row: 2;
+      grid-row: 1;
+      align-self: center;
     }
   }
 

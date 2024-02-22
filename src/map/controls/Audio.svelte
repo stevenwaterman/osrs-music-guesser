@@ -19,7 +19,7 @@
     grid-column-start: 1;
     grid-column-end: 4;
     grid-row: 4;
-    width: calc(100% - 8rem);
+    width: calc(100% - 2rem);
     align-self: flex-end;
     justify-self: center;
     pointer-events: initial;
@@ -29,7 +29,7 @@
   @media only screen and (max-width: 1000px) {
     audio {
       grid-column: 1;
-      grid-row: 5;
+      grid-row: 4;
     }
   }
 </style>

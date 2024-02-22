@@ -45,8 +45,7 @@
 
   @media only screen and (max-width: 1000px) {
     table {
-      grid-column: 1;
-      grid-row: 1;
+      display: none;
     }
   }
 

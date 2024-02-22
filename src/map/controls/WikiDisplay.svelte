@@ -42,6 +42,7 @@
     flex-direction: column;
     max-height: 100%;
     overflow-y: hidden;
+    pointer-events: initial;
   }
 
   @media only screen and (max-width: 1000px) {
@@ -49,7 +50,7 @@
       width: fit-content;
       max-width: 100%;
       grid-column: 1;
-      grid-row: 3;
+      grid-row: 2;
       align-self: center;
       justify-self: center;
     }
@@ -72,6 +73,5 @@
     font-weight: bold;
     padding: 0.25rem 1rem;
     color: yellow;
-    pointer-events: initial;
   }
 </style>
