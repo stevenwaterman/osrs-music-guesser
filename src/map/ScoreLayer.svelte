@@ -50,7 +50,7 @@
         answerPolygons.map(
           (polygon) => new L.Marker(polygon.getCenter(), { icon: greenIcon })
         ) ?? null;
-      answerMarkers.forEach((marker) => marker.addTo(map));
+      answerMarkers.forEach((marker) => marker.addTo(layer));
       lineToClosest.addTo(layer);
     }, durationMs + 1000);
 

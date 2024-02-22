@@ -8,6 +8,7 @@
   import FinalScoreDisplay from "./map/controls/FinalScoreDisplay.svelte";
   import PreviousScores from "./map/controls/PreviousScores.svelte";
   import { stateStore, type AnyState } from "./lib/state/states";
+  import NextRound from "./map/controls/NextRound.svelte";
 
   let zoom: number;
 
@@ -36,6 +37,10 @@
 
     {#if state.isAny("Playing_RevealingAnswer", "Playing_EndOfRound", "Playing_EndOfFinalRound")}
       <ScoreDisplay {state} />
+    {/if}
+
+    {#if state.isAny("Playing_EndOfRound", "Playing_EndOfFinalRound")}
+      <NextRound {state} />
     {/if}
 
     {#if state.isAny("Playing_EndOfRound", "Playing_EndOfFinalRound")}
