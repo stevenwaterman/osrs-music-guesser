@@ -11,9 +11,7 @@
   export let zoom: number = 0;
   $: map?.on("zoomstart", (event) => {
     setTimeout(() => {
-      const newZoom = event.target.getZoom();
-      const zoomingIn = newZoom > zoom;
-      zoom = newZoom;
+      zoom = event.target.getZoom();
     })
   });
 </script>

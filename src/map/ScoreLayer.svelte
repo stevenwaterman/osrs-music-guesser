@@ -14,36 +14,10 @@
 
   $: score = $scoreStore;
 
-  let guessMarker: L.Marker | null;
-  let lineToClosest: L.Polyline | null;
-  let answerPolygons: L.Polygon[] | null;
-  let answerMarkers: L.Marker[] | null;
-
-  let lineStart = new L.LatLng(0, 0);
-  let lineTarget = new L.LatLng(0, 0);
-
-  let revealFraction = tweened(0, { duration: 3000, delay: 500 });
-
-  $: lineEnd = new L.LatLng(
-    lineStart.lat * (1 - $revealFraction) + lineTarget.lat * $revealFraction,
-    lineStart.lng * (1 - $revealFraction) + lineTarget.lng * $revealFraction
-  );
-
-  $: if (lineToClosest) {
-    lineToClosest?.setLatLngs([lineStart, lineEnd]);
-    map.setView(lineEnd, 1);
-  }
-
-  $: if ($revealFraction === 1 && answerPolygons && guessMarker) {
-    answerPolygons.forEach((poly) => poly.addTo(layer));
-    answerMarkers = answerPolygons.map(
-      (polygon) => new L.Marker(polygon.getCenter(), { icon: greenIcon })
-    );
-    answerMarkers.forEach((marker) => marker.addTo(map));
-    setTimeout(() => {
-      fitBounds(guessMarker!, answerPolygons!);
-    }, 500);
-  }
+  let guessMarker: L.Marker | null = null;
+  let lineToClosest: L.Polyline | null = null;
+  let answerPolygons: L.Polygon[] | null = null;
+  let answerMarkers: L.Marker[] | null = null;
 
   function setScore({ song, guess, score }: GuessResult) {
     clearScore();
@@ -51,28 +25,45 @@
     const guessed = convert.coordinate.toLeaflet(guess);
     const closest = convert.coordinate.toLeaflet(score.closest);
 
-    lineStart = guessed;
-    lineTarget = closest;
-
     guessMarker = new L.Marker(guessed);
     guessMarker.addTo(layer);
 
-    lineToClosest = new L.Polyline([guessed, guessed]);
-    lineToClosest.addTo(layer);
+    lineToClosest = new L.Polyline([guessed, closest]);
 
     answerPolygons = finishedData[song].polygons.map((poly) => {
       const leafletPoly = convert.polygon.toLeaflet(poly);
-      leafletPoly.setStyle({ color: "#00FF00", fillColor: "#00FF00", fillOpacity: 0.3, opacity: 0.6 })
+      leafletPoly.setStyle({
+        color: "#00FF00",
+        fillColor: "#00FF00",
+        fillOpacity: 0.3,
+        opacity: 0.6,
+      });
       return leafletPoly;
-  });
+    });
 
-    revealFraction.set(1, { duration: 3000 - score.score / 2 });
-    map.setView(lineStart, 1);
+    const durationMs = 3000 - score.score / 2;
+    map.setView(guessed, 0, { animate: true });
+
+    setTimeout(() => {
+      map.flyTo(closest, 2, { animate: true, duration: durationMs / 1000 });
+    }, 750);
+
+    setTimeout(() => {
+      answerPolygons?.forEach((poly) => poly.addTo(layer));
+      answerMarkers =
+        answerPolygons?.map(
+          (polygon) => new L.Marker(polygon.getCenter(), { icon: greenIcon })
+        ) ?? null;
+      answerMarkers?.forEach((marker) => marker.addTo(map));
+      lineToClosest?.addTo(layer);
+    }, durationMs + 1000);
+
+    setTimeout(() => {
+      fitBounds(guessMarker!, answerPolygons!);
+    }, durationMs + 1500);
   }
 
   function clearScore() {
-    revealFraction.set(0, { duration: 0 });
-
     guessMarker?.remove();
     guessMarker = null;
 
@@ -91,7 +82,7 @@
       (acc, elem) => acc.extend(elem.getBounds()),
       new LatLngBounds(marker.getLatLng(), marker.getLatLng())
     );
-    map.fitBounds(bounds, { animate: true, padding: [20, 20] });
+    map.fitBounds(bounds, { animate: true, padding: [100, 100] });
   }
 
   $: if (score) {

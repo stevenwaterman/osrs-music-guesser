@@ -41,7 +41,7 @@
       }
       return acc.extend(elem.getBounds());
     }, null as LatLngBounds | null);
-    map.fitBounds(bounds!);
+    map.flyToBounds(bounds!);
   } else {
     guessMarkers.forEach((marker) => marker.remove());
     guessMarkers = [];

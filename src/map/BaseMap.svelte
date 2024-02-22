@@ -1,15 +1,15 @@
 <script lang="ts">
   import L from "leaflet";
-  import { mapBounds, resetView, tileBounds } from "./map";
+  import { mapBounds, resetView } from "./map";
 
-  let mapDiv: HTMLDivElement;
+  let mapDiv: HTMLDivElement | undefined;
   export let map: L.Map;
   $: if (mapDiv) {
     map = L.map(mapDiv, {
       crs: L.CRS.Simple,
       renderer: L.canvas(),
       maxBounds: mapBounds,
-      zoomControl: false
+      zoomControl: false,
     });
   }
 
