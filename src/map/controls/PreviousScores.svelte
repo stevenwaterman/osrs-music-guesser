@@ -14,7 +14,7 @@
     <th>Time (s)</th>
   </tr>
   {#each guessHistory as guess (guess.song)}
-    <tr in:fade|global={{ delay: 5000, duration: 300 }}>
+    <tr in:fade|global>
       <td><a
         target="_blank"
         href={`https://oldschool.runescape.wiki/w/${finishedData[guess.song].file}`}>{guess.song}</a
