@@ -1,55 +1,51 @@
 <script lang="ts">
   import L, { LatLngBounds } from "leaflet";
-  import { stateStore, allScoresStore } from "../lib/stores";
   import { convert } from "../lib/coordinates";
   import { greenIcon } from "../lib/icons";
+  import type { State } from "../lib/state/states";
+  import { onMount } from "svelte";
 
+  export let state: State["EndOfGame"];
   export let map: L.Map;
 
-  let layer = new L.LayerGroup();
-  $: layer.addTo(map);
+  onMount(() => {
+    const guessHistory = state.data.guessHistory;
 
-  let guessMarkers: L.Marker[] = [];
-  let answerMarkers: L.Marker[] = [];
-  let lines: L.Polyline[] = [];
+    const layer = new L.LayerGroup();
+    layer.addTo(map);
 
-  $: if ($stateStore === "DONE") {
-    guessMarkers = $allScoresStore
-      .map((score) => score.guess)
-      .map((coord) => convert.coordinate.toLeaflet(coord))
+    const guessMarkers = guessHistory
+      .map(({ guess }) => convert.coordinate.toLeaflet(guess))
       .map((latLng) => new L.Marker(latLng));
     guessMarkers.forEach((marker) => marker.addTo(layer));
 
-    answerMarkers = $allScoresStore
-      .map((score) => score.score.closest)
-      .map((coord) => convert.coordinate.toLeaflet(coord))
-      .map((latLng) => new L.Marker(latLng, {icon: greenIcon}));
-      answerMarkers.forEach((marker) => marker.addTo(layer));
+    const answerMarkers = guessHistory
+      .map(({ closest }) => convert.coordinate.toLeaflet(closest))
+      .map((latLng) => new L.Marker(latLng, { icon: greenIcon }));
+    answerMarkers.forEach((marker) => marker.addTo(layer));
 
-    lines = $allScoresStore.map(
-      (score) =>
+    const lines = guessHistory.map(
+      ({ guess, closest }) =>
         new L.Polyline([
-          convert.coordinate.toLeaflet(score.guess),
-          convert.coordinate.toLeaflet(score.score.closest),
+          convert.coordinate.toLeaflet(guess),
+          convert.coordinate.toLeaflet(closest),
         ])
     );
     lines.forEach((line) => line.addTo(layer));
 
-    const bounds = lines.reduce((acc, elem) => {
-      if (acc === null) {
-        return elem.getBounds();
-      }
-      return acc.extend(elem.getBounds());
-    }, null as LatLngBounds | null);
+    const bounds = lines.reduce(
+      (acc, elem) => {
+        if (acc === null) {
+          return elem.getBounds();
+        }
+        return acc.extend(elem.getBounds());
+      },
+      null as LatLngBounds | null
+    );
     map.flyToBounds(bounds!);
-  } else {
-    guessMarkers.forEach((marker) => marker.remove());
-    guessMarkers = [];
 
-    answerMarkers.forEach(marker => marker.remove())
-    answerMarkers = [];
-
-    lines.forEach((line) => line.remove());
-    lines = [];
-  }
+    return () => {
+      layer.remove();
+    };
+  });
 </script>

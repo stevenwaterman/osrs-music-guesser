@@ -1,14 +1,18 @@
 <script lang="ts">
   import { tweened } from "svelte/motion";
-  import { scoreStore, stateStore, totalScoreStore } from "../../lib/stores";
   import { fade } from "svelte/transition";
+  import { stateStore, type State } from "../../lib/state/states";
 
-  let score = tweened(0, { duration: $totalScoreStore / 10 });
-  $: if ($stateStore === "DONE") {
-    score.set($totalScoreStore);
-  } else {
-    score.set(0, { duration: 0 });
-  }
+  export let state: State["EndOfGame"];
+
+  $: totalScore = state.data.guessHistory.reduce(
+    (acc, elem) => acc + elem.score,
+    0
+  );
+  // $: totalTime = state.data.guessHistory.reduce((acc, elem) => acc + elem.timeMs, 0);
+
+  $: score = tweened(0);
+  $: score.set(totalScore, { duration: totalScore / 10 });
 
   $: roundedScore = Math.round($score);
   $: firstDigit = Math.floor(roundedScore / 10000);
@@ -16,22 +20,24 @@
   $: thirdDigit = Math.floor((roundedScore % 1000) / 100);
   $: fourthDigit = Math.floor((roundedScore % 100) / 10);
   $: fifthDigit = Math.floor(roundedScore % 10);
+
+  function backToMainMenu() {
+    $stateStore = state.backToMainMenu();
+  }
 </script>
 
-{#if $stateStore === "DONE"}
-  <span in:fade class="label">Final Score:</span>
-  <div in:fade class="score" style="">
-    <span class="digit">{firstDigit}</span>
-    <span class="digit">{secondDigit}</span>
-    <span class="digit">{thirdDigit}</span>
-    <span class="digit">{fourthDigit}</span>
-    <span class="digit">{fifthDigit}</span>
-  </div>
-  {#if $score === $totalScoreStore}
-    <button in:fade class="nextRound" on:click={() => { stateStore.next(); stateStore.next(); }}
-      >Play Again</button
-    >
-  {/if}
+<span in:fade|global class="label">Final Score:</span>
+<div in:fade|global class="score" style="">
+  <span class="digit">{firstDigit}</span>
+  <span class="digit">{secondDigit}</span>
+  <span class="digit">{thirdDigit}</span>
+  <span class="digit">{fourthDigit}</span>
+  <span class="digit">{fifthDigit}</span>
+</div>
+{#if $score === totalScore}
+  <button in:fade|global class="nextRound" on:click={() => backToMainMenu()}
+    >Main Menu</button
+  >
 {/if}
 
 <style>

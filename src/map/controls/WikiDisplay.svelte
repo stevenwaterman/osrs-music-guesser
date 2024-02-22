@@ -1,29 +1,29 @@
 <script lang="ts">
   import { fade } from "svelte/transition";
   import { finishedData } from "../../lib/cleanedData";
-  import { scoreStore, songStore } from "../../lib/stores";
   import { describeSong } from "../../lib/wiki";
+  import type { State } from "../../lib/state/states";
 
-  $: song = $songStore;
+  export let state: State["Playing_EndOfRound" | "Playing_EndOfFinalRound"];
+
+  $: song = state.data.songs[state.data.round - 1];
   $: songTitle = song ? finishedData[song].file : null;
 </script>
 
 {#if songTitle}
   {#await describeSong(songTitle) then data}
-    {#if $scoreStore}
-      <div class="infoBox" transition:fade>
-        <a
-          class="title"
-          target="_blank"
-          href={`https://oldschool.runescape.wiki/w/${songTitle}`}>{song}</a
-        >
-        <div class="info">
-          {#each data as line}
-            <p>{line}</p>
-          {/each}
-        </div>
+    <div class="infoBox" transition:fade>
+      <a
+        class="title"
+        target="_blank"
+        href={`https://oldschool.runescape.wiki/w/${songTitle}`}>{song}</a
+      >
+      <div class="info">
+        {#each data as line}
+          <p>{line}</p>
+        {/each}
       </div>
-    {/if}
+    </div>
   {/await}
 {/if}
 

@@ -1,20 +1,15 @@
 <script lang="ts">
   import { finishedData } from "../../lib/cleanedData";
-  import { songStore, stateStore } from "../../lib/stores";
+  import type { StateGroup } from "../../lib/state/states";
   import { fade } from "svelte/transition";
 
-  $: song = $songStore;
-  $: songId =
-    song === null ? null : finishedData[song].title.trim().replaceAll(" ", "_");
-  $: songUrl =
-    songId === null
-      ? null
-      : `https://oldschool.runescape.wiki/images/${encodeURI(songId)}.ogg`;
+  export let state: StateGroup["Playing"];
+  $: song = state.data.songs[state.data.round - 1];
+  $: songId = finishedData[song].title.trim().replaceAll(" ", "_");
+  $: songUrl = `https://oldschool.runescape.wiki/images/${encodeURI(songId)}.ogg`;
 </script>
 
-{#if $stateStore === "PLAYING" && songUrl}
-  <audio src={songUrl} controls autoplay loop in:fade />
-{/if}
+<audio src={songUrl} controls autoplay loop in:fade />
 
 <style>
   audio {

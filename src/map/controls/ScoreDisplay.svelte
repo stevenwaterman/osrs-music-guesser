@@ -1,53 +1,47 @@
 <script lang="ts">
   import { tweened } from "svelte/motion";
-  import { finalRoundStore, scoreStore, stateStore } from "../../lib/stores";
   import { fade } from "svelte/transition";
+  import { stateStore, type State } from "../../lib/state/states";
+  import { sleep } from "../../lib/util";
 
-  let score = tweened(0, { duration: 5000, delay: 500 });
-  $: if ($scoreStore === null) {
-    score.set(5000, { duration: 0 });
-    animationDone = false;
-  } else {
-    score.set($scoreStore.score.score, {
-      duration: 3000 - ($scoreStore.score.score / 2),
-    });
-    setTimeout(() => {
-      animationDone = true;
-    }, 3500 - ($scoreStore.score.score / 2))
+  export let state: State[
+    | "Playing_RevealingAnswer"
+    | "Playing_EndOfRound"
+    | "Playing_EndOfFinalRound"];
+
+  $: score = state.data.result.score;
+
+  let tween = tweened(5000);
+  $: if (state.isAny("Playing_RevealingAnswer")) {
+    tween
+      .set(score, {
+        duration: 3000 - score / 2,
+        delay: 500,
+      })
+      .then(() => sleep(500))
+      .then(() => {
+        $stateStore = (
+          state as State["Playing_RevealingAnswer"]
+        ).animationComplete();
+      });
   }
 
-  let animationDone: boolean = false;
-
-  $: roundedScore = Math.round($score);
+  $: roundedScore = Math.round($tween);
   $: firstDigit = Math.floor(roundedScore / 1000);
   $: secondDigit = Math.floor((roundedScore % 1000) / 100);
   $: thirdDigit = Math.floor((roundedScore % 100) / 10);
   $: fourthDigit = Math.floor(roundedScore % 10);
 </script>
 
-{#if $scoreStore}
-  <span in:fade class="label">Score:</span>
-  <div in:fade class="score" style="">
-    <span class="digit">{firstDigit}</span>
-    <span class="digit">{secondDigit}</span>
-    <span class="digit">{thirdDigit}</span>
-    <span class="digit">{fourthDigit}</span>
-  </div>
-{/if}
-{#if animationDone}
-  <button in:fade class="nextRound" on:click={() => stateStore.next()}
-    >{$finalRoundStore ? "See Results" : "Next Round"}</button
-  >
-{/if}
+<span in:fade class="label">Score:</span>
+<div in:fade class="score" style="">
+  <span class="digit">{firstDigit}</span>
+  <span class="digit">{secondDigit}</span>
+  <span class="digit">{thirdDigit}</span>
+  <span class="digit">{fourthDigit}</span>
+</div>
 
 <style>
-  .nextRound {
-    position: absolute;
-    bottom: 1rem;
-    left: 50%;
-    translate: -50%;
-  }
-
   .label {
     position: absolute;
     bottom: 17rem;

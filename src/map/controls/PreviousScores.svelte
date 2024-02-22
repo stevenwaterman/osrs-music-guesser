@@ -1,26 +1,29 @@
 <script lang="ts">
   import { finishedData } from "../../lib/cleanedData";
-  import { allScoresStore } from "../../lib/stores";
   import { fade } from "svelte/transition";
+  import type { State, StateGroup } from "../../lib/state/states";
+
+  export let state: StateGroup["Playing"] | State["EndOfGame"];
+  $: guessHistory = state.data.guessHistory
 </script>
 
-{#if $allScoresStore.length}
-  <table>
-    <tr class="header">
-      <th>Song</th>
-      <th>Score</th>
+<table>
+  <tr class="header">
+    <th>Song</th>
+    <th>Score</th>
+    <th>Time (s)</th>
+  </tr>
+  {#each guessHistory as guess (guess.song)}
+    <tr in:fade|global={{ delay: 5000, duration: 300 }}>
+      <td><a
+        target="_blank"
+        href={`https://oldschool.runescape.wiki/w/${finishedData[guess.song].file}`}>{guess.song}</a
+      ></td>
+      <td>{guess.score}</td>
+      <td>{Math.round(guess.timeMs / 1000)}</td>
     </tr>
-    {#each $allScoresStore as score (score.song)}
-      <tr in:fade|global={{ delay: 5000, duration: 300 }}>
-        <td><a
-          target="_blank"
-          href={`https://oldschool.runescape.wiki/w/${finishedData[score.song].file}`}>{score.song}</a
-        ></td>
-        <td>{score.score.score}</td>
-      </tr>
-    {/each}
-  </table>
-{/if}
+  {/each}
+</table>
 
 <style>
   table {

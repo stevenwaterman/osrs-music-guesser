@@ -1,10 +1,14 @@
 <script lang="ts">
-  import { stateStore } from "../../lib/stores";
+  import { stateStore, type State } from "../../lib/state/states";
+
+  export let state: State["StartScreen"];
+
+  function start() {
+    $stateStore = state.start();
+  }
 </script>
 
-{#if $stateStore === "INTRO"}
-  <button class="center" on:click={() => stateStore.next()}>Start</button>
-{/if}
+<button class="center" on:click={() => start()}>Start</button>
 
 <style>
   button {

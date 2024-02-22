@@ -7,20 +7,44 @@
   import WikiDisplay from "./map/controls/WikiDisplay.svelte";
   import FinalScoreDisplay from "./map/controls/FinalScoreDisplay.svelte";
   import PreviousScores from "./map/controls/PreviousScores.svelte";
+  import { stateStore, type AnyState } from "./lib/state/states";
 
   let zoom: number;
+
+  $: state = $stateStore;
 </script>
 
 <main>
   <div class={`col zoom${zoom}`}>
-    <Map bind:zoom />
-    <ScoreDisplay />
-    <ConfirmGuess />
-    <StartButton />
-    <WikiDisplay />
-    <FinalScoreDisplay />
-    <PreviousScores />
-    <Audio />
+    <Map bind:zoom {state} />
+
+    {#if state.isAny("StartScreen")}
+      <StartButton {state} />
+    {/if}
+
+    {#if state.isAny("Playing_NoGuess", "Playing_UnconfirmedGuess", "Playing_RevealingAnswer", "Playing_EndOfRound", "Playing_EndOfFinalRound", "EndOfGame")}
+      <PreviousScores {state} />
+    {/if}
+
+    {#if state.isAny("Playing_NoGuess", "Playing_UnconfirmedGuess", "Playing_RevealingAnswer", "Playing_EndOfRound", "Playing_EndOfFinalRound")}
+      <Audio {state} />
+    {/if}
+
+    {#if state.isAny("Playing_UnconfirmedGuess")}
+      <ConfirmGuess {state} />
+    {/if}
+
+    {#if state.isAny("Playing_RevealingAnswer", "Playing_EndOfRound", "Playing_EndOfFinalRound")}
+      <ScoreDisplay {state} />
+    {/if}
+
+    {#if state.isAny("Playing_EndOfRound", "Playing_EndOfFinalRound")}
+      <WikiDisplay {state} />
+    {/if}
+
+    {#if state.isAny("EndOfGame")}
+      <FinalScoreDisplay {state} />
+    {/if}
   </div>
 </main>
 

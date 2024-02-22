@@ -1,13 +1,17 @@
 <script lang="ts">
-  import { unconfirmedGuessStore } from "../../lib/stores";
-  import { fade } from "svelte/transition"
+  import { fade } from "svelte/transition";
+  import { stateStore, type State } from "../../lib/state/states";
 
-  $: unconfirmedGuess = $unconfirmedGuessStore
+  export let state: State["Playing_UnconfirmedGuess"];
+
+  function confirm() {
+    $stateStore = state.confirm();
+  }
 </script>
 
-{#if unconfirmedGuess}
-  <button in:fade class="bottomMiddle" on:click={() => unconfirmedGuessStore.confirm()}>Confirm Guess</button>
-{/if}
+<button in:fade|global class="bottomMiddle" on:click={() => confirm()}
+  >Confirm Guess</button
+>
 
 <style>
   .bottomMiddle {
@@ -17,4 +21,3 @@
     translate: -50%;
   }
 </style>
-
