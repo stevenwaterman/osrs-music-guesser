@@ -4,10 +4,7 @@
   import { stateStore, type State } from "../../lib/state/states";
   import { sleep } from "../../lib/util";
 
-  export let state: State[
-    | "Playing_EndOfRound"
-    | "Playing_EndOfFinalRound"
-  ];
+  export let state: State["Playing_EndOfRound" | "Playing_EndOfFinalRound"];
 
   function next() {
     if (state.isAny("Playing_EndOfRound")) {
@@ -19,16 +16,24 @@
 </script>
 
 {#if state.isAny("Playing_EndOfRound")}
-  <button in:fade|global on:click={() => next()}>Next Round</button>
+  <button in:fade|global on:click={() => next()}>Next&nbsp;Round</button>
 {:else}
-  <button in:fade|global on:click={() => next()}>Show Results</button>
+  <button in:fade|global on:click={() => next()}>Show&nbsp;Results</button>
 {/if}
 
 <style>
   button {
-    position: absolute;
-    bottom: 1rem;
-    left: 50%;
-    translate: -50%;
+    grid-column: 2;
+    grid-row: 3;
+    align-self: flex-end;
+    justify-self: center;
+    pointer-events: initial;
+  }
+
+  @media only screen and (max-width: 1000px) {
+    button {
+      grid-column: 1;
+      grid-row: 4;
+    }
   }
 </style>

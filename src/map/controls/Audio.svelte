@@ -6,20 +6,30 @@
   export let state: StateGroup["Playing"];
   $: song = state.data.songs[state.data.round - 1];
   $: songId = finishedData[song].title.trim().replaceAll(" ", "_");
-  $: songUrl = `https://oldschool.runescape.wiki/images/${encodeURI(songId)}.ogg`;
+  $: songUrl = `https://oldschool.runescape.wiki/images/${encodeURI(
+    songId
+  )}.ogg`;
 </script>
 
 <audio src={songUrl} controls autoplay loop in:fade />
 
 <style>
   audio {
-    position: absolute;
-    bottom: 6rem;
-    left: 50%;
-    translate: -50%;
-
-    width: 30rem;
-    max-width: calc(100vh - 10rem);
     border-radius: 5rem;
+    grid-column-start: 1;
+    grid-column-end: 4;
+    grid-row: 4;
+    width: calc(100% - 8rem);
+    align-self: flex-end;
+    justify-self: center;
+    pointer-events: initial;
+    max-width: 40rem;
+  }
+
+  @media only screen and (max-width: 1000px) {
+    audio {
+      grid-column: 1;
+      grid-row: 5;
+    }
   }
 </style>

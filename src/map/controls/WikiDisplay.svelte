@@ -12,7 +12,7 @@
 
 {#if songTitle}
   {#await describeSong(songTitle) then data}
-    <div class="infoBox" transition:fade>
+    <div class="infoBox" transition:fade|global>
       <a
         class="title"
         target="_blank"
@@ -30,17 +30,38 @@
 <style>
   .infoBox {
     background-color: var(--semi-transparent-black);
-    position: absolute;
-    top: 1rem;
-    left: 1rem;
     width: 20rem;
+
+    grid-column-start: 1;
+    grid-column-end: 3;
+    grid-row: 1;
+    align-self: flex-start;
+    justify-self: flex-start;
+
+    display: flex;
+    flex-direction: column;
+    max-height: 100%;
+    overflow-y: hidden;
+  }
+
+  @media only screen and (max-width: 1000px) {
+    .infoBox {
+      width: fit-content;
+      max-width: 100%;
+      grid-column: 1;
+      grid-row: 3;
+      align-self: center;
+      justify-self: center;
+    }
   }
 
   .info {
-    padding-top: 0;
     padding-left: 1.5rem;
     padding-right: 1.5rem;
-    padding-bottom: 1rem;
+    overflow-y: scroll;
+    max-height: 100%;
+    flex-shrink: 1;
+    font-size: 1.25rem;
   }
 
   .title {
@@ -51,5 +72,6 @@
     font-weight: bold;
     padding: 0.25rem 1rem;
     color: yellow;
+    pointer-events: initial;
   }
 </style>

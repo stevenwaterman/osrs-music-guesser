@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { AnyState } from "../lib/state/states";
+  import { stateStore, type AnyState } from "../lib/state/states";
   import BaseMap from "./BaseMap.svelte";
   import FinalScoreLayer from "./FinalScoreLayer.svelte";
   import GuessLayer from "./GuessLayer.svelte";
@@ -8,7 +8,7 @@
   import TileLayer from "./TileLayer.svelte";
   import { resetView } from "./map";
 
-  export let state: AnyState;
+  $: state = $stateStore;
   let map: L.Map;
 
   export let zoom: number = 0;

@@ -33,34 +33,46 @@
   $: fourthDigit = Math.floor(roundedScore % 10);
 </script>
 
-<span in:fade class="label">Score:</span>
-<div in:fade class="score" style="">
-  <span class="digit">{firstDigit}</span>
-  <span class="digit">{secondDigit}</span>
-  <span class="digit">{thirdDigit}</span>
-  <span class="digit">{fourthDigit}</span>
+<div class="wrapper">
+  <span in:fade class="label">Score:</span>
+  <div in:fade class="score" style="">
+    <span class="digit">{firstDigit}</span>
+    <span class="digit">{secondDigit}</span>
+    <span class="digit">{thirdDigit}</span>
+    <span class="digit">{fourthDigit}</span>
+  </div>
 </div>
 
 <style>
+  .wrapper {
+    grid-column: 1/4;
+    grid-row: 3;
+    align-self: flex-start;
+    justify-self: center;
+  }
+
+  @media only screen and (max-width: 1000px) {
+    .wrapper {
+      grid-column: 1;
+      grid-row: 2;
+    }
+  }
+
   .label {
-    position: absolute;
-    bottom: 17rem;
-    left: 50%;
-    translate: -50%;
     font-size: 4rem;
     font-weight: bold;
     text-shadow:
-      2px 2px 0 #000,
-      -2px 2px 0 #000,
-      -2px -2px 0 #000,
-      2px -2px 0 #000;
+    4px 4px 0 #000,
+      0 4px 0 #000,
+      0 -4px 0 #000,
+      -4px 4px 0 #000,
+      -4px -4px 0 #000,
+      4px -4px 0 #000,
+      4px 0 0 #000,
+      -4px 0 0 #000;
   }
 
   .score {
-    position: absolute;
-    bottom: 8rem;
-    left: 50%;
-    translate: -50%;
     line-height: 1;
     display: grid;
     grid-template-columns: repeat(4, 5rem);
@@ -72,9 +84,13 @@
     font-size: 10rem;
     font-weight: normal;
     text-shadow:
-      3px 3px 0 #000,
-      -3px 3px 0 #000,
-      -3px -3px 0 #000,
-      3px -3px 0 #000;
+      8px 8px 0 #000,
+      0 8px 0 #000,
+      0 -8px 0 #000,
+      -8px 8px 0 #000,
+      -8px -8px 0 #000,
+      8px -8px 0 #000,
+      8px 0 0 #000,
+      -8px 0 0 #000;
   }
 </style>
