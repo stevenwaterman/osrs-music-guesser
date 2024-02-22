@@ -20,7 +20,7 @@
         href={`https://oldschool.runescape.wiki/w/${finishedData[guess.song].file}`}>{guess.song}</a
       ></td>
       <td>{guess.score}</td>
-      <td>{Math.round(guess.timeMs / 1000)}</td>
+      <td>{Math.round(guess.timeMs / 100)/10}</td>
     </tr>
   {/each}
 </table>
