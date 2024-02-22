@@ -31,7 +31,7 @@
 
   $: if (lineToClosest) {
     lineToClosest?.setLatLngs([lineStart, lineEnd]);
-    map.setView(lineEnd, 2);
+    map.setView(lineEnd, 1);
   }
 
   $: if ($revealFraction === 1 && answerPolygons && guessMarker) {
