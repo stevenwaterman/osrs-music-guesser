@@ -67,7 +67,7 @@
   });
 
     revealFraction.set(1, { duration: 3000 - score.score / 2 });
-    map.setView(lineStart, 2);
+    map.setView(lineStart, 1);
   }
 
   function clearScore() {
