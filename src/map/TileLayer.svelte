@@ -18,7 +18,27 @@
         x + 16
       }_${adjustedY + 43}.png`;
     }
-    return `https://maps.runescape.wiki/osrs/versions/2023-07-28_a/tiles/rendered/0/${z}/0_${x}_${adjustedY}.png`;
+
+    let layer = 0;
+
+    // Varlamore
+    if (z === -3 && adjustedY === 1 && x === 0) {
+      layer = -1;
+    } else if (z === -2 && adjustedY >= 2 && adjustedY <= 3 && x === 1) {
+      layer = -1;
+    } else if (z === -1 && adjustedY >= 2 && adjustedY <= 6 && x >= 2 && x <= 3) {
+      layer = -1;
+    } else if (z === 0 && x >= 4 && x <= 7 && adjustedY >= 9 && adjustedY <= 13) {
+      layer = -1;
+    } else if (z === 1 && x >= 8 && x <= 14 && adjustedY >= 19 && adjustedY <= 26) {
+      layer = -1;
+    } else if (z === 2 && x >= 16 && x <= 28 && adjustedY >= 39 && adjustedY <= 52) {
+      layer = -1;
+    } else if (z === 3 && x >= 32 && x <= 56 && adjustedY >= 79 && adjustedY <= 104) {
+      layer = -1;
+    }
+
+    return `https://maps.runescape.wiki/osrs/versions/2023-07-28_a/tiles/rendered/${layer}/${z}/0_${x}_${adjustedY}.png`;
   }
 
   $: tileLayer = L.tileLayer("{tileUrl}", {
