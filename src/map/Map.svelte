@@ -6,6 +6,7 @@
   import LocationLayer from "./LocationLayer.svelte";
   import ScoreLayer from "./ScoreLayer.svelte";
   import TileLayer from "./TileLayer.svelte";
+  import { resetView } from "./map";
 
   export let state: AnyState;
   let map: L.Map;
@@ -16,6 +17,10 @@
       zoom = event.target.getZoom();
     })
   });
+
+  $: if(map && state.isAny("Playing_NoGuess")) {
+    resetView(map);
+  }
 </script>
 
 <BaseMap bind:map />
