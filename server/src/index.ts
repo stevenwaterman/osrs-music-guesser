@@ -1,22 +1,23 @@
 import express from "express";
 import expressWs from "express-ws";
+import WebSocket from "ws";
 
 const app = expressWs(express()).app;
 
 const users: Set<string> = new Set<string>();
 
+type PlayerState = {
+  id: string;
+}
+
 type Game = {
   id: string;
-  creator: string;
-  others: string[];
+  players: Record<string, PlayerState>;
 };
 const games: Record<string, Game> = {};
 
-app.ws("/create", (ws, req) => {
+app.ws("/create", (ws: WebSocket, req) => {
   const user = req.query["user"];
-  console.log("WS connected to create", user);
-  ws.send("hello world");
-  return;
 
   if (!user) {
     ws.send(
@@ -25,8 +26,7 @@ app.ws("/create", (ws, req) => {
         message: "No user provided in query string",
       })
     );
-    ws.close(1001);
-    return;
+    ws.close(1011);
   }
 
   if (!(typeof user === "string")) {
@@ -36,7 +36,7 @@ app.ws("/create", (ws, req) => {
         message: "user was not a string",
       })
     );
-    ws.close(1000);
+    ws.close(1011);
     return;
   }
 
@@ -47,12 +47,28 @@ app.ws("/create", (ws, req) => {
         message: "user already exists",
       })
     );
-    ws.close(1000);
+    ws.close(1011);
     return;
   }
 
-  ws.on("message", (msg) => {
-    msg;
+  users.add(user);
+
+  const gameId = Math.random().toString().split(".")[1];
+  games[gameId] = {
+    id: gameId,
+    players: {
+      [user]: {
+        id: user
+      }
+    }
+  }
+
+  ws.addEventListener("close", () => {
+    users.delete(user);
+  })
+
+  ws.addEventListener("message", (msg) => {
+    console.log(msg);
   });
 });
 

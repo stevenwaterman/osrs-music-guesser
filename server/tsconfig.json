@@ -6,7 +6,9 @@
     "resolveJsonModule": true,
     "moduleResolution": "NodeNext",
     "isolatedModules": true,
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "strict": true,
+    "allowImportingTsExtensions": true
   },
   // "include": ["src/**/*.ts"]
 }
