@@ -1,6 +1,6 @@
 <script lang="ts">
   import { scale } from "svelte/transition";
-  import { stateStore, type State } from "../../lib/state/states";
+  import { stateStore, type State } from "../lib/state/states";
 
   export let state: State["StartScreen"];
 

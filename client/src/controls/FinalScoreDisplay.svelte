@@ -1,7 +1,7 @@
 <script lang="ts">
   import { tweened } from "svelte/motion";
   import { fade } from "svelte/transition";
-  import { stateStore, type State } from "../../lib/state/states";
+  import { stateStore, type State } from "../lib/state/states";
 
   export let state: State["EndOfGame"];
 

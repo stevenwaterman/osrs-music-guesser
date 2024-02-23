@@ -1,8 +1,8 @@
 <script lang="ts">
   import { fade } from "svelte/transition";
-  import { finishedData } from "../../lib/cleanedData";
-  import { describeSong } from "../../lib/wiki";
-  import type { State } from "../../lib/state/states";
+  import { finishedData } from "../lib/cleanedData";
+  import { describeSong } from "../lib/wiki";
+  import type { State } from "../lib/state/states";
 
   export let state: State["Playing_EndOfRound" | "Playing_EndOfFinalRound"];
 

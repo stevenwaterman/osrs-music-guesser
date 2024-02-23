@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { stateStore } from "../../lib/state/states";
+  import { stateStore } from "../lib/state/states";
   import Audio from "./Audio.svelte";
   import ConfirmGuess from "./ConfirmGuess.svelte";
   import ScoreDisplay from "./ScoreDisplay.svelte";

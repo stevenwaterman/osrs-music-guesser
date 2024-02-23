@@ -1,7 +1,8 @@
 <script lang="ts">
   import Map from "./map/Map.svelte";
-  import { stateStore } from "./lib/state/states";
-  import ControlOverlay from "./map/controls/ControlOverlay.svelte";
+  import ControlOverlay from "./controls/ControlOverlay.svelte";
+
+  // let ws = new WebSocket("ws://localhost:3000/create");
 
   let zoom: number;
 </script>

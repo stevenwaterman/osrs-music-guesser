@@ -1,7 +1,7 @@
 <script lang="ts">
-  import { finishedData } from "../../lib/cleanedData";
+  import { finishedData } from "../lib/cleanedData";
   import { fade } from "svelte/transition";
-  import type { State, StateGroup } from "../../lib/state/states";
+  import type { State, StateGroup } from "../lib/state/states";
 
   export let state: StateGroup["Playing"] | State["EndOfGame"];
   $: guessHistory = state.data.guessHistory;

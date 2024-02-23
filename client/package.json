@@ -1,5 +1,5 @@
 {
-  "name": "osrs-music-guesser",
+  "name": "osrs-music-guesser-client",
   "private": true,
   "version": "0.0.0",
   "type": "module",

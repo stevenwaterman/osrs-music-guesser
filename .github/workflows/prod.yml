@@ -21,9 +21,8 @@ jobs:
         git config --local user.name "GitHub Action"
         git checkout --orphan gh-pages
         git reset
-        rm index.html
-        git add dist/* -f
-        git mv dist/* ./ -k
+        git add client/dist/* -f
+        git mv client/dist/* ./ -k
         touch .nojekyll
         git add .nojekyll
         git commit -m "Update hosted version"

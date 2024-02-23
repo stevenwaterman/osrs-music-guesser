@@ -1,6 +1,6 @@
 <script lang="ts">
-  import { finishedData } from "../../lib/cleanedData";
-  import type { StateGroup } from "../../lib/state/states";
+  import { finishedData } from "../lib/cleanedData";
+  import type { StateGroup } from "../lib/state/states";
   import { fade } from "svelte/transition";
 
   export let state: StateGroup["Playing"];
