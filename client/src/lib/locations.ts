@@ -381,7 +381,7 @@ export const locations = [
     coords: [2343, 3690, 0],
     size: "default",
   },
-  { name: "Poision Waste", coords: [2232, 3096, 0], size: "default" },
+  { name: "Poison Waste", coords: [2232, 3096, 0], size: "default" },
   { name: "Pollnivneach", coords: [3352, 2977, 0], size: "medium" },
   { name: "Port Khazard", coords: [2655, 3185, 0], size: "medium" },
   { name: "Port Phasmatys", coords: [3674, 3486, 0], size: "medium" },
