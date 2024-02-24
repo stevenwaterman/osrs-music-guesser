@@ -45,7 +45,7 @@ function closestPoint(
 export function scoreGuess(guess: Coordinate, song: string): Score {
   const polygons = finishedData[song].polygons;
   const { distance, closest } = closestPoint(guess, polygons);
-  const deduction = 500 * Math.pow(distance, 0.3);
+  const deduction = 100 * Math.pow(distance, 0.5);
   const score = Math.round(Math.max(0, 5000 - deduction));
   return { score, distance, closest };
 }
