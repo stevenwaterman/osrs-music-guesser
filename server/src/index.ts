@@ -1,15 +1,12 @@
-import express from "express";
-import expressWs from "express-ws";
-import WebSocket from "ws";
+import WebSocket, { WebSocketServer } from "ws";
 import { LobbyEmpty, LobbyOnePlayer, StateStore } from "./state";
 
-const app = expressWs(express()).app;
-
+const wss = new WebSocketServer({ port: 4433 });
 const users: Set<string> = new Set<string>();
 const games: Record<string, StateStore> = {};
 
-function getUserId(ws: WebSocket, req: express.Request): string | undefined {
-  const userId = req.query["user"];
+function getUserId(ws: WebSocket, searchParams: URLSearchParams): string | undefined {
+  const userId = searchParams.get("user");
 
   if (!userId) {
     console.log("MISSING_USER");
@@ -19,21 +16,6 @@ function getUserId(ws: WebSocket, req: express.Request): string | undefined {
         data: {
           code: "MISSING_USER",
           message: "No user provided in query string",
-        },
-      })
-    );
-    ws.close(1011);
-    return;
-  }
-
-  if (!(typeof userId === "string")) {
-    console.log("INVALID_USER", userId);
-    ws.send(
-      JSON.stringify({
-        action: "error",
-        data: {
-          code: "INVALID_USER",
-          message: "user was not a string",
         },
       })
     );
@@ -59,8 +41,8 @@ function getUserId(ws: WebSocket, req: express.Request): string | undefined {
   return userId;
 }
 
-function getGame(ws: WebSocket, req: express.Request): StateStore | undefined {
-  const gameId = req.query["game"];
+function getGame(ws: WebSocket, searchParams: URLSearchParams): StateStore | undefined {
+  const gameId = searchParams.get("game");
 
   if (!gameId) {
     console.log("MISSING_GAME");
@@ -70,21 +52,6 @@ function getGame(ws: WebSocket, req: express.Request): StateStore | undefined {
         data: {
           code: "MISSING_GAME",
           message: "No game provided in query string",
-        },
-      })
-    );
-    ws.close(1011);
-    return;
-  }
-
-  if (!(typeof gameId === "string")) {
-    console.log("INVALID_GAME", gameId);
-    ws.send(
-      JSON.stringify({
-        action: "error",
-        data: {
-          code: "INVALID_GAME",
-          message: "game was not a string",
         },
       })
     );
@@ -110,9 +77,18 @@ function getGame(ws: WebSocket, req: express.Request): StateStore | undefined {
   return games[gameId];
 }
 
-app.ws("/create", (ws: WebSocket, req) => {
+wss.on("connection", (ws, req) => {
+  const url = new URL(`http://localhost${req.url!}`);
+  if (url.pathname === "/create") {
+    onCreate(ws, url.searchParams);
+  } else if (url.pathname === "/join") {
+    onJoin(ws, url.searchParams);
+  }
+});
+
+function onCreate(ws: WebSocket, searchParams: URLSearchParams) {
   console.log("create called");
-  const userId = getUserId(ws, req);
+  const userId = getUserId(ws, searchParams);
   if (!userId) {
     return;
   }
@@ -128,15 +104,20 @@ app.ws("/create", (ws: WebSocket, req) => {
   games[gameId] = stateStore;
   (stateStore.state as LobbyEmpty).join(userId, ws);
   console.log("created", userId, gameId);
-});
+}
 
-app.ws("/join", (ws, req) => {
+function onJoin(ws: WebSocket, searchParams: URLSearchParams) {
   console.log("join called");
-  const userId = getUserId(ws, req);
-  const game = getGame(ws, req);
-  if (!userId || !game) {
+  const userId = getUserId(ws, searchParams);
+  if (!userId) {
     return;
   }
+
+  const game = getGame(ws, searchParams);
+  if (!game) {
+    return;
+  }
+
   users.add(userId);
 
   ws.addEventListener("close", () => {
@@ -161,8 +142,4 @@ app.ws("/join", (ws, req) => {
   const state = game.state as LobbyOnePlayer;
   state.join(userId, ws);
   console.log("joined", userId, state.game.gameId);
-});
-
-app.listen(80, () => {
-  console.log("App listening");
-});
+}
