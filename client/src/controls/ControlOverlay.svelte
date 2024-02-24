@@ -3,15 +3,24 @@
   import Audio from "./Audio.svelte";
   import ConfirmGuess from "./ConfirmGuess.svelte";
   import ScoreDisplay from "./ScoreDisplay.svelte";
-  import StartButton from "./MainMenu.svelte";
+  import MainMenu from "./MainMenu.svelte";
   import WikiDisplay from "./WikiDisplay.svelte";
   import FinalScoreDisplay from "./FinalScoreDisplay.svelte";
   import PreviousScores from "./PreviousScores.svelte";
   import NextRound from "./NextRound.svelte";
+  import MultiplayerMenu from "./MultiplayerMenu.svelte";
   $: state = $stateStore;
 </script>
 
 <div class="grid">
+  {#if state.isAny("StartScreen")}
+    <MainMenu {state} />
+  {/if}
+
+  {#if state.isAny("StartScreen_Multiplayer")}
+    <MultiplayerMenu {state} />
+  {/if}
+
   {#if state.isAny("SinglePlayer_EndOfRound", "SinglePlayer_EndOfFinalRound")}
     <WikiDisplay {state} />
   {/if}
@@ -22,10 +31,6 @@
 
   {#if state.isAny("SinglePlayer_NoGuess", "SinglePlayer_UnconfirmedGuess", "SinglePlayer_RevealingAnswer", "SinglePlayer_EndOfRound", "SinglePlayer_EndOfFinalRound", "SinglePlayer_EndOfGame")}
     <PreviousScores {state} />
-  {/if}
-
-  {#if state.isAny("StartScreen")}
-    <StartButton {state} />
   {/if}
 
   {#if state.isAny("SinglePlayer_NoGuess", "SinglePlayer_UnconfirmedGuess", "SinglePlayer_RevealingAnswer", "SinglePlayer_EndOfRound", "SinglePlayer_EndOfFinalRound")}

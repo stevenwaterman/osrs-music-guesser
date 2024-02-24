@@ -1,4 +1,4 @@
-import Flatten from "flatten-js";
+import Flatten from "@flatten-js/core";
 
 export type Coordinate = [number, number];
 export type Polygon = { coordinates: Coordinate[]; inMap: boolean };

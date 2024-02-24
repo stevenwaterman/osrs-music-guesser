@@ -12,6 +12,7 @@ function getUserId(ws: WebSocket, req: express.Request): string | undefined {
   const userId = req.query["user"];
 
   if (!userId) {
+    console.log("MISSING_USER");
     ws.send(
       JSON.stringify({
         action: "error",
@@ -22,9 +23,11 @@ function getUserId(ws: WebSocket, req: express.Request): string | undefined {
       })
     );
     ws.close(1011);
+    return;
   }
 
   if (!(typeof userId === "string")) {
+    console.log("INVALID_USER", userId);
     ws.send(
       JSON.stringify({
         action: "error",
@@ -39,6 +42,7 @@ function getUserId(ws: WebSocket, req: express.Request): string | undefined {
   }
 
   if (users.has(userId)) {
+    console.log("DUPLICATE_USER", userId);
     ws.send(
       JSON.stringify({
         action: "error",
@@ -59,6 +63,7 @@ function getGame(ws: WebSocket, req: express.Request): StateStore | undefined {
   const gameId = req.query["game"];
 
   if (!gameId) {
+    console.log("MISSING_GAME");
     ws.send(
       JSON.stringify({
         action: "error",
@@ -69,14 +74,16 @@ function getGame(ws: WebSocket, req: express.Request): StateStore | undefined {
       })
     );
     ws.close(1011);
+    return;
   }
 
   if (!(typeof gameId === "string")) {
+    console.log("INVALID_GAME", gameId);
     ws.send(
       JSON.stringify({
         action: "error",
         data: {
-          code: "INVALID_USER",
+          code: "INVALID_GAME",
           message: "game was not a string",
         },
       })
@@ -86,6 +93,7 @@ function getGame(ws: WebSocket, req: express.Request): StateStore | undefined {
   }
 
   if (!(gameId in games)) {
+    console.log("UNKNOWN_GAME", gameId);
     ws.send(
       JSON.stringify({
         action: "error",
@@ -103,29 +111,38 @@ function getGame(ws: WebSocket, req: express.Request): StateStore | undefined {
 }
 
 app.ws("/create", (ws: WebSocket, req) => {
+  console.log("create called");
   const userId = getUserId(ws, req);
   if (!userId) {
     return;
   }
   users.add(userId);
 
+  ws.addEventListener("close", () => {
+    console.log("deleting", userId);
+    users.delete(userId);
+  });
+
   const gameId = Math.random().toString().split(".")[1];
   const stateStore = new StateStore(gameId);
   games[gameId] = stateStore;
   (stateStore.state as LobbyEmpty).join(userId, ws);
-
-  ws.addEventListener("close", () => {
-    users.delete(userId);
-  });
+  console.log("created", userId, gameId);
 });
 
 app.ws("/join", (ws, req) => {
+  console.log("join called");
   const userId = getUserId(ws, req);
   const game = getGame(ws, req);
   if (!userId || !game) {
     return;
   }
   users.add(userId);
+
+  ws.addEventListener("close", () => {
+    console.log("deleting", userId);
+    users.delete(userId);
+  });
 
   if (game.state.stateName !== "LobbyOnePlayer") {
     ws.send(
@@ -143,6 +160,7 @@ app.ws("/join", (ws, req) => {
 
   const state = game.state as LobbyOnePlayer;
   state.join(userId, ws);
+  console.log("joined", userId, state.game.gameId);
 });
 
 app.listen(3000, () => {

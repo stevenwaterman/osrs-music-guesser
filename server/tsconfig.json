@@ -6,7 +6,8 @@
     "isolatedModules": true,
     "esModuleInterop": true,
     "strict": true,
-    "verbatimModuleSyntax": true
+    "verbatimModuleSyntax": true,
+    "moduleResolution": "Node"
   },
   // "include": ["src/**/*.ts"]
 }

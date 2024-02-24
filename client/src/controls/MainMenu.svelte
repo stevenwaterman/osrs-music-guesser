@@ -5,27 +5,38 @@
   export let state: State["StartScreen"];
 </script>
 
-<button transition:scale|global on:click={() => state.singlePlayer()}
-  >Single Player</button
->
+<div class="buttons">
+  <button transition:scale|global on:click={() => state.singlePlayer()}
+    >Single Player</button
+  >
+  <button transition:scale|global on:click={() => state.multiPlayer()}
+    >Multiplayer</button
+  >
+</div>
 
 <style>
-  button {
-    font-size: 4rem;
-    padding: 1rem 3rem;
-    height: fit-content;
-
+  .buttons {
     grid-column-start: 1;
     grid-column-end: 4;
     grid-row: 3;
     align-self: flex-end;
     justify-self: center;
     pointer-events: initial;
+    
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+  button {
+    padding: 1rem 3rem;
+    height: fit-content;
   }
 
   @media only screen and (max-width: 1000px) {
-    button {
+    .buttons {
       grid-column: 1;
+      grid-template-columns: 1fr;
+      grid-template-rows: auto auto;
     }
   }
 </style>

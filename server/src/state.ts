@@ -103,7 +103,10 @@ abstract class State<
     });
 
     // Notify clients about new state
-    this.broadcastState();
+    // Done in setTimeout so that the abstract properties can all be set
+    setTimeout(() => {
+      this.broadcastState();
+    });
   }
 
   public getPublicGameState(): Pick<GameState, PublicGameKeys[number]> {

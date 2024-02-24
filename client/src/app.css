@@ -16,6 +16,10 @@
   color: yellow;
 }
 
+input {
+  color: black;
+}
+
 audio {
   background-color: var(--semi-transparent-black);
 }
