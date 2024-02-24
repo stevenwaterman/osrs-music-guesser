@@ -217,7 +217,7 @@ class State_StartScreen_Multiplayer extends BaseState<
     internalStateStore.set(new State_StartScreen(this.data));
   }
   public create(userId: string) {
-    const ws = new WebSocket(`ws://178.128.132.7:3000/create?user=${userId}`);
+    const ws = new WebSocket(`wss://178.128.132.7:3000/create?user=${userId}`);
     this.listenToWs(ws);
   }
   public join(userId: string, gameId: string) {
