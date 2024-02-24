@@ -18,7 +18,7 @@ function rectangle(
   const topRight: Coordinate = [right, top];
   return {
     coordinates: [topLeft, bottomLeft, bottomRight, topRight],
-    inMap: false,
+    inMap: true,
   };
 }
 
