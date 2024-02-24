@@ -14,7 +14,8 @@ jobs:
       - uses: actions/setup-node@v1
         with:
           node-version: "16.x"
-      - run: npm ci && npm run build
+      - run: yarn install --frozen-lockfile
+      - run: yarn run build
         working-directory: ./client
       - run: |
           git config --local user.email "action@github.com"
