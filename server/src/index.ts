@@ -163,6 +163,6 @@ app.ws("/join", (ws, req) => {
   console.log("joined", userId, state.game.gameId);
 });
 
-app.listen(443, () => {
+app.listen(80, () => {
   console.log("App listening");
 });
