@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { convert } from "osrs-music-guesser-shared/src/coordinates";
+  import { convertLeaflet } from "../lib/convertLeaflet";
   import { locations } from "../lib/locations";
   import L from "leaflet";
 
@@ -37,7 +37,7 @@
     .map(({ name, coords, size }) => {
       const content = wrapAfter(name, 12);
       return new L.Tooltip(
-        convert.coordinate.toLeaflet(coords as [number, number]),
+        convertLeaflet.coordinate.to(coords as [number, number]),
         {
           interactive: false,
           className: `tooltip ${size ?? "default"}`,

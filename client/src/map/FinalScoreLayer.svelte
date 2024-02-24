@@ -1,9 +1,9 @@
 <script lang="ts">
   import L, { LatLngBounds } from "leaflet";
-  import { convert } from "osrs-music-guesser-shared/src/coordinates";
   import { greenIcon } from "../lib/icons";
   import type { State } from "../lib/clientState";
   import { onMount } from "svelte";
+  import { convertLeaflet } from "../lib/convertLeaflet";
 
   export let state: State["SinglePlayer_EndOfGame"];
   export let map: L.Map;
@@ -15,20 +15,20 @@
     layer.addTo(map);
 
     const guessMarkers = guessHistory
-      .map(({ guess }) => convert.coordinate.toLeaflet(guess))
+      .map(({ guess }) => convertLeaflet.coordinate.to(guess))
       .map((latLng) => new L.Marker(latLng));
     guessMarkers.forEach((marker) => marker.addTo(layer));
 
     const answerMarkers = guessHistory
-      .map(({ closest }) => convert.coordinate.toLeaflet(closest))
+      .map(({ closest }) => convertLeaflet.coordinate.to(closest))
       .map((latLng) => new L.Marker(latLng, { icon: greenIcon }));
     answerMarkers.forEach((marker) => marker.addTo(layer));
 
     const lines = guessHistory.map(
       ({ guess, closest }) =>
         new L.Polyline([
-          convert.coordinate.toLeaflet(guess),
-          convert.coordinate.toLeaflet(closest),
+          convertLeaflet.coordinate.to(guess),
+          convertLeaflet.coordinate.to(closest),
         ])
     );
     lines.forEach((line) => line.addTo(layer));

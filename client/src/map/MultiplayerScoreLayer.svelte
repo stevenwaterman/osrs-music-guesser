@@ -1,10 +1,10 @@
 <script lang="ts">
   import L from "leaflet";
   import { finishedData } from "osrs-music-guesser-shared/src/cleanedData";
-  import { convert } from "osrs-music-guesser-shared/src/coordinates";
   import type { MultiplayerState } from "../lib/clientState";
   import { onMount } from "svelte";
   import { mapBounds } from "./map";
+  import { convertLeaflet } from "../lib/convertLeaflet";
 
   export let state: MultiplayerState<"RoundOver">;
   export let map: L.Map;
@@ -20,8 +20,8 @@
         continue;
       }
 
-      const guessLatLng = convert.coordinate.toLeaflet(user.result.guess);
-      const closestLatLng = convert.coordinate.toLeaflet(user.result.closest);
+      const guessLatLng = convertLeaflet.coordinate.to(user.result.guess);
+      const closestLatLng = convertLeaflet.coordinate.to(user.result.closest);
 
       const guessMarker = new L.Marker(guessLatLng);
       guessMarker.addTo(layer);
@@ -30,7 +30,7 @@
       lineToClosest.addTo(layer);
 
       const answerPolygons = finishedData[song].polygons.map((poly) => {
-        const leafletPoly = convert.polygon.toLeaflet(poly);
+        const leafletPoly = convertLeaflet.polygon.to(poly);
         leafletPoly.setStyle({
           color: "#00FF00",
           fillColor: "#00FF00",

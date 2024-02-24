@@ -1,10 +1,10 @@
 <script lang="ts">
   import L, { LatLngBounds } from "leaflet";
   import { finishedData } from "osrs-music-guesser-shared/src/cleanedData";
-  import { convert } from "osrs-music-guesser-shared/src/coordinates";
   import { greenIcon } from "../lib/icons";
   import type { State } from "../lib/clientState";
   import { onMount } from "svelte";
+  import { convertLeaflet } from "../lib/convertLeaflet";
 
   export let state: State[
     | "SinglePlayer_RevealingAnswer"
@@ -17,8 +17,8 @@
     const layer = new L.LayerGroup();
     layer.addTo(map);
 
-    const guessLatLng = convert.coordinate.toLeaflet(guess);
-    const closestLatLng = convert.coordinate.toLeaflet(closest);
+    const guessLatLng = convertLeaflet.coordinate.to(guess);
+    const closestLatLng = convertLeaflet.coordinate.to(closest);
 
     const guessMarker = new L.Marker(guessLatLng);
     guessMarker.addTo(layer);
@@ -26,7 +26,7 @@
     const lineToClosest = new L.Polyline([guessLatLng, closestLatLng]);
 
     const answerPolygons = finishedData[song].polygons.map((poly) => {
-      const leafletPoly = convert.polygon.toLeaflet(poly);
+      const leafletPoly = convertLeaflet.polygon.to(poly);
       leafletPoly.setStyle({
         color: "#00FF00",
         fillColor: "#00FF00",
@@ -40,7 +40,7 @@
     map.setView(guessLatLng, 5, { animate: true });
 
     setTimeout(() => {
-      map.flyTo(convert.coordinate.toLeaflet(closest), 3, {
+      map.flyTo(convertLeaflet.coordinate.to(closest), 3, {
         animate: true,
         duration: durationMs / 1000,
       });

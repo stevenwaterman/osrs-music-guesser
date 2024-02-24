@@ -1,8 +1,8 @@
 <script lang="ts">
   import L from "leaflet";
-  import { convert } from "osrs-music-guesser-shared/src/coordinates";
   import { type State } from "../lib/clientState";
   import { onMount } from "svelte";
+  import { convertLeaflet } from "../lib/convertLeaflet";
 
   export let state: State[
     | "SinglePlayer_NoGuess"
@@ -14,7 +14,7 @@
 
   $: map.on("click", (click) => {
     if (state.isAny("SinglePlayer_NoGuess", "SinglePlayer_UnconfirmedGuess")) {
-      const coord = convert.coordinate.fromLeaflet(click.latlng);
+      const coord = convertLeaflet.coordinate.from(click.latlng);
       state.placeGuess(coord);
     }
   });
@@ -40,7 +40,7 @@
 
   $: guess = getGuess(state);
   $: if (guess) {
-    marker.setLatLng(convert.coordinate.toLeaflet(guess));
+    marker.setLatLng(convertLeaflet.coordinate.to(guess));
     marker.setOpacity(1);
   } else {
     marker.setOpacity(0);
