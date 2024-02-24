@@ -1,8 +1,8 @@
 <script lang="ts">
   import { tweened } from "svelte/motion";
   import { fade } from "svelte/transition";
-  import { type State } from "../lib/state/clientState";
-  import { sleep } from "../lib/util";
+  import { type State } from "../lib/clientState";
+  import { sleep } from "osrs-music-guesser-shared/src/util";
 
   export let state: State[
     | "SinglePlayer_RevealingAnswer"

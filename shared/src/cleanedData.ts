@@ -4,7 +4,7 @@
 // - detect the nearest point inside a polygon
 // - add missing tracks that weren't on music map eg ape-ex predator
 
-import type { Coordinate, Polygon } from "./coordinates";
+import type { Coordinate, Polygon } from "./coordinates.js";
 
 function rectangle(
   left: number,

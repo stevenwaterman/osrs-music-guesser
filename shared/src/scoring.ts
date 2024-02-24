@@ -1,5 +1,6 @@
-import { finishedData } from "./cleanedData";
-import { convert, type Coordinate, type Polygon } from "./coordinates";
+import { finishedData } from "./cleanedData.js";
+import { convertFlatten } from "./coordinates.js";
+import type { Coordinate, Polygon } from "./coordinates.js";
 
 export type Score = {
   closest: Coordinate;
@@ -11,8 +12,8 @@ function closestPoint(
   coord: Coordinate,
   polygons: Polygon[]
 ): { distance: number; closest: Coordinate } {
-  const point = convert.coordinate.toFlatten(coord);
-  const flattenPolys = polygons.map((p) => convert.polygon.toFlatten(p));
+  const point = convertFlatten.coordinate.to(coord);
+  const flattenPolys = polygons.map((p) => convertFlatten.polygon.to(p));
   const isInside = flattenPolys.some((polygon) => polygon.contains(point));
   if (isInside) {
     return {
@@ -34,7 +35,7 @@ function closestPoint(
 
       return {
         distance,
-        closest: convert.coordinate.fromFlatten(segment.ps),
+        closest: convertFlatten.coordinate.from(segment.ps),
       };
     },
     { distance: Number.MAX_VALUE, closest: [0, 0] }

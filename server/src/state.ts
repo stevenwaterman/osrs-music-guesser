@@ -1,186 +1,15 @@
 import WebSocket from "ws";
-import { getSongs } from "./songs";
-import { type Coordinate } from "./coordinates";
-import { scoreGuess } from "./scoring";
-
-function pick<Input extends {}, Keys extends keyof Input>(
-  input: Input,
-  ...keys: Keys[]
-): Pick<Input, Keys> {
-  const copy: Partial<Pick<Input, Keys>> = {};
-  for (const key of keys) {
-    copy[key] = input[key];
-  }
-  return copy as Pick<Input, Keys>;
-}
-
-function omit<Input extends {}, Keys extends keyof Input>(
-  input: Input,
-  ...keys: Keys[]
-): Omit<Input, Keys> {
-  const copy = { ...input };
-  for (const key of keys) {
-    delete copy[key];
-  }
-  return copy as Omit<Input, Keys>;
-}
-
-function mapValues<InValue, OutValue>(
-  map: Record<string, InValue>,
-  mapper: (value: InValue) => OutValue
-): Record<string, OutValue> {
-  const output: Record<string, OutValue> = {} as any;
-  const entries: Array<[string, InValue]> = Object.entries(map);
-  entries.forEach(([key, value]) => {
-    const newValue = mapper(value);
-    output[key] = newValue;
-  });
-  return output;
-}
-
-export class StateStore {
-  private _state: AnyState;
-  get state(): AnyState {
-    return this._state;
-  }
-  set state(state: AnyState) {
-    this._state = state;
-    // TODO listeners
-  }
+import { getSongs, scoreGuess, StateInterface, pick, omit, mapValues } from "osrs-music-guesser-shared";
+import type { Coordinate } from "osrs-music-guesser-shared";
+export class StateStore implements StateInterface.StateStore {
+  public state: StateInterface.AnyServerState;
 
   constructor(gameId: string) {
-    this._state = new LobbyEmpty(this, { gameId }, {});
+    this.state = new LobbyEmpty(this, { gameId }, {});
   }
 }
 
-abstract class State<
-  StateName extends string,
-  GameState extends {
-    gameId: string;
-  },
-  PublicGameKeys extends Array<keyof GameState>,
-  UserState extends {
-    userId: string;
-    ws: WebSocket;
-  },
-  PublicUserKeys extends Array<keyof UserState>,
-  PrivateUserKeys extends Array<keyof UserState>
-> {
-  public abstract stateName: StateName;
-  public abstract publicGameKeys: Readonly<PublicGameKeys>;
-  public abstract publicUserKeys: Readonly<PublicUserKeys>;
-  public abstract privateUserKeys: Readonly<PrivateUserKeys>;
-
-  private readonly unsubscribeFromWsMessages: Array<() => void>;
-  private readonly unsubscribeFromWsClose: Array<() => void>;
-
-  constructor(
-    protected readonly store: StateStore,
-    public readonly game: GameState,
-    public readonly users: Record<string, UserState>
-  ) {
-    // Listen for incoming messages
-    this.unsubscribeFromWsMessages = Object.values(users).map((user) => {
-      const messageHandler = (ev: WebSocket.MessageEvent) => {
-        const message = ev.data.toString();
-        const parsedMessage = JSON.parse(message);
-        if ("action" in parsedMessage) {
-          // TODO error handling
-          this.onMessage(user.userId, parsedMessage);
-        }
-      };
-      user.ws.addEventListener("message", messageHandler);
-      return () => user.ws.removeEventListener("message", messageHandler);
-    });
-
-    // Listen for WS close
-    this.unsubscribeFromWsClose = Object.values(users).map((user) => {
-      const closeHandler = (ev: WebSocket.CloseEvent) => {
-        this.leave(user.userId);
-      };
-      user.ws.addEventListener("close", closeHandler);
-      return () => user.ws.removeEventListener("close", closeHandler);
-    });
-
-    // Notify clients about new state
-    // Done in setTimeout so that the abstract properties can all be set
-    setTimeout(() => {
-      this.broadcastState();
-    });
-  }
-
-  public getPublicGameState(): Pick<GameState, PublicGameKeys[number]> {
-    return pick(this.game, ...this.publicGameKeys);
-  }
-
-  public getPublicUserState(): Record<
-    string,
-    Pick<UserState, PublicUserKeys[number]>
-  > {
-    return mapValues(this.users, (user) => pick(user, ...this.publicUserKeys));
-  }
-
-  public getPrivateUserState(
-    userId: string
-  ): Pick<UserState, PrivateUserKeys[number]> &
-    Pick<UserState, PublicUserKeys[number]> {
-    return pick(
-      this.users[userId],
-      ...[...this.publicUserKeys, ...this.privateUserKeys]
-    );
-  }
-
-  private broadcastState() {
-    const game = this.getPublicGameState();
-    const users = this.getPublicUserState();
-    Object.values(this.users).forEach((user) => {
-      user.ws.send(
-        JSON.stringify({
-          action: "state",
-          data: {
-            stateName: this.stateName,
-            game,
-            users,
-            me: this.getPrivateUserState(user.userId),
-          },
-        })
-      );
-    });
-  }
-
-  protected transition<T extends AnyState>(to: T): T {
-    Object.values(this.unsubscribeFromWsMessages).forEach((cb) => cb());
-    Object.values(this.unsubscribeFromWsClose).forEach((cb) => cb());
-    this.store.state = to;
-    return to;
-  }
-
-  protected abstract leave(userId: string): void;
-
-  protected onMessage(
-    userId: string,
-    message: { action: string; data?: any }
-  ): void {}
-}
-
-export class LobbyEmpty extends State<
-  "LobbyEmpty",
-  {
-    gameId: string;
-  },
-  ["gameId"],
-  {
-    userId: string;
-    ws: WebSocket;
-  },
-  ["userId"],
-  []
-> {
-  public stateName = "LobbyEmpty" as const;
-  public publicGameKeys = ["gameId"] as const;
-  public publicUserKeys = ["userId"] as const;
-  public privateUserKeys = [] as const;
-
+export class LobbyEmpty extends StateInterface.LobbyEmpty {
   public join(userId: string, ws: WebSocket) {
     return this.transition(
       new LobbyOnePlayer(
@@ -199,25 +28,7 @@ export class LobbyEmpty extends State<
   }
 }
 
-export class LobbyOnePlayer extends State<
-  "LobbyOnePlayer",
-  {
-    gameId: string;
-    owner: string;
-  },
-  ["gameId", "owner"],
-  {
-    userId: string;
-    ws: WebSocket;
-  },
-  ["userId"],
-  []
-> {
-  public stateName = "LobbyOnePlayer" as const;
-  public publicGameKeys = ["gameId", "owner"] as const;
-  public publicUserKeys = ["userId"] as const;
-  public privateUserKeys = [] as const;
-
+export class LobbyOnePlayer extends StateInterface.LobbyOnePlayer {
   public join(userId: string, ws: WebSocket) {
     return this.transition(
       new LobbyTwoPlayer(this.store, this.game, {
@@ -231,32 +42,14 @@ export class LobbyOnePlayer extends State<
     return this.transition(
       new LobbyEmpty(
         this.store,
-        omit(this.game, "owner"),
+        pick(this.game, "gameId"),
         omit(this.users, userId)
       )
     );
   }
 }
 
-export class LobbyTwoPlayer extends State<
-  "LobbyTwoPlayer",
-  {
-    gameId: string;
-    owner: string;
-  },
-  ["gameId", "owner"],
-  {
-    userId: string;
-    ws: WebSocket;
-  },
-  ["userId"],
-  []
-> {
-  public stateName = "LobbyTwoPlayer" as const;
-  public publicGameKeys = ["gameId", "owner"] as const;
-  public publicUserKeys = ["userId"] as const;
-  public privateUserKeys = [] as const;
-
+export class LobbyTwoPlayer extends StateInterface.LobbyTwoPlayer {
   public start() {
     const songs = getSongs();
     const round = 1;
@@ -297,36 +90,7 @@ export class LobbyTwoPlayer extends State<
   }
 }
 
-export class RoundNoGuessYet extends State<
-  "RoundNoGuessYet",
-  {
-    gameId: string;
-    owner: string;
-    songs: string[];
-    song: string;
-    songStartFraction: number;
-    round: number;
-  },
-  ["gameId", "owner", "song", "songStartFraction", "round"],
-  {
-    userId: string;
-    health: number;
-    ws: WebSocket;
-  },
-  ["userId", "health"],
-  []
-> {
-  public stateName = "RoundNoGuessYet" as const;
-  public publicGameKeys = [
-    "gameId",
-    "owner",
-    "song",
-    "songStartFraction",
-    "round",
-  ] as const;
-  public publicUserKeys = ["userId", "health"] as const;
-  public privateUserKeys = [] as const;
-
+export class RoundNoGuessYet extends StateInterface.RoundNoGuessYet {
   public guess(userId: string, guess: Coordinate) {
     const timerStarted = new Date();
     const timerDurationSecs = 10;
@@ -368,51 +132,7 @@ export class RoundNoGuessYet extends State<
   }
 }
 
-export class RoundOneGuess extends State<
-  "RoundOneGuess",
-  {
-    gameId: string;
-    owner: string;
-    songs: string[];
-    song: string;
-    songStartFraction: number;
-    round: number;
-    timerStarted: Date;
-    timerDurationSecs: number;
-    timerId: NodeJS.Timeout;
-  },
-  [
-    "gameId",
-    "owner",
-    "song",
-    "songStartFraction",
-    "round",
-    "timerStarted",
-    "timerDurationSecs"
-  ],
-  {
-    userId: string;
-    health: number;
-    guess: Coordinate | null;
-    guessTime: number;
-    ws: WebSocket;
-  },
-  ["userId", "health"],
-  ["guess", "guessTime"]
-> {
-  public stateName = "RoundOneGuess" as const;
-  public publicGameKeys = [
-    "gameId",
-    "owner",
-    "song",
-    "songStartFraction",
-    "round",
-    "timerStarted",
-    "timerDurationSecs",
-  ] as const;
-  public publicUserKeys = ["userId", "health"] as const;
-  public privateUserKeys = ["guess", "guessTime"] as const;
-
+export class RoundOneGuess extends StateInterface.RoundOneGuess {
   public guess(userId: string, guess: Coordinate) {
     return this.roundOver(userId, guess);
   }
@@ -495,51 +215,7 @@ export class RoundOneGuess extends State<
   }
 }
 
-export class RoundOver extends State<
-  "RoundOver",
-  {
-    gameId: string;
-    owner: string;
-    songs: string[];
-    song: string;
-    songStartFraction: number;
-    round: number;
-  },
-  ["gameId", "owner", "song", "songStartFraction", "round"],
-  {
-    userId: string;
-    healthBefore: number;
-    health: number;
-    result: {
-      guess: Coordinate;
-      closest: Coordinate;
-      distance: number;
-    } | null;
-    guessTime: number;
-    score: number;
-    ws: WebSocket;
-  },
-  ["userId", "healthBefore", "health", "result", "guessTime", "score"],
-  []
-> {
-  public stateName = "RoundOver" as const;
-  public publicGameKeys = [
-    "gameId",
-    "owner",
-    "song",
-    "songStartFraction",
-    "round",
-  ] as const;
-  public publicUserKeys = [
-    "userId",
-    "healthBefore",
-    "health",
-    "result",
-    "guessTime",
-    "score",
-  ] as const;
-  public privateUserKeys = [] as const;
-
+export class RoundOver extends StateInterface.RoundOver {
   public next() {
     if (Object.values(this.users).some((user) => user.health <= 0)) {
       return this.transition(
@@ -579,27 +255,7 @@ export class RoundOver extends State<
   }
 }
 
-export class GameOver extends State<
-  "GameOver",
-  {
-    gameId: string;
-    owner: string;
-    round: number;
-  },
-  ["gameId", "owner", "round"],
-  {
-    userId: string;
-    health: number;
-    ws: WebSocket;
-  },
-  ["userId", "health"],
-  []
-> {
-  public stateName = "GameOver" as const;
-  public publicGameKeys = ["gameId", "owner", "round"] as const;
-  public publicUserKeys = ["userId", "health"] as const;
-  public privateUserKeys = [] as const;
-
+export class GameOver extends StateInterface.GameOver {
   public playAgain() {
     return this.transition(
       new LobbyTwoPlayer(
@@ -625,20 +281,3 @@ export class GameOver extends State<
     }
   }
 }
-
-export type States = {
-  LobbyEmpty: LobbyEmpty;
-  LobbyOnePlayer: LobbyOnePlayer;
-  LobbyTwoPlayer: LobbyTwoPlayer;
-  RoundNoGuessYet: RoundNoGuessYet;
-  RoundOneGuess: RoundOneGuess;
-  RoundOver: RoundOver;
-  GameOver: GameOver;
-};
-export type AnyState = States[keyof States];
-export type ClientStateData<State extends AnyState> = {
-  stateName: State["stateName"];
-  game: ReturnType<State["getPublicGameState"]>;
-  users: ReturnType<State["getPublicUserState"]>;
-  me: ReturnType<State["getPrivateUserState"]>;
-};

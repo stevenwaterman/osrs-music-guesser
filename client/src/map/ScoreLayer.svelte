@@ -1,9 +1,9 @@
 <script lang="ts">
   import L, { LatLngBounds } from "leaflet";
-  import { finishedData } from "../lib/cleanedData";
-  import { convert } from "../lib/coordinates";
+  import { finishedData } from "osrs-music-guesser-shared/src/cleanedData";
+  import { convert } from "osrs-music-guesser-shared/src/coordinates";
   import { greenIcon } from "../lib/icons";
-  import type { State } from "../lib/state/clientState";
+  import type { State } from "../lib/clientState";
   import { onMount } from "svelte";
 
   export let state: State[

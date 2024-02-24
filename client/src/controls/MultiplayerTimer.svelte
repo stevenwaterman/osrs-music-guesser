@@ -1,6 +1,6 @@
 <script lang="ts">
   import { scale } from "svelte/transition";
-  import { type MultiplayerState, type State } from "../lib/state/clientState";
+  import { type MultiplayerState } from "../lib/clientState";
   import { tweened } from "svelte/motion";
 
   export let state: MultiplayerState<"RoundOneGuess">;

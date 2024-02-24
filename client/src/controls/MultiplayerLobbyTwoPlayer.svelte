@@ -1,6 +1,6 @@
 <script lang="ts">
   import { scale } from "svelte/transition";
-  import { type MultiplayerState } from "../lib/state/clientState";
+  import { type MultiplayerState } from "../lib/clientState";
 
   export let state: MultiplayerState<"LobbyTwoPlayer">;
 

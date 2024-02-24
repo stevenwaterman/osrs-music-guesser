@@ -1,19 +1,20 @@
 <script lang="ts">
   import L from "leaflet";
-  import { convert } from "../lib/coordinates";
-  import { type MultiplayerState } from "../lib/state/clientState";
+  import { convert } from "osrs-music-guesser-shared/src/coordinates";
+  import { type MultiplayerState } from "../lib/clientState";
   import { onMount } from "svelte";
 
   export let state: MultiplayerState<"RoundNoGuessYet" | "RoundOneGuess">;
   export let map: L.Map;
 
   $: map.on("click", (click) => {
-    if (
-      state.isAnyMultiplayer("RoundNoGuessYet")
-    ) {
+    if (state.isAnyMultiplayer("RoundNoGuessYet")) {
       const coord = convert.coordinate.fromLeaflet(click.latlng);
       state.send({ action: "guess", data: coord });
-    } else if (state.isAnyMultiplayer("RoundOneGuess") && state.data.me.guess === null) {
+    } else if (
+      state.isAnyMultiplayer("RoundOneGuess") &&
+      state.data.me.guess === null
+    ) {
       const coord = convert.coordinate.fromLeaflet(click.latlng);
       state.send({ action: "guess", data: coord });
     }

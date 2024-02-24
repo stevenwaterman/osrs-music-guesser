@@ -15,8 +15,5 @@
     "strict": true,
     "moduleResolution": "NodeNext"
   },
-  "references": [
-    { "path": "../shared" }
-  ],
   "include": ["src"]
 }

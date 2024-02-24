@@ -1,6 +1,6 @@
 <script lang="ts">
   import { scale } from "svelte/transition";
-  import { type State } from "../lib/state/clientState";
+  import { type State } from "../lib/clientState";
 
   export let state: State["StartScreen_Multiplayer"];
 

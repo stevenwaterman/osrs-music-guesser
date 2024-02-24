@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { type MultiplayerState, type State } from "../lib/state/clientState";
+  import { type MultiplayerState } from "../lib/clientState";
 
   export let state: MultiplayerState<
     "RoundNoGuessYet" | "RoundOneGuess" | "RoundOver" | "GameOver"

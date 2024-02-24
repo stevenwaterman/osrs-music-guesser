@@ -1,9 +1,8 @@
 <script lang="ts">
-  import L, { LatLngBounds } from "leaflet";
-  import { finishedData } from "../lib/cleanedData";
-  import { convert } from "../lib/coordinates";
-  import { greenIcon } from "../lib/icons";
-  import type { MultiplayerState, State } from "../lib/state/clientState";
+  import L from "leaflet";
+  import { finishedData } from "osrs-music-guesser-shared/src/cleanedData";
+  import { convert } from "osrs-music-guesser-shared/src/coordinates";
+  import type { MultiplayerState } from "../lib/clientState";
   import { onMount } from "svelte";
   import { mapBounds } from "./map";
 
@@ -42,36 +41,6 @@
       });
       answerPolygons.forEach((poly) => poly.addTo(layer));
     }
-
-    /*
-    map.setView(guessLatLng, 5, { animate: true });
-
-      setTimeout(() => {
-        map.flyTo(closestLatLng, 3, {
-          animate: true,
-          duration: durationMs / 1000,
-        });
-      }, 750);
-
-      setTimeout(() => {
-        
-        const answerMarkers =
-          answerPolygons.map(
-            (polygon) => new L.Marker(polygon.getCenter(), { icon: greenIcon })
-          ) ?? null;
-        answerMarkers.forEach((marker) => marker.addTo(layer));
-        lineToClosest.addTo(layer);
-      }, durationMs + 1000);
-
-      setTimeout(() => {
-      const bounds = answerPolygons.reduce(
-        (acc, elem) => acc.extend(elem.getBounds()),
-        new LatLngBounds(guessMarker.getLatLng(), guessMarker.getLatLng())
-      );
-      map.fitBounds(bounds, { animate: true, padding: [100, 100] });
-    }, durationMs + 1500);
-    }
-    */
 
     map.fitBounds(mapBounds, { animate: true });
 

@@ -1,6 +1,6 @@
 {
   "name": "osrs-music-guesser-client",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -20,6 +20,7 @@
   },
   "dependencies": {
     "flatten-js": "^0.6.9",
-    "leaflet": "^1.9.4"
+    "leaflet": "^1.9.4",
+    "osrs-music-guesser-shared": "1.0.0"
   }
 }

@@ -1,8 +1,8 @@
 <script lang="ts">
   import L, { LatLngBounds } from "leaflet";
-  import { convert } from "../lib/coordinates";
+  import { convert } from "osrs-music-guesser-shared/src/coordinates";
   import { greenIcon } from "../lib/icons";
-  import type { State } from "../lib/state/clientState";
+  import type { State } from "../lib/clientState";
   import { onMount } from "svelte";
 
   export let state: State["SinglePlayer_EndOfGame"];

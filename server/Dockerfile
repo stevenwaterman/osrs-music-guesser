@@ -1,10 +1,17 @@
 FROM node:lts
 
-COPY ./src ./src
-COPY .babelrc package-lock.json package.json tsconfig.json ./
+COPY ./server/src /server/src
+COPY ./server/package.json ./server/tsconfig.json /server/
 
-RUN npm ci
-RUN npm run build:js
+COPY ./shared/src /shared/src
+COPY ./shared/package.json ./shared/tsconfig.json /shared/
+
+COPY ./package.json ./yarn.lock /
+
+RUN yarn install --frozen-lockfile
+
+WORKDIR /server
+RUN yarn run build
 
 EXPOSE 4433
-ENTRYPOINT ["node", "./dist/index.js"]
+ENTRYPOINT ["node", "/server/dist/index.js"]

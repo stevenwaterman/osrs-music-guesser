@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { convert } from "../lib/coordinates";
+  import { convert } from "osrs-music-guesser-shared/src/coordinates";
   import { locations } from "../lib/locations";
   import L from "leaflet";
 
@@ -44,7 +44,7 @@
           content,
           permanent: true,
           direction: "center",
-          pane: "overlayPane"
+          pane: "overlayPane",
         }
       );
     });

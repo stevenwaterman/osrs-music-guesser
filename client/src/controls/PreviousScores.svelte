@@ -1,7 +1,7 @@
 <script lang="ts">
-  import { finishedData } from "../lib/cleanedData";
+  import { finishedData } from "osrs-music-guesser-shared/src/cleanedData";
   import { fade } from "svelte/transition";
-  import type { State, StateGroup } from "../lib/state/clientState";
+  import type { State, StateGroup } from "../lib/clientState";
 
   export let state: StateGroup["Playing"] | State["SinglePlayer_EndOfGame"];
   $: guessHistory = state.data.guessHistory;

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { stateStore, type AnyState } from "../lib/state/clientState";
+  import { stateStore, type AnyState } from "../lib/clientState";
   import BaseMap from "./BaseMap.svelte";
   import FinalScoreLayer from "./FinalScoreLayer.svelte";
   import GuessLayer from "./GuessLayer.svelte";

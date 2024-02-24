@@ -1,13 +1,13 @@
 import { writable, type Readable, type Writable } from "svelte/store";
-import type { Coordinate } from "../coordinates";
-import { scoreGuess } from "../scoring";
-import { getSongs } from "./songs";
+import type { Coordinate } from "osrs-music-guesser-shared/src/coordinates";
+import { scoreGuess } from "osrs-music-guesser-shared/src/scoring";
+import { getSongs } from "osrs-music-guesser-shared/src/songs";
 import type {
   AnyServerState,
   ClientActions,
   ClientStateData,
   ServerStates,
-} from "./serverState";
+} from "osrs-music-guesser-shared/src/serverState";
 
 function omit<Input extends {}, Keys extends keyof Input>(
   input: Input,
@@ -223,7 +223,9 @@ class State_StartScreen_Multiplayer extends BaseState<
   }
   public join(userId: string, gameId: string) {
     // const ws = new WebSocket( `wss://osrs-music-api.stevenwaterman.uk/join?user=${userId}&game=${gameId}`);
-    const ws = new WebSocket( `ws://localhost:4433/join?user=${userId}&game=${gameId}`);
+    const ws = new WebSocket(
+      `ws://localhost:4433/join?user=${userId}&game=${gameId}`
+    );
     this.listenToWs(ws);
   }
 

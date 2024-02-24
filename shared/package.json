@@ -1,0 +1,22 @@
+{
+  "name": "osrs-music-guesser-shared",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "build": "tsc --build",
+    "check": "where tsc"
+  },
+  "devDependencies": {
+    "@types/leaflet": "^1.9.8",
+    "@types/node": "^20.11.20",
+    "@types/ws": "^8.5.10",
+    "tslib": "^2.6.2",
+    "typescript": "^5.2.2"
+  },
+  "dependencies": {
+    "@flatten-js/core": "^1.4.8",
+    "ws": "^8.16.0"
+  },
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts"
+}

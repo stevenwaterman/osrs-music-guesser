@@ -1,7 +1,7 @@
 <script lang="ts">
   import L from "leaflet";
-  import { convert, type Coordinate } from "../lib/coordinates";
-  import { stateStore, type State } from "../lib/state/clientState";
+  import { convert } from "osrs-music-guesser-shared/src/coordinates";
+  import { type State } from "../lib/clientState";
   import { onMount } from "svelte";
 
   export let state: State[

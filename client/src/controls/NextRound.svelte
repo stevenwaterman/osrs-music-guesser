@@ -1,6 +1,6 @@
 <script lang="ts">
   import { fade } from "svelte/transition";
-  import { type State } from "../lib/state/clientState";
+  import { type State } from "../lib/clientState";
 
   export let state: State[
     | "SinglePlayer_EndOfRound"

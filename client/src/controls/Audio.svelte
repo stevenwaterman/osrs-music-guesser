@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { finishedData } from "../lib/cleanedData";
+  import { finishedData } from "osrs-music-guesser-shared/src/cleanedData";
   import { fade } from "svelte/transition";
 
   export let song: string;

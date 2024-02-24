@@ -1,27 +1,19 @@
 {
   "name": "osrs-music-guesser-server",
-  "version": "0.0.0",
-  "type": "commonjs",
+  "version": "1.0.0",
+  "type": "module",
   "scripts": {
     "dev": "tsx watch src/index.ts",
-    "build": "npm run build:types && npm run build:js",
-    "build:types": "tsc --emitDeclarationOnly",
-    "build:js": "babel src --out-dir dist --extensions \".ts,.tsx\" --source-maps inline"
+    "build": "tsc --build"
   },
   "devDependencies": {
-    "@babel/cli": "^7.23.9",
-    "@babel/core": "^7.23.9",
-    "@babel/preset-env": "^7.23.9",
-    "@babel/preset-typescript": "^7.23.3",
-    "@types/express": "^4.17.21",
     "@types/node": "^20.11.20",
     "@types/ws": "^8.5.10",
-    "tslib": "^2.6.2",
     "tsx": "^4.7.1",
     "typescript": "^5.2.2"
   },
   "dependencies": {
-    "@flatten-js/core": "^1.4.8",
-    "ws": "^8.16.0"
+    "ws": "^8.16.0",
+    "osrs-music-guesser-shared": "1.0.0"
   }
 }

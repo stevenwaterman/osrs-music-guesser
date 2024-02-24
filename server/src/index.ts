@@ -1,5 +1,5 @@
 import WebSocket, { WebSocketServer } from "ws";
-import { LobbyEmpty, LobbyOnePlayer, StateStore } from "./state";
+import { LobbyEmpty, LobbyOnePlayer, StateStore } from "./state.js";
 
 const wss = new WebSocketServer({ port: 4433 });
 const users: Set<string> = new Set<string>();
@@ -155,3 +155,5 @@ setInterval(function ping() {
     ws.ping();
   });
 }, 30000);
+
+console.log("Running");

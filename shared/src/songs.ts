@@ -1,4 +1,4 @@
-import { finishedData } from "../cleanedData";
+import { finishedData } from "./cleanedData.js";
 
 function shuffle<T>(array: T[]): T[] {
   let currentIndex = array.length,
@@ -29,7 +29,11 @@ Object.values(finishedData)
   .forEach((title) => delete finishedData[title]);
 const allSongs = Object.keys(finishedData);
 
-export function getSongs(count: number): string[] {
+export function getSongs(count?: number): string[] {
   shuffle(allSongs);
-  return allSongs.slice(0, count);
+  if (count === undefined) {
+    return allSongs.slice();
+  } else {
+    return allSongs.slice(0, count);
+  }
 }
