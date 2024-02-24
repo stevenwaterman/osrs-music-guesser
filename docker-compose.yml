@@ -2,25 +2,18 @@ version: "3.2"
 services:
   server:
     build:
-      context: './server/'
+      context: "./server/"
     restart: always
     ports:
-      - "4433:4433"
-    networks:
-      - backend
+      - 4433:4433
   nginx:
     build:
-      context: './nginx/'
+      context: "./nginx/"
     restart: always
     ports:
       - 80:80
       - 443:443
     volumes:
       - ./.cert:/etc/letsencrypt
-    networks:
-      - backend
     depends_on:
       - server
-
-networks:
-  backend:
