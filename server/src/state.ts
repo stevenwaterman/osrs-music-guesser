@@ -134,7 +134,6 @@ abstract class State<
     const game = this.getPublicGameState();
     const users = this.getPublicUserState();
     Object.values(this.users).forEach((user) => {
-      console.log("broadcasting to ", user.userId, this.stateName);
       user.ws.send(
         JSON.stringify({
           action: "state",
@@ -449,10 +448,9 @@ export class RoundOneGuess extends State<
       mapValues(this.users, (user) => {
         const result = results[user.userId];
         const score = result?.score ?? 0;
-        let damage = bestScore - score;
-        if (draw && user.guessTime > 0) {
-          damage = 500;
-        }
+        const loser = score < bestScore || (draw && user.userId === userId);
+        const baseDamage = bestScore - score;
+        const damage = loser ? Math.max(baseDamage, 500) : baseDamage;
 
         return {
           userId: user.userId,
