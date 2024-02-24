@@ -217,12 +217,14 @@ class State_StartScreen_Multiplayer extends BaseState<
     internalStateStore.set(new State_StartScreen(this.data));
   }
   public create(userId: string) {
-    const ws = new WebSocket(`wss://178.128.132.7:3000/create?user=${userId}`);
+    const ws = new WebSocket(
+      `wss://osrs-api.stevenwaterman.uk/create?user=${userId}`
+    );
     this.listenToWs(ws);
   }
   public join(userId: string, gameId: string) {
     const ws = new WebSocket(
-      `wss://178.128.132.7::3000/join?user=${userId}&game=${gameId}`
+      `wss://osrs-api.stevenwaterman.uk/join?user=${userId}&game=${gameId}`
     );
     this.listenToWs(ws);
   }
