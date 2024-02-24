@@ -318,7 +318,7 @@ export class RoundNoGuessYet extends State<
 
   public guess(userId: string, guess: Coordinate) {
     const timerStarted = new Date();
-    const timerDurationSecs = 15;
+    const timerDurationSecs = 10;
     const timerId = setTimeout(() => {
       if (this.store.state === toState) {
         toState.timeUp();
