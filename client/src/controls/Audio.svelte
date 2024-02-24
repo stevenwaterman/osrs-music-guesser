@@ -11,12 +11,13 @@
     songId
   )}.ogg`;
 
-  let audioPlayer: HTMLAudioElement;
-  $: audioPlayer?.addEventListener("loadedmetadata", () => {
-    if (startFraction > 0) {
-      audioPlayer.currentTime = audioPlayer.duration * startFraction;
+  function seek(audio: HTMLAudioElement, fraction: number) {
+    const desiredCurrentTime = audio.duration * fraction;
+    const delta = Math.abs(audio.currentTime - desiredCurrentTime);
+    if (delta > 0.1) {
+      audio.currentTime = audio.duration * fraction;
     }
-  });
+  }
 </script>
 
 <audio
@@ -25,7 +26,7 @@
   autoplay
   loop
   in:fade
-  bind:this={audioPlayer}
+  on:canplaythrough={(ev) => seek(ev.currentTarget, startFraction)}
 />
 
 <style>
