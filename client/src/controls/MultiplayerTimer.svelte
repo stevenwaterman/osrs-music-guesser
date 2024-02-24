@@ -17,7 +17,7 @@
 
 <style>
   .timer {
-    font-size: 4rem;
+    font-size: 5rem;
     font-weight: bold;
     text-shadow:
       4px 4px 0 #000,
@@ -30,7 +30,7 @@
       -4px 0 0 #000;
 
     grid-row: 1;
-    grid-column: 1;
+    grid-column: 2;
     align-self: flex-start;
     justify-self: center;
   }
