@@ -25,8 +25,8 @@
   controls={control}
   autoplay
   loop
-  in:fade
-  on:canplaythrough={(ev) => seek(ev.currentTarget, startFraction)}
+  transition:fade
+  on:loadedmetadata={(ev) => seek(ev.currentTarget, startFraction)}
 />
 
 <style>

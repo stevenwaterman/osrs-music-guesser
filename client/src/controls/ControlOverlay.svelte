@@ -43,7 +43,11 @@
   {/if}
 
   {#if state.isAny("SinglePlayer_NoGuess", "SinglePlayer_UnconfirmedGuess", "SinglePlayer_RevealingAnswer", "SinglePlayer_EndOfRound", "SinglePlayer_EndOfFinalRound")}
-    <Audio song={state.data.songs[state.data.round - 1]} control={true} startFraction={0} />
+    <Audio
+      song={state.data.songs[state.data.round - 1]}
+      control={true}
+      startFraction={0}
+    />
   {/if}
 
   {#if state.isAny("SinglePlayer_EndOfGame")}
@@ -68,7 +72,11 @@
     {/if}
 
     {#if state.isAnyMultiplayer("RoundNoGuessYet", "RoundOneGuess")}
-      <Audio song={state.data.game.song} control={false} startFraction={state.data.game.songStartFraction} />
+      <Audio
+        song={state.data.game.song}
+        control={false}
+        startFraction={state.data.game.songStartFraction}
+      />
     {/if}
 
     {#if state.isAnyMultiplayer("RoundOneGuess")}
