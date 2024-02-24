@@ -13,6 +13,7 @@
   import MultiplayerLobbyTwoPlayer from "./MultiplayerLobbyTwoPlayer.svelte";
   import MultiplayerTimer from "./MultiplayerTimer.svelte";
   import MultiplayerHealth from "./MultiplayerHealth.svelte";
+  import MultiplayerGameOver from "./MultiplayerGameOver.svelte";
   $: state = $stateStore;
 
   $: if (state.isAny("Multiplayer_Active")) {
@@ -76,6 +77,10 @@
 
     {#if state.isAnyMultiplayer("RoundNoGuessYet", "RoundOneGuess", "RoundOver", "GameOver")}
       <MultiplayerHealth {state} />
+    {/if}
+
+    {#if state.isAnyMultiplayer("GameOver")}
+      <MultiplayerGameOver {state} />
     {/if}
   {/if}
 </div>
