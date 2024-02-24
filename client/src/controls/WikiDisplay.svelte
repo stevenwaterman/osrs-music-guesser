@@ -35,7 +35,7 @@
     width: 20rem;
 
     grid-column-start: 1;
-    grid-column-end: 3;
+    grid-column-end: 4;
     grid-row: 1;
     align-self: flex-start;
     justify-self: flex-start;
