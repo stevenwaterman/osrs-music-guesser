@@ -347,6 +347,7 @@ export class RoundNoGuessYet extends State<
       mapValues(this.users, (user) => ({
         ...user,
         guess: userId === user.userId ? guess : null,
+        guessTime: 0,
       }))
     );
     return this.transition(toState);
@@ -394,10 +395,11 @@ export class RoundOneGuess extends State<
     userId: string;
     health: number;
     guess: Coordinate | null;
+    guessTime: number;
     ws: WebSocket;
   },
   ["userId", "health"],
-  ["guess"]
+  ["guess", "guessTime"]
 > {
   public stateName = "RoundOneGuess" as const;
   public publicGameKeys = [
@@ -410,7 +412,7 @@ export class RoundOneGuess extends State<
     "timerDurationSecs",
   ] as const;
   public publicUserKeys = ["userId", "health"] as const;
-  public privateUserKeys = ["guess"] as const;
+  public privateUserKeys = ["guess", "guessTime"] as const;
 
   public guess(userId: string, guess: Coordinate) {
     return this.roundOver(userId, guess);
@@ -438,13 +440,20 @@ export class RoundOneGuess extends State<
     const bestScore = Math.max(
       ...Object.values(results).map((result) => result?.score ?? 0)
     );
+    const draw = Object.values(results).every(
+      (result) => result?.score === bestScore
+    );
     const toState = new RoundOver(
       this.store,
       omit(this.game, "timerStarted", "timerDurationSecs", "timerId"),
       mapValues(this.users, (user) => {
         const result = results[user.userId];
         const score = result?.score ?? 0;
-        const damage = bestScore - score;
+        let damage = bestScore - score;
+        if (draw && user.guessTime > 0) {
+          damage = 500;
+        }
+
         return {
           userId: user.userId,
           healthBefore: user.health,
@@ -457,6 +466,8 @@ export class RoundOneGuess extends State<
                   closest: result.closest,
                   distance: result.distance,
                 },
+          guessTime:
+            (new Date().getTime() - this.game.timerStarted.getTime()) / 1000,
           score: result?.score ?? 0,
           ws: user.ws,
         };
@@ -506,10 +517,11 @@ export class RoundOver extends State<
       closest: Coordinate;
       distance: number;
     } | null;
+    guessTime: number;
     score: number;
     ws: WebSocket;
   },
-  ["userId", "healthBefore", "health", "result", "score"],
+  ["userId", "healthBefore", "health", "result", "guessTime", "score"],
   []
 > {
   public stateName = "RoundOver" as const;
@@ -525,6 +537,7 @@ export class RoundOver extends State<
     "healthBefore",
     "health",
     "result",
+    "guessTime",
     "score",
   ] as const;
   public privateUserKeys = [] as const;
