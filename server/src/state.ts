@@ -475,7 +475,7 @@ export class RoundOneGuess extends State<
       if (this.store.state === toState) {
         toState.next();
       }
-    }, 5000);
+    }, 10000);
     return this.transition(toState);
   }
 
