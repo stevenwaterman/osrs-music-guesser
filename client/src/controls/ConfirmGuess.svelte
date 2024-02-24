@@ -1,15 +1,11 @@
 <script lang="ts">
   import { fade } from "svelte/transition";
-  import { stateStore, type State } from "../lib/state/states";
+  import { type State } from "../lib/state/clientState";
 
-  export let state: State["Playing_UnconfirmedGuess"];
-
-  function confirm() {
-    $stateStore = state.confirm();
-  }
+  export let state: State["SinglePlayer_UnconfirmedGuess"];
 </script>
 
-<button transition:fade|global on:click={() => confirm()}>Submit Guess</button>
+<button transition:fade|global on:click={() => state.confirm()}>Submit Guess</button>
 
 <style>
   button {

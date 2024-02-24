@@ -2,9 +2,11 @@
   import { fade } from "svelte/transition";
   import { finishedData } from "../lib/cleanedData";
   import { describeSong } from "../lib/wiki";
-  import type { State } from "../lib/state/states";
+  import type { State } from "../lib/state/clientState";
 
-  export let state: State["Playing_EndOfRound" | "Playing_EndOfFinalRound"];
+  export let state: State[
+    | "SinglePlayer_EndOfRound"
+    | "SinglePlayer_EndOfFinalRound"];
 
   $: song = state.data.songs[state.data.round - 1];
   $: songTitle = song ? finishedData[song].file : null;

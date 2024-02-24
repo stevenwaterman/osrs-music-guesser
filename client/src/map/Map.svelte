@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { stateStore, type AnyState } from "../lib/state/states";
+  import { stateStore, type AnyState } from "../lib/state/clientState";
   import BaseMap from "./BaseMap.svelte";
   import FinalScoreLayer from "./FinalScoreLayer.svelte";
   import GuessLayer from "./GuessLayer.svelte";
@@ -18,7 +18,7 @@
     })
   });
 
-  $: if(map && state.isAny("Playing_NoGuess")) {
+  $: if(map && state.isAny("SinglePlayer_NoGuess")) {
     resetView(map);
   }
 </script>
@@ -28,15 +28,15 @@
   <TileLayer {map} />
   <LocationLayer {map} />
 
-  {#if state.isAny("Playing_RevealingAnswer", "Playing_EndOfRound", "Playing_EndOfFinalRound")}
+  {#if state.isAny("SinglePlayer_RevealingAnswer", "SinglePlayer_EndOfRound", "SinglePlayer_EndOfFinalRound")}
     <ScoreLayer {map} {state} />
   {/if}
 
-  {#if state.isAny("Playing_NoGuess", "Playing_UnconfirmedGuess", "Playing_RevealingAnswer", "Playing_EndOfRound", "Playing_EndOfFinalRound")}
+  {#if state.isAny("SinglePlayer_NoGuess", "SinglePlayer_UnconfirmedGuess", "SinglePlayer_RevealingAnswer", "SinglePlayer_EndOfRound", "SinglePlayer_EndOfFinalRound")}
     <GuessLayer {map} {state} />
   {/if}
 
-  {#if state.isAny("EndOfGame")}
+  {#if state.isAny("SinglePlayer_EndOfGame")}
     <FinalScoreLayer {map} {state} />
   {/if}
 {/if}

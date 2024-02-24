@@ -1,9 +1,9 @@
 <script lang="ts">
   import { finishedData } from "../lib/cleanedData";
   import { fade } from "svelte/transition";
-  import type { State, StateGroup } from "../lib/state/states";
+  import type { State, StateGroup } from "../lib/state/clientState";
 
-  export let state: StateGroup["Playing"] | State["EndOfGame"];
+  export let state: StateGroup["Playing"] | State["SinglePlayer_EndOfGame"];
   $: guessHistory = state.data.guessHistory;
 </script>
 

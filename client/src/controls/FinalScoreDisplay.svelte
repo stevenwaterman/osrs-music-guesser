@@ -1,9 +1,9 @@
 <script lang="ts">
   import { tweened } from "svelte/motion";
   import { fade } from "svelte/transition";
-  import { stateStore, type State } from "../lib/state/states";
+  import { stateStore, type State } from "../lib/state/clientState";
 
-  export let state: State["EndOfGame"];
+  export let state: State["SinglePlayer_EndOfGame"];
 
   $: totalScore = state.data.guessHistory.reduce(
     (acc, elem) => acc + elem.score,
@@ -13,7 +13,9 @@
 
   let tweenDone = false;
   $: score = tweened(0);
-  $: score.set(totalScore, { duration: totalScore / 10 }).then(() => tweenDone = true);
+  $: score
+    .set(totalScore, { duration: totalScore / 10 })
+    .then(() => (tweenDone = true));
 
   $: roundedScore = Math.round($score);
   $: firstDigit = Math.floor(roundedScore / 10000);
@@ -21,10 +23,6 @@
   $: thirdDigit = Math.floor((roundedScore % 1000) / 100);
   $: fourthDigit = Math.floor((roundedScore % 100) / 10);
   $: fifthDigit = Math.floor(roundedScore % 10);
-
-  function backToMainMenu() {
-    $stateStore = state.backToMainMenu();
-  }
 </script>
 
 <div class="wrapper">
@@ -39,7 +37,7 @@
 </div>
 
 {#if tweenDone}
-  <button in:fade|global class="mainMenu" on:click={() => backToMainMenu()}
+  <button in:fade|global class="mainMenu" on:click={() => state.backToMainMenu()}
     >← Main Menu</button
   >
 {/if}
@@ -57,7 +55,7 @@
     font-size: 4rem;
     font-weight: bold;
     text-shadow:
-    4px 4px 0 #000,
+      4px 4px 0 #000,
       0 4px 0 #000,
       0 -4px 0 #000,
       -4px 4px 0 #000,
@@ -65,7 +63,6 @@
       4px -4px 0 #000,
       4px 0 0 #000,
       -4px 0 0 #000;
-
   }
   .score {
     line-height: 1;

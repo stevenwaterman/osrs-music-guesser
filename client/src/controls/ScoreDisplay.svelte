@@ -1,18 +1,18 @@
 <script lang="ts">
   import { tweened } from "svelte/motion";
   import { fade } from "svelte/transition";
-  import { stateStore, type State } from "../lib/state/states";
+  import { type State } from "../lib/state/clientState";
   import { sleep } from "../lib/util";
 
   export let state: State[
-    | "Playing_RevealingAnswer"
-    | "Playing_EndOfRound"
-    | "Playing_EndOfFinalRound"];
+    | "SinglePlayer_RevealingAnswer"
+    | "SinglePlayer_EndOfRound"
+    | "SinglePlayer_EndOfFinalRound"];
 
   $: score = state.data.result.score;
 
   let tween = tweened(5000);
-  $: if (state.isAny("Playing_RevealingAnswer")) {
+  $: if (state.isAny("SinglePlayer_RevealingAnswer")) {
     tween
       .set(score, {
         duration: 3000 - score / 2,
@@ -20,8 +20,8 @@
       })
       .then(() => sleep(500))
       .then(() => {
-        $stateStore = (
-          state as State["Playing_RevealingAnswer"]
+        (
+          state as State["SinglePlayer_RevealingAnswer"]
         ).animationComplete();
       });
   }
@@ -63,7 +63,7 @@
     font-size: 4rem;
     font-weight: bold;
     text-shadow:
-    4px 4px 0 #000,
+      4px 4px 0 #000,
       0 4px 0 #000,
       0 -4px 0 #000,
       -4px 4px 0 #000,

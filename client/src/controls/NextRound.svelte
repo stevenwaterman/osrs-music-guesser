@@ -1,21 +1,21 @@
 <script lang="ts">
-  import { tweened } from "svelte/motion";
   import { fade } from "svelte/transition";
-  import { stateStore, type State } from "../lib/state/states";
-  import { sleep } from "../lib/util";
+  import { type State } from "../lib/state/clientState";
 
-  export let state: State["Playing_EndOfRound" | "Playing_EndOfFinalRound"];
+  export let state: State[
+    | "SinglePlayer_EndOfRound"
+    | "SinglePlayer_EndOfFinalRound"];
 
   function next() {
-    if (state.isAny("Playing_EndOfRound")) {
-      $stateStore = state.nextRound();
+    if (state.isAny("SinglePlayer_EndOfRound")) {
+      state.nextRound();
     } else {
-      $stateStore = state.showResults();
+      state.showResults();
     }
   }
 </script>
 
-{#if state.isAny("Playing_EndOfRound")}
+{#if state.isAny("SinglePlayer_EndOfRound")}
   <button in:fade|global on:click={() => next()}>Next&nbsp;Round</button>
 {:else}
   <button in:fade|global on:click={() => next()}>Show&nbsp;Results</button>

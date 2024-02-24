@@ -2,15 +2,14 @@
   import L, { LatLngBounds } from "leaflet";
   import { finishedData } from "../lib/cleanedData";
   import { convert } from "../lib/coordinates";
-  import { resetView } from "./map";
   import { greenIcon } from "../lib/icons";
-  import type { State } from "../lib/state/states";
+  import type { State } from "../lib/state/clientState";
   import { onMount } from "svelte";
 
   export let state: State[
-    | "Playing_RevealingAnswer"
-    | "Playing_EndOfRound"
-    | "Playing_EndOfFinalRound"];
+    | "SinglePlayer_RevealingAnswer"
+    | "SinglePlayer_EndOfRound"
+    | "SinglePlayer_EndOfFinalRound"];
   export let map: L.Map;
 
   onMount(() => {
@@ -41,7 +40,10 @@
     map.setView(guessLatLng, 5, { animate: true });
 
     setTimeout(() => {
-      map.flyTo(convert.coordinate.toLeaflet(closest), 3, { animate: true, duration: durationMs / 1000 });
+      map.flyTo(convert.coordinate.toLeaflet(closest), 3, {
+        animate: true,
+        duration: durationMs / 1000,
+      });
     }, 750);
 
     setTimeout(() => {

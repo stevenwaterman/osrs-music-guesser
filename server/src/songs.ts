@@ -1,4 +1,4 @@
-import { finishedData } from "./cleanedData.ts";
+import { finishedData } from "./cleanedData";
 
 function shuffle<T>(array: T[]): T[] {
   let currentIndex = array.length,

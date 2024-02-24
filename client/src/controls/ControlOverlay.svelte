@@ -1,9 +1,9 @@
 <script lang="ts">
-  import { stateStore } from "../lib/state/states";
+  import { stateStore } from "../lib/state/clientState";
   import Audio from "./Audio.svelte";
   import ConfirmGuess from "./ConfirmGuess.svelte";
   import ScoreDisplay from "./ScoreDisplay.svelte";
-  import StartButton from "./StartButton.svelte";
+  import StartButton from "./MainMenu.svelte";
   import WikiDisplay from "./WikiDisplay.svelte";
   import FinalScoreDisplay from "./FinalScoreDisplay.svelte";
   import PreviousScores from "./PreviousScores.svelte";
@@ -12,15 +12,15 @@
 </script>
 
 <div class="grid">
-  {#if state.isAny("Playing_EndOfRound", "Playing_EndOfFinalRound")}
+  {#if state.isAny("SinglePlayer_EndOfRound", "SinglePlayer_EndOfFinalRound")}
     <WikiDisplay {state} />
   {/if}
 
-  {#if state.isAny("Playing_RevealingAnswer", "Playing_EndOfRound", "Playing_EndOfFinalRound")}
+  {#if state.isAny("SinglePlayer_RevealingAnswer", "SinglePlayer_EndOfRound", "SinglePlayer_EndOfFinalRound")}
     <ScoreDisplay {state} />
   {/if}
 
-  {#if state.isAny("Playing_NoGuess", "Playing_UnconfirmedGuess", "Playing_RevealingAnswer", "Playing_EndOfRound", "Playing_EndOfFinalRound", "EndOfGame")}
+  {#if state.isAny("SinglePlayer_NoGuess", "SinglePlayer_UnconfirmedGuess", "SinglePlayer_RevealingAnswer", "SinglePlayer_EndOfRound", "SinglePlayer_EndOfFinalRound", "SinglePlayer_EndOfGame")}
     <PreviousScores {state} />
   {/if}
 
@@ -28,19 +28,19 @@
     <StartButton {state} />
   {/if}
 
-  {#if state.isAny("Playing_NoGuess", "Playing_UnconfirmedGuess", "Playing_RevealingAnswer", "Playing_EndOfRound", "Playing_EndOfFinalRound")}
+  {#if state.isAny("SinglePlayer_NoGuess", "SinglePlayer_UnconfirmedGuess", "SinglePlayer_RevealingAnswer", "SinglePlayer_EndOfRound", "SinglePlayer_EndOfFinalRound")}
     <Audio {state} />
   {/if}
 
-  {#if state.isAny("EndOfGame")}
+  {#if state.isAny("SinglePlayer_EndOfGame")}
     <FinalScoreDisplay {state} />
   {/if}
 
-  {#if state.isAny("Playing_UnconfirmedGuess")}
+  {#if state.isAny("SinglePlayer_UnconfirmedGuess")}
     <ConfirmGuess {state} />
   {/if}
 
-  {#if state.isAny("Playing_EndOfRound", "Playing_EndOfFinalRound")}
+  {#if state.isAny("SinglePlayer_EndOfRound", "SinglePlayer_EndOfFinalRound")}
     <NextRound {state} />
   {/if}
 </div>

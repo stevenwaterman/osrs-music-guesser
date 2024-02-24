@@ -2,13 +2,11 @@
   "compilerOptions": {
     "target": "ESNext",
     "useDefineForClassFields": true,
-    "module": "NodeNext",
-    "resolveJsonModule": true,
-    "moduleResolution": "NodeNext",
+    "module": "ESNext",
     "isolatedModules": true,
     "esModuleInterop": true,
     "strict": true,
-    "allowImportingTsExtensions": true
+    "verbatimModuleSyntax": true
   },
   // "include": ["src/**/*.ts"]
 }
