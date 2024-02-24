@@ -114,10 +114,11 @@ export interface RoundOneGuess
       userId: string;
       health: number;
       guess: Coordinate | null;
+      guessTime: number;
       ws: WebSocket;
     },
     ["userId", "health"],
-    ["guess"]
+    ["guess", "guessTime"]
   > {}
 
 export interface RoundOver
@@ -141,10 +142,11 @@ export interface RoundOver
         closest: Coordinate;
         distance: number;
       } | null;
+      guessTime: number;
       score: number;
       ws: WebSocket;
     },
-    ["userId", "healthBefore", "health", "result", "score"],
+    ["userId", "healthBefore", "health", "result", "guessTime", "score"],
     []
   > {}
 
