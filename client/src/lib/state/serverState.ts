@@ -82,9 +82,10 @@ export interface RoundNoGuessYet
       owner: string;
       songs: string[];
       song: string;
+      songStartFraction: number;
       round: number;
     },
-    ["gameId", "owner", "song", "round"],
+    ["gameId", "owner", "song", "songStartFraction", "round"],
     {
       userId: string;
       health: number;
@@ -102,12 +103,13 @@ export interface RoundOneGuess
       owner: string;
       songs: string[];
       song: string;
+      songStartFraction: number;
       round: number;
       timerStarted: Date;
       timerDurationSecs: number;
       timerId: NodeJS.Timeout;
     },
-    ["gameId", "owner", "song", "round", "timerStarted", "timerDurationSecs"],
+    ["gameId", "owner", "song", "songStartFraction", "round", "timerStarted", "timerDurationSecs"],
     {
       userId: string;
       health: number;
@@ -126,9 +128,10 @@ export interface RoundOver
       owner: string;
       songs: string[];
       song: string;
+      songStartFraction: number;
       round: number;
     },
-    ["gameId", "owner", "song", "round"],
+    ["gameId", "owner", "song", "songStartFraction", "round"],
     {
       userId: string;
       healthBefore: number;

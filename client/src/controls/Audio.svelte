@@ -1,16 +1,32 @@
 <script lang="ts">
   import { finishedData } from "../lib/cleanedData";
-  import type { StateGroup } from "../lib/state/clientState";
   import { fade } from "svelte/transition";
 
   export let song: string;
+  export let control: boolean;
+  export let startFraction: number;
+
   $: songId = finishedData[song].title.trim().replaceAll(" ", "_");
   $: songUrl = `https://oldschool.runescape.wiki/images/${encodeURI(
     songId
   )}.ogg`;
+
+  let audioPlayer: HTMLAudioElement;
+  $: audioPlayer?.addEventListener("loadedmetadata", () => {
+    if (startFraction > 0) {
+      audioPlayer.currentTime = audioPlayer.duration * startFraction;
+    }
+  });
 </script>
 
-<audio src={songUrl} controls autoplay loop in:fade />
+<audio
+  src={songUrl}
+  controls={control}
+  autoplay
+  loop
+  in:fade
+  bind:this={audioPlayer}
+/>
 
 <style>
   audio {

@@ -265,7 +265,7 @@ export class LobbyTwoPlayer extends State<
     return this.transition(
       new RoundNoGuessYet(
         this.store,
-        { ...this.game, songs, round, song },
+        { ...this.game, songs, round, song, songStartFraction: Math.random() },
         mapValues(this.users, (user) => ({ ...user, health: 5000 }))
       )
     );
@@ -299,9 +299,10 @@ export class RoundNoGuessYet extends State<
     owner: string;
     songs: string[];
     song: string;
+    songStartFraction: number;
     round: number;
   },
-  ["gameId", "owner", "song", "round"],
+  ["gameId", "owner", "song", "songStartFraction", "round"],
   {
     userId: string;
     health: number;
@@ -311,7 +312,7 @@ export class RoundNoGuessYet extends State<
   []
 > {
   public stateName = "RoundNoGuessYet" as const;
-  public publicGameKeys = ["gameId", "owner", "song", "round"] as const;
+  public publicGameKeys = ["gameId", "owner", "song", "songStartFraction", "round"] as const;
   public publicUserKeys = ["userId", "health"] as const;
   public privateUserKeys = [] as const;
 
@@ -362,12 +363,13 @@ export class RoundOneGuess extends State<
     owner: string;
     songs: string[];
     song: string;
+    songStartFraction: number;
     round: number;
     timerStarted: Date;
     timerDurationSecs: number;
     timerId: NodeJS.Timeout;
   },
-  ["gameId", "owner", "song", "round", "timerStarted", "timerDurationSecs"],
+  ["gameId", "owner", "song", "songStartFraction", "round", "timerStarted", "timerDurationSecs"],
   {
     userId: string;
     health: number;
@@ -382,6 +384,7 @@ export class RoundOneGuess extends State<
     "gameId",
     "owner",
     "song",
+    "songStartFraction",
     "round",
     "timerStarted",
     "timerDurationSecs",
@@ -470,9 +473,10 @@ export class RoundOver extends State<
     owner: string;
     songs: string[];
     song: string;
+    songStartFraction: number;
     round: number;
   },
-  ["gameId", "owner", "song", "round"],
+  ["gameId", "owner", "song", "songStartFraction", "round"],
   {
     userId: string;
     healthBefore: number;
@@ -489,7 +493,7 @@ export class RoundOver extends State<
   []
 > {
   public stateName = "RoundOver" as const;
-  public publicGameKeys = ["gameId", "owner", "song", "round"] as const;
+  public publicGameKeys = ["gameId", "owner", "song", "songStartFraction", "round"] as const;
   public publicUserKeys = [
     "userId",
     "healthBefore",
@@ -504,7 +508,7 @@ export class RoundOver extends State<
       return this.transition(
         new GameOver(
           this.store,
-          omit(this.game, "songs", "song"),
+          omit(this.game, "songs", "song", "songStartFraction"),
           mapValues(this.users, (user) => ({
             userId: user.userId,
             health: user.health,
