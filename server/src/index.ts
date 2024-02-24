@@ -5,7 +5,10 @@ const wss = new WebSocketServer({ port: 4433 });
 const users: Set<string> = new Set<string>();
 const games: Record<string, StateStore> = {};
 
-function getUserId(ws: WebSocket, searchParams: URLSearchParams): string | undefined {
+function getUserId(
+  ws: WebSocket,
+  searchParams: URLSearchParams
+): string | undefined {
   const userId = searchParams.get("user");
 
   if (!userId) {
@@ -41,7 +44,10 @@ function getUserId(ws: WebSocket, searchParams: URLSearchParams): string | undef
   return userId;
 }
 
-function getGame(ws: WebSocket, searchParams: URLSearchParams): StateStore | undefined {
+function getGame(
+  ws: WebSocket,
+  searchParams: URLSearchParams
+): StateStore | undefined {
   const gameId = searchParams.get("game");
 
   if (!gameId) {
@@ -143,3 +149,9 @@ function onJoin(ws: WebSocket, searchParams: URLSearchParams) {
   state.join(userId, ws);
   console.log("joined", userId, state.game.gameId);
 }
+
+setInterval(function ping() {
+  wss.clients.forEach(function each(ws) {
+    ws.ping();
+  });
+}, 30000);
