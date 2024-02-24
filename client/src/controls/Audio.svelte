@@ -3,8 +3,7 @@
   import type { StateGroup } from "../lib/state/clientState";
   import { fade } from "svelte/transition";
 
-  export let state: StateGroup["Playing"];
-  $: song = state.data.songs[state.data.round - 1];
+  export let song: string;
   $: songId = finishedData[song].title.trim().replaceAll(" ", "_");
   $: songUrl = `https://oldschool.runescape.wiki/images/${encodeURI(
     songId

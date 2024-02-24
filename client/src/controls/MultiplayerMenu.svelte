@@ -12,7 +12,7 @@
   <label for="userId">Username:</label>
   <input id="userId" bind:value={userId} />
   <button
-    disabled={userId.trim().length === 0}
+    disabled={userId.trim().length === 0 || gameId.trim().length > 0}
     on:click={() => state.create(userId)}>Create Game</button
   >
 

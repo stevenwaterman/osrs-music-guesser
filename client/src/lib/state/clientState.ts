@@ -4,6 +4,7 @@ import { scoreGuess } from "../scoring";
 import { getSongs } from "./songs";
 import type {
   AnyServerState,
+  ClientActions,
   ClientStateData,
   ServerStates,
 } from "./serverState";
@@ -160,7 +161,7 @@ class State_SinglePlayer_RevealingAnswer extends SinglePlayerState<
     }
   }
 }
-export class State_SinglePlayer_EndOfRound extends SinglePlayerState<
+class State_SinglePlayer_EndOfRound extends SinglePlayerState<
   "EndOfRound",
   { result: GuessResult }
 > {
@@ -175,7 +176,7 @@ export class State_SinglePlayer_EndOfRound extends SinglePlayerState<
     );
   }
 }
-export class State_SinglePlayer_EndOfFinalRound extends SinglePlayerState<
+class State_SinglePlayer_EndOfFinalRound extends SinglePlayerState<
   "EndOfFinalRound",
   { result: GuessResult }
 > {
@@ -216,11 +217,13 @@ class State_StartScreen_Multiplayer extends BaseState<
     internalStateStore.set(new State_StartScreen(this.data));
   }
   public create(userId: string) {
-    const ws = new WebSocket(`ws://localhost:3000/create?user=${userId}`);
+    const ws = new WebSocket(`ws://192.168.8.17:3000/create?user=${userId}`);
     this.listenToWs(ws);
   }
   public join(userId: string, gameId: string) {
-    const ws = new WebSocket(`ws://localhost:3000/create?user=${userId}`);
+    const ws = new WebSocket(
+      `ws://192.168.8.17::3000/join?user=${userId}&game=${gameId}`
+    );
     this.listenToWs(ws);
   }
 
@@ -230,11 +233,13 @@ class State_StartScreen_Multiplayer extends BaseState<
     };
     const onMessageHandler = (ev: MessageEvent<any>) => {
       const message: WsMessage = JSON.parse(ev.data);
+      console.log("message from server", message);
       if (message.action === "error") {
         cleanup();
         ws.close(1011);
       } else if (message.action === "state") {
-        internalStateStore.set(new State_Multiplayer_Active(message.data));
+        console.log("setting state store");
+        internalStateStore.set(new State_Multiplayer_Active(ws, message.data));
       }
     };
     const cleanup = () => {
@@ -248,11 +253,29 @@ class State_StartScreen_Multiplayer extends BaseState<
 
 class State_Multiplayer_Active<
   ServerStateName extends AnyServerState["stateName"]
-> extends BaseState<
-  `State_Multiplayer_${ServerStates[ServerStateName]["stateName"]}`,
-  ClientStateData<ServerStateName>
-> {
-  public name = `State_Multiplayer_${this.data.stateName}` as const;
+> extends BaseState<`Multiplayer_Active`, ClientStateData<ServerStateName>> {
+  public name = "Multiplayer_Active" as const;
+
+  constructor(
+    private readonly ws: WebSocket,
+    data: ClientStateData<ServerStateName>
+  ) {
+    super(data);
+  }
+
+  disconnect() {
+    this.ws.close(1000);
+  }
+
+  send(action: ClientActions) {
+    this.ws.send(JSON.stringify(action));
+  }
+
+  public isAnyMultiplayer<
+    Names extends ServerStates[keyof ServerStates]["stateName"]
+  >(...names: Names[]): this is MultiplayerState<Names> {
+    return (names as string[]).includes(this.data.stateName);
+  }
 }
 
 export type State = {
@@ -265,8 +288,14 @@ export type State = {
   SinglePlayer_EndOfFinalRound: State_SinglePlayer_EndOfFinalRound;
   SinglePlayer_EndOfGame: State_SinglePlayer_EndOfGame;
   StartScreen_Multiplayer: State_StartScreen_Multiplayer;
-  Multiplayer_Active: State_Multiplayer_Active<any>;
+  Multiplayer_Active: State_Multiplayer_Active<
+    ServerStates[keyof ServerStates]["stateName"]
+  >;
 };
+export type MultiplayerState<
+  Name extends ServerStates[keyof ServerStates]["stateName"]
+> = State_Multiplayer_Active<Name>;
+
 export type AnyState = State[keyof State];
 const internalStateStore: Writable<AnyState> = writable(
   new State_StartScreen({})

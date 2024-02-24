@@ -21,7 +21,10 @@ interface State<
 
   getPublicGameState(): Pick<GameState, PublicGameKeys[number]>;
   getPublicUserState(): Record<string, Pick<UserState, PublicUserKeys[number]>>;
-  getPrivateUserState(userId: string): Pick<UserState, PrivateUserKeys[number]>;
+  getPrivateUserState(
+    userId: string
+  ): Pick<UserState, PrivateUserKeys[number]> &
+    Pick<UserState, PublicUserKeys[number]>;
 }
 
 export interface LobbyEmpty
@@ -129,7 +132,7 @@ export interface RoundOver
     {
       userId: string;
       healthBefore: number;
-      healthAfter: number;
+      health: number;
       result: {
         guess: Coordinate;
         closest: Coordinate;
@@ -138,7 +141,7 @@ export interface RoundOver
       score: number;
       ws: WebSocket;
     },
-    ["userId", "healthBefore", "healthAfter", "result", "score"],
+    ["userId", "healthBefore", "health", "result", "score"],
     []
   > {}
 
@@ -176,3 +179,8 @@ export type ClientStateData<StateName extends AnyServerState["stateName"]> = {
   users: ReturnType<ServerStates[StateName]["getPublicUserState"]>;
   me: ReturnType<ServerStates[StateName]["getPrivateUserState"]>;
 };
+
+export type ClientActions =
+  | { action: "start" }
+  | { action: "guess"; data: Coordinate }
+  | { action: "playAgain" };

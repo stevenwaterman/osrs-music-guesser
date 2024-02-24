@@ -9,7 +9,15 @@
   import PreviousScores from "./PreviousScores.svelte";
   import NextRound from "./NextRound.svelte";
   import MultiplayerMenu from "./MultiplayerMenu.svelte";
+  import MultiplayerLobbyOnePlayer from "./MultiplayerLobbyOnePlayer.svelte";
+  import MultiplayerLobbyTwoPlayer from "./MultiplayerLobbyTwoPlayer.svelte";
+  import MultiplayerTimer from "./MultiplayerTimer.svelte";
+  import MultiplayerHealth from "./MultiplayerHealth.svelte";
   $: state = $stateStore;
+
+  $: if (state.isAny("Multiplayer_Active")) {
+    console.log(state.data);
+  }
 </script>
 
 <div class="grid">
@@ -34,7 +42,7 @@
   {/if}
 
   {#if state.isAny("SinglePlayer_NoGuess", "SinglePlayer_UnconfirmedGuess", "SinglePlayer_RevealingAnswer", "SinglePlayer_EndOfRound", "SinglePlayer_EndOfFinalRound")}
-    <Audio {state} />
+    <Audio song={state.data.songs[state.data.round - 1]} />
   {/if}
 
   {#if state.isAny("SinglePlayer_EndOfGame")}
@@ -47,6 +55,28 @@
 
   {#if state.isAny("SinglePlayer_EndOfRound", "SinglePlayer_EndOfFinalRound")}
     <NextRound {state} />
+  {/if}
+
+  {#if state.isAny("Multiplayer_Active")}
+    {#if state.isAnyMultiplayer("LobbyOnePlayer")}
+      <MultiplayerLobbyOnePlayer {state} />
+    {/if}
+
+    {#if state.isAnyMultiplayer("LobbyTwoPlayer")}
+      <MultiplayerLobbyTwoPlayer {state} />
+    {/if}
+
+    {#if state.isAnyMultiplayer("RoundNoGuessYet", "RoundOneGuess")}
+      <Audio song={state.data.game.song} />
+    {/if}
+
+    {#if state.isAnyMultiplayer("RoundOneGuess")}
+      <MultiplayerTimer {state} />
+    {/if}
+
+    {#if state.isAnyMultiplayer("RoundNoGuessYet", "RoundOneGuess", "RoundOver", "GameOver")}
+      <MultiplayerHealth {state} />
+    {/if}
   {/if}
 </div>
 

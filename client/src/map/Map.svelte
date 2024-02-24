@@ -4,6 +4,8 @@
   import FinalScoreLayer from "./FinalScoreLayer.svelte";
   import GuessLayer from "./GuessLayer.svelte";
   import LocationLayer from "./LocationLayer.svelte";
+  import MultiplayerGuessLayer from "./MultiplayerGuessLayer.svelte";
+  import MultiplayerScoreLayer from "./MultiplayerScoreLayer.svelte";
   import ScoreLayer from "./ScoreLayer.svelte";
   import TileLayer from "./TileLayer.svelte";
   import { resetView } from "./map";
@@ -19,6 +21,10 @@
   });
 
   $: if(map && state.isAny("SinglePlayer_NoGuess")) {
+    resetView(map);
+  }
+
+  $: if(map && state.isAny("Multiplayer_Active") && state.isAnyMultiplayer("RoundNoGuessYet")) {
     resetView(map);
   }
 </script>
@@ -38,5 +44,15 @@
 
   {#if state.isAny("SinglePlayer_EndOfGame")}
     <FinalScoreLayer {map} {state} />
+  {/if}
+
+  {#if state.isAny("Multiplayer_Active")}
+    {#if state.isAnyMultiplayer("RoundNoGuessYet", "RoundOneGuess")}
+      <MultiplayerGuessLayer {map} {state} />
+    {/if}
+
+    {#if state.isAnyMultiplayer("RoundOver")}
+      <MultiplayerScoreLayer {map} {state} />
+    {/if}
   {/if}
 {/if}

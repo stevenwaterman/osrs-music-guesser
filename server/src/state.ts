@@ -122,14 +122,19 @@ abstract class State<
 
   public getPrivateUserState(
     userId: string
-  ): Pick<UserState, PrivateUserKeys[number]> {
-    return pick(this.users[userId], ...this.privateUserKeys);
+  ): Pick<UserState, PrivateUserKeys[number]> &
+    Pick<UserState, PublicUserKeys[number]> {
+    return pick(
+      this.users[userId],
+      ...[...this.publicUserKeys, ...this.privateUserKeys]
+    );
   }
 
   private broadcastState() {
     const game = this.getPublicGameState();
     const users = this.getPublicUserState();
     Object.values(this.users).forEach((user) => {
+      console.log("broadcasting to ", user.userId, this.stateName);
       user.ws.send(
         JSON.stringify({
           action: "state",
@@ -420,7 +425,7 @@ export class RoundOneGuess extends State<
         return {
           userId: user.userId,
           healthBefore: user.health,
-          healthAfter: Math.max(user.health - damage, 0),
+          health: Math.max(user.health - damage, 0),
           result:
             result === null
               ? null
@@ -471,7 +476,7 @@ export class RoundOver extends State<
   {
     userId: string;
     healthBefore: number;
-    healthAfter: number;
+    health: number;
     result: {
       guess: Coordinate;
       closest: Coordinate;
@@ -480,7 +485,7 @@ export class RoundOver extends State<
     score: number;
     ws: WebSocket;
   },
-  ["userId", "healthBefore", "healthAfter", "result", "score"],
+  ["userId", "healthBefore", "health", "result", "score"],
   []
 > {
   public stateName = "RoundOver" as const;
@@ -488,21 +493,21 @@ export class RoundOver extends State<
   public publicUserKeys = [
     "userId",
     "healthBefore",
-    "healthAfter",
+    "health",
     "result",
     "score",
   ] as const;
   public privateUserKeys = [] as const;
 
   public next() {
-    if (Object.values(this.users).some((user) => user.healthAfter <= 0)) {
+    if (Object.values(this.users).some((user) => user.health <= 0)) {
       return this.transition(
         new GameOver(
           this.store,
           omit(this.game, "songs", "song"),
           mapValues(this.users, (user) => ({
             userId: user.userId,
-            health: user.healthAfter,
+            health: user.health,
             ws: user.ws,
           }))
         )
@@ -518,7 +523,7 @@ export class RoundOver extends State<
           },
           mapValues(this.users, (user) => ({
             userId: user.userId,
-            health: user.healthAfter,
+            health: user.health,
             ws: user.ws,
           }))
         )
@@ -574,7 +579,7 @@ export class GameOver extends State<
     userId: string,
     message: { action: string; data?: any }
   ): void {
-    if (userId === this.game.owner && message.action === "PlayAgain") {
+    if (userId === this.game.owner && message.action === "playAgain") {
       this.playAgain();
     }
   }
