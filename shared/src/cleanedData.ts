@@ -541,6 +541,9 @@ const eaglesTransport = [
   rectangle(3402, 3160, 3406, 3156),
 ];
 const waterAltar = rectangle(3181, 3167, 3186, 3161);
+const miscPrinceBrand = rectangle(2497, 3855, 2509, 3845);
+const rellekkaLongHall = rectangle(2654, 3686, 2663, 3664);
+const vardorvis = rectangle(1120, 3427, 1138, 3409);
 
 export const finishedData: Record<string, { title: string; file: string; polygons: Polygon[] }> = {
   "7th Realm": {
@@ -21118,13 +21121,13 @@ export const finishedData: Record<string, { title: string; file: string; polygon
   ...song("Amascut's Promise", toa),
   ...song("Ape-ex Predator", toa),
   ...song("Architects of Prifddinas", prif),
-  ...song("Awful Anthem"),
-  ...song("Bait"),
-  ...song("Ballad of the Basilisk"),
+  ...song("Awful Anthem", miscPrinceBrand),
+  ...song("Bait", nightmare, myrequeHideoutCanifis),
+  ...song("Ballad of the Basilisk", rellekkaLongHall),
   ...song("Barbarian Workout"),
-  ...song("Beneath Cursed Sands"),
-  ...song("Blood Rush"),
-  ...song("Bob's on Holiday"),
+  ...song("Beneath Cursed Sands", toa),
+  ...song("Blood Rush", vardorvis),
+  ...song("Bob's on Holiday", kbd, ),
   ...song("Bolrie's Diary"),
   ...song("Brain Battle"),
   ...song("Bunny's Sugar Rush"),
