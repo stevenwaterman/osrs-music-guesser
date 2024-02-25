@@ -1,7 +1,7 @@
 import { Polygon } from "../coordinates.js";
 import { toMap } from "../util.js";
 import { audioUrls } from "./parsed/audioUrls.js";
-import { songPolygons } from "./parsed/songPolygons.js";
+import { songLocations } from "./parsed/songLocations.js";
 import {
   songDurations,
   songNames,
@@ -28,5 +28,5 @@ export const songs: Record<string, Song> = toMap(songNames.map((name) => [name, 
   unlockHint: songUnlockHints[name],
   description: songDescriptions[name],
   duration: songDurations[name],
-  locations: songPolygons[name],
+  locations: songLocations[name],
 }]));

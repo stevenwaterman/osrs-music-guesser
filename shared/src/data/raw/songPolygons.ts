@@ -1,4 +1,4 @@
-import type { Coordinate, Polygon } from "./coordinates.js";
+import type { Coordinate, Polygon } from "../../coordinates.js";
 
 type PolygonWithoutCenter = Omit<Polygon, "center">;
 function rectangle(
@@ -610,23 +610,23 @@ const sophanemMenaphosGate = rectangle(3264, 2788, 3282, 2781);
 const poisonWasteTree = rectangle(2335, 3109, 2341, 3116);
 const cropCircles = [
   rectangle(2948, 3439, 2958, 3449),
-rectangle(2577, 3099, 2587, 3109),
-rectangle(3110, 3268, 3120, 3278),
-rectangle(2973, 3211, 2983, 3221),
-rectangle(3136, 3456, 3146, 3466),
-rectangle(1297, 3706, 1307, 3716),
-rectangle(1733, 3528, 1743, 3538),
-rectangle(3805, 2847, 3815, 2857),
-rectangle(2190, 3397, 2200, 3407),
-rectangle(2814, 3465, 2824, 3475),
-rectangle(2430, 3467, 2440, 3477),
-rectangle(2803, 3195, 2813, 3205),
-rectangle(3698, 2970, 3708, 2980),
-rectangle(2891, 3401, 2901, 3411),
-rectangle(3155, 3294, 3165, 3304),
-rectangle(2642, 3343, 2652, 3353),
-rectangle(3207, 3340, 3217, 3350),
-rectangle(2533, 3840, 2543, 3850)
+  rectangle(2577, 3099, 2587, 3109),
+  rectangle(3110, 3268, 3120, 3278),
+  rectangle(2973, 3211, 2983, 3221),
+  rectangle(3136, 3456, 3146, 3466),
+  rectangle(1297, 3706, 1307, 3716),
+  rectangle(1733, 3528, 1743, 3538),
+  rectangle(3805, 2847, 3815, 2857),
+  rectangle(2190, 3397, 2200, 3407),
+  rectangle(2814, 3465, 2824, 3475),
+  rectangle(2430, 3467, 2440, 3477),
+  rectangle(2803, 3195, 2813, 3205),
+  rectangle(3698, 2970, 3708, 2980),
+  rectangle(2891, 3401, 2901, 3411),
+  rectangle(3155, 3294, 3165, 3304),
+  rectangle(2642, 3343, 2652, 3353),
+  rectangle(3207, 3340, 3217, 3350),
+  rectangle(2533, 3840, 2543, 3850),
 ];
 const rellekkaSquare = rectangle(2627, 3683, 2653, 3667);
 const jester = rectangle(2333, 3801, 2338, 3797);
@@ -639,7 +639,7 @@ const paterdomusBushes = rectangle(3386, 3486, 3394, 3479);
 const weissCentre = rectangle(2865, 3943, 2879, 3929);
 const varrockWarehouseUpstairs = rectangle(3267, 3377, 3269, 3380);
 const gardenOfDeath = [
-  // start point 
+  // start point
   rectangle(1303, 3480, 1323, 3464),
   // under molch
   rectangle(1361, 3639, 1367, 3632),
@@ -680,18 +680,14 @@ const morytaniaHespori = rectangle(3500, 3365, 3514, 3349);
 const aidOfMyrequeVanstromGadderanks = rectangle(3531, 3214, 3542, 3204);
 const sotfVanescula = rectangle(3542, 3521, 3554, 3513);
 
-export const finishedData: Record<
+export const songPolygons: Record<
   string,
-  { title: string; file: string; polygons: PolygonWithoutCenter[] }
+  { polygons: PolygonWithoutCenter[] }
 > = {
   "7th Realm": {
-    title: "7th Realm",
-    file: "7th_Realm",
     polygons: [...mythsDungeon, ...brimhavenDungeon],
   },
   Adventure: {
-    title: "Adventure",
-    file: "Adventure",
     polygons: [
       {
         coordinates: [
@@ -706,8 +702,6 @@ export const finishedData: Record<
     ],
   },
   "Al Kharid": {
-    title: "Al Kharid",
-    file: "Al_Kharid_(music_track)",
     polygons: [
       {
         coordinates: [
@@ -722,18 +716,12 @@ export const finishedData: Record<
     ],
   },
   "Alchemical Attack!": {
-    title: "Alchemical Attack!",
-    file: "Alchemical_Attack!",
     polygons: [karuulmSlayerDungeon],
   },
   "All's Fairy in Love & War": {
-    title: "All's Fairy in Love &; War",
-    file: "All%27s_Fairy_in_Love_%26_War",
     polygons: [],
   },
   Alone: {
-    title: "Alone",
-    file: "Alone",
     polygons: [
       clockTower,
       {
@@ -805,18 +793,12 @@ export const finishedData: Record<
     ],
   },
   "Altar Ego": {
-    title: "Altar Ego",
-    file: "Altar_Ego",
     polygons: [ourania],
   },
   "Alternative Root": {
-    title: "Alternative Root",
-    file: "Alternative_Root",
     polygons: [varrockStatue],
   },
   "Ambient Jungle": {
-    title: "Ambient Jungle",
-    file: "Ambient_Jungle",
     polygons: [
       {
         coordinates: [
@@ -831,18 +813,12 @@ export const finishedData: Record<
     ],
   },
   "The Ancient Prison": {
-    title: "The Ancient Prison",
-    file: "The_Ancient_Prison",
     polygons: [godWars],
   },
   "The Angel's Fury": {
-    title: "The Angel's Fury",
-    file: "The_Angel%27s_Fury",
     polygons: [godWars],
   },
   Anywhere: {
-    title: "Anywhere",
-    file: "Anywhere",
     polygons: [
       {
         coordinates: [
@@ -857,8 +833,6 @@ export const finishedData: Record<
     ],
   },
   Arabian: {
-    title: "Arabian",
-    file: "Arabian",
     polygons: [
       {
         coordinates: [
@@ -883,8 +857,6 @@ export const finishedData: Record<
     ],
   },
   "Arabian 2": {
-    title: "Arabian 2",
-    file: "Arabian_2",
     polygons: [
       {
         coordinates: [
@@ -899,8 +871,6 @@ export const finishedData: Record<
     ],
   },
   "Arabian 3": {
-    title: "Arabian 3",
-    file: "Arabian_3",
     polygons: [
       {
         coordinates: [
@@ -915,18 +885,12 @@ export const finishedData: Record<
     ],
   },
   Arabique: {
-    title: "Arabique",
-    file: "Arabique",
     polygons: taverleyDungeon,
   },
   "Arachnids of Vampyrium": {
-    title: "Arachnids of Vampyrium",
-    file: "Arachnids_of_Vampyrium_(music_track)",
     polygons: [tob],
   },
   Arboretum: {
-    title: "Arboretum",
-    file: "Arboretum",
     polygons: [
       {
         coordinates: [
@@ -947,8 +911,6 @@ export const finishedData: Record<
     ],
   },
   Arcane: {
-    title: "Arcane",
-    file: "Arcane_(music_track)",
     polygons: [
       {
         coordinates: [
@@ -1051,18 +1013,12 @@ export const finishedData: Record<
     ],
   },
   "Armadyl Alliance": {
-    title: "Armadyl Alliance",
-    file: "Armadyl_Alliance",
     polygons: [godWars],
   },
   Armageddon: {
-    title: "Armageddon",
-    file: "Armageddon",
     polygons: [godWars, wildyGodWars],
   },
   "Army of Darkness": {
-    title: "Army of Darkness",
-    file: "Army_of_Darkness",
     polygons: [
       {
         coordinates: [
@@ -1077,8 +1033,6 @@ export const finishedData: Record<
     ],
   },
   Arrival: {
-    title: "Arrival",
-    file: "Arrival",
     polygons: [
       {
         coordinates: [
@@ -1093,18 +1047,12 @@ export const finishedData: Record<
     ],
   },
   Artistry: {
-    title: "Artistry",
-    file: "Artistry",
     polygons: [],
   },
   "Assault and Battery": {
-    title: "Assault and Battery",
-    file: "Assault_and_Battery",
     polygons: [barbAssault],
   },
   "Attack 1": {
-    title: "Attack 1",
-    file: "Attack_1",
     polygons: [
       {
         coordinates: [
@@ -1135,18 +1083,12 @@ export const finishedData: Record<
     ],
   },
   "Attack 2": {
-    title: "Attack 2",
-    file: "Attack_2",
     polygons: tzhaar,
   },
   "Attack 3": {
-    title: "Attack 3",
-    file: "Attack_3",
     polygons: [lavaMaze],
   },
   "Attack 4": {
-    title: "Attack 4",
-    file: "Attack_4",
     polygons: [
       iorwerthCamp,
       ...yanilleAgility,
@@ -1163,18 +1105,12 @@ export const finishedData: Record<
     ],
   },
   "Attack 5": {
-    title: "Attack 5",
-    file: "Attack_5",
     polygons: [kbd, lithkren],
   },
   "Attack 6": {
-    title: "Attack 6",
-    file: "Attack_6",
     polygons: [ogreEnclave],
   },
   Attention: {
-    title: "Attention",
-    file: "Attention",
     polygons: [
       {
         coordinates: [
@@ -1191,8 +1127,6 @@ export const finishedData: Record<
     ],
   },
   "Autumn Voyage": {
-    title: "Autumn Voyage",
-    file: "Autumn_Voyage",
     polygons: [
       {
         coordinates: [
@@ -1207,18 +1141,12 @@ export const finishedData: Record<
     ],
   },
   "Aye Car Rum Ba": {
-    title: "Aye Car Rum Ba",
-    file: "Aye_Car_Rum_Ba",
     polygons: [braindeath],
   },
   Aztec: {
-    title: "Aztec",
-    file: "Aztec",
     polygons: [brimhavenAgility],
   },
   "Back to Life": {
-    title: "Back to Life",
-    file: "Back_to_Life",
     polygons: [
       {
         coordinates: [
@@ -1233,8 +1161,6 @@ export const finishedData: Record<
     ],
   },
   Background: {
-    title: "Background",
-    file: "Background",
     polygons: [
       {
         coordinates: [
@@ -1249,8 +1175,6 @@ export const finishedData: Record<
     ],
   },
   "Ballad of Enchantment": {
-    title: "Ballad of Enchantment",
-    file: "Ballad_of_Enchantment",
     polygons: [
       {
         coordinates: [
@@ -1265,8 +1189,6 @@ export const finishedData: Record<
     ],
   },
   "Bandit Camp": {
-    title: "Bandit Camp",
-    file: "Bandit_Camp_(music_track)",
     polygons: [
       {
         coordinates: [
@@ -1281,28 +1203,18 @@ export const finishedData: Record<
     ],
   },
   "Bandos Battalion": {
-    title: "Bandos Battalion",
-    file: "Bandos_Battalion",
     polygons: [godWars],
   },
   Bane: {
-    title: "Bane",
-    file: "Bane",
     polygons: [corp],
   },
   "The Bane of Ashihama": {
-    title: "The Bane of Ashihama",
-    file: "The_Bane_of_Ashihama",
     polygons: [nightmare],
   },
   "Barb Wire": {
-    title: "Barb Wire",
-    file: "Barb_Wire",
     polygons: [lithkren, ancientCavern],
   },
   Barbarianism: {
-    title: "Barbarianism",
-    file: "Barbarianism",
     polygons: [
       {
         coordinates: [
@@ -1317,13 +1229,9 @@ export const finishedData: Record<
     ],
   },
   "Barking Mad": {
-    title: "Barking Mad",
-    file: "Barking_Mad",
     polygons: [werewolfAgility],
   },
   Baroque: {
-    title: "Baroque",
-    file: "Baroque",
     polygons: [
       {
         coordinates: [
@@ -1338,8 +1246,6 @@ export const finishedData: Record<
     ],
   },
   "Barren Land": {
-    title: "Barren Land",
-    file: "Barren_Land",
     polygons: [
       {
         coordinates: [
@@ -1356,28 +1262,18 @@ export const finishedData: Record<
     ],
   },
   "Beetle Juice": {
-    title: "Beetle Juice",
-    file: "Beetle_Juice",
     polygons: [sophanemDungeon],
   },
   "Beneath the Kingdom": {
-    title: "Beneath the Kingdom",
-    file: "Beneath_the_Kingdom",
     polygons: catacombsGiantsDen,
   },
   "Beneath the Stronghold": {
-    title: "Beneath the Stronghold",
-    file: "Beneath_the_Stronghold",
     polygons: [strongholdSlayerCave],
   },
   Beyond: {
-    title: "Beyond",
-    file: "Beyond",
     polygons: [...whiteWolfTunnel, ...iceQueen, warriorsGuildBasement],
   },
   "Beyond the Meadow": {
-    title: "Beyond the Meadow",
-    file: "Beyond_the_Meadow",
     polygons: [
       {
         coordinates: [
@@ -1469,8 +1365,6 @@ export const finishedData: Record<
     ],
   },
   "Big Chords": {
-    title: "Big Chords",
-    file: "Big_Chords",
     polygons: [
       {
         coordinates: [
@@ -1485,13 +1379,9 @@ export const finishedData: Record<
     ],
   },
   "Blistering Barnacles": {
-    title: "Blistering Barnacles",
-    file: "Blistering_Barnacles",
     polygons: [braindeath],
   },
   Bloodbath: {
-    title: "Bloodbath",
-    file: "Bloodbath",
     polygons: [
       ...myrequeLaboratories,
       abyss,
@@ -1520,13 +1410,9 @@ export const finishedData: Record<
     ],
   },
   "Body Parts": {
-    title: "Body Parts",
-    file: "Body_Parts",
     polygons: experiments,
   },
   "Bone Dance": {
-    title: "Bone Dance",
-    file: "Bone_Dance",
     polygons: [
       {
         coordinates: [
@@ -1543,13 +1429,9 @@ export const finishedData: Record<
     ],
   },
   "Bone Dry": {
-    title: "Bone Dry",
-    file: "Bone_Dry",
     polygons: [pollnivneachSmokeDungeon],
   },
   "Book of Spells": {
-    title: "Book of Spells",
-    file: "Book_of_Spells",
     polygons: [
       {
         coordinates: [
@@ -1564,8 +1446,6 @@ export const finishedData: Record<
     ],
   },
   Borderland: {
-    title: "Borderland",
-    file: "Borderland",
     polygons: [
       {
         coordinates: [
@@ -1580,13 +1460,9 @@ export const finishedData: Record<
     ],
   },
   "Box of Delights": {
-    title: "Box of Delights",
-    file: "Box_of_Delights",
     polygons: [mimic],
   },
   Breeze: {
-    title: "Breeze",
-    file: "Breeze",
     polygons: [
       {
         coordinates: [
@@ -1601,23 +1477,15 @@ export const finishedData: Record<
     ],
   },
   "Brew Hoo Hoo!": {
-    title: "Brew Hoo Hoo!",
-    file: "Brew_Hoo_Hoo!",
     polygons: [phasmatysBrewery],
   },
   "Brimstail's Scales": {
-    title: "Brimstail's Scales",
-    file: "Brimstail%27s_Scales",
     polygons: [brimstail],
   },
   "Bubble and Squeak": {
-    title: "Bubble and Squeak",
-    file: "Bubble_and_Squeak",
     polygons: keldagrim,
   },
   "Burning Desire": {
-    title: "Burning Desire",
-    file: "Burning_Desire",
     polygons: [
       {
         coordinates: [
@@ -1641,13 +1509,9 @@ export const finishedData: Record<
     ],
   },
   "Cabin Fever": {
-    title: "Cabin Fever",
-    file: "Cabin_Fever_(music_track)",
     polygons: [cabinFever],
   },
   Camelot: {
-    title: "Camelot",
-    file: "Camelot_(music_track)",
     polygons: [
       {
         coordinates: [
@@ -1662,8 +1526,6 @@ export const finishedData: Record<
     ],
   },
   "Castle Wars": {
-    title: "Castle Wars",
-    file: "Castle_Wars_(music_track)",
     polygons: [
       {
         coordinates: [
@@ -1678,68 +1540,42 @@ export const finishedData: Record<
     ],
   },
   "Catacombs and Tombs": {
-    title: "Catacombs and Tombs",
-    file: "Catacombs_and_Tombs",
     polygons: [goblinCave],
   },
   "Catch Me If You Can": {
-    title: "Catch Me If You Can",
-    file: "Catch_Me_If_You_Can",
     polygons: ardySewerEast,
   },
   "Cave Background": {
-    title: "Cave Background",
-    file: "Cave_Background",
     polygons: [...dwarvernMine, ...taverleyDungeon],
   },
   "Cave of Beasts": {
-    title: "Cave of Beasts",
-    file: "Cave_of_Beasts",
     polygons: [kendalCave],
   },
   "Cave of the Goblins": {
-    title: "Cave of the Goblins",
-    file: "Cave_of_the_Goblins",
     polygons: swampCavesDorgeshKaanTears,
   },
   Cavern: {
-    title: "Cavern",
-    file: "Cavern",
     polygons: [...yanilleAgility, deepWildyDungeon],
   },
   "The Cellar Dwellers": {
-    title: "The Cellar Dwellers",
-    file: "The_Cellar_Dwellers",
     polygons: [ardySewerWest, elenaPrisonPlagueCity, carnelianBasement],
   },
   "Cellar Song": {
-    title: "Cellar Song",
-    file: "Cellar_Song",
     polygons: [varrockWestBankVault],
   },
   "Chain of Command": {
-    title: "Chain of Command",
-    file: "Chain_of_Command",
     polygons: templeOfIkov,
   },
   Chamber: {
-    title: "Chamber",
-    file: "Chamber",
     polygons: hauntedMine,
   },
   "Chef Surprise": {
-    title: "Chef Surprise",
-    file: "Chef_Surprise",
     polygons: [culinaromancer],
   },
   "Chickened Out": {
-    title: "Chickened Out",
-    file: "Chickened_Out",
     polygons: [zanaris],
   },
   "Chompy Hunt": {
-    title: "Chompy Hunt",
-    file: "Chompy_Hunt",
     polygons: [
       rantz,
       {
@@ -1755,13 +1591,9 @@ export const finishedData: Record<
     ],
   },
   "The Chosen": {
-    title: "The Chosen",
-    file: "The_Chosen",
     polygons: [sirTiffy],
   },
   "City of the Dead": {
-    title: "City of the Dead",
-    file: "City_of_the_Dead",
     polygons: [
       {
         coordinates: [
@@ -1778,23 +1610,15 @@ export const finishedData: Record<
     ],
   },
   "Clan Wars": {
-    title: "Clan Wars",
-    file: "Clan_Wars_(music_track)",
     polygons: [clanWars],
   },
   Clanliness: {
-    title: "Clanliness",
-    file: "Clanliness",
     polygons: [clanHall],
   },
   Claustrophobia: {
-    title: "Claustrophobia",
-    file: "Claustrophobia",
     polygons: keldagrim,
   },
   "Close Quarters": {
-    title: "Close Quarters",
-    file: "Close_Quarters",
     polygons: [
       {
         coordinates: [
@@ -1809,8 +1633,6 @@ export const finishedData: Record<
     ],
   },
   Coil: {
-    title: "Coil",
-    file: "Coil",
     polygons: [
       {
         coordinates: [
@@ -1825,33 +1647,21 @@ export const finishedData: Record<
     ],
   },
   "Colossus of the Deep": {
-    title: "Colossus of the Deep",
-    file: "Colossus_of_the_Deep",
     polygons: [wizardTowerBasement],
   },
   Competition: {
-    title: "Competition",
-    file: "Competition",
     polygons: [burthorpeGamesRoom],
   },
   Complication: {
-    title: "Complication",
-    file: "Complication",
     polygons: [abyss, chaosAltar],
   },
   "The Consortium": {
-    title: "The Consortium",
-    file: "The_Consortium_(music_track)",
     polygons: keldagrim,
   },
   Conspiracy: {
-    title: "Conspiracy",
-    file: "Conspiracy",
     polygons: [tasteOfHopeSpying, serafinaBasement, sotfSpying, damienLeucurte],
   },
   Contest: {
-    title: "Contest",
-    file: "Contest",
     polygons: [
       {
         coordinates: [
@@ -1866,18 +1676,12 @@ export const finishedData: Record<
     ],
   },
   "Corporal Punishment": {
-    title: "Corporal Punishment",
-    file: "Corporal_Punishment",
     polygons: [],
   },
   "Corridors of Power": {
-    title: "Corridors of Power",
-    file: "Corridors_of_Power",
     polygons: miscDungeon,
   },
   "Country Jig": {
-    title: "Country Jig",
-    file: "Country_Jig",
     polygons: [
       {
         coordinates: [
@@ -1966,23 +1770,15 @@ export const finishedData: Record<
     ],
   },
   Courage: {
-    title: "Courage",
-    file: "Courage",
     polygons: [...taverleyDungeon, witchsBasement, heroesGuild],
   },
   "Creature Cruelty": {
-    title: "Creature Cruelty",
-    file: "Creature_Cruelty",
     polygons: [towerOfLife],
   },
   "Creeping Vines": {
-    title: "Creeping Vines",
-    file: "Creeping_Vines",
     polygons: [hespori],
   },
   "Crystal Castle": {
-    title: "Crystal Castle",
-    file: "Crystal_Castle",
     polygons: [
       {
         coordinates: [
@@ -1997,13 +1793,9 @@ export const finishedData: Record<
     ],
   },
   "Crystal Cave": {
-    title: "Crystal Cave",
-    file: "Crystal_Cave",
     polygons: [zanaris],
   },
   "Crystal Sword": {
-    title: "Crystal Sword",
-    file: "Crystal_Sword",
     polygons: [
       ...ardySewerEast,
       {
@@ -2019,33 +1811,21 @@ export const finishedData: Record<
     ],
   },
   Cursed: {
-    title: "Cursed",
-    file: "Cursed",
     polygons: [wrathAltar, rabbitCave, ...undergroundPass],
   },
   "The Curtain Closes": {
-    title: "The Curtain Closes",
-    file: "The_Curtain_Closes",
     polygons: [tob],
   },
   "Dagannoth Dawn": {
-    title: "Dagannoth Dawn",
-    file: "Dagannoth_Dawn",
     polygons: dks,
   },
   "Dance of Death": {
-    title: "Dance of Death",
-    file: "Dance_of_Death",
     polygons: [strongholdOfSecurity],
   },
   "Dance of the Nylocas": {
-    title: "Dance of the Nylocas",
-    file: "Dance_of_the_Nylocas",
     polygons: [tob],
   },
   "Dance of the Undead": {
-    title: "Dance of the Undead",
-    file: "Dance_of_the_Undead",
     polygons: [
       {
         coordinates: [
@@ -2060,8 +1840,6 @@ export const finishedData: Record<
     ],
   },
   Dangerous: {
-    title: "Dangerous",
-    file: "Dangerous",
     polygons: [
       {
         coordinates: [
@@ -2086,23 +1864,15 @@ export const finishedData: Record<
     ],
   },
   "A Dangerous Game": {
-    title: "A Dangerous Game",
-    file: "A_Dangerous_Game",
     polygons: wildySlayerCave,
   },
   "Dangerous Road": {
-    title: "Dangerous Road",
-    file: "Dangerous_Road",
     polygons: tzhaar,
   },
   "Dangerous Way": {
-    title: "Dangerous Way",
-    file: "Dangerous_Way",
     polygons: [barrows],
   },
   Dark: {
-    title: "Dark",
-    file: "Dark",
     polygons: [
       {
         coordinates: [
@@ -2117,28 +1887,18 @@ export const finishedData: Record<
     ],
   },
   "The Dark Beast Sotetseg": {
-    title: "The Dark Beast Sotetseg",
-    file: "The_Dark_Beast_Sotetseg",
     polygons: [tob],
   },
   "Darkly Altared": {
-    title: "Darkly Altared",
-    file: "Darkly_Altared",
     polygons: catacombsGiantsDen,
   },
   "Darkness in the Depths": {
-    title: "Darkness in the Depths",
-    file: "Darkness_in_the_Depths",
     polygons: [chasmOfFire],
   },
   "Davy Jones' Locker": {
-    title: "Davy Jones' Locker",
-    file: "Davy_Jones%27_Locker",
     polygons: [mogreCamp],
   },
   "Dead Can Dance": {
-    title: "Dead Can Dance",
-    file: "Dead_Can_Dance",
     polygons: [
       {
         coordinates: [
@@ -2153,8 +1913,6 @@ export const finishedData: Record<
     ],
   },
   "Dead Quiet": {
-    title: "Dead Quiet",
-    file: "Dead_Quiet",
     polygons: [
       ...templeTrekking,
       {
@@ -2170,8 +1928,6 @@ export const finishedData: Record<
     ],
   },
   Deadlands: {
-    title: "Deadlands",
-    file: "Deadlands",
     polygons: [
       {
         coordinates: [
@@ -2194,13 +1950,9 @@ export const finishedData: Record<
     ],
   },
   "Deep Down": {
-    title: "Deep Down",
-    file: "Deep_Down",
     polygons: hauntedMine,
   },
   "Deep Wildy": {
-    title: "Deep Wildy",
-    file: "Deep_Wildy",
     polygons: [
       {
         coordinates: [
@@ -2215,13 +1967,9 @@ export const finishedData: Record<
     ],
   },
   "The Depths": {
-    title: "The Depths",
-    file: "The_Depths",
     polygons: [sophanemDungeon],
   },
   "Desert Heat": {
-    title: "Desert Heat",
-    file: "Desert_Heat_(music_track)",
     polygons: [
       {
         coordinates: [
@@ -2236,8 +1984,6 @@ export const finishedData: Record<
     ],
   },
   "Desert Voyage": {
-    title: "Desert Voyage",
-    file: "Desert_Voyage",
     polygons: [
       {
         coordinates: [
@@ -2254,8 +2000,6 @@ export const finishedData: Record<
     ],
   },
   "The Desert": {
-    title: "The Desert",
-    file: "The_Desert",
     polygons: [
       {
         coordinates: [
@@ -2270,8 +2014,6 @@ export const finishedData: Record<
     ],
   },
   "The Desolate Isle": {
-    title: "The Desolate Isle",
-    file: "The_Desolate_Isle",
     polygons: [
       {
         coordinates: [
@@ -2306,8 +2048,6 @@ export const finishedData: Record<
     ],
   },
   "The Desolate Mage": {
-    title: "The Desolate Mage",
-    file: "The_Desolate_Mage",
     polygons: [
       {
         coordinates: [
@@ -2331,18 +2071,12 @@ export const finishedData: Record<
     ],
   },
   "Devils May Care": {
-    title: "Devils May Care",
-    file: "Devils_May_Care",
     polygons: [smokeDungeon],
   },
   "Dimension X": {
-    title: "Dimension X",
-    file: "Dimension_X",
     polygons: [],
   },
   "Distant Land": {
-    title: "Distant Land",
-    file: "Distant_Land",
     polygons: [
       ...templeTrekking,
       {
@@ -2360,8 +2094,6 @@ export const finishedData: Record<
     ],
   },
   "Distillery Hilarity": {
-    title: "Distillery Hilarity",
-    file: "Distillery_Hilarity",
     polygons: [
       {
         coordinates: [
@@ -2376,13 +2108,9 @@ export const finishedData: Record<
     ],
   },
   "Dogs of War": {
-    title: "Dogs of War",
-    file: "Dogs_of_War",
     polygons: [strongholdOfSecurity],
   },
   "The Doors of Dinh": {
-    title: "The Doors of Dinh",
-    file: "The_Doors_of_Dinh",
     polygons: [
       {
         coordinates: [
@@ -2405,8 +2133,6 @@ export const finishedData: Record<
     ],
   },
   Doorways: {
-    title: "Doorways",
-    file: "Doorways",
     polygons: [
       {
         coordinates: [
@@ -2448,28 +2174,18 @@ export const finishedData: Record<
     ],
   },
   "Dorgeshuun City": {
-    title: "Dorgeshuun City",
-    file: "Dorgeshuun_City",
     polygons: swampCavesDorgeshKaanTears,
   },
   "Dorgeshuun Deep": {
-    title: "Dorgeshuun Deep",
-    file: "Dorgeshuun_Deep",
     polygons: swampCavesDorgeshKaanTears,
   },
   "Down Below": {
-    title: "Down Below",
-    file: "Down_Below",
     polygons: draynorSewers,
   },
   "Down and Out": {
-    title: "Down and Out",
-    file: "Down_and_Out",
     polygons: [lunarIsleMine],
   },
   "Down by the Docks": {
-    title: "Down by the Docks",
-    file: "Down_by_the_Docks",
     polygons: [
       {
         coordinates: [
@@ -2508,13 +2224,9 @@ export const finishedData: Record<
     ],
   },
   "Down to Earth": {
-    title: "Down to Earth",
-    file: "Down_to_Earth",
     polygons: [earthAltar, abyss],
   },
   "Dragontooth Island": {
-    title: "Dragontooth Island",
-    file: "Dragontooth_Island_(music_track)",
     polygons: [
       {
         coordinates: [
@@ -2529,8 +2241,6 @@ export const finishedData: Record<
     ],
   },
   Dream: {
-    title: "Dream",
-    file: "Dream_(music_track)",
     polygons: [
       {
         coordinates: [
@@ -2545,8 +2255,6 @@ export const finishedData: Record<
     ],
   },
   "Dunes of Eternity": {
-    title: "Dunes of Eternity",
-    file: "Dunes_of_Eternity",
     polygons: [
       {
         coordinates: [
@@ -2563,18 +2271,12 @@ export const finishedData: Record<
     ],
   },
   Dunjun: {
-    title: "Dunjun",
-    file: "Dunjun",
     polygons: [...taverleyDungeon, whiteKnightsCrypt],
   },
   "Dusk in Yu'biusk": {
-    title: "Dusk in Yu'biusk",
-    file: "Dusk_in_Yu%27biusk",
     polygons: [],
   },
   "Dwarf Theme": {
-    title: "Dwarf Theme",
-    file: "Dwarf_Theme",
     polygons: [
       {
         coordinates: [
@@ -2589,8 +2291,6 @@ export const finishedData: Record<
     ],
   },
   Dynasty: {
-    title: "Dynasty",
-    file: "Dynasty",
     polygons: [
       {
         coordinates: [
@@ -2605,8 +2305,6 @@ export const finishedData: Record<
     ],
   },
   "Eagles' Peak": {
-    title: "Eagles' Peak",
-    file: "Eagles%27_Peak_(music_track)",
     polygons: [
       {
         coordinates: [
@@ -2621,8 +2319,6 @@ export const finishedData: Record<
     ],
   },
   Egypt: {
-    title: "Egypt",
-    file: "Egypt",
     polygons: [
       {
         coordinates: [
@@ -2637,8 +2333,6 @@ export const finishedData: Record<
     ],
   },
   "Elven Mist": {
-    title: "Elven Mist",
-    file: "Elven_Mist",
     polygons: [
       {
         coordinates: [
@@ -2653,8 +2347,6 @@ export const finishedData: Record<
     ],
   },
   "Elven Seed": {
-    title: "Elven Seed",
-    file: "Elven_Seed",
     polygons: [
       {
         coordinates: [
@@ -2671,8 +2363,6 @@ export const finishedData: Record<
     ],
   },
   "The Emir's Arena": {
-    title: "The Emir's Arena",
-    file: "The_Emir%27s_Arena",
     polygons: [
       {
         coordinates: [
@@ -2689,8 +2379,6 @@ export const finishedData: Record<
     ],
   },
   Emotion: {
-    title: "Emotion",
-    file: "Emotion",
     polygons: [
       fisherRealm,
       {
@@ -2706,13 +2394,9 @@ export const finishedData: Record<
     ],
   },
   "The Enchanter": {
-    title: "The Enchanter",
-    file: "The_Enchanter",
     polygons: [mta],
   },
   "The Enclave": {
-    title: "The Enclave",
-    file: "The_Enclave",
     polygons: [
       {
         coordinates: [
@@ -2759,18 +2443,12 @@ export const finishedData: Record<
     ],
   },
   Escape: {
-    title: "Escape",
-    file: "Escape",
     polygons: [witchaven],
   },
   Espionage: {
-    title: "Espionage",
-    file: "Espionage",
     polygons: [penguin],
   },
   Etceteria: {
-    title: "Etceteria",
-    file: "Etceteria_(music_track)",
     polygons: [
       {
         coordinates: [
@@ -2785,13 +2463,9 @@ export const finishedData: Record<
     ],
   },
   Everlasting: {
-    title: "Everlasting",
-    file: "Everlasting",
     polygons: [dream],
   },
   "Everlasting Fire": {
-    title: "Everlasting Fire",
-    file: "Everlasting_Fire",
     polygons: [
       {
         coordinates: [
@@ -2806,13 +2480,9 @@ export const finishedData: Record<
     ],
   },
   "The Everlasting Slumber": {
-    title: "The Everlasting Slumber",
-    file: "The_Everlasting_Slumber",
     polygons: [nightmare],
   },
   Everywhere: {
-    title: "Everywhere",
-    file: "Everywhere",
     polygons: [
       {
         coordinates: [
@@ -2839,13 +2509,9 @@ export const finishedData: Record<
     ],
   },
   "Evil Bob's Island": {
-    title: "Evil Bob's Island",
-    file: "Evil_Bob%27s_Island",
     polygons: [],
   },
   Expanse: {
-    title: "Expanse",
-    file: "Expanse",
     polygons: [
       {
         coordinates: [
@@ -2860,8 +2526,6 @@ export const finishedData: Record<
     ],
   },
   Expecting: {
-    title: "Expecting",
-    file: "Expecting",
     polygons: [
       ...undergroundPass,
       {
@@ -2877,13 +2541,9 @@ export const finishedData: Record<
     ],
   },
   Expedition: {
-    title: "Expedition",
-    file: "Expedition",
     polygons: [...trollArenaPassage, ...observatoryDungeon],
   },
   Exposed: {
-    title: "Exposed",
-    file: "Exposed",
     polygons: [
       {
         coordinates: [
@@ -2908,13 +2568,9 @@ export const finishedData: Record<
     ],
   },
   Faerie: {
-    title: "Faerie",
-    file: "Faerie",
     polygons: [zanaris],
   },
   Faithless: {
-    title: "Faithless",
-    file: "Faithless",
     polygons: [
       {
         coordinates: [
@@ -2929,13 +2585,9 @@ export const finishedData: Record<
     ],
   },
   "The Fallen Empire": {
-    title: "The Fallen Empire",
-    file: "The_Fallen_Empire_(music_track)",
     polygons: [camdozaal],
   },
   Fanfare: {
-    title: "Fanfare",
-    file: "Fanfare",
     polygons: [
       {
         coordinates: [
@@ -2950,8 +2602,6 @@ export const finishedData: Record<
     ],
   },
   "Fanfare 2": {
-    title: "Fanfare 2",
-    file: "Fanfare_2",
     polygons: [
       {
         coordinates: [
@@ -2966,8 +2616,6 @@ export const finishedData: Record<
     ],
   },
   "Fanfare 3": {
-    title: "Fanfare 3",
-    file: "Fanfare_3",
     polygons: [
       {
         coordinates: [
@@ -2982,13 +2630,9 @@ export const finishedData: Record<
     ],
   },
   "Fangs for the Memory": {
-    title: "Fangs for the Memory",
-    file: "Fangs_for_the_Memory",
     polygons: [],
   },
   "Far Away": {
-    title: "Far Away",
-    file: "Far_Away",
     polygons: [
       {
         coordinates: [
@@ -3003,13 +2647,9 @@ export const finishedData: Record<
     ],
   },
   "The Far Side": {
-    title: "The Far Side",
-    file: "The_Far_Side",
     polygons: [roguesDen],
   },
   "A Farmer's Grind": {
-    title: "A Farmer's Grind",
-    file: "A_Farmer%27s_Grind",
     polygons: [
       {
         coordinates: [
@@ -3032,23 +2672,15 @@ export const finishedData: Record<
     ],
   },
   "The Fat Lady Sings": {
-    title: "The Fat Lady Sings",
-    file: "The_Fat_Lady_Sings",
     polygons: [tob],
   },
   "Fe Fi Fo Fum": {
-    title: "Fe Fi Fo Fum",
-    file: "Fe_Fi_Fo_Fum",
     polygons: [glod],
   },
   "Fear and Loathing": {
-    title: "Fear and Loathing",
-    file: "Fear_and_Loathing",
     polygons: [soulsBane],
   },
   "Fenkenstrain's Refrain": {
-    title: "Fenkenstrain's Refrain",
-    file: "Fenkenstrain%27s_Refrain",
     polygons: [
       {
         coordinates: [
@@ -3063,33 +2695,21 @@ export const finishedData: Record<
     ],
   },
   "Fight or Flight": {
-    title: "Fight or Flight",
-    file: "Fight_or_Flight",
     polygons: [...undergroundPass],
   },
   "Find My Way": {
-    title: "Find My Way",
-    file: "Find_My_Way",
     polygons: [apeAtollDungeonMM1],
   },
   "Fire and Brimstone": {
-    title: "Fire and Brimstone",
-    file: "Fire_and_Brimstone",
     polygons: tzhaar,
   },
   "Fire in the Deep": {
-    title: "Fire in the Deep",
-    file: "Fire_in_the_Deep",
     polygons: [cox],
   },
   "The Fires of Lletya": {
-    title: "The Fires of Lletya",
-    file: "The_Fires_of_Lletya",
     polygons: [lletya],
   },
   Fishing: {
-    title: "Fishing",
-    file: "Fishing_(music_track)",
     polygons: [
       {
         coordinates: [
@@ -3104,8 +2724,6 @@ export const finishedData: Record<
     ],
   },
   "Flute Salad": {
-    title: "Flute Salad",
-    file: "Flute_Salad",
     polygons: [
       {
         coordinates: [
@@ -3120,13 +2738,9 @@ export const finishedData: Record<
     ],
   },
   "Food for Thought": {
-    title: "Food for Thought",
-    file: "Food_for_Thought",
     polygons: [strongholdOfSecurity],
   },
   Forbidden: {
-    title: "Forbidden",
-    file: "Forbidden",
     polygons: [
       {
         coordinates: [
@@ -3141,8 +2755,6 @@ export const finishedData: Record<
     ],
   },
   Forest: {
-    title: "Forest",
-    file: "Forest_(music_track)",
     polygons: [
       {
         coordinates: [
@@ -3157,8 +2769,6 @@ export const finishedData: Record<
     ],
   },
   "The Forests of Shayzien": {
-    title: "The Forests of Shayzien",
-    file: "The_Forests_of_Shayzien",
     polygons: [
       {
         coordinates: [
@@ -3381,8 +2991,6 @@ export const finishedData: Record<
     ],
   },
   Forever: {
-    title: "Forever",
-    file: "Forever",
     polygons: [
       {
         coordinates: [
@@ -3397,28 +3005,18 @@ export const finishedData: Record<
     ],
   },
   "Forgettable Melody": {
-    title: "Forgettable Melody",
-    file: "Forgettable_Melody",
     polygons: keldagrim,
   },
   Forgotten: {
-    title: "Forgotten",
-    file: "Forgotten",
     polygons: [uzer],
   },
   "A Forgotten Religion": {
-    title: "A Forgotten Religion",
-    file: "A_Forgotten_Religion",
     polygons: forthos,
   },
   "The Forgotten Tomb": {
-    title: "The Forgotten Tomb",
-    file: "The_Forgotten_Tomb",
     polygons: [beneathCursedSands],
   },
   "The Forlorn Homestead": {
-    title: "The Forlorn Homestead",
-    file: "The_Forlorn_Homestead",
     polygons: [
       {
         coordinates: [
@@ -3526,8 +3124,6 @@ export const finishedData: Record<
     ],
   },
   "The Forsaken Tower": {
-    title: "The Forsaken Tower",
-    file: "The_Forsaken_Tower_(music_track)",
     polygons: [
       {
         coordinates: [
@@ -3562,33 +3158,21 @@ export const finishedData: Record<
     ],
   },
   "The Forsaken": {
-    title: "The Forsaken",
-    file: "The_Forsaken",
     polygons: [lithkren],
   },
   Fossilised: {
-    title: "Fossilised",
-    file: "Fossilised",
     polygons: fossilIslandWyverns,
   },
   "The Foundry": {
-    title: "The Foundry",
-    file: "The_Foundry",
     polygons: [giantsFoundry],
   },
   "The Fragment": {
-    title: "The Fragment",
-    file: "The_Fragment",
     polygons: undergroundPass,
   },
   Frogland: {
-    title: "Frogland",
-    file: "Frogland",
     polygons: [],
   },
   Frostbite: {
-    title: "Frostbite",
-    file: "Frostbite",
     polygons: [
       {
         coordinates: [
@@ -3603,8 +3187,6 @@ export const finishedData: Record<
     ],
   },
   "Fruits de Mer": {
-    title: "Fruits de Mer",
-    file: "Fruits_de_Mer",
     polygons: [
       {
         coordinates: [
@@ -3619,13 +3201,9 @@ export const finishedData: Record<
     ],
   },
   "Ful to the Brim": {
-    title: "Ful to the Brim",
-    file: "Ful_to_the_Brim",
     polygons: [karuulmSlayerDungeon],
   },
   "The Galleon": {
-    title: "The Galleon",
-    file: "The_Galleon",
     polygons: [
       {
         coordinates: [
@@ -3640,8 +3218,6 @@ export const finishedData: Record<
     ],
   },
   Gaol: {
-    title: "Gaol",
-    file: "Gaol",
     polygons: [
       {
         coordinates: [
@@ -3656,8 +3232,6 @@ export const finishedData: Record<
     ],
   },
   Garden: {
-    title: "Garden",
-    file: "Garden_(music_track)",
     polygons: [
       {
         coordinates: [
@@ -3674,38 +3248,24 @@ export const finishedData: Record<
     ],
   },
   "Garden of Autumn": {
-    title: "Garden of Autumn",
-    file: "Garden_of_Autumn",
     polygons: [sorceressGarden],
   },
   "Garden of Spring": {
-    title: "Garden of Spring",
-    file: "Garden_of_Spring",
     polygons: [sorceressGarden],
   },
   "Garden of Summer": {
-    title: "Garden of Summer",
-    file: "Garden_of_Summer",
     polygons: [sorceressGarden],
   },
   "Garden of Winter": {
-    title: "Garden of Winter",
-    file: "Garden_of_Winter",
     polygons: [sorceressGarden],
   },
   "The Gauntlet": {
-    title: "The Gauntlet",
-    file: "The_Gauntlet_(music_track)",
     polygons: [gauntlet],
   },
   "The Genie": {
-    title: "The Genie",
-    file: "The_Genie",
     polygons: [genieCave],
   },
   "Gill Bill": {
-    title: "Gill Bill",
-    file: "Gill_Bill",
     polygons: [
       {
         coordinates: [
@@ -3720,8 +3280,6 @@ export const finishedData: Record<
     ],
   },
   "Gnome King": {
-    title: "Gnome King",
-    file: "Gnome_King",
     polygons: [
       {
         coordinates: [
@@ -3736,8 +3294,6 @@ export const finishedData: Record<
     ],
   },
   "Gnome Village": {
-    title: "Gnome Village",
-    file: "Gnome_Village",
     polygons: [
       {
         coordinates: [
@@ -3752,8 +3308,6 @@ export const finishedData: Record<
     ],
   },
   "Gnome Village 2": {
-    title: "Gnome Village 2",
-    file: "Gnome_Village_2",
     polygons: [
       {
         coordinates: [
@@ -3768,8 +3322,6 @@ export const finishedData: Record<
     ],
   },
   Gnomeball: {
-    title: "Gnomeball",
-    file: "Gnomeball_(music_track)",
     polygons: [
       {
         coordinates: [
@@ -3784,13 +3336,9 @@ export const finishedData: Record<
     ],
   },
   "Goblin Game": {
-    title: "Goblin Game",
-    file: "Goblin_Game",
     polygons: [goblinCave],
   },
   "Goblin Village": {
-    title: "Goblin Village",
-    file: "Goblin_Village_(music_track)",
     polygons: [
       {
         coordinates: [
@@ -3813,13 +3361,9 @@ export const finishedData: Record<
     ],
   },
   "Golden Touch": {
-    title: "Golden Touch",
-    file: "Golden_Touch",
     polygons: [mta],
   },
   "The Golem": {
-    title: "The Golem",
-    file: "The_Golem_(music_track)",
     polygons: [
       {
         coordinates: [
@@ -3836,8 +3380,6 @@ export const finishedData: Record<
     ],
   },
   Greatness: {
-    title: "Greatness",
-    file: "Greatness",
     polygons: [
       {
         coordinates: [
@@ -3852,13 +3394,9 @@ export const finishedData: Record<
     ],
   },
   Grotto: {
-    title: "Grotto",
-    file: "Grotto_(music_track)",
     polygons: [natureGrotto],
   },
   "Grow Grow Grow": {
-    title: "Grow Grow Grow",
-    file: "Grow_Grow_Grow",
     polygons: [
       {
         coordinates: [
@@ -3898,8 +3436,6 @@ export const finishedData: Record<
     ],
   },
   Grumpy: {
-    title: "Grumpy",
-    file: "Grumpy",
     polygons: [
       ...mythsDungeon,
       {
@@ -3915,33 +3451,21 @@ export const finishedData: Record<
     ],
   },
   "The Guardians Prepare": {
-    title: "The Guardians Prepare",
-    file: "The_Guardians_Prepare",
     polygons: [wizardTowerBasement],
   },
   "Guardians of the Rift": {
-    title: "Guardians of the Rift",
-    file: "Guardians_of_the_Rift_(music_track)",
     polygons: [wizardTowerBasement],
   },
   "H.A.M. Attack": {
-    title: "H.A.M. Attack",
-    file: "H.A.M._Attack",
     polygons: [goblinVillage],
   },
   "H.A.M. Fisted": {
-    title: "H.A.M. Fisted",
-    file: "H.A.M._Fisted",
     polygons: [hamHideout],
   },
   "H.A.M. and Seek": {
-    title: "H.A.M. and Seek",
-    file: "H.A.M._and_Seek",
     polygons: [hamHideout],
   },
   Harmony: {
-    title: "Harmony",
-    file: "Harmony_(music_track)",
     polygons: [
       {
         coordinates: [
@@ -3956,23 +3480,15 @@ export const finishedData: Record<
     ],
   },
   "Harmony 2": {
-    title: "Harmony 2",
-    file: "Harmony_2",
     polygons: swampCavesDorgeshKaanTears,
   },
   "Haunted Mine": {
-    title: "Haunted Mine",
-    file: "Haunted_Mine_(music_track)",
     polygons: hauntedMine,
   },
   "Have a Blast": {
-    title: "Have a Blast",
-    file: "Have_a_Blast",
     polygons: keldagrim,
   },
   "Have an Ice Day": {
-    title: "Have an Ice Day",
-    file: "Have_an_Ice_Day",
     polygons: [
       {
         coordinates: [
@@ -3987,18 +3503,12 @@ export const finishedData: Record<
     ],
   },
   "Head to Head": {
-    title: "Head to Head",
-    file: "Head_to_Head",
     polygons: [],
   },
   "Heart and Mind": {
-    title: "Heart and Mind",
-    file: "Heart_and_Mind",
     polygons: [bodyAltar, abyss],
   },
   "Hells Bells": {
-    title: "Hells Bells",
-    file: "Hells_Bells",
     polygons: [
       {
         coordinates: [
@@ -4013,13 +3523,9 @@ export const finishedData: Record<
     ],
   },
   Hermit: {
-    title: "Hermit",
-    file: "Hermit",
     polygons: [saba],
   },
   "High Seas": {
-    title: "High Seas",
-    file: "High_Seas",
     polygons: [
       {
         coordinates: [
@@ -4034,8 +3540,6 @@ export const finishedData: Record<
     ],
   },
   "Hoe Down": {
-    title: "Hoe Down",
-    file: "Hoe_Down",
     polygons: [
       {
         coordinates: [
@@ -4084,13 +3588,9 @@ export const finishedData: Record<
     ],
   },
   "Home Sweet Home": {
-    title: "Home Sweet Home",
-    file: "Home_Sweet_Home",
     polygons: [...pohPortals, yarlo],
   },
   Horizon: {
-    title: "Horizon",
-    file: "Horizon",
     polygons: [
       {
         coordinates: [
@@ -4105,23 +3605,15 @@ export const finishedData: Record<
     ],
   },
   "The Houses of Kourend": {
-    title: "The Houses of Kourend",
-    file: "The_Houses_of_Kourend",
     polygons: [xericsLookoutBasement],
   },
   Hypnotised: {
-    title: "Hypnotised",
-    file: "Hypnotised",
     polygons: [icthlarinPyramid],
   },
   Iban: {
-    title: "Iban",
-    file: "Iban_(music_track)",
     polygons: undergroundPass,
   },
   "Ice Melody": {
-    title: "Ice Melody",
-    file: "Ice_Melody",
     polygons: [
       {
         coordinates: [
@@ -4136,8 +3628,6 @@ export const finishedData: Record<
     ],
   },
   "Ice and Fire": {
-    title: "Ice and Fire",
-    file: "Ice_and_Fire",
     polygons: [
       {
         coordinates: [
@@ -4152,23 +3642,15 @@ export const finishedData: Record<
     ],
   },
   Illusive: {
-    title: "Illusive",
-    file: "Illusive",
     polygons: [dream],
   },
   Impetuous: {
-    title: "Impetuous",
-    file: "Impetuous",
     polygons: [zanaris],
   },
   "In Between": {
-    title: "In Between",
-    file: "In_Between",
     polygons: keldagrim,
   },
   "In the Brine": {
-    title: "In the Brine",
-    file: "In_the_Brine",
     polygons: [
       {
         coordinates: [
@@ -4183,13 +3665,9 @@ export const finishedData: Record<
     ],
   },
   "In the Clink": {
-    title: "In the Clink",
-    file: "In_the_Clink",
     polygons: [],
   },
   "In the Manor": {
-    title: "In the Manor",
-    file: "In_the_Manor",
     polygons: [
       {
         coordinates: [
@@ -4204,28 +3682,18 @@ export const finishedData: Record<
     ],
   },
   "In the Pits": {
-    title: "In the Pits",
-    file: "In_the_Pits",
     polygons: tzhaar,
   },
   Inadequacy: {
-    title: "Inadequacy",
-    file: "Inadequacy",
     polygons: [dream],
   },
   Inferno: {
-    title: "Inferno",
-    file: "Inferno_(music_track)",
     polygons: tzhaar,
   },
   "Insect Queen": {
-    title: "Insect Queen",
-    file: "Insect_Queen",
     polygons: [kalphiteCave, kalphiteLair],
   },
   Inspiration: {
-    title: "Inspiration",
-    file: "Inspiration",
     polygons: [
       {
         coordinates: [
@@ -4244,28 +3712,18 @@ export const finishedData: Record<
     ],
   },
   "Into the Abyss": {
-    title: "Into the Abyss",
-    file: "Into_the_Abyss",
     polygons: [abyss],
   },
   "Into the Tombs": {
-    title: "Into the Tombs",
-    file: "Into_the_Tombs_(music_track)",
     polygons: [toa],
   },
   Intrepid: {
-    title: "Intrepid",
-    file: "Intrepid",
     polygons: [...undergroundPass],
   },
   Invader: {
-    title: "Invader",
-    file: "Invader",
     polygons: [abyss],
   },
   "Island Life": {
-    title: "Island Life",
-    file: "Island_Life",
     polygons: [
       {
         coordinates: [
@@ -4280,8 +3738,6 @@ export const finishedData: Record<
     ],
   },
   "Island of the Trolls": {
-    title: "Island of the Trolls",
-    file: "Island_of_the_Trolls",
     polygons: [
       {
         coordinates: [
@@ -4296,8 +3752,6 @@ export const finishedData: Record<
     ],
   },
   "Isle of Everywhere": {
-    title: "Isle of Everywhere",
-    file: "Isle_of_Everywhere",
     polygons: [
       {
         coordinates: [
@@ -4312,18 +3766,12 @@ export const finishedData: Record<
     ],
   },
   "It's not over 'til...": {
-    title: "It's not over 'til...",
-    file: "It%27s_not_over_%27til...",
     polygons: [tob],
   },
   "Itsy Bitsy...": {
-    title: "Itsy Bitsy...",
-    file: "Itsy_Bitsy...",
     polygons: [morytaniaSpiderNest],
   },
   "Jolly R": {
-    title: "Jolly R",
-    file: "Jolly_R",
     polygons: [
       {
         coordinates: [
@@ -4338,8 +3786,6 @@ export const finishedData: Record<
     ],
   },
   "Joy of the Hunt": {
-    title: "Joy of the Hunt",
-    file: "Joy_of_the_Hunt",
     polygons: [
       {
         coordinates: [
@@ -4354,13 +3800,9 @@ export const finishedData: Record<
     ],
   },
   "Judgement of the Depths": {
-    title: "Judgement of the Depths",
-    file: "Judgement_of_the_Depths",
     polygons: [yama],
   },
   "Jungle Hunt": {
-    title: "Jungle Hunt",
-    file: "Jungle_Hunt",
     polygons: [
       ...eaglesTransport,
       {
@@ -4382,8 +3824,6 @@ export const finishedData: Record<
     ],
   },
   "Jungle Island": {
-    title: "Jungle Island",
-    file: "Jungle_Island",
     polygons: [
       {
         coordinates: [
@@ -4408,8 +3848,6 @@ export const finishedData: Record<
     ],
   },
   "Jungle Troubles": {
-    title: "Jungle Troubles",
-    file: "Jungle_Troubles",
     polygons: [
       {
         coordinates: [
@@ -4424,8 +3862,6 @@ export const finishedData: Record<
     ],
   },
   "Jungly 1": {
-    title: "Jungly 1",
-    file: "Jungly_1",
     polygons: [
       {
         coordinates: [
@@ -4440,8 +3876,6 @@ export const finishedData: Record<
     ],
   },
   "Jungly 2": {
-    title: "Jungly 2",
-    file: "Jungly_2",
     polygons: [
       {
         coordinates: [
@@ -4456,8 +3890,6 @@ export const finishedData: Record<
     ],
   },
   "Jungly 3": {
-    title: "Jungly 3",
-    file: "Jungly_3",
     polygons: [
       {
         coordinates: [
@@ -4472,18 +3904,12 @@ export const finishedData: Record<
     ],
   },
   "Kanon of Kahlith": {
-    title: "Kanon of Kahlith",
-    file: "Kanon_of_Kahlith",
     polygons: [karuulmSlayerDungeon],
   },
   "Karamja Jam": {
-    title: "Karamja Jam",
-    file: "Karamja_Jam",
     polygons: [...brimhavenDungeon],
   },
   Kingdom: {
-    title: "Kingdom",
-    file: "Kingdom_(music_track)",
     polygons: [
       {
         coordinates: [
@@ -4547,8 +3973,6 @@ export const finishedData: Record<
     ],
   },
   Knightly: {
-    title: "Knightly",
-    file: "Knightly",
     polygons: [
       {
         coordinates: [
@@ -4563,8 +3987,6 @@ export const finishedData: Record<
     ],
   },
   Knightmare: {
-    title: "Knightmare",
-    file: "Knightmare",
     polygons: [
       keepLeFaye,
       {
@@ -4608,8 +4030,6 @@ export const finishedData: Record<
     ],
   },
   "Kourend the Magnificent": {
-    title: "Kourend the Magnificent",
-    file: "Kourend_the_Magnificent",
     polygons: [
       {
         coordinates: [
@@ -4741,38 +4161,24 @@ export const finishedData: Record<
     ],
   },
   "La Mort": {
-    title: "La Mort",
-    file: "La_Mort",
     polygons: [...undergroundPass],
   },
   Labyrinth: {
-    title: "Labyrinth",
-    file: "Labyrinth",
     polygons: [sophanemDungeon],
   },
   Lagoon: {
-    title: "Lagoon",
-    file: "Lagoon",
     polygons: [fossilIslandUnderwater],
   },
   Lair: {
-    title: "Lair",
-    file: "Lair",
     polygons: [shades],
   },
   "Lair of the Basilisk": {
-    title: "Lair of the Basilisk",
-    file: "Lair_of_the_Basilisk",
     polygons: [jormungandPrison],
   },
   Lament: {
-    title: "Lament",
-    file: "Lament",
     polygons: [enakhrasTemple],
   },
   "Lament for the Hallowed": {
-    title: "Lament for the Hallowed",
-    file: "Lament_for_the_Hallowed",
     polygons: [
       {
         coordinates: [
@@ -4797,8 +4203,6 @@ export const finishedData: Record<
     ],
   },
   "Lament of Meiyerditch": {
-    title: "Lament of Meiyerditch",
-    file: "Lament_of_Meiyerditch",
     polygons: [
       ...myrequeLaboratories,
       meiyerditchHideout,
@@ -4822,18 +4226,12 @@ export const finishedData: Record<
     ],
   },
   "Land Down Under": {
-    title: "Land Down Under",
-    file: "Land_Down_Under",
     polygons: [...miscDungeon],
   },
   "Land of the Dwarves": {
-    title: "Land of the Dwarves",
-    file: "Land_of_the_Dwarves",
     polygons: [...keldagrim],
   },
   Landlubber: {
-    title: "Landlubber",
-    file: "Landlubber",
     polygons: [
       {
         coordinates: [
@@ -4848,18 +4246,12 @@ export const finishedData: Record<
     ],
   },
   "Last King of the Yarasa": {
-    title: "Last King of the Yarasa",
-    file: "Last_King_of_the_Yarasa",
     polygons: [tob],
   },
   "Last Man Standing": {
-    title: "Last Man Standing",
-    file: "Last_Man_Standing_(music_track)",
     polygons: [lms],
   },
   "The Last Shanty": {
-    title: "The Last Shanty",
-    file: "The_Last_Shanty",
     polygons: [
       {
         coordinates: [
@@ -4880,8 +4272,6 @@ export const finishedData: Record<
     ],
   },
   Lasting: {
-    title: "Lasting",
-    file: "Lasting",
     polygons: [
       {
         coordinates: [
@@ -4896,13 +4286,9 @@ export const finishedData: Record<
     ],
   },
   "Lava is Mine": {
-    title: "Lava is Mine",
-    file: "Lava_is_Mine",
     polygons: [volcanicMine],
   },
   Legend: {
-    title: "Legend",
-    file: "Legend",
     polygons: [
       {
         coordinates: [
@@ -4917,8 +4303,6 @@ export const finishedData: Record<
     ],
   },
   Legion: {
-    title: "Legion",
-    file: "Legion",
     polygons: [
       barbAssault,
       {
@@ -4934,8 +4318,6 @@ export const finishedData: Record<
     ],
   },
   "Life's a Beach!": {
-    title: "Life's a Beach!",
-    file: "Life%27s_a_Beach!",
     polygons: [
       {
         coordinates: [
@@ -4950,8 +4332,6 @@ export const finishedData: Record<
     ],
   },
   Lighthouse: {
-    title: "Lighthouse",
-    file: "Lighthouse_(music_track)",
     polygons: [
       {
         coordinates: [
@@ -4966,8 +4346,6 @@ export const finishedData: Record<
     ],
   },
   Lightness: {
-    title: "Lightness",
-    file: "Lightness",
     polygons: [
       {
         coordinates: [
@@ -5005,8 +4383,6 @@ export const finishedData: Record<
     ],
   },
   Lightwalk: {
-    title: "Lightwalk",
-    file: "Lightwalk",
     polygons: [
       {
         coordinates: [
@@ -5021,18 +4397,12 @@ export const finishedData: Record<
     ],
   },
   "Little Cave of Horrors": {
-    title: "Little Cave of Horrors",
-    file: "Little_Cave_of_Horrors",
     polygons: [mosLeHarmlessCave],
   },
   Lonesome: {
-    title: "Lonesome",
-    file: "Lonesome",
     polygons: [desertMiningCamp],
   },
   "Long Ago": {
-    title: "Long Ago",
-    file: "Long_Ago",
     polygons: [
       {
         coordinates: [
@@ -5047,8 +4417,6 @@ export const finishedData: Record<
     ],
   },
   "Long Way Home": {
-    title: "Long Way Home",
-    file: "Long_Way_Home",
     polygons: [
       {
         coordinates: [
@@ -5063,8 +4431,6 @@ export const finishedData: Record<
     ],
   },
   "Looking Back": {
-    title: "Looking Back",
-    file: "Looking_Back",
     polygons: [
       {
         coordinates: [
@@ -5079,18 +4445,12 @@ export const finishedData: Record<
     ],
   },
   "Lore and Order": {
-    title: "Lore and Order",
-    file: "Lore_and_Order",
     polygons: [courthouse],
   },
   "The Lost Melody": {
-    title: "The Lost Melody",
-    file: "The_Lost_Melody",
     polygons: swampCavesDorgeshKaanTears,
   },
   "Lost Soul": {
-    title: "Lost Soul",
-    file: "Lost_Soul_(music_track)",
     polygons: [
       {
         coordinates: [
@@ -5109,28 +4469,18 @@ export const finishedData: Record<
     ],
   },
   "The Lost Tribe": {
-    title: "The Lost Tribe",
-    file: "The_Lost_Tribe_(music_track)",
     polygons: [...swampCavesDorgeshKaanTears],
   },
   "Lower Depths": {
-    title: "Lower Depths",
-    file: "Lower_Depths",
     polygons: [cox, quidamortemCave],
   },
   "Lucid Dream": {
-    title: "Lucid Dream",
-    file: "Lucid_Dream",
     polygons: [dream],
   },
   "Lucid Nightmare": {
-    title: "Lucid Nightmare",
-    file: "Lucid_Nightmare",
     polygons: [dream],
   },
   Lullaby: {
-    title: "Lullaby",
-    file: "Lullaby",
     polygons: [
       {
         coordinates: [
@@ -5155,8 +4505,6 @@ export const finishedData: Record<
     ],
   },
   Lumbering: {
-    title: "Lumbering",
-    file: "Lumbering",
     polygons: [
       {
         coordinates: [
@@ -5175,8 +4523,6 @@ export const finishedData: Record<
     ],
   },
   "The Lunar Isle": {
-    title: "The Lunar Isle",
-    file: "The_Lunar_Isle",
     polygons: [
       {
         coordinates: [
@@ -5191,18 +4537,12 @@ export const finishedData: Record<
     ],
   },
   "Mad Eadgar": {
-    title: "Mad Eadgar",
-    file: "Mad_Eadgar",
     polygons: [eadgarsCave],
   },
   "The Mad Mole": {
-    title: "The Mad Mole",
-    file: "The_Mad_Mole",
     polygons: [giantMoleCave],
   },
   "Mage Arena": {
-    title: "Mage Arena",
-    file: "Mage_Arena_(music_track)",
     polygons: [
       {
         coordinates: [
@@ -5217,8 +4557,6 @@ export const finishedData: Record<
     ],
   },
   "Magic Dance": {
-    title: "Magic Dance",
-    file: "Magic_Dance",
     polygons: [
       {
         coordinates: [
@@ -5233,8 +4571,6 @@ export const finishedData: Record<
     ],
   },
   "Magic Magic Magic": {
-    title: "Magic Magic Magic",
-    file: "Magic_Magic_Magic",
     polygons: [
       {
         coordinates: [
@@ -5249,8 +4585,6 @@ export const finishedData: Record<
     ],
   },
   "Magical Journey": {
-    title: "Magical Journey",
-    file: "Magical_Journey",
     polygons: [
       {
         coordinates: [
@@ -5265,23 +4599,15 @@ export const finishedData: Record<
     ],
   },
   "The Maiden's Anger": {
-    title: "The Maiden's Anger",
-    file: "The_Maiden%27s_Anger",
     polygons: [tob],
   },
   "The Maiden's Sorrow": {
-    title: "The Maiden's Sorrow",
-    file: "The_Maiden%27s_Sorrow",
     polygons: [tob],
   },
   "Major Miner": {
-    title: "Major Miner",
-    file: "Major_Miner",
     polygons: [jatizsoMine],
   },
   "Making Waves": {
-    title: "Making Waves",
-    file: "Making_Waves",
     polygons: [
       {
         coordinates: [
@@ -5296,13 +4622,9 @@ export const finishedData: Record<
     ],
   },
   Malady: {
-    title: "Malady",
-    file: "Malady",
     polygons: [strongholdOfSecurity],
   },
   March: {
-    title: "March",
-    file: "March",
     polygons: [
       {
         coordinates: [
@@ -5317,8 +4639,6 @@ export const finishedData: Record<
     ],
   },
   "March of the Shayzien": {
-    title: "March of the Shayzien",
-    file: "March_of_the_Shayzien",
     polygons: [
       {
         coordinates: [
@@ -5427,8 +4747,6 @@ export const finishedData: Record<
     ],
   },
   Marooned: {
-    title: "Marooned",
-    file: "Marooned",
     polygons: [
       {
         coordinates: [
@@ -5443,28 +4761,18 @@ export const finishedData: Record<
     ],
   },
   Marzipan: {
-    title: "Marzipan",
-    file: "Marzipan",
     polygons: [...keldagrim, ...trollIceTunnel, ...trollStronghold],
   },
   Masquerade: {
-    title: "Masquerade",
-    file: "Masquerade",
     polygons: [fremennikSlayerCave],
   },
   Mausoleum: {
-    title: "Mausoleum",
-    file: "Mausoleum_(music_track)",
     polygons: [...paterdomus],
   },
   "Maws Jaws & Claws": {
-    title: "Maws Jaws & Claws",
-    file: "Maws_Jaws_%26_Claws",
     polygons: [...taverleyDungeon],
   },
   "The Maze": {
-    title: "The Maze",
-    file: "The_Maze",
     polygons: [
       karamjanTemple,
       {
@@ -5493,8 +4801,6 @@ export const finishedData: Record<
     ],
   },
   Medieval: {
-    title: "Medieval",
-    file: "Medieval",
     polygons: [
       {
         coordinates: [
@@ -5511,8 +4817,6 @@ export const finishedData: Record<
     ],
   },
   Mellow: {
-    title: "Mellow",
-    file: "Mellow",
     polygons: [
       {
         coordinates: [
@@ -5527,8 +4831,6 @@ export const finishedData: Record<
     ],
   },
   Melodrama: {
-    title: "Melodrama",
-    file: "Melodrama",
     polygons: [
       {
         coordinates: [
@@ -5543,8 +4845,6 @@ export const finishedData: Record<
     ],
   },
   Meridian: {
-    title: "Meridian",
-    file: "Meridian",
     polygons: [
       {
         coordinates: [
@@ -5559,13 +4859,9 @@ export const finishedData: Record<
     ],
   },
   "Method of Madness": {
-    title: "Method of Madness",
-    file: "Method_of_Madness",
     polygons: [soulsBane],
   },
   "Miles Away": {
-    title: "Miles Away",
-    file: "Miles_Away",
     polygons: [
       fisherRealm,
       {
@@ -5581,8 +4877,6 @@ export const finishedData: Record<
     ],
   },
   "Military Life": {
-    title: "Military Life",
-    file: "Military_Life",
     polygons: [
       {
         coordinates: [
@@ -5707,8 +5001,6 @@ export const finishedData: Record<
     ],
   },
   "The Militia": {
-    title: "The Militia",
-    file: "The_Militia",
     polygons: [
       {
         coordinates: [
@@ -5762,23 +5054,15 @@ export const finishedData: Record<
     ],
   },
   "Mind over Matter": {
-    title: "Mind over Matter",
-    file: "Mind_over_Matter",
     polygons: [mta],
   },
   "Miracle Dance": {
-    title: "Miracle Dance",
-    file: "Miracle_Dance",
     polygons: [abyss, mindAltar],
   },
   Mirage: {
-    title: "Mirage",
-    file: "Mirage",
     polygons: [icthlarinPyramid],
   },
   Miscellania: {
-    title: "Miscellania",
-    file: "Miscellania_(music_track)",
     polygons: [
       {
         coordinates: [
@@ -5793,8 +5077,6 @@ export const finishedData: Record<
     ],
   },
   "The Mollusc Menace": {
-    title: "The Mollusc Menace",
-    file: "The_Mollusc_Menace",
     polygons: [
       {
         coordinates: [
@@ -5809,8 +5091,6 @@ export const finishedData: Record<
     ],
   },
   "Monarch Waltz": {
-    title: "Monarch Waltz",
-    file: "Monarch_Waltz",
     polygons: [
       {
         coordinates: [
@@ -5825,13 +5105,9 @@ export const finishedData: Record<
     ],
   },
   "Monkey Business": {
-    title: "Monkey Business",
-    file: "Monkey_Business",
     polygons: [crashSiteCavern, krukDungeon],
   },
   "Monkey Madness": {
-    title: "Monkey Madness",
-    file: "Monkey_Madness_(music_track)",
     polygons: [
       {
         coordinates: [
@@ -5846,28 +5122,18 @@ export const finishedData: Record<
     ],
   },
   "Monkey Sadness": {
-    title: "Monkey Sadness",
-    file: "Monkey_Sadness",
     polygons: [krukDungeon],
   },
   "Monkey Trouble": {
-    title: "Monkey Trouble",
-    file: "Monkey_Trouble",
     polygons: [krukDungeon],
   },
   "Monster Melee": {
-    title: "Monster Melee",
-    file: "Monster_Melee",
     polygons: [hamHideout],
   },
   "The Monsters Below": {
-    title: "The Monsters Below",
-    file: "The_Monsters_Below",
     polygons: [...dks],
   },
   Moody: {
-    title: "Moody",
-    file: "Moody",
     polygons: [
       {
         coordinates: [
@@ -5920,13 +5186,9 @@ export const finishedData: Record<
     ],
   },
   "Mor Ul Rek": {
-    title: "Mor Ul Rek",
-    file: "Mor_Ul_Rek_(music_track)",
     polygons: [...tzhaar],
   },
   Morytania: {
-    title: "Morytania",
-    file: "Morytania_(music_track)",
     polygons: [
       {
         coordinates: [
@@ -5941,13 +5203,9 @@ export const finishedData: Record<
     ],
   },
   "Mouse Trap": {
-    title: "Mouse Trap",
-    file: "Mouse_Trap",
     polygons: [mouseHole],
   },
   "Mudskipper Melody": {
-    title: "Mudskipper Melody",
-    file: "Mudskipper_Melody",
     polygons: [
       {
         coordinates: [
@@ -5962,28 +5220,18 @@ export const finishedData: Record<
     ],
   },
   "Museum Medley": {
-    title: "Museum Medley",
-    file: "Museum_Medley",
     polygons: [...oldSchoolMuseum],
   },
   "Mutant Medley": {
-    title: "Mutant Medley",
-    file: "Mutant_Medley",
     polygons: [towerOfLife],
   },
   "My Arm's Journey": {
-    title: "My Arm's Journey",
-    file: "My_Arm%27s_Journey",
     polygons: [],
   },
   "Mystics of Nature": {
-    title: "Mystics of Nature",
-    file: "Mystics_of_Nature",
     polygons: [prif],
   },
   Mythical: {
-    title: "Mythical",
-    file: "Mythical",
     polygons: [
       ...mythsDungeon,
       {
@@ -6001,13 +5249,9 @@ export const finishedData: Record<
     ],
   },
   "Narnode's Theme": {
-    title: "Narnode's Theme",
-    file: "Narnode%27s_Theme",
     polygons: [grandTreeTunnels],
   },
   Natural: {
-    title: "Natural",
-    file: "Natural",
     polygons: [
       ...templeTrekking,
       {
@@ -6023,18 +5267,12 @@ export const finishedData: Record<
     ],
   },
   "The Navigator": {
-    title: "The Navigator",
-    file: "The_Navigator",
     polygons: [swensenPuzzle],
   },
   "Nether Realm": {
-    title: "Nether Realm",
-    file: "Nether_Realm",
     polygons: [...brimhavenDungeon],
   },
   Neverland: {
-    title: "Neverland",
-    file: "Neverland",
     polygons: [
       {
         coordinates: [
@@ -6051,8 +5289,6 @@ export const finishedData: Record<
     ],
   },
   "Newbie Farming": {
-    title: "Newbie Farming",
-    file: "Newbie_Farming",
     polygons: [
       {
         coordinates: [
@@ -6071,8 +5307,6 @@ export const finishedData: Record<
     ],
   },
   "Newbie Melody": {
-    title: "Newbie Melody",
-    file: "Newbie_Melody",
     polygons: [
       {
         coordinates: [
@@ -6089,8 +5323,6 @@ export const finishedData: Record<
     ],
   },
   "Night of the Vampyre": {
-    title: "Night of the Vampyre",
-    file: "Night_of_the_Vampyre",
     polygons: [
       {
         coordinates: [
@@ -6115,8 +5347,6 @@ export const finishedData: Record<
     ],
   },
   Nightfall: {
-    title: "Nightfall",
-    file: "Nightfall",
     polygons: [
       {
         coordinates: [
@@ -6131,23 +5361,15 @@ export const finishedData: Record<
     ],
   },
   "The Nightmare Continues": {
-    title: "The Nightmare Continues",
-    file: "The_Nightmare_Continues",
     polygons: [tob],
   },
   "No Pasaran": {
-    title: "No Pasaran",
-    file: "No_Pasaran",
     polygons: [...undergroundPass],
   },
   "No Way Out": {
-    title: "No Way Out",
-    file: "No_Way_Out",
     polygons: [soulsBane],
   },
   Nomad: {
-    title: "Nomad",
-    file: "Nomad_(music_track)",
     polygons: [
       {
         coordinates: [
@@ -6211,8 +5433,6 @@ export const finishedData: Record<
     ],
   },
   "Norse Code": {
-    title: "Norse Code",
-    file: "Norse_Code",
     polygons: [
       {
         coordinates: [
@@ -6227,8 +5447,6 @@ export const finishedData: Record<
     ],
   },
   "Not a Moment of Relief": {
-    title: "Not a Moment of Relief",
-    file: "Not_a_Moment_of_Relief",
     polygons: [
       {
         coordinates: [
@@ -6268,8 +5486,6 @@ export const finishedData: Record<
     ],
   },
   "Null and Void": {
-    title: "Null and Void",
-    file: "Null_and_Void",
     polygons: [
       {
         coordinates: [
@@ -6284,18 +5500,12 @@ export const finishedData: Record<
     ],
   },
   "Ogre the Top": {
-    title: "Ogre the Top",
-    file: "Ogre_the_Top",
     polygons: [...iceTrollCaves],
   },
   "Oh Rats!": {
-    title: "Oh Rats!",
-    file: "Oh_Rats!",
     polygons: [...varrockSewers],
   },
   "On Thin Ice": {
-    title: "On Thin Ice",
-    file: "On_Thin_Ice",
     polygons: [
       {
         coordinates: [
@@ -6310,8 +5520,6 @@ export const finishedData: Record<
     ],
   },
   "On the Shore": {
-    title: "On the Shore",
-    file: "On_the_Shore",
     polygons: [
       {
         coordinates: [
@@ -6326,8 +5534,6 @@ export const finishedData: Record<
     ],
   },
   "On the Wing": {
-    title: "On the Wing",
-    file: "On_the_Wing",
     polygons: [
       {
         coordinates: [
@@ -6342,13 +5548,9 @@ export const finishedData: Record<
     ],
   },
   Oriental: {
-    title: "Oriental",
-    file: "Oriental",
     polygons: [ahZaRhoon],
   },
   "The Other Side": {
-    title: "The Other Side",
-    file: "The_Other_Side",
     polygons: [
       {
         coordinates: [
@@ -6363,8 +5565,6 @@ export const finishedData: Record<
     ],
   },
   "Out at the Mines": {
-    title: "Out at the Mines",
-    file: "Out_at_the_Mines",
     polygons: [
       {
         coordinates: [
@@ -6397,13 +5597,9 @@ export const finishedData: Record<
     ],
   },
   "Out of the Deep": {
-    title: "Out of the Deep",
-    file: "Out_of_the_Deep",
     polygons: [lighthouseBasement],
   },
   "Over to Nardah": {
-    title: "Over to Nardah",
-    file: "Over_to_Nardah",
     polygons: [
       {
         coordinates: [
@@ -6421,8 +5617,6 @@ export const finishedData: Record<
     ],
   },
   Overpass: {
-    title: "Overpass",
-    file: "Overpass",
     polygons: [
       {
         coordinates: [
@@ -6437,8 +5631,6 @@ export const finishedData: Record<
     ],
   },
   Overture: {
-    title: "Overture",
-    file: "Overture",
     polygons: [
       {
         coordinates: [
@@ -6453,8 +5645,6 @@ export const finishedData: Record<
     ],
   },
   Parade: {
-    title: "Parade",
-    file: "Parade",
     polygons: [
       {
         coordinates: [
@@ -6469,23 +5659,15 @@ export const finishedData: Record<
     ],
   },
   "The Part Where You Die": {
-    title: "The Part Where You Die",
-    file: "The_Part_Where_You_Die",
     polygons: [...lizardmenTemple],
   },
   "Path of Peril": {
-    title: "Path of Peril",
-    file: "Path_of_Peril",
     polygons: [shadowDungeon],
   },
   Pathways: {
-    title: "Pathways",
-    file: "Pathways",
     polygons: [...brimhavenDungeon],
   },
   "Pest Control": {
-    title: "Pest Control",
-    file: "Pest_Control_(music_track)",
     polygons: [
       {
         coordinates: [
@@ -6500,8 +5682,6 @@ export const finishedData: Record<
     ],
   },
   "Pharaoh's Tomb": {
-    title: "Pharaoh's Tomb",
-    file: "Pharaoh%27s_Tomb",
     polygons: [
       {
         coordinates: [
@@ -6516,23 +5696,15 @@ export const finishedData: Record<
     ],
   },
   Phasmatys: {
-    title: "Phasmatys",
-    file: "Phasmatys",
     polygons: [ectofunctus],
   },
   "Pick & Shovel": {
-    title: "Pick & Shovel",
-    file: "Pick_%26_Shovel",
     polygons: [...dwarvernMine],
   },
   "Pirates of Penance": {
-    title: "Pirates of Penance",
-    file: "Pirates_of_Penance",
     polygons: [barbAssault],
   },
   "Pirates of Peril": {
-    title: "Pirates of Peril",
-    file: "Pirates_of_Peril",
     polygons: [
       {
         coordinates: [
@@ -6547,8 +5719,6 @@ export const finishedData: Record<
     ],
   },
   "Poles Apart": {
-    title: "Poles Apart",
-    file: "Poles_Apart",
     polygons: [
       ...eaglesTransport,
       {
@@ -6564,23 +5734,15 @@ export const finishedData: Record<
     ],
   },
   "The Power of Tears": {
-    title: "The Power of Tears",
-    file: "The_Power_of_Tears",
     polygons: [...swampCavesDorgeshKaanTears],
   },
   "Power of the Shadow Realm": {
-    title: "Power of the Shadow Realm",
-    file: "Power_of_the_Shadow_Realm",
     polygons: [tob],
   },
   "Predator Xarpus": {
-    title: "Predator Xarpus",
-    file: "Predator_Xarpus",
     polygons: [tob],
   },
   Preservation: {
-    title: "Preservation",
-    file: "Preservation",
     polygons: [
       {
         coordinates: [
@@ -6597,8 +5759,6 @@ export const finishedData: Record<
     ],
   },
   Preserved: {
-    title: "Preserved",
-    file: "Preserved",
     polygons: [
       {
         coordinates: [
@@ -6625,13 +5785,9 @@ export const finishedData: Record<
     ],
   },
   "Prime Time": {
-    title: "Prime Time",
-    file: "Prime_Time",
     polygons: [elementalWorkshop],
   },
   Principality: {
-    title: "Principality",
-    file: "Principality",
     polygons: [
       {
         coordinates: [
@@ -6646,33 +5802,21 @@ export const finishedData: Record<
     ],
   },
   Quest: {
-    title: "Quest",
-    file: "Quest_(music_track)",
     polygons: [abyss, fireAltar],
   },
   "Race Against the Clock": {
-    title: "Race Against the Clock",
-    file: "Race_Against_the_Clock",
     polygons: [camdozaal],
   },
   "Rat Hunt": {
-    title: "Rat Hunt",
-    file: "Rat_Hunt",
     polygons: [jimmyDazzler],
   },
   "Rat a Tat Tat": {
-    title: "Rat a Tat Tat",
-    file: "Rat_a_Tat_Tat",
     polygons: [varrockRatPits],
   },
   "Ready for Battle": {
-    title: "Ready for Battle",
-    file: "Ready_for_Battle",
     polygons: [castleWarsLobby],
   },
   Regal: {
-    title: "Regal",
-    file: "Regal",
     polygons: [
       {
         coordinates: [
@@ -6687,13 +5831,9 @@ export const finishedData: Record<
     ],
   },
   "Regal Pomp": {
-    title: "Regal Pomp",
-    file: "Regal_Pomp",
     polygons: [kourendCastleAKD],
   },
   Reggae: {
-    title: "Reggae",
-    file: "Reggae",
     polygons: [
       {
         coordinates: [
@@ -6708,8 +5848,6 @@ export const finishedData: Record<
     ],
   },
   "Reggae 2": {
-    title: "Reggae 2",
-    file: "Reggae_2",
     polygons: [
       {
         coordinates: [
@@ -6724,13 +5862,9 @@ export const finishedData: Record<
     ],
   },
   Relics: {
-    title: "Relics",
-    file: "Relics_(music_track)",
     polygons: [lithkren, ...tzhaar, ungaelLab],
   },
   Rellekka: {
-    title: "Rellekka",
-    file: "Rellekka_(music_track)",
     polygons: [
       {
         coordinates: [
@@ -6747,33 +5881,21 @@ export const finishedData: Record<
     ],
   },
   "Rest in Peace": {
-    title: "Rest in Peace",
-    file: "Rest_in_Peace",
     polygons: [...death],
   },
   Revenants: {
-    title: "Revenants",
-    file: "Revenants_(music_track)",
     polygons: [...revs],
   },
   "Right on Track": {
-    title: "Right on Track",
-    file: "Right_on_Track",
     polygons: [...keldagrim],
   },
   Righteousness: {
-    title: "Righteousness",
-    file: "Righteousness",
     polygons: [abyss, lawAltar],
   },
   "Rising Damp": {
-    title: "Rising Damp",
-    file: "Rising_Damp",
     polygons: [brineRatCavern],
   },
   Riverside: {
-    title: "Riverside",
-    file: "Riverside",
     polygons: [
       {
         coordinates: [
@@ -6788,18 +5910,12 @@ export const finishedData: Record<
     ],
   },
   "The Rogues' Den": {
-    title: "The Rogues' Den",
-    file: "The_Rogues%27_Den",
     polygons: [roguesDen],
   },
   "Roll the Bones": {
-    title: "Roll the Bones",
-    file: "Roll_the_Bones",
     polygons: [mta],
   },
   "Romancing the Crone": {
-    title: "Romancing the Crone",
-    file: "Romancing_the_Crone",
     polygons: [
       {
         coordinates: [
@@ -6814,8 +5930,6 @@ export const finishedData: Record<
     ],
   },
   "Romper Chomper": {
-    title: "Romper Chomper",
-    file: "Romper_Chomper",
     polygons: [
       {
         coordinates: [
@@ -6830,13 +5944,9 @@ export const finishedData: Record<
     ],
   },
   "Roots and Flutes": {
-    title: "Roots and Flutes",
-    file: "Roots_and_Flutes",
     polygons: [...varrockSewers],
   },
   Rose: {
-    title: "Rose",
-    file: "Rose_(music_track)",
     polygons: [
       {
         coordinates: [
@@ -6871,13 +5981,9 @@ export const finishedData: Record<
     ],
   },
   Royale: {
-    title: "Royale",
-    file: "Royale",
     polygons: [...taverleyDungeon],
   },
   "Rugged Terrain": {
-    title: "Rugged Terrain",
-    file: "Rugged_Terrain",
     polygons: [
       ...catacombsGiantsDen,
       {
@@ -7051,13 +6157,9 @@ export const finishedData: Record<
     ],
   },
   "The Ruins of Camdozaal": {
-    title: "The Ruins of Camdozaal",
-    file: "The_Ruins_of_Camdozaal",
     polygons: [camdozaal],
   },
   "Ruins of Isolation": {
-    title: "Ruins of Isolation",
-    file: "Ruins_of_Isolation",
     polygons: [
       {
         coordinates: [
@@ -7076,13 +6178,9 @@ export const finishedData: Record<
     ],
   },
   "Rune Essence": {
-    title: "Rune Essence",
-    file: "Rune_Essence_(music_track)",
     polygons: [...runeEssenceMine],
   },
   "Sad Meadow": {
-    title: "Sad Meadow",
-    file: "Sad_Meadow",
     polygons: [
       {
         coordinates: [
@@ -7103,13 +6201,9 @@ export const finishedData: Record<
     ],
   },
   "Safety in Numbers": {
-    title: "Safety in Numbers",
-    file: "Safety_in_Numbers",
     polygons: [sourhogCave],
   },
   Saga: {
-    title: "Saga",
-    file: "Saga",
     polygons: [
       {
         coordinates: [
@@ -7124,28 +6218,18 @@ export const finishedData: Record<
     ],
   },
   Sarachnis: {
-    title: "Sarachnis",
-    file: "Sarachnis_(music_track)",
     polygons: [...forthos],
   },
   Sarcophagus: {
-    title: "Sarcophagus",
-    file: "Sarcophagus_(music_track)",
     polygons: [ancientsPyramid],
   },
   "Scape Cave": {
-    title: "Scape Cave",
-    file: "Scape_Cave",
     polygons: [...varrockSewers, tutorialIslandCave, woodcuttingGuildCave],
   },
   "Scape Main": {
-    title: "Scape Main",
-    file: "Scape_Main",
     polygons: [boatPartDS2],
   },
   "Scape Sad": {
-    title: "Scape Sad",
-    file: "Scape_Sad",
     polygons: [
       {
         coordinates: [
@@ -7160,8 +6244,6 @@ export const finishedData: Record<
     ],
   },
   "Scape Soft": {
-    title: "Scape Soft",
-    file: "Scape_Soft",
     polygons: [
       {
         coordinates: [
@@ -7176,8 +6258,6 @@ export const finishedData: Record<
     ],
   },
   "Scape Wild": {
-    title: "Scape Wild",
-    file: "Scape_Wild",
     polygons: [
       {
         coordinates: [
@@ -7202,13 +6282,9 @@ export const finishedData: Record<
     ],
   },
   "Scar Tissue": {
-    title: "Scar Tissue",
-    file: "Scar_Tissue",
     polygons: [wizardTowerBasement],
   },
   Scarab: {
-    title: "Scarab",
-    file: "Scarab",
     polygons: [
       {
         coordinates: [
@@ -7279,13 +6355,9 @@ export const finishedData: Record<
     ],
   },
   "Scorpia Dances": {
-    title: "Scorpia Dances",
-    file: "Scorpia_Dances",
     polygons: [...scorpia],
   },
   "Sea Shanty": {
-    title: "Sea Shanty",
-    file: "Sea_Shanty",
     polygons: [
       {
         coordinates: [
@@ -7303,8 +6375,6 @@ export const finishedData: Record<
     ],
   },
   "Sea Shanty 2": {
-    title: "Sea Shanty 2",
-    file: "Sea_Shanty_2",
     polygons: [
       {
         coordinates: [
@@ -7326,13 +6396,9 @@ export const finishedData: Record<
     ],
   },
   "Secrets of the North": {
-    title: "Secrets of the North",
-    file: "Secrets_of_the_North_(music_track)",
     polygons: [ghorrockDungeon],
   },
   Serenade: {
-    title: "Serenade",
-    file: "Serenade",
     polygons: [
       {
         coordinates: [
@@ -7347,13 +6413,9 @@ export const finishedData: Record<
     ],
   },
   Serene: {
-    title: "Serene",
-    file: "Serene",
     polygons: [abyss, airAltar],
   },
   "Servants of Strife": {
-    title: "Servants of Strife",
-    file: "Servants_of_Strife",
     polygons: [
       {
         coordinates: [
@@ -7385,8 +6447,6 @@ export const finishedData: Record<
     ],
   },
   Settlement: {
-    title: "Settlement",
-    file: "Settlement",
     polygons: [
       {
         coordinates: [
@@ -7401,8 +6461,6 @@ export const finishedData: Record<
     ],
   },
   "The Shadow": {
-    title: "The Shadow",
-    file: "The_Shadow",
     polygons: [
       {
         coordinates: [
@@ -7419,8 +6477,6 @@ export const finishedData: Record<
     ],
   },
   Shadowland: {
-    title: "Shadowland",
-    file: "Shadowland",
     polygons: [
       ...templeTrekking,
       {
@@ -7446,13 +6502,9 @@ export const finishedData: Record<
     ],
   },
   "Sharp End of the Crystal": {
-    title: "Sharp End of the Crystal",
-    file: "Sharp_End_of_the_Crystal",
     polygons: [iorwerthDungeon],
   },
   Shine: {
-    title: "Shine",
-    file: "Shine",
     polygons: [
       {
         coordinates: [
@@ -7467,8 +6519,6 @@ export const finishedData: Record<
     ],
   },
   Shining: {
-    title: "Shining",
-    file: "Shining",
     polygons: [
       {
         coordinates: [
@@ -7493,13 +6543,9 @@ export const finishedData: Record<
     ],
   },
   "Shining Spirit": {
-    title: "Shining Spirit",
-    file: "Shining_Spirit",
     polygons: [corp],
   },
   Shipwrecked: {
-    title: "Shipwrecked",
-    file: "Shipwrecked",
     polygons: [
       {
         coordinates: [
@@ -7514,38 +6560,24 @@ export const finishedData: Record<
     ],
   },
   "Sigmund's Showdown": {
-    title: "Sigmund's Showdown",
-    file: "Sigmund%27s_Showdown",
     polygons: [lumbridgeWaterMillSigmundFight],
   },
   "The Slayer": {
-    title: "The Slayer",
-    file: "The_Slayer",
     polygons: [fremennikSlayerCave],
   },
   "Slice of Silent Movie": {
-    title: "Slice of Silent Movie",
-    file: "Slice_of_Silent_Movie",
     polygons: [...swampCavesDorgeshKaanTears],
   },
   "Slice of Station": {
-    title: "Slice of Station",
-    file: "Slice_of_Station",
     polygons: [...swampCavesDorgeshKaanTears, ...keldagrim],
   },
   "Slither and Thither": {
-    title: "Slither and Thither",
-    file: "Slither_and_Thither",
     polygons: [...miscDungeon],
   },
   "Slug a Bug Ball": {
-    title: "Slug a Bug Ball",
-    file: "Slug_a_Bug_Ball",
     polygons: [witchaven],
   },
   Sojourn: {
-    title: "Sojourn",
-    file: "Sojourn",
     polygons: [
       {
         coordinates: [
@@ -7560,13 +6592,9 @@ export const finishedData: Record<
     ],
   },
   "Song of the Elves": {
-    title: "Song of the Elves",
-    file: "Song_of_the_Elves_(music_track)",
     polygons: [lletyaCouncilHutGrandLibrary],
   },
   "Soul Fall": {
-    title: "Soul Fall",
-    file: "Soul_Fall",
     polygons: [
       {
         coordinates: [
@@ -7585,8 +6613,6 @@ export const finishedData: Record<
     ],
   },
   "Soul Wars": {
-    title: "Soul Wars",
-    file: "Soul_Wars_(music_track)",
     polygons: [
       {
         coordinates: [
@@ -7601,8 +6627,6 @@ export const finishedData: Record<
     ],
   },
   Soundscape: {
-    title: "Soundscape",
-    file: "Soundscape",
     polygons: [
       {
         coordinates: [
@@ -7617,8 +6641,6 @@ export const finishedData: Record<
     ],
   },
   Sphinx: {
-    title: "Sphinx",
-    file: "Sphinx_(music_track)",
     polygons: [
       {
         coordinates: [
@@ -7637,8 +6659,6 @@ export const finishedData: Record<
     ],
   },
   Spirit: {
-    title: "Spirit",
-    file: "Spirit_(music_track)",
     polygons: [
       {
         coordinates: [
@@ -7653,13 +6673,9 @@ export const finishedData: Record<
     ],
   },
   "Spirits of the Elid": {
-    title: "Spirits of the Elid",
-    file: "Spirits_of_the_Elid_(music_track)",
     polygons: [riverElidWaterfall],
   },
   Splendour: {
-    title: "Splendour",
-    file: "Splendour",
     polygons: [
       {
         coordinates: [
@@ -7674,8 +6690,6 @@ export const finishedData: Record<
     ],
   },
   Spooky: {
-    title: "Spooky",
-    file: "Spooky",
     polygons: [
       {
         coordinates: [
@@ -7690,13 +6704,9 @@ export const finishedData: Record<
     ],
   },
   "Spooky 2": {
-    title: "Spooky 2",
-    file: "Spooky_2",
     polygons: [...hauntedMine, burghDeRottBasement, isleOfSoulsDungeon],
   },
   "Spooky Jungle": {
-    title: "Spooky Jungle",
-    file: "Spooky_Jungle",
     polygons: [
       shaikahan,
       {
@@ -7712,13 +6722,9 @@ export const finishedData: Record<
     ],
   },
   "The Spurned Demon": {
-    title: "The Spurned Demon",
-    file: "The_Spurned_Demon_(music_track)",
     polygons: [zalcano],
   },
   Stagnant: {
-    title: "Stagnant",
-    file: "Stagnant",
     polygons: [
       ...templeTrekking,
       {
@@ -7734,13 +6740,9 @@ export const finishedData: Record<
     ],
   },
   Starlight: {
-    title: "Starlight",
-    file: "Starlight_(music_track)",
     polygons: [asgarnianIceDungeon],
   },
   Start: {
-    title: "Start",
-    file: "Start",
     polygons: [
       {
         coordinates: [
@@ -7755,8 +6757,6 @@ export const finishedData: Record<
     ],
   },
   "Still Night": {
-    title: "Still Night",
-    file: "Still_Night",
     polygons: [
       {
         coordinates: [
@@ -7771,18 +6771,12 @@ export const finishedData: Record<
     ],
   },
   Stillness: {
-    title: "Stillness",
-    file: "Stillness",
     polygons: [daeyaltEssenceMine, myrequeHideoutCanifis],
   },
   "Storm Brew": {
-    title: "Storm Brew",
-    file: "Storm_Brew",
     polygons: [draynorManorUpstairsKillerwatts],
   },
   Stranded: {
-    title: "Stranded",
-    file: "Stranded",
     polygons: [
       {
         coordinates: [
@@ -7797,8 +6791,6 @@ export const finishedData: Record<
     ],
   },
   Strangled: {
-    title: "Strangled",
-    file: "Strangled_(music_track)",
     polygons: [
       {
         coordinates: [
@@ -7821,18 +6813,12 @@ export const finishedData: Record<
     ],
   },
   Stratosphere: {
-    title: "Stratosphere",
-    file: "Stratosphere",
     polygons: [zanaris, abyss],
   },
   "Strength of Saradomin": {
-    title: "Strength of Saradomin",
-    file: "Strength_of_Saradomin",
     polygons: [godWars],
   },
   "Stuck in the Mire": {
-    title: "Stuck in the Mire",
-    file: "Stuck_in_the_Mire",
     polygons: [
       {
         coordinates: [
@@ -7864,13 +6850,9 @@ export const finishedData: Record<
     ],
   },
   Subterranea: {
-    title: "Subterranea",
-    file: "Subterranea",
     polygons: [...dks, crabclawCaves],
   },
   Sunburn: {
-    title: "Sunburn",
-    file: "Sunburn",
     polygons: [
       {
         coordinates: [
@@ -7895,23 +6877,15 @@ export const finishedData: Record<
     ],
   },
   Superstition: {
-    title: "Superstition",
-    file: "Superstition",
     polygons: [towerofMagic, viyeldiCaves],
   },
   Suspicious: {
-    title: "Suspicious",
-    file: "Suspicious",
     polygons: [karamjaShipYard],
   },
   "Tale of Keldagrim": {
-    title: "Tale of Keldagrim",
-    file: "Tale_of_Keldagrim",
     polygons: [...keldagrim],
   },
   "Talking Forest": {
-    title: "Talking Forest",
-    file: "Talking_Forest",
     polygons: [
       {
         coordinates: [
@@ -7926,48 +6900,30 @@ export const finishedData: Record<
     ],
   },
   "A Taste of Hope": {
-    title: "A Taste of Hope",
-    file: "A_Taste_of_Hope_(music_track)",
     polygons: [verSinhaza],
   },
   "Tears of Guthix": {
-    title: "Tears of Guthix",
-    file: "Tears_of_Guthix_(music_track)",
     polygons: [...swampCavesDorgeshKaanTears],
   },
   Technology: {
-    title: "Technology",
-    file: "Technology",
     polygons: [grandTreeUpstairs],
   },
   Tempest: {
-    title: "Tempest",
-    file: "Tempest",
     polygons: [slayerTower],
   },
   Temple: {
-    title: "Temple",
-    file: "Temple_(music_track)",
     polygons: [marimboDungeon],
   },
   "Temple of Light": {
-    title: "Temple of Light",
-    file: "Temple_of_Light_(music_track)",
     polygons: [...undergroundPass],
   },
   "Temple of Tribes": {
-    title: "Temple of Tribes",
-    file: "Temple_of_Tribes",
     polygons: [goblinCave],
   },
   "Temple of the Eye": {
-    title: "Temple of the Eye",
-    file: "Temple_of_the_Eye_(music_track)",
     polygons: [wizardTowerBasement],
   },
   "Tempor of the Storm": {
-    title: "Tempor of the Storm",
-    file: "Tempor_of_the_Storm",
     polygons: [
       {
         coordinates: [
@@ -7982,8 +6938,6 @@ export const finishedData: Record<
     ],
   },
   "The Terrible Tower": {
-    title: "The Terrible Tower",
-    file: "The_Terrible_Tower",
     polygons: [
       {
         coordinates: [
@@ -7998,18 +6952,12 @@ export const finishedData: Record<
     ],
   },
   "The Terrible Tunnels": {
-    title: "The Terrible Tunnels",
-    file: "The_Terrible_Tunnels",
     polygons: [...myrequeLaboratories],
   },
   "That Sullen Hall": {
-    title: "That Sullen Hall",
-    file: "That_Sullen_Hall",
     polygons: [...taverleyDungeon],
   },
   Theme: {
-    title: "Theme",
-    file: "Theme",
     polygons: [
       baxtorianWaterfallDungeon,
       {
@@ -8025,8 +6973,6 @@ export const finishedData: Record<
     ],
   },
   "Thrall of the Serpent": {
-    title: "Thrall of the Serpent",
-    file: "Thrall_of_the_Serpent",
     polygons: [
       {
         coordinates: [
@@ -8041,28 +6987,18 @@ export const finishedData: Record<
     ],
   },
   "Throne of the Demon": {
-    title: "Throne of the Demon",
-    file: "Throne_of_the_Demon",
     polygons: [uzer],
   },
   "Time to Mine": {
-    title: "Time to Mine",
-    file: "Time_to_Mine",
     polygons: [...keldagrim],
   },
   Tiptoe: {
-    title: "Tiptoe",
-    file: "Tiptoe",
     polygons: [draynorManorCellar],
   },
   "Tomb Raider": {
-    title: "Tomb Raider",
-    file: "Tomb_Raider_(music_track)",
     polygons: [pyramidPlunder],
   },
   Tomorrow: {
-    title: "Tomorrow",
-    file: "Tomorrow",
     polygons: [
       {
         coordinates: [
@@ -8080,13 +7016,9 @@ export const finishedData: Record<
     ],
   },
   "Too Many Cooks...": {
-    title: "Too Many Cooks...",
-    file: "Too_Many_Cooks...",
     polygons: [goblinVillageKitchen],
   },
   "The Tower": {
-    title: "The Tower",
-    file: "The_Tower",
     polygons: [
       ardySewerWest,
       {
@@ -8104,8 +7036,6 @@ export const finishedData: Record<
     ],
   },
   "The Trade Parade": {
-    title: "The Trade Parade",
-    file: "The_Trade_Parade",
     polygons: [
       {
         coordinates: [
@@ -8120,23 +7050,15 @@ export const finishedData: Record<
     ],
   },
   "Trahaearn Toil": {
-    title: "Trahaearn Toil",
-    file: "Trahaearn_Toil",
     polygons: [prif, lletyaCouncilHutGrandLibrary],
   },
   Trawler: {
-    title: "Trawler",
-    file: "Trawler_(music_track)",
     polygons: [fishingTrawler],
   },
   "Trawler Minor": {
-    title: "Trawler Minor",
-    file: "Trawler_Minor",
     polygons: [fishingTrawler],
   },
   "Tree Spirits": {
-    title: "Tree Spirits",
-    file: "Tree_Spirits",
     polygons: [
       {
         coordinates: [
@@ -8151,8 +7073,6 @@ export const finishedData: Record<
     ],
   },
   Tremble: {
-    title: "Tremble",
-    file: "Tremble",
     polygons: [
       {
         coordinates: [
@@ -8167,8 +7087,6 @@ export const finishedData: Record<
     ],
   },
   Tribal: {
-    title: "Tribal",
-    file: "Tribal",
     polygons: [
       {
         coordinates: [
@@ -8183,8 +7101,6 @@ export const finishedData: Record<
     ],
   },
   "Tribal 2": {
-    title: "Tribal 2",
-    file: "Tribal_2",
     polygons: [
       {
         coordinates: [
@@ -8199,8 +7115,6 @@ export const finishedData: Record<
     ],
   },
   "Tribal Background": {
-    title: "Tribal Background",
-    file: "Tribal_Background",
     polygons: [
       {
         coordinates: [
@@ -8225,8 +7139,6 @@ export const finishedData: Record<
     ],
   },
   Trinity: {
-    title: "Trinity",
-    file: "Trinity",
     polygons: [
       {
         coordinates: [
@@ -8241,13 +7153,9 @@ export const finishedData: Record<
     ],
   },
   "Troll Shuffle": {
-    title: "Troll Shuffle",
-    file: "Troll_Shuffle",
     polygons: [weissMakingFriendsSneakCave],
   },
   "Trouble Brewing": {
-    title: "Trouble Brewing",
-    file: "Trouble_Brewing_(music_track)",
     polygons: [
       {
         coordinates: [
@@ -8262,8 +7170,6 @@ export const finishedData: Record<
     ],
   },
   Troubled: {
-    title: "Troubled",
-    file: "Troubled",
     polygons: [
       {
         coordinates: [
@@ -8278,28 +7184,18 @@ export const finishedData: Record<
     ],
   },
   "Troubled Waters": {
-    title: "Troubled Waters",
-    file: "Troubled_Waters",
     polygons: [kraken],
   },
   Twilight: {
-    title: "Twilight",
-    file: "Twilight",
     polygons: [elementalWorkshop],
   },
   "TzHaar!": {
-    title: "TzHaar!",
-    file: "TzHaar!",
     polygons: [...tzhaar],
   },
   "Undead Dungeon": {
-    title: "Undead Dungeon",
-    file: "Undead_Dungeon",
     polygons: [...hauntedMine],
   },
   Undercurrent: {
-    title: "Undercurrent",
-    file: "Undercurrent",
     polygons: [
       {
         coordinates: [
@@ -8314,8 +7210,6 @@ export const finishedData: Record<
     ],
   },
   Underground: {
-    title: "Underground",
-    file: "Underground_(music_track)",
     polygons: [
       ...taverleyDungeon,
       entranaDungeon,
@@ -8333,18 +7227,12 @@ export const finishedData: Record<
     ],
   },
   "Underground Pass": {
-    title: "Underground Pass",
-    file: "Underground_Pass_(music_track)",
     polygons: [...undergroundPass],
   },
   Understanding: {
-    title: "Understanding",
-    file: "Understanding",
     polygons: [abyss, natureAltar],
   },
   "Unknown Land": {
-    title: "Unknown Land",
-    file: "Unknown_Land",
     polygons: [
       {
         coordinates: [
@@ -8362,18 +7250,12 @@ export const finishedData: Record<
     ],
   },
   Untouchable: {
-    title: "Untouchable",
-    file: "Untouchable",
     polygons: [dream],
   },
   "Unturned Stones": {
-    title: "Unturned Stones",
-    file: "Unturned_Stones",
     polygons: [digsiteDT2],
   },
   Upcoming: {
-    title: "Upcoming",
-    file: "Upcoming",
     polygons: [
       ...balloonTransport,
       {
@@ -8397,8 +7279,6 @@ export const finishedData: Record<
     ],
   },
   "Upir Likhyi": {
-    title: "Upir Likhyi",
-    file: "Upir_Likhyi",
     polygons: [
       {
         coordinates: [
@@ -8413,18 +7293,12 @@ export const finishedData: Record<
     ],
   },
   "Upper Depths": {
-    title: "Upper Depths",
-    file: "Upper_Depths",
     polygons: [cox],
   },
   "The Vault": {
-    title: "The Vault",
-    file: "The_Vault",
     polygons: [ancientVaultDT2],
   },
   Venomous: {
-    title: "Venomous",
-    file: "Venomous",
     polygons: [
       {
         coordinates: [
@@ -8439,8 +7313,6 @@ export const finishedData: Record<
     ],
   },
   Venture: {
-    title: "Venture",
-    file: "Venture",
     polygons: [
       {
         coordinates: [
@@ -8455,18 +7327,12 @@ export const finishedData: Record<
     ],
   },
   "Venture 2": {
-    title: "Venture 2",
-    file: "Venture_2",
     polygons: [...digsiteDungeon],
   },
   "Victory is Mine": {
-    title: "Victory is Mine",
-    file: "Victory_is_Mine",
     polygons: [championsChallenge],
   },
   Village: {
-    title: "Village",
-    file: "Village",
     polygons: [
       {
         coordinates: [
@@ -8481,8 +7347,6 @@ export const finishedData: Record<
     ],
   },
   Vision: {
-    title: "Vision",
-    file: "Vision",
     polygons: [
       {
         coordinates: [
@@ -8497,8 +7361,6 @@ export const finishedData: Record<
     ],
   },
   "Volcanic Vikings": {
-    title: "Volcanic Vikings",
-    file: "Volcanic_Vikings",
     polygons: [
       {
         coordinates: [
@@ -8513,13 +7375,9 @@ export const finishedData: Record<
     ],
   },
   "Voodoo Cult": {
-    title: "Voodoo Cult",
-    file: "Voodoo_Cult",
     polygons: [ahZaRhoon, viyeldiCaves],
   },
   Voyage: {
-    title: "Voyage",
-    file: "Voyage",
     polygons: [
       {
         coordinates: [
@@ -8534,8 +7392,6 @@ export const finishedData: Record<
     ],
   },
   "The Waiting Game": {
-    title: "The Waiting Game",
-    file: "The_Waiting_Game",
     polygons: [
       {
         coordinates: [
@@ -8550,13 +7406,9 @@ export const finishedData: Record<
     ],
   },
   "Waking Dream": {
-    title: "Waking Dream",
-    file: "Waking_Dream",
     polygons: [dream],
   },
   "A Walk in the Woods": {
-    title: "A Walk in the Woods",
-    file: "A_Walk_in_the_Woods",
     polygons: [
       {
         coordinates: [
@@ -8618,13 +7470,9 @@ export const finishedData: Record<
     ],
   },
   "The Walking Dead": {
-    title: "The Walking Dead",
-    file: "The_Walking_Dead",
     polygons: [shayzienCrypt],
   },
   Wander: {
-    title: "Wander",
-    file: "Wander",
     polygons: [
       {
         coordinates: [
@@ -8639,18 +7487,12 @@ export const finishedData: Record<
     ],
   },
   Warpath: {
-    title: "Warpath",
-    file: "Warpath",
     polygons: [clanWars],
   },
   Warrior: {
-    title: "Warrior",
-    file: "Warrior_(music_track)",
     polygons: [koscheiFightFremTrials],
   },
   "Warriors' Guild": {
-    title: "Warriors' Guild",
-    file: "Warriors%27_Guild_(music_track)",
     polygons: [
       {
         coordinates: [
@@ -8710,18 +7552,12 @@ export const finishedData: Record<
     ],
   },
   "Waste Defaced": {
-    title: "Waste Defaced",
-    file: "Waste_Defaced",
     polygons: [poisonWasteDungeon],
   },
   "Watch Your Step": {
-    title: "Watch Your Step",
-    file: "Watch_Your_Step",
     polygons: [hallowedSepulchre],
   },
   Waterfall: {
-    title: "Waterfall",
-    file: "Waterfall_(music_track)",
     polygons: [
       {
         coordinates: [
@@ -8736,8 +7572,6 @@ export const finishedData: Record<
     ],
   },
   Waterlogged: {
-    title: "Waterlogged",
-    file: "Waterlogged",
     polygons: [
       ...templeTrekking,
       {
@@ -8753,28 +7587,18 @@ export const finishedData: Record<
     ],
   },
   "Way of the Enchanter": {
-    title: "Way of the Enchanter",
-    file: "Way_of_the_Enchanter",
     polygons: [lunarIsleMine],
   },
   "Way of the Wyrm": {
-    title: "Way of the Wyrm",
-    file: "Way_of_the_Wyrm",
     polygons: [karuulmSlayerDungeon],
   },
   Wayward: {
-    title: "Wayward",
-    file: "Wayward",
     polygons: [jiggigZogreDungeon],
   },
   "Welcome to my Nightmare": {
-    title: "Welcome to my Nightmare",
-    file: "Welcome_to_my_Nightmare",
     polygons: [tob],
   },
   "Welcome to the Theatre": {
-    title: "Welcome to the Theatre",
-    file: "Welcome_to_the_Theatre",
     polygons: [
       {
         coordinates: [
@@ -8797,28 +7621,18 @@ export const finishedData: Record<
     ],
   },
   "Well Hallowed Air": {
-    title: "Well Hallowed Air",
-    file: "Well_Hallowed_Air",
     polygons: [hallowedSepulchre],
   },
   "Well of Voyage": {
-    title: "Well of Voyage",
-    file: "Well_of_Voyage_(music_track)",
     polygons: [...undergroundPass, ...leafTraps],
   },
   "What Happens Below...": {
-    title: "What Happens Below...",
-    file: "What_Happens_Below...",
     polygons: [warrensPortPiscarilius],
   },
   "Where Eagles Lair": {
-    title: "Where Eagles Lair",
-    file: "Where_Eagles_Lair",
     polygons: [...eaglesTransport],
   },
   "Wild Isle": {
-    title: "Wild Isle",
-    file: "Wild_Isle",
     polygons: [
       {
         coordinates: [
@@ -8833,8 +7647,6 @@ export const finishedData: Record<
     ],
   },
   "Wild Side": {
-    title: "Wild Side",
-    file: "Wild_Side",
     polygons: [
       {
         coordinates: [
@@ -8849,8 +7661,6 @@ export const finishedData: Record<
     ],
   },
   Wilderness: {
-    title: "Wilderness",
-    file: "Wilderness_(music_track)",
     polygons: [
       {
         coordinates: [
@@ -8895,8 +7705,6 @@ export const finishedData: Record<
     ],
   },
   "Wilderness 2": {
-    title: "Wilderness 2",
-    file: "Wilderness_2",
     polygons: [
       {
         coordinates: [
@@ -8911,8 +7719,6 @@ export const finishedData: Record<
     ],
   },
   "Wilderness 3": {
-    title: "Wilderness 3",
-    file: "Wilderness_3",
     polygons: [
       {
         coordinates: [
@@ -8927,8 +7733,6 @@ export const finishedData: Record<
     ],
   },
   Wildwood: {
-    title: "Wildwood",
-    file: "Wildwood",
     polygons: [
       {
         coordinates: [
@@ -8955,8 +7759,6 @@ export const finishedData: Record<
     ],
   },
   Witching: {
-    title: "Witching",
-    file: "Witching",
     polygons: [
       {
         coordinates: [
@@ -8971,13 +7773,9 @@ export const finishedData: Record<
     ],
   },
   "Woe of the Wyvern": {
-    title: "Woe of the Wyvern",
-    file: "Woe_of_the_Wyvern",
     polygons: [asgarnianIceDungeon],
   },
   Wonder: {
-    title: "Wonder",
-    file: "Wonder",
     polygons: [
       {
         coordinates: [
@@ -8996,8 +7794,6 @@ export const finishedData: Record<
     ],
   },
   Wonderous: {
-    title: "Wonderous",
-    file: "Wonderous",
     polygons: [
       {
         coordinates: [
@@ -9012,8 +7808,6 @@ export const finishedData: Record<
     ],
   },
   Woodland: {
-    title: "Woodland",
-    file: "Woodland_(music_track)",
     polygons: [
       {
         coordinates: [
@@ -9028,8 +7822,6 @@ export const finishedData: Record<
     ],
   },
   "Work Work Work": {
-    title: "Work Work Work",
-    file: "Work_Work_Work",
     polygons: [
       {
         coordinates: [
@@ -9044,8 +7836,6 @@ export const finishedData: Record<
     ],
   },
   Workshop: {
-    title: "Workshop",
-    file: "Workshop_(music_track)",
     polygons: [
       {
         coordinates: [
@@ -9060,18 +7850,12 @@ export const finishedData: Record<
     ],
   },
   "Wrath and Ruin": {
-    title: "Wrath and Ruin",
-    file: "Wrath_and_Ruin",
     polygons: [soulsBane],
   },
   Xenophobe: {
-    title: "Xenophobe",
-    file: "Xenophobe",
     polygons: [...dks],
   },
   Yesteryear: {
-    title: "Yesteryear",
-    file: "Yesteryear",
     polygons: [
       {
         coordinates: [
@@ -9086,28 +7870,18 @@ export const finishedData: Record<
     ],
   },
   "Zamorak Zoo": {
-    title: "Zamorak Zoo",
-    file: "Zamorak_Zoo",
     polygons: [godWars],
   },
   "Zanik's Theme": {
-    title: "Zanik's Theme",
-    file: "Zanik%27s_Theme",
     polygons: [...swampCavesDorgeshKaanTears],
   },
   "Zaros Zeitgeist": {
-    title: "Zaros Zeitgeist",
-    file: "Zaros_Zeitgeist",
     polygons: [godWars],
   },
   Zealot: {
-    title: "Zealot",
-    file: "Zealot_(music_track)",
     polygons: [abyss, waterAltar],
   },
   "Zogre Dance": {
-    title: "Zogre Dance",
-    file: "Zogre_Dance",
     polygons: [
       {
         coordinates: [
@@ -9122,8 +7896,6 @@ export const finishedData: Record<
     ],
   },
   Zombiism: {
-    title: "Zombiism",
-    file: "Zombiism",
     polygons: [
       {
         coordinates: [
@@ -9138,8 +7910,6 @@ export const finishedData: Record<
     ],
   },
   Ascent: {
-    title: "Ascent",
-    file: "Ascent",
     polygons: [
       {
         coordinates: [
@@ -9194,8 +7964,6 @@ export const finishedData: Record<
     ],
   },
   Darkmeyer: {
-    title: "Darkmeyer",
-    file: "Darkmeyer",
     polygons: [
       {
         coordinates: [
@@ -9240,13 +8008,9 @@ export const finishedData: Record<
     ],
   },
   Dreamstate: {
-    title: "Dreamstate",
-    file: "Dreamstate",
     polygons: [dream],
   },
   "Dwarven Domain": {
-    title: "Dwarven Domain",
-    file: "Dwarven_Domain",
     polygons: [
       {
         coordinates: [
@@ -9350,8 +8114,6 @@ export const finishedData: Record<
     ],
   },
   Emperor: {
-    title: "Emperor",
-    file: "Emperor",
     polygons: [
       {
         coordinates: [
@@ -9389,8 +8151,6 @@ export const finishedData: Record<
     ],
   },
   "Getting Down to Business": {
-    title: "Getting Down to Business",
-    file: "Getting_Down_to_Business",
     polygons: [
       {
         coordinates: [
@@ -9535,8 +8295,6 @@ export const finishedData: Record<
     ],
   },
   "On the Frontline": {
-    title: "On the Frontline",
-    file: "On_the_Frontline",
     polygons: [
       {
         coordinates: [
@@ -9629,8 +8387,6 @@ export const finishedData: Record<
     ],
   },
   "Title Fight": {
-    title: "Title Fight",
-    file: "Title_Fight",
     polygons: [championsChallenge],
   },
   ...song("Amascut's Promise", toa),
@@ -9772,11 +8528,12 @@ export const finishedData: Record<
 function song(
   name: string,
   ...polygons: PolygonWithoutCenter[]
-): Record<string, { title: string; file: string; polygons: PolygonWithoutCenter[] }> {
+): Record<
+  string,
+  { polygons: PolygonWithoutCenter[] }
+> {
   return {
     [name]: {
-      title: name,
-      file: name,
       polygons,
     },
   };
