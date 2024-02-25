@@ -1,5 +1,5 @@
 import WebSocket from "ws";
-import { getSongs, scoreGuess, StateInterface, pick, omit, mapValues } from "osrs-music-guesser-shared";
+import { randomSongs, scoreGuess, StateInterface, pick, omit, mapValues } from "osrs-music-guesser-shared";
 import type { Coordinate } from "osrs-music-guesser-shared";
 export class StateStore implements StateInterface.StateStore {
   public state: StateInterface.AnyServerState;
@@ -51,7 +51,7 @@ export class LobbyOnePlayer extends StateInterface.LobbyOnePlayer {
 
 export class LobbyTwoPlayer extends StateInterface.LobbyTwoPlayer {
   public start() {
-    const songs = getSongs();
+    const songs = randomSongs();
     const round = 1;
     const song = songs[round];
     return this.transition(

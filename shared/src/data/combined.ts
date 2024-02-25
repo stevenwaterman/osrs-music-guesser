@@ -1,6 +1,7 @@
 import { Polygon } from "../coordinates.js";
-import { finishedData } from "../index.js";
+import { toMap } from "../util.js";
 import { audioUrls } from "./parsed/audioUrls.js";
+import { songPolygons } from "./parsed/songPolygons.js";
 import {
   songDurations,
   songNames,
@@ -9,22 +10,23 @@ import {
 import { wikiPageUrls } from "./parsed/wikiPageUrls.js";
 import { songDescriptions } from "./raw/wikiDescriptions.js";
 
-const songs: Song[] = songNames.map((name) => ({
-  name,
-  audioUrl: audioUrls[name],
-  wikiUrl: wikiPageUrls[name],
-  unlockHint: songUnlockHints[name],
-  description: songDescriptions[name],
-  duration: songDurations[name],
-  locations: finishedData[name].polygons,
-}));
-
-type Song = {
+export type Song = {
   name: string;
   audioUrl: string;
   wikiUrl: string;
   unlockHint: string;
   description: string[];
   duration: number;
-  locations: Omit<Polygon, "center">[];
+  locations: Polygon[];
 };
+
+
+export const songs: Record<string, Song> = toMap(songNames.map((name) => [name, {
+  name,
+  audioUrl: audioUrls[name],
+  wikiUrl: wikiPageUrls[name],
+  unlockHint: songUnlockHints[name],
+  description: songDescriptions[name],
+  duration: songDurations[name],
+  locations: songPolygons[name],
+}]));

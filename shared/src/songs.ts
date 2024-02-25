@@ -1,11 +1,10 @@
-import { finishedData } from "./cleanedData.js";
+import { songs } from "./index.js";
 import { shuffle } from "./util.js";
 
-const allSongs = Object.values(finishedData)
-  .filter((song) => song.polygons.length > 0)
-  .map((song) => song.title);
-
-export function getSongs(count?: number): string[] {
+export function randomSongs(count?: number): string[] {
+  const allSongs = Object.values(songs)
+    .filter((song) => song.locations.length > 0)
+    .map((song) => song.name)
   shuffle(allSongs);
   if (count === undefined) {
     return allSongs.slice();

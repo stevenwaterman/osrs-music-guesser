@@ -1,15 +1,10 @@
 <script lang="ts">
-  import { finishedData } from "osrs-music-guesser-shared/src/cleanedData";
+  import { songs } from "osrs-music-guesser-shared";
   import { fade } from "svelte/transition";
 
   export let song: string;
   export let control: boolean;
   export let startFraction: number;
-
-  $: songId = finishedData[song].title.trim().replaceAll(" ", "_");
-  $: songUrl = `https://oldschool.runescape.wiki/images/${encodeURI(
-    songId
-  )}.ogg`;
 
   function seek(audio: HTMLAudioElement, fraction: number) {
     const desiredCurrentTime = audio.duration * fraction;
@@ -21,7 +16,7 @@
 </script>
 
 <audio
-  src={songUrl}
+  src={songs[song].audioUrl}
   controls={control}
   autoplay
   loop

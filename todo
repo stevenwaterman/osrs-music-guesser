@@ -2,9 +2,8 @@ hiscores
 name
 logo
 domain
-fix song descriptions
 more dramatic when you're perfect
-instruction
+instructions
 
 animate score
 animate answers
@@ -16,6 +15,7 @@ wiki info in multiplayer
 confirm next round in casual games
 competitive games
 
-download all descriptions
 check all polygons
-precompute center of polygons
+wait for everyone to load audio before starting
+fix descriptions
+fix quest polygons

@@ -1,6 +1,6 @@
 <script lang="ts">
   import L from "leaflet";
-  import { finishedData } from "osrs-music-guesser-shared/src/cleanedData";
+  import { songs } from "osrs-music-guesser-shared";
   import type { MultiplayerState } from "../lib/clientState";
   import { onMount } from "svelte";
   import { mapBounds } from "./map";
@@ -29,7 +29,7 @@
       const lineToClosest = new L.Polyline([guessLatLng, closestLatLng]);
       lineToClosest.addTo(layer);
 
-      const answerPolygons = finishedData[song].polygons.map((poly) => {
+      const answerPolygons = songs[song].locations.map((poly) => {
         const leafletPoly = convertLeaflet.polygon.to(poly);
         leafletPoly.setStyle({
           color: "#00FF00",
