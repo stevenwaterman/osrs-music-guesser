@@ -12,6 +12,8 @@ export default {
   "Children of the Sun": "Children_of_the_Sun_(music_track)",
   "Clan Wars": "Clan_Wars_(music_track)",
   "The Consortium": "The_Consortium_(music_track)",
+  "Darkmeyer": "Darkmeyer_(music_track)",
+  "Delrith": "Delrith_(music_track)",
   "Desert Heat": "Desert_Heat_(music_track)",
   "Dragontooth Island": "Dragontooth_Island_(music_track)",
   "Dream": "Dream_(music_track)",

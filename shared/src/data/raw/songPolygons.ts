@@ -94,6 +94,7 @@ const nightmare = [
 const ancientCavern = rectangle(2510, 3510, 2514, 3506);
 const werewolfAgility = rectangle(3541, 3463, 3545, 3459);
 const sophanemDungeon = rectangle(3313, 2799, 3317, 2795);
+const ds2 = rectangle(2455, 2870, 2459, 2866);
 const catacombsGiantsDen = [
   // statue
   rectangle(1635, 3675, 1639, 3671),
@@ -196,13 +197,13 @@ const recruitmentDrive = rectangle(2961, 3340, 2965, 3336);
 const clanWars = rectangle(3126, 3625, 3132, 3618);
 const lms = rectangle(3137, 3645, 3145, 3632);
 const clanHall = rectangle(3183, 3474, 3188, 3468);
-const wizardTowerBasement = rectangle(3102, 3164, 3106, 3159);
-const burthorpeGamesRoom = rectangle(2896, 3568, 2901, 3566);
+const wizardTowerBasement = rectangle(3103, 3162, 3106, 3159);
+const burthorpeGamesRoom = rectangle(2899, 3569, 2902, 3566);
 const chaosAltar = rectangle(3053, 3597, 3068, 3584);
 const tasteOfHopeSpying = rectangle(3653, 3239, 3659, 3234);
 const serafinaBasement = rectangle(3592, 3275, 3595, 3272);
 const sotfSpying = rectangle(3754, 3303, 3709, 3328);
-const damienLeucurte = rectangle(3713, 3362, 3722, 3354);
+const damienLeucurte = rectangle(3725, 3356, 3728, 3353);
 const miscDungeon = [
   // misc
   rectangle(2507, 3848, 2511, 3844),
@@ -212,6 +213,7 @@ const miscDungeon = [
 const heroesGuild = rectangle(2890, 3509, 2894, 3505);
 const witchsBasement = rectangle(2906, 3477, 2908, 3475);
 const towerOfLife = rectangle(2648, 3215, 2652, 3211);
+const towerOfLifeUpstairs = rectangle(2644, 3222, 2647, 3218);
 const wrathAltar = rectangle(2443, 2827, 2449, 2823);
 const rabbitCave = rectangle(2263, 3420, 2266, 3417);
 const undergroundPass = [
@@ -235,12 +237,26 @@ const wildySlayerCave = [
   // north
   rectangle(3291, 3748, 3295, 3744),
 ];
-const barrows = rectangle(3545, 3308, 3584, 3268);
+const barrowsCrypts = [
+  // Dharrock
+  rectangle(3555, 3300, 3559, 3295),
+  // Verac
+  rectangle(3572, 3300, 3577, 3295),
+  // Ahrim
+  rectangle(3562, 3292, 3567, 3286),
+  // Torag
+  rectangle(3552, 3284, 3556, 3281),
+  // Karil
+  rectangle(3563, 3279, 3569, 3273),
+  // Guthan
+  rectangle(3574, 3284, 3580, 3280)
+];
 const chasmOfFire = rectangle(1431, 3672, 1435, 3668);
 const mogreCamp = rectangle(2666, 3165, 2671, 3161);
+const templeTrekkingNorthOnly = rectangle(3431, 3491, 3440, 3484);
 const templeTrekking = [
   // north
-  rectangle(3431, 3491, 3440, 3484),
+  templeTrekkingNorthOnly,
   // south
   rectangle(3475, 3243, 3485, 3234),
 ];
@@ -255,7 +271,7 @@ const lunarIsleMine = rectangle(2140, 3946, 2144, 3942);
 const earthAltar = rectangle(3302, 3478, 3308, 3472);
 const whiteKnightsCrypt = rectangle(2963, 3333, 2967, 3329);
 const fisherRealm = rectangle(2738, 3236, 2745, 3229);
-const mta = rectangle(3357, 3323, 3369, 3313);
+const mta = rectangle(3358, 3324, 3369, 3313); // TODO make one per room, with small squares
 const witchaven = rectangle(2694, 3285, 2698, 3281);
 const penguin = rectangle(2623, 4056, 2679, 3999);
 const dream = rectangle(2071, 3913, 2074, 3910);
@@ -341,7 +357,7 @@ const kalphiteLair = rectangle(3225, 3110, 3229, 3106);
 const kalphiteCave = rectangle(3318, 3124, 3322, 3120);
 const toa = rectangle(3356, 2713, 3360, 2709);
 const morytaniaSpiderNest = rectangle(3655, 3411, 3659, 3407);
-const yama = rectangle(1808, 3692, 1824, 3687);
+const yama = rectangle(1808, 3692, 1824, 3688);
 const keepLeFaye = rectangle(2763, 3409, 2776, 3393);
 const fossilIslandUnderwater = rectangle(3764, 3900, 3768, 3896);
 const shades = rectangle(3483, 3323, 3487, 3319);
@@ -608,8 +624,8 @@ const dragonSlayerCrandorCrash = rectangle(2840, 3238, 2870, 3217);
 const delrith = rectangle(3220, 3377, 3235, 3361);
 const castleDrakanCourtyard = rectangle(3560, 3369, 3590, 3349);
 const icyeneGraveyard = rectangle(3678, 3197, 3716, 3172);
-const lumbridgeCastleDiningHall = rectangle(3204, 3227, 3213, 3218);
-const mythsGuildGalvek = rectangle(2464, 2850, 2468, 2843);
+const lumbridgeCastleDiningHall = rectangle(3205, 3227, 3213, 3218);
+const mythsGuildGalvek = rectangle(2464, 2850, 2468, 2844);
 const entranaBalloon = rectangle(2805, 3358, 2812, 3354);
 const jatizsoThroneRoom = rectangle(2403, 3807, 2411, 3799);
 const sophanemMenaphosGate = rectangle(3264, 2788, 3282, 2781);
@@ -758,7 +774,7 @@ export const songPolygons: Record<
         ],
         inMap: true,
       },
-      {
+      { // TODO this is meant to be a cutout, it doesn't play at the black knight's fortress
         coordinates: [
           [3008, 3518],
           [3008, 3514],
@@ -1777,12 +1793,12 @@ export const songPolygons: Record<
     polygons: [...taverleyDungeon, witchsBasement, heroesGuild],
   },
   "Creature Cruelty": {
-    polygons: [towerOfLife],
+    polygons: [towerOfLifeUpstairs],
   },
   "Creeping Vines": {
     polygons: [hespori],
   },
-  "Crystal Castle": {
+  "Crystal Castle": { // TODO this doesn't play in prif only around it
     polygons: [
       {
         coordinates: [
@@ -1874,7 +1890,7 @@ export const songPolygons: Record<
     polygons: tzhaar,
   },
   "Dangerous Way": {
-    polygons: [barrows],
+    polygons: [...barrowsCrypts],
   },
   Dark: {
     polygons: [
@@ -1910,7 +1926,6 @@ export const songPolygons: Record<
           [3136, 3712],
           [3200, 3712],
           [3200, 3648],
-          [3136, 3648],
         ],
         inMap: true,
       },
@@ -1925,7 +1940,6 @@ export const songPolygons: Record<
           [3392, 3456],
           [3456, 3456],
           [3456, 3392],
-          [3392, 3392],
         ],
         inMap: true,
       },
@@ -1947,7 +1961,6 @@ export const songPolygons: Record<
           [3584, 3392],
           [3584, 3456],
           [3520, 3456],
-          [3520, 3520],
         ],
         inMap: true,
       },
@@ -1964,7 +1977,6 @@ export const songPolygons: Record<
           [2944, 3904],
           [3008, 3904],
           [3008, 3776],
-          [2944, 3776],
         ],
         inMap: true,
       },
@@ -1981,7 +1993,6 @@ export const songPolygons: Record<
           [3392, 3072],
           [3520, 3072],
           [3520, 2944],
-          [3392, 2944],
         ],
         inMap: true,
       },
@@ -1997,7 +2008,6 @@ export const songPolygons: Record<
           [3328, 3008],
           [3328, 2944],
           [3264, 2944],
-          [3264, 3072],
         ],
         inMap: true,
       },
@@ -2017,7 +2027,7 @@ export const songPolygons: Record<
       },
     ],
   },
-  "The Desolate Isle": {
+  "The Desolate Isle": { // todo one of these should be a cutout
     polygons: [
       {
         coordinates: [
@@ -2025,7 +2035,6 @@ export const songPolygons: Record<
           [2496, 3776],
           [2560, 3776],
           [2560, 3712],
-          [2496, 3712],
         ],
         inMap: true,
       },
@@ -2035,7 +2044,6 @@ export const songPolygons: Record<
           [2240, 4096],
           [2304, 4096],
           [2304, 4032],
-          [2240, 4032],
         ],
         inMap: true,
       },
@@ -2045,7 +2053,6 @@ export const songPolygons: Record<
           [2260, 4077],
           [2285, 4077],
           [2285, 4053],
-          [2260, 4053],
         ],
         inMap: true,
       },
@@ -2082,7 +2089,7 @@ export const songPolygons: Record<
   },
   "Distant Land": {
     polygons: [
-      ...templeTrekking,
+      templeTrekkingNorthOnly,
       {
         coordinates: [
           [3520, 3136],
@@ -2138,7 +2145,7 @@ export const songPolygons: Record<
   },
   Doorways: {
     polygons: [
-      {
+      { // The isle of souls should be a cutout
         coordinates: [
           [3264, 3456],
           [3264, 3520],
@@ -2633,7 +2640,7 @@ export const songPolygons: Record<
       },
     ],
   },
-  "Fangs for the Memory": {
+  "Fangs for the Memory": { // TODO add polygons
     polygons: [],
   },
   "Far Away": {
@@ -7994,7 +8001,7 @@ export const songPolygons: Record<
         ],
         inMap: true,
       },
-      {
+      { // TODO this should be a cutout
         coordinates: [
           [3615, 3365],
           [3615, 3359],
@@ -8117,7 +8124,7 @@ export const songPolygons: Record<
       },
     ],
   },
-  Emperor: {
+  Emperor: { // needs cutout
     polygons: [
       {
         coordinates: [
@@ -8416,17 +8423,17 @@ export const songPolygons: Record<
   ...song("Diango's Little Helpers"),
   ...song("Dies Irae"),
   ...song("Dogfight", goblinCave),
-  ...song("Domain of the Vampyres", castleDrakanCourtyard, icyeneGraveyard),
+  ...song("Domain of the Vampyres", castleDrakanCourtyard, verSinhaza, icyeneGraveyard),
   ...song("Don't Panic Zanik"),
   ...song("Dorgeshuun Treaty", lumbridgeCastleDiningHall),
   ...song("Dot's Yuletide"),
-  ...song("The Dragon Slayer", mythsGuildGalvek),
+  ...song("The Dragon Slayer", mythsGuildGalvek, ds2),
   ...song("Easter Jig"),
   ...song("Elven Guardians", prif),
   ...song("Eve's Epinette"),
   ...song("Eye See You", ghorrockDungeon),
   ...song("Eye of the Storm", dragonSlayerCrandorCrash),
-  ...song("The Fairy Dragon", zanaris),
+  ...song("The Fairy Dragon", lumbridgeCastleDiningHall),
   ...song("Faith of the Hefin", prif),
   ...song("A Festive Party"),
   ...song("Fight of the Basilisk", jormungandPrison),
