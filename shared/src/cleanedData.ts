@@ -573,6 +573,105 @@ const atlasCutscene = [
     [3071, 3418],
   ]),
 ];
+const pathOfGlouphrieCutscenes = [
+  // tree village throne north ladder
+  rectangle(2524, 3173, 2526, 3171),
+  // south ladder
+  rectangle(2524, 3163, 2526, 3161),
+  // stronghold entrance
+  rectangle(2460, 3385, 2466, 3379),
+  // grand tree
+  rectangle(2461, 3500, 2469, 3490),
+];
+const barrelchestFight = rectangle(3804, 2849, 3817, 2839);
+const varrockPalaceUpstairs = [
+  // west
+  rectangle(3201, 3499, 3204, 3496),
+  // east
+  rectangle(3217, 3498, 3220, 3495),
+  // south
+  rectangle(3211, 3475, 3214, 3473),
+];
+const varrockSquare = rectangle(3205, 3438, 3225, 3421);
+const dragonSlayerCrandorCrash = rectangle(2840, 3238, 2870, 3217);
+const delrith = rectangle(3220, 3377, 3235, 3361);
+const castleDrakanCourtyard = rectangle(3560, 3369, 3590, 3349);
+const icyeneGraveyard = rectangle(3678, 3197, 3716, 3172);
+const lumbridgeCastleDiningHall = rectangle(3204, 3227, 3213, 3218);
+const mythsGuildGalvek = rectangle(2464, 2850, 2468, 2843);
+const entranaBalloon = rectangle(2805, 3358, 2812, 3354);
+const jatizsoThroneRoom = rectangle(2403, 3807, 2411, 3799);
+const sophanemMenaphosGate = rectangle(3264, 2788, 3282, 2781);
+const poisonWasteTree = rectangle(2335, 3109, 2341, 3116);
+const cropCircles = [
+  rectangle(2948, 3439, 2958, 3449),
+rectangle(2577, 3099, 2587, 3109),
+rectangle(3110, 3268, 3120, 3278),
+rectangle(2973, 3211, 2983, 3221),
+rectangle(3136, 3456, 3146, 3466),
+rectangle(1297, 3706, 1307, 3716),
+rectangle(1733, 3528, 1743, 3538),
+rectangle(3805, 2847, 3815, 2857),
+rectangle(2190, 3397, 2200, 3407),
+rectangle(2814, 3465, 2824, 3475),
+rectangle(2430, 3467, 2440, 3477),
+rectangle(2803, 3195, 2813, 3205),
+rectangle(3698, 2970, 3708, 2980),
+rectangle(2891, 3401, 2901, 3411),
+rectangle(3155, 3294, 3165, 3304),
+rectangle(2642, 3343, 2652, 3353),
+rectangle(3207, 3340, 3217, 3350),
+rectangle(2533, 3840, 2543, 3850)
+];
+const rellekkaSquare = rectangle(2627, 3683, 2653, 3667);
+const jester = rectangle(2333, 3801, 2338, 3797);
+const seaTrollQueen = rectangle(2337, 3708, 2352, 3692);
+const poisonWaste = rectangle(2321, 3117, 2359, 3081);
+const observatory = rectangle(2433, 3168, 2447, 3154);
+const wizardTowerUpstairs = rectangle(3102, 3162, 3106, 3158);
+const zooknocksHouseGloughRefight = rectangle(2383, 3508, 2386, 3505);
+const paterdomusBushes = rectangle(3386, 3486, 3394, 3479);
+const weissCentre = rectangle(2865, 3943, 2879, 3929);
+const varrockWarehouseUpstairs = rectangle(3267, 3377, 3269, 3380);
+const gardenOfDeath = [
+  // start point 
+  rectangle(1303, 3480, 1323, 3464),
+  // under molch
+  rectangle(1361, 3639, 1367, 3632),
+  // under xerics shrine
+  rectangle(1310, 3619, 1316, 3613),
+  // under ruins of morra
+  rectangle(1446, 3514, 1452, 3508),
+];
+const organ = [
+  // lumbridge
+  rectangle(3239, 3208, 3247, 3204),
+  // seers
+  rectangle(2689, 3467, 2694, 3458),
+  // entrana
+  rectangle(2856, 3347, 2858, 3345),
+  // paterdomus
+  rectangle(3408, 3485, 3412, 3482),
+  // tutorial island
+  rectangle(3114, 3109, 3117, 3106),
+];
+const varrockEastGuardFollow = rectangle(3221, 3433, 3263, 3386);
+const trollStrongholdRoof = rectangle(2821, 3701, 2834, 3689);
+const morytaniaSwampCutscene = rectangle(3535, 3501, 3549, 3491);
+const portSarimRatPits = rectangle(3014, 3234, 3020, 3230);
+const camelotCastleEastStatue = rectangle(2779, 3509, 2786, 3502);
+const sophanemOutsideAltar = rectangle(3302, 2806, 3310, 2799);
+const maisasCampRuinsOfUllek = rectangle(3363, 2810, 3382, 2788);
+const battleofWestArdougne = [
+  // west ardy
+  rectangle(2556, 3303, 2514, 3334),
+  // ardy castle
+  rectangle(2566, 3311, 2590, 3282),
+];
+const treeGnomeVillageDungeon = rectangle(2531, 3157, 2535, 3153);
+const varrockLibrary = rectangle(3206, 3499, 3215, 3489);
+const hespori = rectangle(1230, 3731, 1234, 3727);
+const morytaniaHespori = rectangle(3500, 3365, 3514, 3349);
 
 export const finishedData: Record<
   string,
@@ -1872,18 +1971,7 @@ export const finishedData: Record<
   "Creeping Vines": {
     title: "Creeping Vines",
     file: "Creeping_Vines",
-    polygons: [
-      {
-        coordinates: [
-          [1216, 10048],
-          [1216, 10112],
-          [1280, 10112],
-          [1280, 10048],
-          [1216, 10048],
-        ],
-        inMap: false,
-      },
-    ],
+    polygons: [hespori],
   },
   "Crystal Castle": {
     title: "Crystal Castle",
@@ -9548,86 +9636,86 @@ export const finishedData: Record<
   ...song("Beneath Cursed Sands", toa),
   ...song("Blood Rush", vardorvis),
   ...song("Bob's on Holiday", kbd, sophanemBobAdventure),
-  ...song("Bolrie's Diary"),
-  ...song("Brain Battle"),
+  ...song("Bolrie's Diary", brimstail, ...pathOfGlouphrieCutscenes),
+  ...song("Brain Battle", barrelchestFight),
   ...song("Bunny's Sugar Rush"),
-  ...song("The Burning Sun"),
-  ...song("Cain's Tutorial"),
-  ...song("Children of the Sun"),
-  ...song("Confrontation"),
-  ...song("Crest of a Wave"),
-  ...song("Dance of the Meilyr"),
-  ...song("Delrith"),
+  ...song("The Burning Sun", ...varrockPalaceUpstairs),
+  ...song("Cain's Tutorial", barbAssault),
+  ...song("Children of the Sun", varrockSquare),
+  ...song("Confrontation", yama),
+  ...song("Crest of a Wave", ...keldagrim, dragonSlayerCrandorCrash),
+  ...song("Dance of the Meilyr", prif),
+  ...song("Delrith", delrith),
   ...song("Diango's Little Helpers"),
   ...song("Dies Irae"),
-  ...song("Dogfight"),
-  ...song("Domain of the Vampyres"),
+  ...song("Dogfight", goblinCave),
+  ...song("Domain of the Vampyres", castleDrakanCourtyard, icyeneGraveyard),
   ...song("Don't Panic Zanik"),
-  ...song("Dorgeshuun Treaty"),
+  ...song("Dorgeshuun Treaty", lumbridgeCastleDiningHall),
   ...song("Dot's Yuletide"),
-  ...song("The Dragon Slayer"),
+  ...song("The Dragon Slayer", mythsGuildGalvek),
   ...song("Easter Jig"),
-  ...song("Elven Guardians"),
+  ...song("Elven Guardians", prif),
   ...song("Eve's Epinette"),
-  ...song("Eye See You"),
-  ...song("Eye of the Storm"),
-  ...song("The Fairy Dragon"),
-  ...song("Faith of the Hefin"),
+  ...song("Eye See You", ghorrockDungeon),
+  ...song("Eye of the Storm", dragonSlayerCrandorCrash),
+  ...song("The Fairy Dragon", zanaris),
+  ...song("Faith of the Hefin", prif),
   ...song("A Festive Party"),
-  ...song("Fight of the Basilisk"),
-  ...song("Floating Free"),
-  ...song("The Fremennik Kings"),
+  ...song("Fight of the Basilisk", jormungandPrison),
+  ...song("Floating Free", entranaBalloon),
+  ...song("The Fremennik Kings", jatizsoThroneRoom),
   ...song("Funny Bunnies"),
-  ...song("The Gates of Menaphos"),
+  ...song("The Gates of Menaphos", sophanemMenaphosGate),
   ...song("Gnome Village Party"),
   ...song("Grimly Fiendish"),
-  ...song("Grip of the Talon"),
-  ...song("Healin' Feelin'"),
+  ...song("Grip of the Talon", uzer),
+  ...song("Healin' Feelin'", poisonWasteTree),
   ...song("High Spirits"),
-  ...song("His Faithful Servants"),
-  ...song("Impulses"),
-  ...song("In the Shadows"),
-  ...song("Incantation"),
-  ...song("Iorwerth's Lament"),
-  ...song("Jaws of the Basilisk"),
-  ...song("Jaws of Gluttony"),
-  ...song("Jester Minute"),
+  ...song("His Faithful Servants", ancientVaultDT2),
+  ...song("Impulses", zanaris, ...cropCircles),
+  ...song("In the Shadows", ghorrockDungeon),
+  ...song("Incantation", uzer),
+  ...song("Iorwerth's Lament", prif),
+  ...song("Jaws of the Basilisk", rellekkaSquare),
+  ...song("Jaws of Gluttony", toa),
+  ...song("Jester Minute", jester),
   ...song("Jungle Bells"),
   ...song("Jungle Island Xmas"),
-  ...song("King of the Trolls"),
-  ...song("Laid to Rest"),
+  ...song("King of the Trolls", ...iceTrollCaves),
+  ...song("Laid to Rest", toa),
   ...song("Land of Snow"),
-  ...song("Last Stand"),
-  ...song("The Longramble Scramble"),
-  ...song("Look to the Stars"),
-  ...song("Master of Puppets"),
-  ...song("Mastermindless"),
-  ...song("Meddling Kids"),
-  ...song("Monkey Badness"),
-  ...song("More Than Meets the Eye"),
-  ...song("Morytanian Mystery"),
-  ...song("A Mother's Curse"),
-  ...song("Mother Ruckus"),
-  ...song("The Noble Rodent"),
+  ...song("Last Stand", seaTrollQueen),
+  ...song("The Longramble Scramble", poisonWaste),
+  ...song("Look to the Stars", observatory),
+  ...song("Master of Puppets", ancientVaultDT2),
+  ...song("Mastermindless", wizardTowerUpstairs),
+  ...song("Meddling Kids", ...miscDungeon),
+  ...song("Monkey Badness", crashSiteCavern, zooknocksHouseGloughRefight),
+  ...song("More Than Meets the Eye", ghorrockDungeon),
+  ...song("Morytanian Mystery", paterdomusBushes, morytaniaSwampCutscene),
+  ...song("A Mother's Curse", toa),
+  ...song("Mother Ruckus", weissCentre),
+  ...song("The Noble Rodent", varrockWarehouseUpstairs),
   ...song("Nox Irae"),
-  ...song("The Old Ones"),
-  ...song("On the Up"),
+  ...song("The Old Ones", ...gardenOfDeath),
+  ...song("On the Up", lunarIsleMine),
   ...song("Oncoming Foe"),
-  ...song("Organ Music 1"),
-  ...song("Organ Music 2"),
-  ...song("The Penguin Bards"),
-  ...song("Penguin Plots"),
-  ...song("The Pharaoh"),
+  ...song("Organ Music 1", ...organ),
+  ...song("Organ Music 2", ...organ),
+  ...song("The Penguin Bards", penguin),
+  ...song("Penguin Plots", penguin),
+  ...song("The Pharaoh", sophanemMenaphosGate),
   ...song("Pheasant Peasant"),
   ...song("Pinball Wizard"),
-  ...song("Plots and Plans"),
-  ...song("Prison Break"),
+  ...song("Plots and Plans", varrockEastGuardFollow),
+  ...song("Prison Break", ghorrockDungeon),
   ...song("The Quizmaster"),
-  ...song("Reign of the Basilisk"),
-  ...song("Rhapsody"),
-  ...song("Roc and Roll"),
-  ...song("Sands of Time"),
-  ...song("Sarim's Vermin"),
+  ...song("Reign of the Basilisk", jormungandPrison),
+  ...song("Rhapsody", clanHall),
+  ...song("Roc and Roll", trollStrongholdRoof),
+  ...song("Sands of Time", toa),
+  ...song("Sarim's Vermin", portSarimRatPits),
   ...song("Scape Ape"),
   ...song("Scape Crystal"),
   ...song("Scape Five"),
@@ -9641,36 +9729,36 @@ export const finishedData: Record<
   ...song("Scrubfoot's Descent"),
   ...song("Sea Minor Shanty"),
   ...song("Sea Shanty Xmas"),
-  ...song("The Seed of Crwys"),
+  ...song("The Seed of Crwys", prif),
   ...song("Shattered Relics"),
   ...song("Showdown"),
-  ...song("The Sinclairs"),
-  ...song("Snowflake & My Arm"),
-  ...song("Song of the Silent Choir"),
-  ...song("Sorceress's Garden"),
-  ...song("The Spymaster"),
-  ...song("Stand Up and Be Counted"),
-  ...song("Storeroom Shuffle"),
+  ...song("The Sinclairs", camelotCastleEastStatue),
+  ...song("Snowflake & My Arm", weissCentre),
+  ...song("Song of the Silent Choir", camdozaal),
+  ...song("Sorceress's Garden", sorceressGarden),
+  ...song("The Spymaster", sophanemOutsideAltar, maisasCampRuinsOfUllek),
+  ...song("Stand Up and Be Counted", ...battleofWestArdougne),
+  ...song("Storeroom Shuffle", treeGnomeVillageDungeon),
   ...song("Strange Place"),
-  ...song("Surok's Theme"),
-  ...song("Tarn Razorlor"),
-  ...song("The Terrible Caverns"),
-  ...song("Terrorbird Tussle"),
-  ...song("Test of Companionship"),
-  ...song("Test of Isolation"),
-  ...song("Test of Resourcefulness"),
-  ...song("Test of Strength"),
-  ...song("A Thorn in My Side"),
-  ...song("Thrall of the Devourer"),
-  ...song("Tick Tock"),
+  ...song("Surok's Theme", varrockLibrary),
+  ...song("Tarn Razorlor", ...hauntedMine),
+  ...song("The Terrible Caverns", ...myrequeLaboratories),
+  ...song("Terrorbird Tussle", poisonWasteDungeon),
+  ...song("Test of Companionship", toa),
+  ...song("Test of Isolation", toa),
+  ...song("Test of Resourcefulness", toa),
+  ...song("Test of Strength", toa),
+  ...song("A Thorn in My Side", hespori, morytaniaHespori),
+  ...song("Thrall of the Devourer", maisasCampRuinsOfUllek, beneathCursedSands),
+  ...song("Tick Tock", ancientVaultDT2),
   ...song("Time Out"),
-  ...song("The Tower of Voices"),
+  ...song("The Tower of Voices", prif),
   ...song("Vampyre Assault"),
   ...song("Vanescula"),
   ...song("Wally the Hero"),
   ...song("We are the Fairies"),
   ...song("Winter Funfair"),
-  ...song("A Worthy Foe"),
+  ...song("A Worthy Foe", ancientVaultDT2),
   ...song("You Have My Attention"),
 };
 
