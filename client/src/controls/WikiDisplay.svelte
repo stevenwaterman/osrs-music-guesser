@@ -1,7 +1,6 @@
 <script lang="ts">
   import { fade } from "svelte/transition";
-  import { finishedData } from "osrs-music-guesser-shared/src/cleanedData";
-  import { describeSong } from "../lib/wiki";
+  import { finishedData, describeSong } from "osrs-music-guesser-shared";
   import type { State } from "../lib/clientState";
 
   export let state: State[

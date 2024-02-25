@@ -33,7 +33,7 @@ export function mapValues<InValue, OutValue>(
   return output;
 }
 
-export async function sleep(ms: number) {
+export async function sleep(ms: number): Promise<void> {
   return await new Promise(resolve => setTimeout(resolve, ms));
 }
 
@@ -55,4 +55,12 @@ export function shuffle<T>(array: T[]): T[] {
   }
 
   return array;
+}
+
+export function toMap<T>(entries: Array<[string, T]>): Record<string, T> {
+  const output: Record<string, T> = {};
+  for (const [key, value] of entries) {
+    output[key] = value;
+  }
+  return output;
 }

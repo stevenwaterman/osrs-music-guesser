@@ -10,7 +10,7 @@ export type Score = {
 
 function closestPoint(
   coord: Coordinate,
-  polygons: Polygon[]
+  polygons: Omit<Polygon, "center">[]
 ): { distance: number; closest: Coordinate } {
   const point = convertFlatten.coordinate.to(coord);
   const flattenPolys = polygons.map((p) => convertFlatten.polygon.to(p));
