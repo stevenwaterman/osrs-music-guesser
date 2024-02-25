@@ -579,8 +579,8 @@ export const finishedData: Record<string, { title: string; file: string; polygon
       }
     ]
   },
-  "Al Kharid ": {
-    "title": "Al Kharid ",
+  "Al Kharid": {
+    "title": "Al Kharid",
     "file": "Al_Kharid_(music_track)",
     "polygons": [
       {
@@ -615,8 +615,8 @@ export const finishedData: Record<string, { title: string; file: string; polygon
     "file": "Alchemical_Attack!",
     "polygons": [karuulmSlayerDungeon]
   },
-  "All's Fairy in Love &amp; War": {
-    "title": "All's Fairy in Love &amp; War",
+  "All's Fairy in Love & War": {
+    "title": "All's Fairy in Love &; War",
     "file": "All%27s_Fairy_in_Love_%26_War",
     "polygons": []
   },
@@ -1066,8 +1066,8 @@ export const finishedData: Record<string, { title: string; file: string; polygon
     "file": "Arabique",
     "polygons": taverleyDungeon
   },
-  "Arachnids of Vampyrium ": {
-    "title": "Arachnids of Vampyrium ",
+  "Arachnids of Vampyrium": {
+    "title": "Arachnids of Vampyrium",
     "file": "Arachnids_of_Vampyrium_(music_track)",
     "polygons": [tob]
   },
@@ -1126,8 +1126,8 @@ export const finishedData: Record<string, { title: string; file: string; polygon
       }
     ]
   },
-  "Arcane ": {
-    "title": "Arcane ",
+  "Arcane": {
+    "title": "Arcane",
     "file": "Arcane_(music_track)",
     "polygons": [
       {
@@ -1897,8 +1897,8 @@ export const finishedData: Record<string, { title: string; file: string; polygon
       }
     ]
   },
-  "Bandit Camp ": {
-    "title": "Bandit Camp ",
+  "Bandit Camp": {
+    "title": "Bandit Camp",
     "file": "Bandit_Camp_(music_track)",
     "polygons": [
       {
@@ -2759,13 +2759,13 @@ export const finishedData: Record<string, { title: string; file: string; polygon
       }
     ]
   },
-  "Cabin Fever ": {
-    "title": "Cabin Fever ",
+  "Cabin Fever": {
+    "title": "Cabin Fever",
     "file": "Cabin_Fever_(music_track)",
     "polygons": [cabinFever]
   },
-  "Camelot ": {
-    "title": "Camelot ",
+  "Camelot": {
+    "title": "Camelot",
     "file": "Camelot_(music_track)",
     "polygons": [
       {
@@ -2795,8 +2795,8 @@ export const finishedData: Record<string, { title: string; file: string; polygon
       }
     ]
   },
-  "Castle Wars ": {
-    "title": "Castle Wars ",
+  "Castle Wars": {
+    "title": "Castle Wars",
     "file": "Castle_Wars_(music_track)",
     "polygons": [
       {
@@ -2961,8 +2961,8 @@ export const finishedData: Record<string, { title: string; file: string; polygon
       }
     ]
   },
-  "Clan Wars ": {
-    "title": "Clan Wars ",
+  "Clan Wars": {
+    "title": "Clan Wars",
     "file": "Clan_Wars_(music_track)",
     "polygons": [clanWars]
   },
@@ -3053,8 +3053,8 @@ export const finishedData: Record<string, { title: string; file: string; polygon
     "file": "Complication",
     "polygons": [abyss, chaosAltar]
   },
-  "The Consortium ": {
-    "title": "The Consortium ",
+  "The Consortium": {
+    "title": "The Consortium",
     "file": "The_Consortium_(music_track)",
     "polygons": keldagrim
   },
@@ -3885,8 +3885,8 @@ export const finishedData: Record<string, { title: string; file: string; polygon
     "file": "The_Depths",
     "polygons": [sophanemDungeon]
   },
-  "Desert Heat ": {
-    "title": "Desert Heat ",
+  "Desert Heat": {
+    "title": "Desert Heat",
     "file": "Desert_Heat_(music_track)",
     "polygons": [
       {
@@ -4544,8 +4544,8 @@ export const finishedData: Record<string, { title: string; file: string; polygon
     "file": "Down_to_Earth",
     "polygons": [earthAltar, abyss]
   },
-  "Dragontooth Island ": {
-    "title": "Dragontooth Island ",
+  "Dragontooth Island": {
+    "title": "Dragontooth Island",
     "file": "Dragontooth_Island_(music_track)",
     "polygons": [
       {
@@ -4575,8 +4575,8 @@ export const finishedData: Record<string, { title: string; file: string; polygon
       }
     ]
   },
-  "Dream ": {
-    "title": "Dream ",
+  "Dream": {
+    "title": "Dream",
     "file": "Dream_(music_track)",
     "polygons": [
       {
@@ -4717,8 +4717,8 @@ export const finishedData: Record<string, { title: string; file: string; polygon
       }
     ]
   },
-  "Eagles' Peak ": {
-    "title": "Eagles' Peak ",
+  "Eagles' Peak": {
+    "title": "Eagles' Peak",
     "file": "Eagles%27_Peak_(music_track)",
     "polygons": [
       {
@@ -5094,8 +5094,8 @@ export const finishedData: Record<string, { title: string; file: string; polygon
     "file": "Espionage",
     "polygons": [penguin]
   },
-  "Etceteria ": {
-    "title": "Etceteria ",
+  "Etceteria": {
+    "title": "Etceteria",
     "file": "Etceteria_(music_track)",
     "polygons": [
       {
@@ -5395,8 +5395,8 @@ export const finishedData: Record<string, { title: string; file: string; polygon
       }
     ]
   },
-  "The Fallen Empire ": {
-    "title": "The Fallen Empire ",
+  "The Fallen Empire": {
+    "title": "The Fallen Empire",
     "file": "The_Fallen_Empire_(music_track)",
     "polygons": [camdozaal]
   },
@@ -5668,8 +5668,8 @@ export const finishedData: Record<string, { title: string; file: string; polygon
     "file": "The_Fires_of_Lletya",
     "polygons": [lletya]
   },
-  "Fishing ": {
-    "title": "Fishing ",
+  "Fishing": {
+    "title": "Fishing",
     "file": "Fishing_(music_track)",
     "polygons": [
       {
@@ -5766,8 +5766,8 @@ export const finishedData: Record<string, { title: string; file: string; polygon
       }
     ]
   },
-  "Forest ": {
-    "title": "Forest ",
+  "Forest": {
+    "title": "Forest",
     "file": "Forest_(music_track)",
     "polygons": [
       {
@@ -7114,8 +7114,8 @@ export const finishedData: Record<string, { title: string; file: string; polygon
       }
     ]
   },
-  "The Forsaken Tower ": {
-    "title": "The Forsaken Tower ",
+  "The Forsaken Tower": {
+    "title": "The Forsaken Tower",
     "file": "The_Forsaken_Tower_(music_track)",
     "polygons": [
       {
@@ -7364,8 +7364,8 @@ export const finishedData: Record<string, { title: string; file: string; polygon
       }
     ]
   },
-  "Garden ": {
-    "title": "Garden ",
+  "Garden": {
+    "title": "Garden",
     "file": "Garden_(music_track)",
     "polygons": [
       {
@@ -7423,8 +7423,8 @@ export const finishedData: Record<string, { title: string; file: string; polygon
     "file": "Garden_of_Winter",
     "polygons": [sorceressGarden]
   },
-  "The Gauntlet ": {
-    "title": "The Gauntlet ",
+  "The Gauntlet": {
+    "title": "The Gauntlet",
     "file": "The_Gauntlet_(music_track)",
     "polygons": [gauntlet]
   },
@@ -7557,8 +7557,8 @@ export const finishedData: Record<string, { title: string; file: string; polygon
       }
     ]
   },
-  "Gnomeball ": {
-    "title": "Gnomeball ",
+  "Gnomeball": {
+    "title": "Gnomeball",
     "file": "Gnomeball_(music_track)",
     "polygons": [
       {
@@ -7593,8 +7593,8 @@ export const finishedData: Record<string, { title: string; file: string; polygon
     "file": "Goblin_Game",
     "polygons": [goblinCave]
   },
-  "Goblin Village ": {
-    "title": "Goblin Village ",
+  "Goblin Village": {
+    "title": "Goblin Village",
     "file": "Goblin_Village_(music_track)",
     "polygons": [
       {
@@ -7661,8 +7661,8 @@ export const finishedData: Record<string, { title: string; file: string; polygon
     "file": "Golden_Touch",
     "polygons": [mta]
   },
-  "The Golem ": {
-    "title": "The Golem ",
+  "The Golem": {
+    "title": "The Golem",
     "file": "The_Golem_(music_track)",
     "polygons": [
       {
@@ -7731,8 +7731,8 @@ export const finishedData: Record<string, { title: string; file: string; polygon
       }
     ]
   },
-  "Grotto ": {
-    "title": "Grotto ",
+  "Grotto": {
+    "title": "Grotto",
     "file": "Grotto_(music_track)",
     "polygons": [natureGrotto]
   },
@@ -7904,8 +7904,8 @@ export const finishedData: Record<string, { title: string; file: string; polygon
     "file": "The_Guardians_Prepare",
     "polygons": [wizardTowerBasement]
   },
-  "Guardians of the Rift ": {
-    "title": "Guardians of the Rift ",
+  "Guardians of the Rift": {
+    "title": "Guardians of the Rift",
     "file": "Guardians_of_the_Rift_(music_track)",
     "polygons": [wizardTowerBasement]
   },
@@ -7924,8 +7924,8 @@ export const finishedData: Record<string, { title: string; file: string; polygon
     "file": "H.A.M._and_Seek",
     "polygons": [hamHideout]
   },
-  "Harmony ": {
-    "title": "Harmony ",
+  "Harmony": {
+    "title": "Harmony",
     "file": "Harmony_(music_track)",
     "polygons": [
       {
@@ -7960,8 +7960,8 @@ export const finishedData: Record<string, { title: string; file: string; polygon
     "file": "Harmony_2",
     "polygons": swampCavesDorgeshKaanTears
   },
-  "Haunted Mine ": {
-    "title": "Haunted Mine ",
+  "Haunted Mine": {
+    "title": "Haunted Mine",
     "file": "Haunted_Mine_(music_track)",
     "polygons": hauntedMine
   },
@@ -8291,8 +8291,8 @@ export const finishedData: Record<string, { title: string; file: string; polygon
     "file": "Hypnotised",
     "polygons": [icthlarinPyramid]
   },
-  "Iban ": {
-    "title": "Iban ",
+  "Iban": {
+    "title": "Iban",
     "file": "Iban_(music_track)",
     "polygons": undergroundPass
   },
@@ -8450,8 +8450,8 @@ export const finishedData: Record<string, { title: string; file: string; polygon
     "file": "Inadequacy",
     "polygons": [dream]
   },
-  "Inferno ": {
-    "title": "Inferno ",
+  "Inferno": {
+    "title": "Inferno",
     "file": "Inferno_(music_track)",
     "polygons": tzhaar
   },
@@ -8512,8 +8512,8 @@ export const finishedData: Record<string, { title: string; file: string; polygon
     "file": "Into_the_Abyss",
     "polygons": [abyss]
   },
-  "Into the Tombs ": {
-    "title": "Into the Tombs ",
+  "Into the Tombs": {
+    "title": "Into the Tombs",
     "file": "Into_the_Tombs_(music_track)",
     "polygons": [toa]
   },
@@ -8943,8 +8943,8 @@ export const finishedData: Record<string, { title: string; file: string; polygon
     "file": "Karamja_Jam",
     "polygons": [...brimhavenDungeon]
   },
-  "Kingdom ": {
-    "title": "Kingdom ",
+  "Kingdom": {
+    "title": "Kingdom",
     "file": "Kingdom_(music_track)",
     "polygons": [
       {
@@ -10045,8 +10045,8 @@ export const finishedData: Record<string, { title: string; file: string; polygon
     "file": "Last_King_of_the_Yarasa",
     "polygons": [tob]
   },
-  "Last Man Standing ": {
-    "title": "Last Man Standing ",
+  "Last Man Standing": {
+    "title": "Last Man Standing",
     "file": "Last_Man_Standing_(music_track)",
     "polygons": [lms]
   },
@@ -10234,8 +10234,8 @@ export const finishedData: Record<string, { title: string; file: string; polygon
       }
     ]
   },
-  "Lighthouse ": {
-    "title": "Lighthouse ",
+  "Lighthouse": {
+    "title": "Lighthouse",
     "file": "Lighthouse_(music_track)",
     "polygons": [
       {
@@ -10532,8 +10532,8 @@ export const finishedData: Record<string, { title: string; file: string; polygon
     "file": "The_Lost_Melody",
     "polygons": swampCavesDorgeshKaanTears
   },
-  "Lost Soul ": {
-    "title": "Lost Soul ",
+  "Lost Soul": {
+    "title": "Lost Soul",
     "file": "Lost_Soul_(music_track)",
     "polygons": [
       {
@@ -10579,8 +10579,8 @@ export const finishedData: Record<string, { title: string; file: string; polygon
       }
     ]
   },
-  "The Lost Tribe ": {
-    "title": "The Lost Tribe ",
+  "The Lost Tribe": {
+    "title": "The Lost Tribe",
     "file": "The_Lost_Tribe_(music_track)",
     "polygons": [...swampCavesDorgeshKaanTears]
   },
@@ -10743,8 +10743,8 @@ export const finishedData: Record<string, { title: string; file: string; polygon
     "file": "The_Mad_Mole",
     "polygons": [giantMoleCave]
   },
-  "Mage Arena ": {
-    "title": "Mage Arena ",
+  "Mage Arena": {
+    "title": "Mage Arena",
     "file": "Mage_Arena_(music_track)",
     "polygons": [
       {
@@ -11367,8 +11367,8 @@ export const finishedData: Record<string, { title: string; file: string; polygon
     "file": "Masquerade",
     "polygons": [fremennikSlayerCave]
   },
-  "Mausoleum ": {
-    "title": "Mausoleum ",
+  "Mausoleum": {
+    "title": "Mausoleum",
     "file": "Mausoleum_(music_track)",
     "polygons": [...paterdomus]
   },
@@ -12301,8 +12301,8 @@ export const finishedData: Record<string, { title: string; file: string; polygon
     "file": "Mirage",
     "polygons": [icthlarinPyramid]
   },
-  "Miscellania ": {
-    "title": "Miscellania ",
+  "Miscellania": {
+    "title": "Miscellania",
     "file": "Miscellania_(music_track)",
     "polygons": [
       {
@@ -12399,8 +12399,8 @@ export const finishedData: Record<string, { title: string; file: string; polygon
     "file": "Monkey_Business",
     "polygons": [crashSiteCavern, krukDungeon]
   },
-  "Monkey Madness ": {
-    "title": "Monkey Madness ",
+  "Monkey Madness": {
+    "title": "Monkey Madness",
     "file": "Monkey_Madness_(music_track)",
     "polygons": [
       {
@@ -12618,13 +12618,13 @@ export const finishedData: Record<string, { title: string; file: string; polygon
       }
     ]
   },
-  "Mor Ul Rek ": {
-    "title": "Mor Ul Rek ",
+  "Mor Ul Rek": {
+    "title": "Mor Ul Rek",
     "file": "Mor_Ul_Rek_(music_track)",
     "polygons": [...tzhaar]
   },
-  "Morytania ": {
-    "title": "Morytania ",
+  "Morytania": {
+    "title": "Morytania",
     "file": "Morytania_(music_track)",
     "polygons": [
       {
@@ -13037,8 +13037,8 @@ export const finishedData: Record<string, { title: string; file: string; polygon
     "file": "No_Way_Out",
     "polygons": [soulsBane]
   },
-  "Nomad ": {
-    "title": "Nomad ",
+  "Nomad": {
+    "title": "Nomad",
     "file": "Nomad_(music_track)",
     "polygons": [
       {
@@ -13855,8 +13855,8 @@ export const finishedData: Record<string, { title: string; file: string; polygon
     "file": "Pathways",
     "polygons": [...brimhavenDungeon]
   },
-  "Pest Control ": {
-    "title": "Pest Control ",
+  "Pest Control": {
+    "title": "Pest Control",
     "file": "Pest_Control_(music_track)",
     "polygons": [
       {
@@ -14148,8 +14148,8 @@ export const finishedData: Record<string, { title: string; file: string; polygon
       }
     ]
   },
-  "Quest ": {
-    "title": "Quest ",
+  "Quest": {
+    "title": "Quest",
     "file": "Quest_(music_track)",
     "polygons": [abyss, fireAltar]
   },
@@ -14271,13 +14271,13 @@ export const finishedData: Record<string, { title: string; file: string; polygon
       }
     ]
   },
-  "Relics ": {
-    "title": "Relics ",
+  "Relics": {
+    "title": "Relics",
     "file": "Relics_(music_track)",
     "polygons": [lithkren, ...tzhaar, ungaelLab]
   },
-  "Rellekka ": {
-    "title": "Rellekka ",
+  "Rellekka": {
+    "title": "Rellekka",
     "file": "Rellekka_(music_track)",
     "polygons": [
       {
@@ -14320,8 +14320,8 @@ export const finishedData: Record<string, { title: string; file: string; polygon
     "file": "Rest_in_Peace",
     "polygons": [...death]
   },
-  "Revenants ": {
-    "title": "Revenants ",
+  "Revenants": {
+    "title": "Revenants",
     "file": "Revenants_(music_track)",
     "polygons": [...revs]
   },
@@ -14448,8 +14448,8 @@ export const finishedData: Record<string, { title: string; file: string; polygon
     "file": "Roots_and_Flutes",
     "polygons": [...varrockSewers]
   },
-  "Rose ": {
-    "title": "Rose ",
+  "Rose": {
+    "title": "Rose",
     "file": "Rose_(music_track)",
     "polygons": [
       {
@@ -15249,8 +15249,8 @@ export const finishedData: Record<string, { title: string; file: string; polygon
       }
     ]
   },
-  "Rune Essence ": {
-    "title": "Rune Essence ",
+  "Rune Essence": {
+    "title": "Rune Essence",
     "file": "Rune_Essence_(music_track)",
     "polygons": [...runeEssenceMine]
   },
@@ -15345,13 +15345,13 @@ export const finishedData: Record<string, { title: string; file: string; polygon
       }
     ]
   },
-  "Sarachnis ": {
-    "title": "Sarachnis ",
+  "Sarachnis": {
+    "title": "Sarachnis",
     "file": "Sarachnis_(music_track)",
     "polygons": [...forthos]
   },
-  "Sarcophagus ": {
-    "title": "Sarcophagus ",
+  "Sarcophagus": {
+    "title": "Sarcophagus",
     "file": "Sarcophagus_(music_track)",
     "polygons": [ancientsPyramid]
   },
@@ -15850,8 +15850,8 @@ export const finishedData: Record<string, { title: string; file: string; polygon
       }
     ]
   },
-  "Secrets of the North ": {
-    "title": "Secrets of the North ",
+  "Secrets of the North": {
+    "title": "Secrets of the North",
     "file": "Secrets_of_the_North_(music_track)",
     "polygons": [ghorrockDungeon]
   },
@@ -16305,8 +16305,8 @@ export const finishedData: Record<string, { title: string; file: string; polygon
       }
     ]
   },
-  "Song of the Elves ": {
-    "title": "Song of the Elves ",
+  "Song of the Elves": {
+    "title": "Song of the Elves",
     "file": "Song_of_the_Elves_(music_track)",
     "polygons": [lletyaCouncilHutGrandLibrary]
   },
@@ -16357,8 +16357,8 @@ export const finishedData: Record<string, { title: string; file: string; polygon
       }
     ]
   },
-  "Soul Wars ": {
-    "title": "Soul Wars ",
+  "Soul Wars": {
+    "title": "Soul Wars",
     "file": "Soul_Wars_(music_track)",
     "polygons": [
       {
@@ -16419,8 +16419,8 @@ export const finishedData: Record<string, { title: string; file: string; polygon
       }
     ]
   },
-  "Sphinx ": {
-    "title": "Sphinx ",
+  "Sphinx": {
+    "title": "Sphinx",
     "file": "Sphinx_(music_track)",
     "polygons": [
       {
@@ -16466,8 +16466,8 @@ export const finishedData: Record<string, { title: string; file: string; polygon
       }
     ]
   },
-  "Spirit ": {
-    "title": "Spirit ",
+  "Spirit": {
+    "title": "Spirit",
     "file": "Spirit_(music_track)",
     "polygons": [
       {
@@ -16497,8 +16497,8 @@ export const finishedData: Record<string, { title: string; file: string; polygon
       }
     ]
   },
-  "Spirits of the Elid ": {
-    "title": "Spirits of the Elid ",
+  "Spirits of the Elid": {
+    "title": "Spirits of the Elid",
     "file": "Spirits_of_the_Elid_(music_track)",
     "polygons": [riverElidWaterfall]
   },
@@ -16600,8 +16600,8 @@ export const finishedData: Record<string, { title: string; file: string; polygon
       },
     ]
   },
-  "The Spurned Demon ": {
-    "title": "The Spurned Demon ",
+  "The Spurned Demon": {
+    "title": "The Spurned Demon",
     "file": "The_Spurned_Demon_(music_track)",
     "polygons": [zalcano]
   },
@@ -16636,8 +16636,8 @@ export const finishedData: Record<string, { title: string; file: string; polygon
     },
     ]
   },
-  "Starlight ": {
-    "title": "Starlight ",
+  "Starlight": {
+    "title": "Starlight",
     "file": "Starlight_(music_track)",
     "polygons": [asgarnianIceDungeon]
   },
@@ -16744,8 +16744,8 @@ export const finishedData: Record<string, { title: string; file: string; polygon
       }
     ]
   },
-  "Strangled ": {
-    "title": "Strangled ",
+  "Strangled": {
+    "title": "Strangled",
     "file": "Strangled_(music_track)",
     "polygons": [
       {
@@ -17023,13 +17023,13 @@ export const finishedData: Record<string, { title: string; file: string; polygon
       }
     ]
   },
-  "A Taste of Hope ": {
-    "title": "A Taste of Hope ",
+  "A Taste of Hope": {
+    "title": "A Taste of Hope",
     "file": "A_Taste_of_Hope_(music_track)",
     "polygons": [verSinhaza]
   },
-  "Tears of Guthix ": {
-    "title": "Tears of Guthix ",
+  "Tears of Guthix": {
+    "title": "Tears of Guthix",
     "file": "Tears_of_Guthix_(music_track)",
     "polygons": [...swampCavesDorgeshKaanTears]
   },
@@ -17043,13 +17043,13 @@ export const finishedData: Record<string, { title: string; file: string; polygon
     "file": "Tempest",
     "polygons": [slayerTower]
   },
-  "Temple ": {
-    "title": "Temple ",
+  "Temple": {
+    "title": "Temple",
     "file": "Temple_(music_track)",
     "polygons": [marimboDungeon]
   },
-  "Temple of Light ": {
-    "title": "Temple of Light ",
+  "Temple of Light": {
+    "title": "Temple of Light",
     "file": "Temple_of_Light_(music_track)",
     "polygons": [...undergroundPass]
   },
@@ -17058,8 +17058,8 @@ export const finishedData: Record<string, { title: string; file: string; polygon
     "file": "Temple_of_Tribes",
     "polygons": [goblinCave]
   },
-  "Temple of the Eye ": {
-    "title": "Temple of the Eye ",
+  "Temple of the Eye": {
+    "title": "Temple of the Eye",
     "file": "Temple_of_the_Eye_(music_track)",
     "polygons": [wizardTowerBasement]
   },
@@ -17212,8 +17212,8 @@ export const finishedData: Record<string, { title: string; file: string; polygon
     "file": "Tiptoe",
     "polygons": [draynorManorCellar]
   },
-  "Tomb Raider ": {
-    "title": "Tomb Raider ",
+  "Tomb Raider": {
+    "title": "Tomb Raider",
     "file": "Tomb_Raider_(music_track)",
     "polygons": [pyramidPlunder]
   },
@@ -17340,8 +17340,8 @@ export const finishedData: Record<string, { title: string; file: string; polygon
     "file": "Trahaearn_Toil",
     "polygons": [prif, lletyaCouncilHutGrandLibrary]
   },
-  "Trawler ": {
-    "title": "Trawler ",
+  "Trawler": {
+    "title": "Trawler",
     "file": "Trawler_(music_track)",
     "polygons": [fishingTrawler]
   },
@@ -17566,8 +17566,8 @@ export const finishedData: Record<string, { title: string; file: string; polygon
     "file": "Troll_Shuffle",
     "polygons": [weissMakingFriendsSneakCave]
   },
-  "Trouble Brewing ": {
-    "title": "Trouble Brewing ",
+  "Trouble Brewing": {
+    "title": "Trouble Brewing",
     "file": "Trouble_Brewing_(music_track)",
     "polygons": [
       {
@@ -17679,8 +17679,8 @@ export const finishedData: Record<string, { title: string; file: string; polygon
       }
     ]
   },
-  "Underground ": {
-    "title": "Underground ",
+  "Underground": {
+    "title": "Underground",
     "file": "Underground_(music_track)",
     "polygons": [...taverleyDungeon, entranaDungeon, wildyAgilityDungeon,
     {
@@ -17710,8 +17710,8 @@ export const finishedData: Record<string, { title: string; file: string; polygon
     },
     ]
   },
-  "Underground Pass ": {
-    "title": "Underground Pass ",
+  "Underground Pass": {
+    "title": "Underground Pass",
     "file": "Underground_Pass_(music_track)",
     "polygons": [...undergroundPass]
   },
@@ -18374,13 +18374,13 @@ export const finishedData: Record<string, { title: string; file: string; polygon
     "file": "Warpath",
     "polygons": [clanWars]
   },
-  "Warrior ": {
-    "title": "Warrior ",
+  "Warrior": {
+    "title": "Warrior",
     "file": "Warrior_(music_track)",
     "polygons": [koscheiFightFremTrials]
   },
-  "Warriors' Guild ": {
-    "title": "Warriors' Guild ",
+  "Warriors' Guild": {
+    "title": "Warriors' Guild",
     "file": "Warriors%27_Guild_(music_track)",
     "polygons": [
       {
@@ -18600,8 +18600,8 @@ export const finishedData: Record<string, { title: string; file: string; polygon
     "file": "Watch_Your_Step",
     "polygons": [hallowedSepulchre]
   },
-  "Waterfall ": {
-    "title": "Waterfall ",
+  "Waterfall": {
+    "title": "Waterfall",
     "file": "Waterfall_(music_track)",
     "polygons": [
       {
@@ -18750,8 +18750,8 @@ export const finishedData: Record<string, { title: string; file: string; polygon
     "file": "Well_Hallowed_Air",
     "polygons": [hallowedSepulchre]
   },
-  "Well of Voyage ": {
-    "title": "Well of Voyage ",
+  "Well of Voyage": {
+    "title": "Well of Voyage",
     "file": "Well_of_Voyage_(music_track)",
     "polygons": [...undergroundPass, ...leafTraps]
   },
@@ -18827,8 +18827,8 @@ export const finishedData: Record<string, { title: string; file: string; polygon
       }
     ]
   },
-  "Wilderness ": {
-    "title": "Wilderness ",
+  "Wilderness": {
+    "title": "Wilderness",
     "file": "Wilderness_(music_track)",
     "polygons": [
       {
@@ -19188,8 +19188,8 @@ export const finishedData: Record<string, { title: string; file: string; polygon
       }
     ]
   },
-  "Woodland ": {
-    "title": "Woodland ",
+  "Woodland": {
+    "title": "Woodland",
     "file": "Woodland_(music_track)",
     "polygons": [
       {
@@ -19250,8 +19250,8 @@ export const finishedData: Record<string, { title: string; file: string; polygon
       }
     ]
   },
-  "Workshop ": {
-    "title": "Workshop ",
+  "Workshop": {
+    "title": "Workshop",
     "file": "Workshop_(music_track)",
     "polygons": [
       {
@@ -19337,8 +19337,8 @@ export const finishedData: Record<string, { title: string; file: string; polygon
     "file": "Zaros_Zeitgeist",
     "polygons": [godWars]
   },
-  "Zealot ": {
-    "title": "Zealot ",
+  "Zealot": {
+    "title": "Zealot",
     "file": "Zealot_(music_track)",
     "polygons": [abyss, waterAltar]
   },
@@ -21114,5 +21114,141 @@ export const finishedData: Record<string, { title: string; file: string; polygon
     "title": "Title Fight",
     "file": "Title_Fight",
     "polygons": [championsChallenge]
-  }
+  },
+  ...todo("Amascut's Promise"),
+  ...todo("Ape-ex Predator"),
+  ...todo("Architects of Prifddinas"),
+    ...todo("Awful Anthem"),
+    ...todo("Bait"),
+    ...todo("Ballad of the Basilisk"),
+    ...todo("Barbarian Workout"),
+    ...todo("Beneath Cursed Sands"),
+    ...todo("Blood Rush"),
+    ...todo("Bob's on Holiday"),
+    ...todo("Bolrie's Diary"),
+    ...todo("Brain Battle"),
+    ...todo("Bunny's Sugar Rush"),
+    ...todo("The Burning Sun"),
+    ...todo("Cain's Tutorial"),
+    ...todo("Children of the Sun"),
+    ...todo("Confrontation"),
+    ...todo("Crest of a Wave"),
+    ...todo("Dance of the Meilyr"),
+    ...todo("Delrith"),
+    ...todo("Diango's Little Helpers"),
+    ...todo("Dies Irae"),
+    ...todo("Dogfight"),
+    ...todo("Domain of the Vampyres"),
+    ...todo("Don't Panic Zanik"),
+    ...todo("Dorgeshuun Treaty"),
+    ...todo("Dot's Yuletide"),
+    ...todo("The Dragon Slayer"),
+    ...todo("Easter Jig"),
+    ...todo("Elven Guardians"),
+    ...todo("Eve's Epinette"),
+    ...todo("Eye See You"),
+    ...todo("Eye of the Storm"),
+    ...todo("The Fairy Dragon"),
+    ...todo("Faith of the Hefin"),
+    ...todo("A Festive Party"),
+    ...todo("Fight of the Basilisk"),
+    ...todo("Floating Free"),
+    ...todo("The Fremennik Kings"),
+    ...todo("Funny Bunnies"),
+    ...todo("The Gates of Menaphos"),
+    ...todo("Gnome Village Party"),
+    ...todo("Grimly Fiendish"),
+    ...todo("Grip of the Talon"),
+    ...todo("Healin' Feelin'"),
+    ...todo("High Spirits"),
+    ...todo("His Faithful Servants"),
+    ...todo("Impulses"),
+    ...todo("In the Shadows"),
+    ...todo("Incantation"),
+    ...todo("Iorwerth's Lament"),
+    ...todo("Jaws of the Basilisk"),
+    ...todo("Jaws of Gluttony"),
+    ...todo("Jester Minute"),
+    ...todo("Jungle Bells"),
+    ...todo("Jungle Island Xmas"),
+    ...todo("King of the Trolls"),
+    ...todo("Laid to Rest"),
+    ...todo("Land of Snow"),
+    ...todo("Last Stand"),
+    ...todo("The Longramble Scramble"),
+    ...todo("Look to the Stars"),
+    ...todo("Master of Puppets"),
+    ...todo("Mastermindless"),
+    ...todo("Meddling Kids"),
+    ...todo("Monkey Badness"),
+    ...todo("More Than Meets the Eye"),
+    ...todo("Morytanian Mystery"),
+    ...todo("A Mother's Curse"),
+    ...todo("Mother Ruckus"),
+    ...todo("The Noble Rodent"),
+    ...todo("Nox Irae"),
+    ...todo("The Old Ones"),
+    ...todo("On the Up"),
+    ...todo("Oncoming Foe"),
+    ...todo("Organ Music 1"),
+    ...todo("Organ Music 2"),
+    ...todo("The Penguin Bards"),
+    ...todo("Penguin Plots"),
+    ...todo("The Pharaoh"),
+    ...todo("Pheasant Peasant"),
+    ...todo("Pinball Wizard"),
+    ...todo("Plots and Plans"),
+    ...todo("Prison Break"),
+    ...todo("The Quizmaster"),
+    ...todo("Reign of the Basilisk"),
+    ...todo("Rhapsody"),
+    ...todo("Roc and Roll"),
+    ...todo("Sands of Time"),
+    ...todo("Sarim's Vermin"),
+    ...todo("Scape Ape"),
+    ...todo("Scape Crystal"),
+    ...todo("Scape Five"),
+    ...todo("Scape Ground"),
+    ...todo("Scape Home"),
+    ...todo("Scape Hunter"),
+    ...todo("Scape Original"),
+    ...todo("Scape Santa"),
+    ...todo("Scape Scared"),
+    ...todo("School's Out"),
+    ...todo("Scrubfoot's Descent"),
+    ...todo("Sea Minor Shanty"),
+    ...todo("Sea Shanty Xmas"),
+    ...todo("The Seed of Crwys"),
+    ...todo("Shattered Relics"),
+    ...todo("Showdown"),
+    ...todo("The Sinclairs"),
+    ...todo("Snowflake & My Arm"),
+    ...todo("Song of the Silent Choir"),
+    ...todo("Sorceress's Garden"),
+    ...todo("The Spymaster"),
+    ...todo("Stand Up and Be Counted"),
+    ...todo("Storeroom Shuffle"),
+    ...todo("Strange Place"),
+    ...todo("Surok's Theme"),
+    ...todo("Tarn Razorlor"),
+    ...todo("The Terrible Caverns"),
+    ...todo("Terrorbird Tussle"),
+    ...todo("Test of Companionship"),
+    ...todo("Test of Isolation"),
+    ...todo("Test of Resourcefulness"),
+    ...todo("Test of Strength"),
+    ...todo("A Thorn in My Side"),
+    ...todo("Thrall of the Devourer"),
+    ...todo("Tick Tock"),
+    ...todo("Time Out"),
+    ...todo("The Tower of Voices"),
+    ...todo("Vampyre Assault"),
+    ...todo("Vanescula"),
+    ...todo("Wally the Hero"),
+    ...todo("We are the Fairies"),
+    ...todo("Winter Funfair"),
+    ...todo("A Worthy Foe"),
+    ...todo("You Have My Attention")
 }
+
+function todo(name: string) { return { [name]: { title: name, file: name, polygons: [] }}}
