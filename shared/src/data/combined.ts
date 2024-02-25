@@ -20,13 +20,17 @@ export type Song = {
   locations: Polygon[];
 };
 
-
-export const songs: Record<string, Song> = toMap(songNames.map((name) => [name, {
-  name,
-  audioUrl: audioUrls[name],
-  wikiUrl: wikiPageUrls[name],
-  unlockHint: songUnlockHints[name],
-  description: songDescriptions[name],
-  duration: songDurations[name],
-  locations: songLocations[name],
-}]));
+export const songs: Record<string, Song> = toMap(
+  songNames.map((name) => [
+    name,
+    {
+      name,
+      audioUrl: audioUrls[name],
+      wikiUrl: wikiPageUrls[name],
+      unlockHint: songUnlockHints[name],
+      description: songDescriptions[name],
+      duration: songDurations[name],
+      locations: songLocations[name],
+    },
+  ])
+);

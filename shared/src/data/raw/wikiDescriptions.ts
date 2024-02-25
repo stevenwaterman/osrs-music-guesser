@@ -1,7 +1,18 @@
+const mythsGuild =
+  "The Myths' guild basement can also be accessed from the Wrath Altar island or via the Corsair Cove dungeon, crossing the bridge to the west.";
+const taverleyDungeon =
+  "Taverley Dungeon is also accessible through the ladder down to the Fire Obelisk, even though the only way to get there is by going through Taverley Dungeon first.";
+const attack =
+  "Had that naming convention continued, this game would have been a lot less interesting.";
+const nightmare =
+  "The Sisterhood Sanctuary is also accessible by climbing down a ladder inside Crombwick Manor, which takes you to Kroy's Laboratory. Since the doors to Crombwick Manor are locked, the only way to do this is to first go through Sisterhood Sanctuary.";
+  const swampCaves = ["The Lumbridge Swamp Caves and Dorgesh-Kaan are accessible through Lumbridge Castle basement, the ladder in Lumbridge swamp, and through the watermill dungeon.", "If all transport options were allowed, they would also be accessible from KQ, Keldagrim, Falador, White Wolf Mountain, Elvarg's Lair, and about a million other places."]
+  const zanaris = "As fairy rings are not an allowed method of transport, Zanaris is only accesible through the hut in Lumbridge swamp."
+
 export const songDescriptions: Record<string, string[]> = {
   "7th Realm": [
     "Unlocked in the western part of Brimhaven Dungeon or in the basement of the Myths' Guild.",
-    "Also accessible via the Corsair Cove dungeon, crossing the bridge to the west section of the dungeon under the Myths' Guild.",
+    mythsGuild,
   ],
   Adventure: ["Unlocked in Varrock Palace."],
   "Al Kharid": ["Unlocked in Al Kharid and the west of the Giants' Plateau."],
@@ -27,39 +38,36 @@ export const songDescriptions: Record<string, string[]> = {
     "Unlocked inside Shilo Village. It also plays in the underground area of the Shilo Village mine.",
   ],
   "The Ancient Prison": [
-    "Unlocked in the Ancient Prison, and requires completion of the miniquest The Frozen Door to unlock.",
+    "Unlocked in the Ancient Prison outside Nex, inside the God Wars Dungeon.",
     'The track was originally released on 3 December 2009, being played during the quest The Temple at Senntisten in RuneScape and later in the Ancient Prison. It was originally composed by Chris Jolley, and was titled "Zaros Stirs".',
   ],
   "The Angel's Fury": [
-    "Unlocked at the beginning of the encounter with Nex, which requires completion of the miniquest The Frozen Door to unlock.",
+    "Unlocked at the beginning of the encounter with Nex, inside the God Wars Dungeon.",
     "The track begins playing when Nex enters her Blood phase after Umbra is killed.",
     "The track is based on the Angel of Death music track from The Angel of Death, Nex's hard mode encounter in RuneScape.",
   ],
-  Anywhere: ["Unlocked at Marim's main gate on Ape Atoll."],
+  Anywhere: ["Unlocked north of Marim's main gate on Ape Atoll."],
   "Ape-ex Predator": [
-    "Unlocked during the fight with Ba-Ba in the Tombs of Amascut.",
+    "Unlocked during the fight with Ba-Ba in the Tombs of Amascut, inside the Necropolis.",
   ],
   Arabian: [
-    "Unlocked in Al Kharid, at the Al Kharid mine and the Giants' Plateau. In this area, the music player will also shuffle between playing this track, Al Kharid and Arabian 2.",
-    "In Classic mode, the track plays in several locations in northern Kharidian Desert:",
-    "On the path to the Emir's Arena north of Al Kharid.",
-    "At the Citharede Abbey.",
-    "At the Uzer mine.",
+    "Unlocked in Al Kharid, after passing through the toll gate. Also plays in Citharede Abbey and at the Uzer mine.",
   ],
   "Arabian 2": [
-    "Unlocked in Al Kharid, at the Al Kharid mine and the Giants' Plateau. In this area, the music player will also shuffle between playing this track, Al Kharid and Arabian.",
-    "In Classic mode, the track plays at the Al Kharid mining site.",
+    "Unlocked in the Al Kharid mine and surrounding areas, including a cow pen and a potato field.",
   ],
   "Arabian 3": [
-    "Unlocked in members part of Kharidian Desert, mostly at sands. In this area, the music player will also shuffle between playing this track, Desert Heat, Desert Voyage, The Desert, Egypt, Scarab, Sphinx and Sunburn.",
-    "In Classic mode, the track plays near the Kalphite Lair which is in the western part of the desert.",
+    "Unlocked in the north-western part of the Kharidian Desert, around the entrance to the Kalphite Lair.",
   ],
-  Arabique: ["Unlocked near the Hellhounds in Taverley Dungeon."],
+  Arabique: [
+    "Unlocked near the Hellhounds in Taverley Dungeon.",
+    taverleyDungeon,
+  ],
   "Arachnids of Vampyrium": [
     "Unlocked during the fight in the Nylocas lair within the Theatre of Blood.",
   ],
   Arboretum: [
-    "Unlocked during the quest Sins of the Father upon entering the Arboretum for the first time.",
+    "Unlocked inside the Arboretum (which contains the Blisterwood tree) in Darkmeyer.",
     "The track was originally released on 31 August 2011, being played during the quest Branches of Darkmeyer in RuneScape.",
   ],
   Arcane: [
@@ -69,141 +77,136 @@ export const songDescriptions: Record<string, string[]> = {
     "Unlocked upon entering Prifddinas for the first time after completing the Song of the Elves quest. It is the theme of the Ithell Clan.",
   ],
   "Armadyl Alliance": [
-    "Unlocked outside of Armadyl's Eyrie. Unlike the other strongholds, this track does not need the skill level to enter the stronghold to be unlocked.",
+    "Unlocked outside of Armadyl's Eyrie inside the God Wars Dungeon.",
   ],
   Armageddon: [
     "Unlocked in the main area of the God Wars Dungeon, and in the Wilderness God Wars Dungeon.",
     "This music track seems to contain elements of the other God Wars Dungeon tracks. If the player listens closely, parts of it sound very similar to Armadyl Alliance, Bandos Battalion, Strength of Saradomin, and Zamorak Zoo.",
-    "Unlocked, the God Wars Dungeon, an epic battle takes place as well.",
     "According to data crowdsourced via RuneLite, approximately 71% of players unlock the track in the God Wars Dungeon, while 29% unlock it in the Wilderness God Wars Dungeon.",
   ],
   "Army of Darkness": [
-    "Unlocked in the Wilderness and also plays in Wilderness Agility Course Dungeon.",
-    "In Classic mode, it plays at Dark Warriors' Fortress as well as Wilderness Bandit Camp.",
+    "Unlocked in the Dark Warriors' Fortress and the Wilderness Bandit Camp.",
   ],
-  Arrival: [
-    "Unlocked inside Falador city walls. In this area, the music player will also shuffle between playing Fanfare and Workshop.",
-    "In Classic mode, the track plays west of Falador at the West Falador mine.",
-  ],
+  Arrival: ["Unlocked west of Falador at the West Falador mine."],
   Artistry: ["Unlocked during the Mime Random event."],
   Ascent: [
-    "Unlocked near Mount Quidamortem west of Great Kourend.",
+    "Unlocked south of Mount Quidamortem (Chambers of Xeric), west of Great Kourend.",
     "This music track contains elements of the Love Story soundtrack, which is a quest that Mod Ash has composed music for on RuneScape 2.",
   ],
   "Assault and Battery": ["Unlocked while playing Barbarian Assault."],
   "Attack 1": [
-    "Unlocked on and to the north-west of the Khazard Battlefield. It also plays at a small area north of West Ardougne.",
-    'It is the first of six variations known as the "Attack" musics.',
+    "Unlocked on the Khazard Battlefield, and to the north-west where you fight the Khazard Warlord in the Tree Gnome Village quest. It also plays at a small area north of West Ardougne.",
+    'It is the first of six variations known as the "Attack" series. ' + attack,
   ],
   "Attack 2": [
     "Unlocked in Elvarg's lair in the Crandor and Karamja Dungeon. It can later be heard in Dragon Slayer II, during the cutscene of the Dragonkin battle on Lithkren.",
-    'It is the second in a set of six tracks known as the "Attack" series.',
+    "After completing Dragon Slayer, Elvarg's lair can also be accessed from the Tzhaar Area under Karamja Volcano.",
+    'It is the second in a set of six tracks known as the "Attack" series. ' +
+      attack,
   ],
   "Attack 3": [
-    'Attack 3 is a music track that is unlocked at the Lava Maze Dungeon. It is the third track in the series of six "Attack" music tracks.',
+    "Unlocked in the Lava Maze Dungeon.",
+    'It is the third track in the series of six "Attack" music tracks. ' +
+      attack,
   ],
   "Attack 4": [
-    "Unlocked at the Fight Arena. It can also be unlocked in the Iorwerth Camp cave during Song of the Elves, or in parts of the Yanille Agility Dungeon. ",
-    'It is the fourth track in the series of six "Attack" music tracks.',
+    "Unlocked at the Fight Arena. It can also be unlocked in the Iorwerth Camp cave during Song of the Elves, or in parts of the Yanille Agility Dungeon (which has two entrances).",
+    'It is the fourth track in the series of six "Attack" music tracks. ' +
+      attack,
   ],
   "Attack 5": [
     "Unlocked at the King Black Dragon's Lair, or in a cutscene at the Lithkren Vault during Dragon Slayer II.",
-    'It is the fifth track in the series of six "Attack" music tracks.',
+    'It is the fifth track in the series of six "Attack" music tracks. ' +
+      attack,
   ],
   "Attack 6": [
-    'Attack 6 is a music track that is unlocked at the Gu\'Tanoth Ogre Enclave lair. It is the sixth track in the series of six "Attack" music tracks.',
+    "Unlocked at the Gu'Tanoth Ogre Enclave lair.",
+    'It is the sixth track in the series of six "Attack" music tracks. ' +
+      attack,
   ],
   Attention: [
-    "Attention is a music track that unlocks around Rimmington. In this area, the music player will shuffle between playing this track and Emperor.",
-    "In Classic mode, the track plays at the coastline south of Rimmington and western side of Thurgo Peninsula.",
+    "Unlocked at the coastline south of Rimmington and on the western side of Thurgo Peninsula.",
+    "'Thurgo Peninsula' is a quote from the wiki page and I'm not changing it.",
   ],
-  "Autumn Voyage": [
-    "Unlocked when the player first arrives in Lumbridge. It can also be heard around the Lumbridge Swamp and farmlands. In this area, the music player will also shuffle between playing Book of Spells, Dream, Flute Salad, Harmony, and Yesteryear.",
-    "In Classic mode, the track plays in eastern Lumbridge, near the cow calves.",
+  "Autumn Voyage": ["Unlocked in eastern Lumbridge, near the cow calves."],
+  "Awful Anthem": [
+    "Unlocked during Throne of Miscellania, played by Prince Brand.",
+    "The song does cannonically have lyrics, but they make little difference to the overall experience.",
   ],
-  "Awful Anthem": ["error", "TypeError: afterInfoBox is undefined"],
-  "Aye Car Rum Ba": ["Unlocked on Braindeath Island."],
+  "Aye Car Rum Ba": [
+    "Unlocked on Braindeath Island during Rum Deal, accessible from the dock to the north-west of the Ectofuntus.",
+  ],
   Aztec: ["Unlocked in the Brimhaven Agility Arena."],
   "Back to Life": [
-    "Unlocked in Sophanem and which also plays in Sophanem bank. After the Contact! quest, it replaces the City of the Dead music track.",
+    "Unlocked in Sophanem and Sophanem bank after the Contact! quest, replacing the City of the Dead music track.",
   ],
   Background: [
-    "Unlocked on Entrana, or on a small patch of land south of Keep Le Faye.",
+    "Unlocked on Entrana.",
+    "Due to how the chunks line up, the song is also unlocked on a few tiles of land south of Keep Le Faye.",
+    "According to the wiki, 1.7% of players unlock this song on that small patch of land.",
   ],
-  Bait: ["error", "TypeError: afterInfoBox is undefined"],
+  Bait: [
+    "Unlocked in the Myreque Hideout under Meiyerditch, when under attack by the Abomination during A Taste of Hope.",
+    "Also plays during the battle with Kroy in the Laboratory under Crombwick Manor in Slepe, which is accessed via the Sisterhood Sanctuary",
+  ],
   "Ballad of Enchantment": [
     "Unlocked at the Ardougne Monastery and the Clock Tower.",
   ],
-  "Ballad of the Basilisk": ["error", "TypeError: afterInfoBox is undefined"],
+  "Ballad of the Basilisk": [
+    "Unlocked in the Rellekka Longhall when Olaf the Bard is on stage performing the ballad after you defeat the Jormungand.",
+    "It is an instrumental version of RuneScape 3's song by the same name. In that version, the lyrics are sung, while in this version Olaf the Bard sings by typing.",
+  ],
   "Bandit Camp": [
     "Unlocked when visiting the Bandit Camp in the Kharidian Desert.",
   ],
   "Bandos Battalion": [
-    "Unlocked in Bandos' Stronghold. It can be unlocked outside the stronghold without the requirement of 70 Strength.",
-    "Throughout the track renditions of different tracks are featured, such as the theme music of the Goblin Village and of Dorgeshuun City. This track features a part of the main music of the God Wars Dungeon, as do Strength of Saradomin, Armadyl Alliance, and Zamorak Zoo.",
+    "Unlocked in Bandos' Stronghold inside the God Wars Dungeon.",
+    "Throughout the track renditions of different tracks are featured, such as the theme music of the Goblin Village and of Dorgeshuun City.",
   ],
   Bane: [
     "Unlocked during the fight with the Corporeal Beast.",
-    "'Bane' is a variation of the RuneScape track 'Bane of Summer' from the 29th of July, in 2008. There is a slight difference between the Old School RuneScape Version of this song and the actual one released in 2008, due to the different quality in soundbanks, or instruments used.",
+    "'Bane' is a variation of the RuneScape track 'Bane of Summer' from the 29th of July, in 2008.",
   ],
   "The Bane of Ashihama": [
     "Unlocked during the fight with The Nightmare. It can be also be unlocked by spectating an ongoing fight.",
+    nightmare,
   ],
   "Barb Wire": [
-    "Unlocked inside the Ancient Cavern beneath Baxtorian Falls. It can also be heard behind the mithril door in the Cavern during Dragon Slayer II.",
-    "To access the Ancient Cavern, the player needs to start the pyre ship section of Barbarian Training.",
-    'This track\'s title is a play on the term "barbed wire".',
+    "Unlocked inside the Ancient Cavern beneath Baxtorian Falls.",
     "Portions of Barbarianism can be heard in the track.",
+    "To access the Ancient Cavern, the player needs to start the pyre ship section of Barbarian Training.",
   ],
   "Barbarian Workout": [
     "Unlocked while doing the Below Ice Mountain quest, during the training session with Atlas.",
+    "The areas marked on the map are all the areas your character is shown in during the cutscene.",
   ],
   Barbarianism: [
-    "Barbarianism is a music track that unlocks at Barbarian Village.",
+    "Unlocked at Barbarian Village.",
+    "This song is also notable for playing when you walk past the fishing spot in a free to play world and get scarred for life by public chat.",
   ],
-  "Barking Mad": ["Unlocked in the Werewolf Agility Course."],
-  Baroque: ["Unlocked in the Ardougne Market."],
-  "Barren Land": [
-    "Unlocked during Making Friends with My Arm, at the icy lands to the north of Weiss.",
+  "Barking Mad": [
+    "Unlocked in the Werewolf Agility Course and while playing Skullball.",
   ],
+  Baroque: ["Unlocked in and around East Ardougne Market."],
+  "Barren Land": ["Unlocked on the icy cliffs to the north of Weiss."],
   "Beetle Juice": [
-    "Unlocked in the battle with the Giant Scarab during the Contact! quest. After the quest, The Depths will play in this area.",
+    "Unlocked in the battle with the Giant Scarab under Sophanem during the Contact! quest. After the quest, The Depths will play in this area.",
   ],
   "Beneath Cursed Sands": [
-    "Beneath Cursed Sands is the fourth quest in the Desert quest series, and is intended to introduce players to the lore surrounding Tombs of Amascut, the third raid. The quest added the Ruins of Ullek and the Necropolis to the south-eastern Kharidian Desert. ",
-    "Completion of the following quests:",
-    "*Contact!",
-    "**Prince Ali Rescue",
-    "**Icthlarin's Little Helper",
-    "***Gertrude's Cat",
-    "link=yes no",
-    "link=yes no",
-    "link=yes no",
-    "85",
-    "Protection against the desert heat, such as waterskins or Desert amulet 4",
-    "Some form of antipoison",
-    "Dramen staff to use fairy ring AKP",
-    "A pharaoh's sceptre for a direct teleport to the necropolis (Once you arrive in the necropolis, use the Commune option on the obelisk by the mine).",
-    "Food and both melee and ranged combat gear.",
-    "Stamina potions are helpful in the dungeon",
-    "A method of teleporting to Nardah (e.g: Nardah teleport or Desert amulet 2+)",
-    "Coal",
-    "Iron bar",
-    "Tinderbox (obtainable during quest)",
-    "Spade (obtainable during quest) ",
-    "Any cooked or raw meat (fish will not work; raw yak meat will not work; purchasable from shop during quest)",
-    "Head Menaphite Guard (level 174) without the use of protection prayers",
-    "Two Scarab Mages (level 119)",
-    "The Champion of Scabaras (level 379) ",
-    "Menaphite Akh (level 351)",
+    "Unlocked in the Tombs of Amascut, inside the Necropolis.",
+    "It is a remix of Oncoming Foe, which playes during the final assault in Dragon Slayer 2",
   ],
   "Beneath the Kingdom": [
     "Unlocked upon entering the Catacombs of Kourend and Giants' Den.",
-    "The music track was not released alongside the Catacombs of Kourend on 9 June 2016. Rather, Arcane was played instead.",
+    "The music track was not released alongside the Catacombs of Kourend on 9th June 2016 - Arcane was played instead.",
+    "This song is technically accessible from Forthos Dungeon via the Strange Passage, but we banned that as a transport method because there's already 5 entrances and it was just getting a bit silly.",
   ],
-  "Beneath the Stronghold": ["Unlocked at the Stronghold Slayer Cave."],
+  "Beneath the Stronghold": [
+    "Unlocked at the Stronghold Slayer Cave, inside the Gnome Stronghold.",
+  ],
   Beyond: [
     "Unlocked in the White Wolf Tunnel, the Ice Queen's Lair under White Wolf Mountain, or the basement of the Warriors' Guild.",
+    "This song is technically accessible from Keldagrim via minecart, but that transport method is banned.",
   ],
   "Beyond the Meadow": [
     "Unlocked in the western part of Hosidius, just south of the southern entrance to Kourend Castle. It can be heard around the Mess and Watson's house, and also around the Forthos Ruin and Saltpetre south of the river.",
@@ -212,65 +215,77 @@ export const songDescriptions: Record<string, string[]> = {
     "Unlocked west of Yanille.",
     "This track has a rather slow and tranquil tune with strings, wind and piano. The melody is uplifting with high notes.",
   ],
-  "Blistering Barnacles": ["Unlocked on Braindeath Island's mountain."],
+  "Blistering Barnacles": [
+    "Unlocked on Braindeath Island's mountain, during Rum Deal.",
+  ],
   "Blood Rush": [
-    "Blood Rush requires a Magic level of 56 to cast and is capable of hitting up to 15 damage (without any magic damage boosts) per cast. It is also the weakest of all blood spells, along with all other rush spells.",
-    "Blood Rush has a life leech effect that will heal the caster's Hitpoints by 25% of the damage dealt. This can be increased by wearing bloodbark armour, where each piece increases the amount healed by 2%, up to a maximum of 35%. When worn alongside the ancient sceptre, this increases to 38.5% of the amount of damage inflicted.",
-    "As with all Ancient Magicks spells, the quest Desert Treasure I must be completed to cast this spell.",
-    "When wearing an Elidinis' ward (f), occult necklace, tormented bracelet, imbued god cape, ancestral robes, and kodai wand (or similar +15% magic damage weapon), Blood Rush has a maximum damage of 21. Adding the slayer helmet (i) while on a slayer task, the maximum damage increases to 24.",
+    "Unlocked when fighting Vardorvis during and after Desert Treasure II - The Fallen Empire.",
+    "This song is the only song that shares a name with a sound effect, meaning originally the game had a bug where instead of playing the song, it would just play the sound effect on repeat.",
   ],
   Bloodbath: [
-    "Unlocked at Slepe. It can also later be heard inside the Blood Altar.",
-    "Unlocked at the Blood Altar in RuneScape.",
+    "Unlocked at Slepe. It can also later be heard inside the True Blood Altar in the tunnels under Morytania.",
   ],
   "Bob's on Holiday": [
-    "Bob's on Holiday is a music track that plays during A Tail of Two Cats. It can be heard during the cutscene showing the various adventures of Bob and Neite.",
+    "Unlocked during A Tail of Two Cats. It can be heard during the cutscene showing the various adventures of Bob and Neite.",
+    "Valid answers include the Sophanem Pyramid, the King Black Dragon's Lair, and the Quest Icon in Burthorpe (for the scene parodying Titanic which has no specific location)",
   ],
   "Body Parts": [
-    "Unlocked in the Experiment Cave.",
-    "It seems to start with a drum kit playing a syncopated line, then a Baritone Saxophone or Trombone plays a basic jazz rhythm on the drum beat. Later an organ begins to play and plays the chromatic runs more typical of RuneScape Music tracks, while a Marimba plays a background countermelody, with the Baritone Sax or Trombone continuing to play the bass line much more softly.",
+    "Unlocked in the Experiment Cave under Fenkenstrain's Castle.",
+    "Also accessible via the Mausoleum, which is only accessible from within the cave.",
   ],
   "Bolrie's Diary": [
     "Unlocked during the quest The Path of Glouphrie. It plays whilst viewing the cutscenes of King Bolrie's diary.",
+    "The locations shown in the cutscene are the Gnome Stronghold, the ground floor of the Grand Tree, Brimstail's cave, and the Tree Gnome Village throne.",
   ],
   "Bone Dance": [
     "Unlocked on the western side of Mort'ton, or during Sins of the Father when fighting the Nail Beasts during the Temple Trek with Ivan Strom. It can also be heard on the island in the River Salve.",
+    "It is possible, although difficult, to unlock the track during Sins of the Father. This would require the player to complete the Nature Spirit, In Search of the Myreque, In Aid of the Myreque, and A Taste of Hope quests without ever passing through the path left of Mort'ton, and by following an extremely specific route to the Nature Grotto. So far, no player is recorded as having accomplished this.",
   ],
-  "Bone Dry": ["Unlocked in the Smoke Dungeon below Pollnivneach."],
-  "Book of Spells": [
-    "Unlocked when the player first arrives in Lumbridge. It can also be heard around the Lumbridge Swamp and farmlands. In this area, the music player will also shuffle between playing Autumn Voyage, Dream, Flute Salad, Harmony, and Yesteryear.",
-    "In Classic mode, the track plays in the western part of Lumbridge Swamp.",
+  "Bone Dry": [
+    "Unlocked in the Smoke Dungeon below Pollnivneach (not the Smoke Devil Dungeon).",
   ],
+  "Book of Spells": ["Unlocked in the western part of Lumbridge Swamp."],
   Borderland: [
-    "Unlocked in north-eastern Rellekka and outside the Keldagrim entrance.",
+    "Unlocked east of Rellekka, outside the Keldagrim entrance, and in parts of the Polar Hunter area.",
   ],
-  "Box of Delights": ["Unlocked during the fight with the Mimic."],
+  "Box of Delights": [
+    "Unlocked during the fight with the Mimic, upstairs in Watson's house.",
+    "This is often a player's last song to unlock in order to earn the Music Cape, as fighting the Mimic is only possible sporadically after compliting Elite and Master clue scrolls.",
+  ],
   "Brain Battle": [
-    "Brain Battle is a music track that plays during The Great Brain Robbery. It can be heard during the battle with Barrelchest.",
-    'It can later be heard in the Nightmare Zone when fighting Barrelchest. Originally, the name "Barrelchest Battle" would appear in the Music Player, but no longer does so after it became a listed track.',
+    "Unlocked during The Great Brain Robbery. It can be heard during the battle with Barrelchest.",
   ],
   Breeze: ["Unlocked at Isafdar near the Underground Pass."],
   "Brew Hoo Hoo!": ["Unlocked at the Port Phasmatys brewery basement."],
-  "Brimstail's Scales": ["Unlocked in Brimstail's cave."],
-  "Bubble and Squeak": ["Unlocked at the Keldagrim Rat Pits."],
+  "Brimstail's Scales": [
+    "Unlocked in Brimstail's cave, in the south-west of the Gnome Stronghold.",
+  ],
+  "Bubble and Squeak": [
+    "Unlocked at the Keldagrim Rat Pits.",
+    "Keldagrim is accessible via the main entrance, or the trapdoor in the Grand Exchange.",
+  ],
   "Bunny's Sugar Rush": [
     "Unlocked during the 2015 Easter event. It is unlocked by completing an Easter event.",
   ],
   "Burning Desire": [
     "Unlocked on Mount Karuulm.",
-    "The music contains leitmotifs from TzHaar! and In the Pits.",
+    "The music contains leitmotifs from TzHaar! and In the Pits. Mount Karuulm is inhabited by a trio of ancient Tzhaar that left the Karamja Volcano long ago.",
   ],
   "The Burning Sun": [
     "Unlocked during the Children of the Sun quest, when Prince Itzla Arkan personally interrogates the bandit planning to assasinate their delegation's priest.",
   ],
-  "Cabin Fever": ["Unlocked during the Cabin Fever quest."],
+  "Cabin Fever": [
+    "Unlocked during the Cabin Fever quest, and plays constantly during the naval battle.",
+    "The exact location of the naval battle is unknown, as it takes place in an instanced bit of ocean.",
+  ],
   "Cain's Tutorial": [
-    "Cain's Tutorial is a music track that plays during Barbarian Assault. It can be heard during the tutorial for the minigame presented by Captain Cain.",
+    "Unlocked during Barbarian Assault. It can be heard during the tutorial for the minigame presented by Captain Cain.",
     'If the player chose to skip the tutorial, the track can be obtained by selecting the "Getting Started" option from Cain\'s Tutorial menu.',
     "It is a remix of Barbarianism.",
   ],
   Camelot: [
     "Unlocked near Camelot Castle, or much more rarely in Tenzing's house. It can also be heard in the jail during King's Ransom after Merlin has been freed, and on Mac's island.",
+    "Good luck unlocking it on Mac's island though.",
   ],
   "Castle Wars": [
     "Unlocked while playing Castle Wars.",
@@ -280,19 +295,18 @@ export const songDescriptions: Record<string, string[]> = {
     "Unlocked during Land of the Goblins within the crypt in the Goblin Temple.",
   ],
   "Catch Me If You Can": [
-    "Unlocked at the Ardougne Rat Pits.",
-    "Playing this song to Cecilia may be required for a Medium Clue step.",
+    "Unlocked at the Ardougne Rat Pits. The Rat Pits are accessible through a trapdoor in Jimmy Dazzler's house, or though the main entrance to the western section fo the Ardougne Sewers.",
   ],
   "Cave Background": [
     "Unlocked throughout the Dwarven Mine. It can also be heard in the Magic axe room of Taverley Dungeon.",
+    taverleyDungeon,
   ],
   "Cave of Beasts": [
     "Unlocked during Mountain Daughter, in the Kendal's cave north of the Mountain Camp.",
-    "Unlocked without participating in combat or gaining the experience granted at the end of the quest by simply leaving the cave once entered.",
-    "Playing this song to Cecilia may be required for a Medium Clue step.",
   ],
   "Cave of the Goblins": [
     "Unlocked in the Lumbridge Swamp Caves. It can also be heard during Another Slice of H.A.M., when visiting the Dorgesh-Kaan–Keldagrim train system while it is still under construction.",
+    ...swampCaves
   ],
   Cavern: [
     "Unlocked at the Yanille Agility Dungeon and the Deep Wilderness Dungeon.",
@@ -301,7 +315,7 @@ export const songDescriptions: Record<string, string[]> = {
     "Unlocked in the Ardougne Sewers during Hazeel Cult, Elena's prison during Plague City, and the basement of the Carnillean Mansion.",
   ],
   "Cellar Song": ["Unlocked at the vault of the Varrock West Bank."],
-  "Chain of Command": ["Unlocked in the Temple of Ikov."],
+  "Chain of Command": ["Unlocked in the Temple of Ikov. The entrance inside McGrubor's Wood requires a shiny key."],
   Chamber: [
     "Unlocked during the Haunted Mine quest, on Levels 4 and 5 of the Abandoned Mine.",
   ],
@@ -310,34 +324,33 @@ export const songDescriptions: Record<string, string[]> = {
     "Plucked strings are the accompaniment while a French horn has the melody. In the second phrase, the song changes key and a tenor sax takes the melody.",
   ],
   "Chickened Out": [
-    "Unlocked during Recipe for Disaster: Freeing Sir Amik Varze. It is located in the Evil Chicken's Lair.",
+    "Unlocked during Recipe for Disaster: Freeing Sir Amik Varze. It is located in the Evil Chicken's Lair in Zanaris.",
+    zanaris
   ],
   "Children of the Sun": [
-    "Children of the Sun is the first quest in the Twilight Emissaries series, which introduces players to Varlamore, the Shining Kingdom of the far west. In the quest, a delegation from Varlamore arrives in Varrock for a historic treaty signing with the rulers of Misthalin, but the visit is disrupted by a nefarious plot that the player must uncover.",
-    "Completion of the quest will be required to access Varlamore upon its release.",
+    "Unlocked during the Children of the Sun quest, when Prince Itzla Arkan's delegation from Varlamore arrives in the Varrock Square.",
   ],
   "Chompy Hunt": [
     "Unlocked at the chompy bird hunting location east of Feldip Hills. It can also be heard in Rantz's Cave.",
   ],
-  "The Chosen": ["Unlocked during the Recruitment Drive quest."],
+  "The Chosen": ["Unlocked during the Recruitment Drive quest, during the challenges. The location is in an instance not accessible outside of the quest, so the correct answer is the quest icon."],
   "City of the Dead": [
-    "Unlocked north of Menaphos (Classic mode only), and plays in Sophanem and its bank before Contact! is completed, being replaced after the quest by Back to Life.",
+    "Unlocked north of Menaphos and in Sophanem before Contact! is completed, being replaced after the quest by Back to Life.",
   ],
   "Clan Wars": [
     "Unlocked in Clan Wars arenas. Upon entering any Clan Wars arena, either Warpath or this track is randomly chosen to start playing.",
   ],
   Clanliness: ["Unlocked upon entering a Clan Hall."],
   Claustrophobia: [
-    "Unlocked during the Between a Rock... quest, within the Arzinian Mine.",
+    "Unlocked during the Between a Rock... quest, within the Arzinian Mine inside Keldagrim.",
   ],
   "Close Quarters": [
-    "Unlocked in the Wilderness and also plays in Wilderness Agility Course Dungeon.",
-    "In Classic mode, the track plays at the Eastern Ruins in level 26-29 Wilderness.",
+    "Unlocked in the Eastern Ruins in level 26-29 Wilderness.",
     "The depressed percussion provides a backdrop for the bleak landscape.",
   ],
-  Coil: ["Unlocked during the fight with Zulrah."],
+  Coil: ["Unlocked during the fight with Zulrah.", "Also unlocked on the bus to work when I have my boombox with me."],
   "Colossus of the Deep": [
-    "Colossus of the Deep is a music track that is played when fighting the Leviathan during and after Desert Treasure II - The Fallen Empire.",
+    "Unlocked when fighting the Leviathan during and after Desert Treasure II - The Fallen Empire.",
   ],
   Competition: ["Unlocked at the Burthorpe Games Room."],
   Complication: [
@@ -348,7 +361,7 @@ export const songDescriptions: Record<string, string[]> = {
     "Unlocked during the quest A Kingdom Divided, in which the player and Commander Fullore confront Sophia Hughes during her attempt to escape to the mainland.",
   ],
   "The Consortium": [
-    "The Consortium is a music track that plays during The Giant Dwarf. It can be heard during the final cutscene of the quest, when the Dwarven Consortium meets.",
+    "Unlocked during The Giant Dwarf. It can be heard during the final cutscene of the quest, when the Dwarven Consortium meets.",
   ],
   Conspiracy: [
     "Unlocked while spying on Ranis Drakan and Vanstrom Klause in Ver Sinhaza during A Taste of Hope. It can later be heard in the basement of Serafina's house.",
@@ -375,7 +388,7 @@ export const songDescriptions: Record<string, string[]> = {
     "Unlocked during the quest.",
   ],
   "Creeping Vines": [
-    "Creeping Vines is a music track that unlocks in the Hespori cave in the west wing of the Farming Guild. During the fight with the Hespori, A Thorn in My Side will play.",
+    "Unlocked in the Hespori cave in the west wing of the Farming Guild. During the fight with the Hespori, A Thorn in My Side will play.",
   ],
   "Crest of a Wave": [""],
   "Crystal Castle": ["Unlocked at the southern entrance of Prifddinas."],
@@ -474,7 +487,7 @@ export const songDescriptions: Record<string, string[]> = {
   ],
   "The Desolate Mage": ["Unlocked at the summit of Mount Quidamortem."],
   "Devils May Care": [
-    "Devils May Care is a music track that unlocks upon entering the Smoke Devil Dungeon, south of Castle Wars. A Slayer assignment is not required to enter the cave.",
+    "Unlocked upon entering the Smoke Devil Dungeon, south of Castle Wars. A Slayer assignment is not required to enter the cave.",
     "This is one of many music tracks which Cecilia can ask you to play when completing a medium clue.",
   ],
   "Diango's Little Helpers": [
@@ -498,7 +511,7 @@ export const songDescriptions: Record<string, string[]> = {
     "Unlocked on the first level of the Stronghold of Security, the Vault of War. It could also be unlocked during a cutscene in 2022 Easter event.",
   ],
   Dogfight: [
-    "Dogfight is a music track that plays during The General's Shadow. It can be heard during the battle with the ghost of Bouncer.",
+    "Unlocked during The General's Shadow. It can be heard during the battle with the ghost of Bouncer.",
   ],
   "Domain of the Vampyres": [
     "Unlocked during the meeting between Vanstrom Klause, Ranis Drakan and Vanescula Drakan during the quest Darkness of Hallowvale.",
@@ -511,7 +524,7 @@ export const songDescriptions: Record<string, string[]> = {
     "The track sounds like a softer, sadder version of Zanik's Theme.",
   ],
   "The Doors of Dinh": [
-    "The Doors of Dinh is a music track that unlocks at the Northern Tundras, at the Wintertodt Camp and area around the Settlement Ruins. It can also be heard at the Fishing Hamlet.",
+    "Unlocked at the Northern Tundras, at the Wintertodt Camp and area around the Settlement Ruins. It can also be heard at the Fishing Hamlet.",
   ],
   Doorways: [
     "Unlocked at locations outside Varrock city walls, including the Cooks' Guild, Champions' Guild, and Jolly Boar Inn. In this area, the music player will also shuffle between playing Expanse, Greatness, and Still Night. It can also be unlocked on the Isle of Souls.",
@@ -520,22 +533,20 @@ export const songDescriptions: Record<string, string[]> = {
   "Dorgeshuun City": ["Unlocked in Dorgesh-Kaan."],
   "Dorgeshuun Deep": ["Unlocked in Dorgesh-Kaan South Dungeon."],
   "Dorgeshuun Treaty": [
-    "Dorgeshuun Treaty is a music track that plays during The Lost Tribe. It can be heard during the final cutscene of the quest, when Duke Horacio and Ur-tag sign the peace treaty between Lumbridge and the Dorgeshuun.",
+    "Unlocked during The Lost Tribe. It can be heard during the final cutscene of the quest, when Duke Horacio and Ur-tag sign the peace treaty between Lumbridge and the Dorgeshuun.",
   ],
   "Dot's Yuletide": ["Unlocked by completing future Christmas events.-->"],
   "Down and Out": [
     "Unlocked at the cave behind the crevice in the north wall of the Lunar Isle mine, before helping Cyrisus get back up on his feet. After that point, On the Up will play in the same cave.",
   ],
   "Down Below": ["Unlocked in the Draynor Sewers."],
-  "Down by the Docks": [
-    "Down by the Docks is a music track that unlocks in Port Piscarilius.",
-  ],
+  "Down by the Docks": ["Unlocked in Port Piscarilius."],
   "Down to Earth": [
     "Unlocked at the Earth Altar.",
     "The backing strings of the track are notoriously remixed off of the closing section of Fruits de Mer, a more well-known piece of music from the game.",
   ],
   "The Dragon Slayer": [
-    "The Dragon Slayer is a music track that is played when fighting Galvek during Dragon Slayer II.",
+    "Unlocked when fighting Galvek during Dragon Slayer II.",
   ],
   "Dragontooth Island": ["Unlocked on Dragontooth Island."],
   Dream: [
@@ -557,9 +568,7 @@ export const songDescriptions: Record<string, string[]> = {
     "Unlocked near the surface camp above the Dwarven Mine.",
     "In Classic mode, the track plays in a wider area around the Dwarven Mine, on the path between Falador and the Barbarian Village.",
   ],
-  "Dwarven Domain": [
-    "Dwarven Domain is a music track that unlocks in Lovakengj.",
-  ],
+  "Dwarven Domain": ["Unlocked in Lovakengj."],
   Dynasty: ["Unlocked in Pollnivneach."],
   "Eagles' Peak": [
     "Unlocked at Eagles' Peak. Despite its hint, players can unlock the track without starting the Eagles' Peak quest.",
@@ -586,7 +595,7 @@ export const songDescriptions: Record<string, string[]> = {
     "Unlocked at the Tree Gnome Village maze, and in the corrupted version of the Fisher Realm. It can also be heard in the Tree Gnome Village dungeon.",
   ],
   Emperor: [
-    "Emperor is a music track that unlocks around Rimmington. In this area, the music player will shuffle between playing this track and Attention.",
+    "Unlocked around Rimmington. In this area, the music player will shuffle between playing this track and Attention.",
     "In Classic mode, the track plays around Melzar's Maze and (since an update in 2022) at a small area south-west of Rommik's Crafty Supplies. The map below represents post-2022 unlock area on Classic mode. The area before 2021 and on Classic mode in 2021-2022 only covers text=64x64 tile square excluding Melzar's Maze.",
     "The song is very slow and simple. It has some low strings, including what sounds like a sitar, a choir in the background, and what sounds like a trumpet or cornet.",
     "When the track arrives at the bridge, the instrumentation changes dramatically, with a guitar playing waltz triplets, violins playing a counter-melody, and woodwinds having a melody. It briefly goes back to the beginning melody, but quickly switches to an almost operatic strings and choir part, with a piano playing the melody.",
@@ -634,10 +643,10 @@ export const songDescriptions: Record<string, string[]> = {
     "Unlocked south of Tyras Camp, and at the Island of Stone. It can also be unlocked without having started Regicide quest, at an island in the Poison Waste by dialling DLR on the fairy ring network.",
   ],
   "Eye See You": [
-    "Eye See You is a music track that is played when fighting Duke Sucellus during and after Desert Treasure II - The Fallen Empire.",
+    "Unlocked when fighting Duke Sucellus during and after Desert Treasure II - The Fallen Empire.",
   ],
   "Eye of the Storm": [
-    "Eye of the Storm is a music track that plays during Dragon Slayer I. It can be heard during the cutscene when Elvarg attacks the Lady Lumbridge, while the player and Captain Ned are sailing to Crandor.",
+    "Unlocked during Dragon Slayer I. It can be heard during the cutscene when Elvarg attacks the Lady Lumbridge, while the player and Captain Ned are sailing to Crandor.",
   ],
   Faerie: [
     "Unlocked in western Zanaris and outside the Cosmic Altar. To get there, the player must have completed the Lost City quest.",
@@ -645,7 +654,7 @@ export const songDescriptions: Record<string, string[]> = {
     "Playing this song to Cecilia may be required for a Medium Clue step.",
   ],
   "The Fairy Dragon": [
-    "The Fairy Dragon is a music track that plays during Sir Amik Varze's subquest of Recipe for Disaster. It can be heard during the cutscene when meeting with K'klik, after rubbing the Dragon token.",
+    "Unlocked during Sir Amik Varze's subquest of Recipe for Disaster. It can be heard during the cutscene when meeting with K'klik, after rubbing the Dragon token.",
   ],
   "Faith of the Hefin": [
     "Unlocked upon entering Prifddinas for the first time after completing the Song of the Elves quest. It is the theme of the Hefin Clan.",
@@ -675,7 +684,7 @@ export const songDescriptions: Record<string, string[]> = {
     "Unlocked at Rogues' Den. It is unlocked by traversing far enough through the maze minigame.",
   ],
   "A Farmer's Grind": [
-    "A Farmer's Grind is a music track that unlocks in the Farming Guild.",
+    "Unlocked in the Farming Guild.",
     "In Classic mode, the track only plays in the west wing of the Farming Guild.",
   ],
   "The Fat Lady Sings": [
@@ -751,7 +760,7 @@ export const songDescriptions: Record<string, string[]> = {
     "Playing this song to Cecilia may be required for an Easy Clue step.",
   ],
   "The Forsaken Tower": [
-    "The Forsaken Tower is a music track that unlocks upon entering<!--, you know it,--> The Forsaken Tower during The Forsaken Tower quest. It is a remix of The Doors of Dinh.",
+    "Unlocked upon entering<!--, you know it,--> The Forsaken Tower during The Forsaken Tower quest. It is a remix of The Doors of Dinh.",
   ],
   "The Forsaken": ["Unlocked in the Lithkren Vault during Dragon Slayer II."],
   Fossilised: [
@@ -759,14 +768,12 @@ export const songDescriptions: Record<string, string[]> = {
     "Playing this song to Cecilia may be required for a Hard Clue step.",
     "According to data crowdsourced via RuneLite, approximately 51% of players unlock the track in the northern cave, while 49% unlock it in the southern cave.",
   ],
-  "The Foundry": [
-    "The Foundry is a music track that plays inside the Giants' Foundry.",
-  ],
+  "The Foundry": ["Unlocked inside the Giants' Foundry."],
   "The Fragment": [
     "Unlocked during the final fight of the Song of the Elves quest against the Fragment of Seren.",
   ],
   "The Fremennik Kings": [
-    "The Fremennik Kings is a music track that plays during The Fremennik Isles. It can be heard when the player criticises King Gjuki Sorvott IV for his stubbornness and ignorance.",
+    "Unlocked during The Fremennik Isles. It can be heard when the player criticises King Gjuki Sorvott IV for his stubbornness and ignorance.",
     "It is a remix of Norse Code.",
   ],
   Frogland: [
@@ -812,7 +819,7 @@ export const songDescriptions: Record<string, string[]> = {
     "Unlocked in the Winter section of the Sorceress's Garden.",
   ],
   "The Gates of Menaphos": [
-    "The Gates of Menaphos is a music track that plays during the intro cutscene of Contact!, when the High Priest attempts to speak with the Menaphite guards. It is based upon Beetle Juice.",
+    "Unlocked during the intro cutscene of Contact!, when the High Priest attempts to speak with the Menaphite guards. It is based upon Beetle Juice.",
   ],
   "The Gauntlet": ["Unlocked in the Gauntlet in Prifddinas."],
   "The Genie": ["Unlocked at the genie's cave west of Nardah."],
@@ -861,7 +868,7 @@ export const songDescriptions: Record<string, string[]> = {
   ],
   Grotto: ["Unlocked at the Nature Spirit's grotto in Mort Myre Swamp."],
   "Grow Grow Grow": [
-    "Grow Grow Grow is a music track that unlocks in the Farming Guild.",
+    "Unlocked in the Farming Guild.",
     "In Classic mode, the track only plays in the north wing of the Farming Guild.",
   ],
   Grumpy: [
@@ -963,7 +970,7 @@ export const songDescriptions: Record<string, string[]> = {
     "This music track contains a reference to The X Files theme song, especially at the beginning.",
   ],
   Impulses: [
-    "Impulses is a music track that plays during Impetuous Impulses. It can be heard when standing near an active Crop circle.",
+    "Unlocked during Impetuous Impulses. It can be heard when standing near an active Crop circle.",
     "It is a remix of Impetuous.",
   ],
   "In Between": [
@@ -1099,7 +1106,7 @@ export const songDescriptions: Record<string, string[]> = {
     "Playing this song to Cecilia may be required for a Medium Clue step.",
   ],
   "King of the Trolls": [
-    "King of the Trolls is a music track that plays during The Fremennik Isles. It can be heard during the battle that takes places in the Ice Troll Caves.",
+    "Unlocked during The Fremennik Isles. It can be heard during the battle that takes places in the Ice Troll Caves.",
     'It can later be heard in the Nightmare Zone when fighting the Ice Troll King. Originally, the name "Ice Troll King" would appear in the music player, but no longer does so since 28 April 2021.',
   ],
   Kingdom: ["Unlocked near the Warriors' Guild."],
@@ -1192,7 +1199,7 @@ export const songDescriptions: Record<string, string[]> = {
     "Unlocked on Fossil Island at the Volcanic Mine. Thus, unlocking this track requires 150 Kudos.",
   ],
   Legend: [
-    "Legend is a music track that unlocks in the south-east corner of Rellekka and outside the Fremennik Slayer Dungeon.",
+    "Unlocked in the south-east corner of Rellekka and outside the Fremennik Slayer Dungeon.",
   ],
   Legion: [
     "Unlocked at Barbarian Outpost. It can also be heard underneath the Barbarian Agility Course and the lobby of Barbarian Assault. Prior to tracks removal from Wilderness Bandit Camp in 2021, this track was accessible to free-to-play players.",
@@ -1225,7 +1232,7 @@ export const songDescriptions: Record<string, string[]> = {
     "Unlocked during the quest The Path of Glouphrie. It plays upon arriving at the Galarpos Mountains, where Longramble is.",
   ],
   "Look to the Stars": [
-    "Look to the Stars is a music track that plays during the Observatory Quest. It can be heard during the cutscene when the player and the Observatory professor first arrive at the Observatory.",
+    "Unlocked during the Observatory Quest. It can be heard during the cutscene when the player and the Observatory professor first arrive at the Observatory.",
   ],
   "Looking Back": ["Unlocked at the Varrock Museum and its basement."],
   "Lore and Order": [
@@ -1242,7 +1249,7 @@ export const songDescriptions: Record<string, string[]> = {
     "Unlocked in the tunnels leading to the Dorgesh-Kaan mine.",
   ],
   "Lower Depths": [
-    "Lower Depths is a music track that unlocks in the second level of the Chambers of Xeric or in the Quidamortem Cave during Tale of the Righteous.",
+    "Unlocked in the second level of the Chambers of Xeric or in the Quidamortem Cave during Tale of the Righteous.",
     "According to data crowdsourced via RuneLite, approximately 64% of players unlock the track in the Quidamortem Cave, while 36% unlock it in the Chambers of Xeric.",
   ],
   "Lucid Dream": [
@@ -1250,7 +1257,7 @@ export const songDescriptions: Record<string, string[]> = {
     "The melody is a slower version of Lucid Nightmare.",
   ],
   "Lucid Nightmare": [
-    "Lucid Nightmare is a music track that is played when fighting Robert the Strong during Dragon Slayer II.",
+    "Unlocked when fighting Robert the Strong during Dragon Slayer II.",
     "The melody is a faster version of Lucid Dream.",
   ],
   Lullaby: [
@@ -1339,7 +1346,7 @@ export const songDescriptions: Record<string, string[]> = {
   ],
   "Military Life": ["Unlocked in the Shayzien Encampment north of Shayzien."],
   "The Militia": [
-    "The Militia is a music track that unlocks in Shayzien, and can also be heard in its prison as well as Xeric's Lookout basement outside cutscenes of A Kingdom Divided quest.",
+    "Unlocked in Shayzien, and can also be heard in its prison as well as Xeric's Lookout basement outside cutscenes of A Kingdom Divided quest.",
     "Changed to only play in Shayzien city and its prison due to Shayzien Rework.",
     "Replaced with Dwarven Domain at a single square inside the south-westernmost house in Lovakengj: type=maplink.",
     "Added to play beneath Xeric's Lookout outside cutscenes of A Kingdom Divided quest.",
@@ -1365,7 +1372,7 @@ export const songDescriptions: Record<string, string[]> = {
     "It is in the key of D#/Eb Minor, and has a varying tempo. It starts out with a tempo of 125, then goes to 130 for a short section with the Marimba instrument playing, then gets dramatic with powerful Brass Sections & String Ensembles playing, maintaining a tempo of 140 until the end of the song.",
   ],
   "Monkey Business": [
-    "Monkey Business is a music track that unlocks during the fight with Kruk in Monkey Madness II. It can later be heard in the Crash Site Cavern after the quest.",
+    "Unlocked during the fight with Kruk in Monkey Madness II. It can later be heard in the Crash Site Cavern after the quest.",
   ],
   "Monkey Madness": [
     "Unlocked in Marim. It can later be heard at the airship platform during Monkey Madness II.",
@@ -1466,14 +1473,8 @@ export const songDescriptions: Record<string, string[]> = {
     "Nomad is a music track that used to play in northern Tai Bwo Wannai, but now plays in the Ruins of Unkah.",
   ],
   "Norse Code": [
-    "Unlocked on Jatizso that was released along with the Fremennik Isles and the respective quest on 6 February 2007. It uses 3/4 beat.",
-    "The track's name is a play on the Norse, whom the Fremennik are based on, and Morse code, a form of telecommunications.",
-    "In the actual track, a secret Morse code message is present. The high-pitched flute plays in Morse code. The short notes are the dits, and the long notes are the dahs.",
-    "The sequence of the Morse code is as follows:",
-    "! Sequence",
-    '! width="100px" | Sounds',
-    "! Letter",
-    'The full sequence spells out the letters for "RuneScape", although the timing between letters is incorrect (three dit intervals should be left between each letter). So the interpretation would be very different when the rules of deciphering Morse Code are strictly followed.',
+    "Unlocked on Jatizso.",
+    "The track's name hints that the song actually contains a secret Morse Code message. The high-pitched flute plays the word 'RuneScape' on repeat throughout the song.",
   ],
   "Not a Moment of Relief": [
     "Unlocked north of Arceuus, around the dense essence mine and the Blood Altar.",
@@ -1492,16 +1493,14 @@ export const songDescriptions: Record<string, string[]> = {
   ],
   "Oh Rats!": ["Unlocked while fighting the boss Scurrius."],
   "The Old Ones": [
-    "The Old Ones is a music track that unlocks during The Garden of Death. It plays in various dungeons visited during the quest:",
+    "Unlocked during The Garden of Death. It plays in various dungeons visited during the quest:",
     "Near the start point of the quest",
     "Beneath Molch Island",
     "Beneath Xeric's Shrine",
     "Beneath the Ruins of Morra",
     "Prior to 9 August 2023, this track also played within the Stranglewood. It has since been replaced by the track Strangled.",
   ],
-  "On the Frontline": [
-    "On the Frontline is a music track that unlocks at the Battlefront west of Great Kourend.",
-  ],
+  "On the Frontline": ["Unlocked at the Battlefront west of Great Kourend."],
   "On the Shore": [
     "Unlocked at Corsair Cove.",
     "Playing this song to Cecilia may be required for an Easy Clue step.",
@@ -1514,7 +1513,7 @@ export const songDescriptions: Record<string, string[]> = {
     "It is a slow, calming piece of music which emphasises the feeling of (birds) flying on a warm, sunny day. It features woodwind, light percussion and scattered synthesizer, and ambient birdsong effects.",
   ],
   "On Thin Ice": [
-    "On Thin Ice is a music track that is played when fighting Vorkath both during and after Dragon Slayer II.",
+    "Unlocked when fighting Vorkath both during and after Dragon Slayer II.",
   ],
   "Oncoming Foe": [
     "Unlocked during the fourth phase of the naval assault during Dragon Slayer II, when several metal dragons are fought.",
@@ -1543,10 +1542,10 @@ export const songDescriptions: Record<string, string[]> = {
   ],
   "Path of Peril": ["Unlocked at the Shadow Dungeon."],
   "The Penguin Bards": [
-    "The Penguin Bards is a music track that plays during Cold War. It can be heard during the musical performances of Ping and Pong.",
+    "Unlocked during Cold War. It can be heard during the musical performances of Ping and Pong.",
   ],
   "Penguin Plots": [
-    "Penguin Plots is a music track that plays during Cold War. It can be heard during the cutscenes when witnessing the Penguin handshake, and when Pescaling Pax describes the penguin plans for world domination.",
+    "Unlocked during Cold War. It can be heard during the cutscenes when witnessing the Penguin handshake, and when Pescaling Pax describes the penguin plans for world domination.",
     "It is a remix of Espionage.",
   ],
   Pathways: ["Unlocked at the Brimhaven Dungeon entrance."],
@@ -1695,7 +1694,7 @@ export const songDescriptions: Record<string, string[]> = {
     "Unlocked when entering the Sourhog Cave during the quest A Porcine of Interest.",
     "The track was originally released on 11 March 2008, being played in the Stronghold of Player Safety in RuneScape.",
   ],
-  Saga: ["Saga is a music track that unlocks south of Rellekka."],
+  Saga: ["Unlocked south of Rellekka."],
   "Sands of Time": [
     "Unlocked during the fight with Akkha in the Tombs of Amascut.",
     "Sands of Time is one of two music tracks that share name with a RuneScape music track, but being completely unrelated. The other being The Nightmare Continues.",
@@ -1785,7 +1784,7 @@ export const songDescriptions: Record<string, string[]> = {
     "* Sea Shanty Xmas",
   ],
   "Sea Shanty": [
-    "Sea Shanty is a music track that unlocks around Musa Point and Karamja Volcano. In this area, the music player will shuffle between playing this track and Jungle Island.",
+    "Unlocked around Musa Point and Karamja Volcano. In this area, the music player will shuffle between playing this track and Jungle Island.",
     "In Classic mode, the track plays at Musa Point and its docks.",
   ],
   "Sea Shanty 2": [
@@ -1840,7 +1839,7 @@ export const songDescriptions: Record<string, string[]> = {
     "Unlocked in the Lumbridge water mill, during the battle with Sigmund in Death to the Dorgeshuun.",
   ],
   "The Sinclairs": [
-    "The Sinclairs is a music track that plays during King's Ransom. It can be heard during the cutscene when the player spies on the Sinclairs, revealing that Anna and David have betrayed the player.",
+    "Unlocked during King's Ransom. It can be heard during the cutscene when the player spies on the Sinclairs, revealing that Anna and David have betrayed the player.",
   ],
   "The Slayer": [
     "Unlocked at the entrance cave to the Fremennik Slayer Dungeon.",
@@ -1868,7 +1867,7 @@ export const songDescriptions: Record<string, string[]> = {
     "Unlocked during the Song of the Elves quest, in the Grand Library.",
   ],
   "Song of the Silent Choir": [
-    "Song of the Silent Choir is a music track that is played when fighting The Whisperer during and after Desert Treasure II - The Fallen Empire.",
+    "Unlocked when fighting The Whisperer during and after Desert Treasure II - The Fallen Empire.",
     "The track's title refers to the Silent Choir cult dedicated to worshipping a strange totem within the Lassar Undercity.",
     "Although it's quiet, this track uses Verzik Vitur's voice on MIDI channel 11.",
   ],
@@ -1908,7 +1907,7 @@ export const songDescriptions: Record<string, string[]> = {
   ],
   "The Spurned Demon": ["Unlocked while fighting Zalcano in Prifddinas."],
   "The Spymaster": [
-    "The Spymaster is a music track that plays during the cutscene in Contact!, when Osman sneaks into Sophanem. It is based upon City of the Dead. It is also played when encountering Osman in Beneath Cursed Sands.",
+    "Unlocked during the cutscene in Contact!, when Osman sneaks into Sophanem. It is based upon City of the Dead. It is also played when encountering Osman in Beneath Cursed Sands.",
     "The music track is now listed in the Music Player.",
     "The music track was extended in length from 1 minute and 3 seconds to 2 minutes and 33 seconds.",
   ],
@@ -1968,7 +1967,7 @@ export const songDescriptions: Record<string, string[]> = {
     "Unlocked inside the top floor of the Viyeldi Caves, or in the Tower of Magic prison.",
   ],
   "Surok's Theme": [
-    "Surok's Theme is a music track that plays during What Lies Below. It can be heard during the battle with King Roald.",
+    "Unlocked during What Lies Below. It can be heard during the battle with King Roald.",
     'It can later be heard in the Nightmare Zone when fighting King Roald. Originally, the name "Surok\'s Revenge" would appear in the Music Player, but no longer does so after it became a listed track.',
   ],
   Suspicious: ["Unlocked during cutscenes in Monkey Madness I."],
@@ -2043,7 +2042,7 @@ export const songDescriptions: Record<string, string[]> = {
     "Unlocked during the Beneath Cursed Sands quest. It plays during the fight with the Champion of Scabaras and the Menaphite Akh.",
   ],
   "Thrall of the Serpent": [
-    "Thrall of the Serpent is a music track that unlocks at Zul-Andra. It was the 500th music track added to Old School RuneScape.",
+    "Unlocked at Zul-Andra. It was the 500th music track added to Old School RuneScape.",
   ],
   "Throne of the Demon": [
     "Unlocked in Thammaron's Throne Room underneath Uzer. It will play here by default after The Golem and Shadow of the Storm have been completed. During the Shadow of the Storm quest's battle with Agrith Naar, Grip of the Talon will play here.",
@@ -2104,7 +2103,7 @@ export const songDescriptions: Record<string, string[]> = {
     "Unlocked during Making Friends with My Arm. It first plays when attempting to sneak into Weiss, and later plays during the battle with Don't Know What.",
   ],
   "Trouble Brewing": [
-    "Trouble Brewing is a music track that unlocks while playing the Trouble Brewing minigame in Mos Le'Harmless.",
+    "Unlocked while playing the Trouble Brewing minigame in Mos Le'Harmless.",
     "For Ironman, using the trade option on Honest Jimmy will unlock this music track and Distillery Hilarity.",
   ],
   Troubled: [
@@ -2112,7 +2111,7 @@ export const songDescriptions: Record<string, string[]> = {
     "In Classic mode, the track plays at the Western Ruins in the Wilderness.",
   ],
   "Troubled Waters": [
-    "Troubled Waters is a music track that unlocks in the Kraken Cove.",
+    "Unlocked in the Kraken Cove.",
     "Unlocked at the Stronghold Slayer Cave.",
   ],
   Twilight: [
@@ -2155,9 +2154,7 @@ export const songDescriptions: Record<string, string[]> = {
     "The track was originally released on 31 August 2011, being played during the quest Branches of Darkmeyer in RuneScape. However, this version is notably more slower pace than the original.",
     'Upir\' Likhyj (Упирь Лихый, in Russian Упырь Лихой, Old Russian Оупирь Лихыи) was the name of an 11th century Old Russian scribe and a priest. Direct translation of his name from the Old Russian would be "Bloodsucker the Foul" or "Bloodsucker the Wicked". Upir\' could also be a Cyrillic version of the Swedish/Nordic Öpir or Öper, with Likhyj meaning "wicked/unworthy" in Old Russian, as in "Öpir the Unworthy".',
   ],
-  "Upper Depths": [
-    "Upper Depths is a music track that unlocks upon entering the Chambers of Xeric.",
-  ],
+  "Upper Depths": ["Unlocked upon entering the Chambers of Xeric."],
   "Vampyre Assault": [
     "Unlocked during the meeting between Gadderanks and Vanstrom Klause during the quest In Aid of the Myreque. It also plays during Sins of the Father in the battle with Damien Leucurte.",
     "It is based upon Distant Land and Fangs for the Memory.",
@@ -2208,7 +2205,7 @@ export const songDescriptions: Record<string, string[]> = {
     "This track's name is a reference to the like-named series The Walking Dead.",
   ],
   "Wally the Hero": [
-    "Wally the Hero is a music track that plays during Demon Slayer. It can be heard during the cutscene where Aris describes how Wally first defeated Delrith.",
+    "Unlocked during Demon Slayer. It can be heard during the cutscene where Aris describes how Wally first defeated Delrith.",
   ],
   Wander: [
     "Unlocked around Draynor Village. In this area, the music player will also shuffle between playing Start and Unknown Land.",
@@ -2216,7 +2213,7 @@ export const songDescriptions: Record<string, string[]> = {
     "This track is light and airy with plucking beats throughout. A melody with different background sounds layered emerges.",
   ],
   Warpath: [
-    "Warpath is a music track that unlocks at Clan Wars. Upon entering any Clan Wars area, either Warpath or the Clan Wars track is randomly selected to start playing.",
+    "Unlocked at Clan Wars. Upon entering any Clan Wars area, either Warpath or the Clan Wars track is randomly selected to start playing.",
   ],
   Warrior: [
     "Unlocked when facing Koschei the Deathless during The Fremennik Trials quest.",
@@ -2300,7 +2297,7 @@ export const songDescriptions: Record<string, string[]> = {
     "Unlocked in the Asgarnian Ice Dungeon, at the skeletal wyverns.",
   ],
   Wonder: [
-    "Wonder is a music track that unlocks in the Wilderness and also plays in Wilderness Agility Course Dungeon.",
+    "Unlocked in the Wilderness and also plays in Wilderness Agility Course Dungeon.",
     "In Classic mode, the track plays north of Goblin Village in the Wilderness.",
   ],
   Wonderous: [

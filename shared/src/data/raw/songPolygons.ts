@@ -7,9 +7,9 @@ function rectangle(
   right: number,
   bottom: number
 ): PolygonWithoutCenter {
-  const minX = Math.min(left, right) + 1;
+  const minX = Math.min(left, right);
   const maxX = Math.max(left, right);
-  const minY = Math.min(top, bottom) + 1;
+  const minY = Math.min(top, bottom);
   const maxY = Math.max(top, bottom);
   const topLeft: Coordinate = [minX, maxY];
   const bottomLeft: Coordinate = [minX, minY];
@@ -29,7 +29,9 @@ function rectangle(
 // - passageway between dorgesh kaan and kalphite lair
 // - fairy rings
 // - crop circles (puro puro is in the lumbridge swamp shed)
+// - nightmare zone
 
+const sotf = rectangle(3727, 3321, 3731, 3317);
 const mythsDungeon = [
   // myths
   rectangle(2455, 2849, 2459, 2845),
@@ -47,11 +49,11 @@ const brimhavenDungeon = [
   rectangle(2762, 3060, 2758, 3064),
 ];
 const karuulmSlayerDungeon = rectangle(1313, 3804, 1307, 3810);
-const zanaris = rectangle(3201, 3171, 3206, 3166);
+const zanaris = rectangle(3202, 3171, 3206, 3167);
 const clockTower = rectangle(2567, 3227, 2571, 3231);
 const ourania = rectangle(2450, 3229, 2454, 3233);
 const varrockStatue = rectangle(3280, 3465, 3287, 3471);
-const godWars = rectangle(2916, 3748, 2920, 3744);
+const godWars = rectangle(2916, 3750, 2922, 3744);
 const taverleyDungeon = [
   // main entrance
   rectangle(2886, 3395, 2882, 3399),
@@ -60,7 +62,7 @@ const taverleyDungeon = [
 ];
 const tob = rectangle(3675, 3221, 3679, 3217);
 const wildyGodWars = rectangle(3019, 3737, 3015, 3741);
-const barbAssault = rectangle(2537, 3575, 2528, 3566);
+const barbAssault = rectangle(2538, 3575, 2529, 3566);
 const tzhaar = [
   // Karamja volcano
   rectangle(2854, 3170, 2858, 3166),
@@ -78,10 +80,17 @@ const yanilleAgility = [
 const kbd = rectangle(3015, 3851, 3019, 3847);
 const lithkren = rectangle(3559, 3988, 3546, 4007);
 const ogreEnclave = rectangle(2504, 3041, 2508, 3037);
-const braindeath = rectangle(3679, 3540, 3683, 3536);
+const braindeath = rectangle(3676, 3540, 3683, 3533);
 const brimhavenAgility = rectangle(2807, 3196, 2811, 3192);
 const corp = rectangle(3201, 3683, 3205, 3679);
-const nightmare = rectangle(3726, 3302, 3730, 3298);
+const unferth = rectangle(2916, 3559, 2920, 3555);
+const nightmareSouth = rectangle(3726, 3302, 3730, 3298);
+const nightmare = [
+  // normal entrance
+  nightmareSouth,
+  // crombwich manor
+  rectangle(3723, 3358, 3727, 3354),
+]
 const ancientCavern = rectangle(2510, 3510, 2514, 3506);
 const werewolfAgility = rectangle(3541, 3463, 3545, 3459);
 const sophanemDungeon = rectangle(3313, 2799, 3317, 2795);
@@ -127,7 +136,7 @@ const experiments = [
   rectangle(3502, 3572, 3507, 3569),
 ];
 const pollnivneachSmokeDungeon = rectangle(3308, 2964, 3312, 2960);
-const mimic = rectangle(1641, 3575, 1649, 3570);
+const mimic = rectangle(1642, 3573, 1649, 3570);
 const phasmatysBrewery = rectangle(3678, 3500, 3682, 3496);
 const brimstail = rectangle(2401, 3421, 2405, 3417);
 const keldagrim = [
@@ -144,7 +153,7 @@ const forthos = [
   // east
   rectangle(1700, 3576, 1704, 3572),
 ];
-const cabinFever = rectangle(3708, 3499, 3712, 3495);
+const cabinFever = rectangle(3673, 3498, 3677, 3494);
 const goblinCave = rectangle(2621, 3395, 2625, 3391);
 const ardySewerEast = [
   // Jimmy dazzler
@@ -163,13 +172,13 @@ const swampCavesDorgeshKaanTears = [
   // Lumbridge swamp
   rectangle(3167, 3174, 3171, 3170),
   // Watermill
-  rectangle(3225, 3286, 3236, 3278),
+  rectangle(3225, 3287, 3237, 3278),
 ];
 const deepWildyDungeon = rectangle(3043, 3926, 3047, 3922);
 const ardySewerWest = rectangle(2585, 3237, 2589, 3233);
 const elenaPrisonPlagueCity = rectangle(2534, 3271, 2538, 3267);
-const carnelianBasement = rectangle(2567, 3271, 2570, 3267);
-const varrockWestBankVault = rectangle(3185, 3436, 3190, 3432);
+const carnelianBasement = rectangle(2569, 3269, 2572, 3266);
+const varrockWestBankVault = rectangle(3186, 3436, 3192, 3433);
 const templeOfIkov = [
   // Main entrance
   rectangle(2675, 3406, 2679, 3402),
@@ -183,8 +192,7 @@ const hauntedMine = [
   rectangle(3438, 3234, 3442, 3230),
 ];
 const culinaromancer = rectangle(3207, 3220, 3209, 3218);
-const rantz = rectangle(2624, 2997, 2637, 2985);
-const sirTiffy = rectangle(2994, 3376, 3000, 3371);
+const recruitmentDrive = rectangle(2961, 3340, 2965, 3336);
 const clanWars = rectangle(3126, 3625, 3132, 3618);
 const lms = rectangle(3137, 3645, 3145, 3632);
 const clanHall = rectangle(3183, 3474, 3188, 3468);
@@ -213,8 +221,6 @@ const undergroundPass = [
   rectangle(2432, 3317, 2436, 3313),
   // mourner tunnel entrance
   rectangle(2541, 3326, 2544, 3323),
-  // abyss
-  abyss,
 ];
 const dks = [
   // main
@@ -541,7 +547,7 @@ const eaglesTransport = [
 ];
 const waterAltar = rectangle(3181, 3167, 3186, 3161);
 const miscPrinceBrand = rectangle(2497, 3855, 2509, 3845);
-const rellekkaLongHall = rectangle(2654, 3686, 2663, 3664);
+const rellekkaLongHall = rectangle(2655, 3686, 2663, 3665);
 const vardorvis = rectangle(1120, 3427, 1138, 3409);
 const sophanemBobAdventure = rectangle(3282, 2778, 3302, 2797);
 
@@ -588,14 +594,14 @@ const pathOfGlouphrieCutscenes = [
   // grand tree
   rectangle(2461, 3500, 2469, 3490),
 ];
-const barrelchestFight = rectangle(3804, 2849, 3817, 2839);
+const barrelchestFight = rectangle(3804, 2849, 3817, 2840);
 const varrockPalaceUpstairs = [
   // west
-  rectangle(3201, 3499, 3204, 3496),
+  rectangle(3202, 3500, 3205, 3496),
   // east
-  rectangle(3217, 3498, 3220, 3495),
+  rectangle(3218, 3499, 3221, 3495),
   // south
-  rectangle(3211, 3475, 3214, 3473),
+  rectangle(3212, 3476, 3215, 3473),
 ];
 const varrockSquare = rectangle(3205, 3438, 3225, 3421);
 const dragonSlayerCrandorCrash = rectangle(2840, 3238, 2870, 3217);
@@ -1083,7 +1089,7 @@ export const songPolygons: Record<
     ],
   },
   "Attack 2": {
-    polygons: tzhaar,
+    polygons: [...tzhaar, lithkren],
   },
   "Attack 3": {
     polygons: [lavaMaze],
@@ -1209,7 +1215,7 @@ export const songPolygons: Record<
     polygons: [corp],
   },
   "The Bane of Ashihama": {
-    polygons: [nightmare],
+    polygons: [...nightmare],
   },
   "Barb Wire": {
     polygons: [lithkren, ancientCavern],
@@ -1384,7 +1390,6 @@ export const songPolygons: Record<
   Bloodbath: {
     polygons: [
       ...myrequeLaboratories,
-      abyss,
       {
         coordinates: [
           [3680, 3239],
@@ -1413,7 +1418,7 @@ export const songPolygons: Record<
     polygons: experiments,
   },
   "Bone Dance": {
-    polygons: [
+    polygons: [sotf,
       {
         coordinates: [
           [3392, 3268],
@@ -1577,7 +1582,6 @@ export const songPolygons: Record<
   },
   "Chompy Hunt": {
     polygons: [
-      rantz,
       {
         coordinates: [
           [2624, 2944],
@@ -1591,7 +1595,7 @@ export const songPolygons: Record<
     ],
   },
   "The Chosen": {
-    polygons: [sirTiffy],
+    polygons: [recruitmentDrive],
   },
   "City of the Dead": {
     polygons: [
@@ -1653,7 +1657,7 @@ export const songPolygons: Record<
     polygons: [burthorpeGamesRoom],
   },
   Complication: {
-    polygons: [abyss, chaosAltar],
+    polygons: [varrockStatue, chaosAltar],
   },
   "The Consortium": {
     polygons: keldagrim,
@@ -2224,7 +2228,7 @@ export const songPolygons: Record<
     ],
   },
   "Down to Earth": {
-    polygons: [earthAltar, abyss],
+    polygons: [earthAltar],
   },
   "Dragontooth Island": {
     polygons: [
@@ -2480,7 +2484,7 @@ export const songPolygons: Record<
     ],
   },
   "The Everlasting Slumber": {
-    polygons: [nightmare],
+    polygons: [...nightmare],
   },
   Everywhere: {
     polygons: [
@@ -3506,7 +3510,7 @@ export const songPolygons: Record<
     polygons: [],
   },
   "Heart and Mind": {
-    polygons: [bodyAltar, abyss],
+    polygons: [bodyAltar],
   },
   "Hells Bells": {
     polygons: [
@@ -5057,7 +5061,7 @@ export const songPolygons: Record<
     polygons: [mta],
   },
   "Miracle Dance": {
-    polygons: [abyss, mindAltar],
+    polygons: [mindAltar],
   },
   Mirage: {
     polygons: [icthlarinPyramid],
@@ -5802,7 +5806,7 @@ export const songPolygons: Record<
     ],
   },
   Quest: {
-    polygons: [abyss, fireAltar],
+    polygons: [fireAltar],
   },
   "Race Against the Clock": {
     polygons: [camdozaal],
@@ -5890,7 +5894,7 @@ export const songPolygons: Record<
     polygons: [...keldagrim],
   },
   Righteousness: {
-    polygons: [abyss, lawAltar],
+    polygons: [lawAltar],
   },
   "Rising Damp": {
     polygons: [brineRatCavern],
@@ -6413,7 +6417,7 @@ export const songPolygons: Record<
     ],
   },
   Serene: {
-    polygons: [abyss, airAltar],
+    polygons: [airAltar],
   },
   "Servants of Strife": {
     polygons: [
@@ -6813,7 +6817,7 @@ export const songPolygons: Record<
     ],
   },
   Stratosphere: {
-    polygons: [zanaris, abyss],
+    polygons: [zanaris],
   },
   "Strength of Saradomin": {
     polygons: [godWars],
@@ -7230,7 +7234,7 @@ export const songPolygons: Record<
     polygons: [...undergroundPass],
   },
   Understanding: {
-    polygons: [abyss, natureAltar],
+    polygons: [natureAltar],
   },
   "Unknown Land": {
     polygons: [
@@ -7879,7 +7883,7 @@ export const songPolygons: Record<
     polygons: [godWars],
   },
   Zealot: {
-    polygons: [abyss, waterAltar],
+    polygons: [waterAltar],
   },
   "Zogre Dance": {
     polygons: [
@@ -8393,12 +8397,12 @@ export const songPolygons: Record<
   ...song("Ape-ex Predator", toa),
   ...song("Architects of Prifddinas", prif),
   ...song("Awful Anthem", miscPrinceBrand),
-  ...song("Bait", nightmare, myrequeHideoutCanifis),
+  ...song("Bait", nightmareSouth, meiyerditchHideout),
   ...song("Ballad of the Basilisk", rellekkaLongHall),
   ...song("Barbarian Workout", ...atlasCutscene),
   ...song("Beneath Cursed Sands", toa),
   ...song("Blood Rush", vardorvis),
-  ...song("Bob's on Holiday", kbd, sophanemBobAdventure),
+  ...song("Bob's on Holiday", kbd, sophanemBobAdventure, unferth),
   ...song("Bolrie's Diary", brimstail, ...pathOfGlouphrieCutscenes),
   ...song("Brain Battle", barrelchestFight),
   ...song("Bunny's Sugar Rush"),
