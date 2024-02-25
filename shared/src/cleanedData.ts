@@ -538,6 +538,7 @@ const waterAltar = rectangle(3181, 3167, 3186, 3161);
 const miscPrinceBrand = rectangle(2497, 3855, 2509, 3845);
 const rellekkaLongHall = rectangle(2654, 3686, 2663, 3664);
 const vardorvis = rectangle(1120, 3427, 1138, 3409);
+const sophanemBobAdventure = rectangle(3282, 2778, 3302, 2797);
 
 const atlasCutscene = [
   // varrock east
@@ -9546,7 +9547,7 @@ export const finishedData: Record<
   ...song("Barbarian Workout", ...atlasCutscene),
   ...song("Beneath Cursed Sands", toa),
   ...song("Blood Rush", vardorvis),
-  ...song("Bob's on Holiday", kbd),
+  ...song("Bob's on Holiday", kbd, sophanemBobAdventure),
   ...song("Bolrie's Diary"),
   ...song("Brain Battle"),
   ...song("Bunny's Sugar Rush"),
