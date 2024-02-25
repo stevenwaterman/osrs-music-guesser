@@ -3,17 +3,18 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "dev": "tsx watch src/index.ts",
+    "dev": "concurrently --kill-others \"cd ../shared && yarn run watch\" \"tsx watch src/index.ts\"",
     "build": "tsc --build"
   },
   "devDependencies": {
     "@types/node": "^20.11.20",
     "@types/ws": "^8.5.10",
+    "concurrently": "^8.2.2",
     "tsx": "^4.7.1",
     "typescript": "^5.2.2"
   },
   "dependencies": {
-    "ws": "^8.16.0",
-    "osrs-music-guesser-shared": "1.0.0"
+    "osrs-music-guesser-shared": "1.0.0",
+    "ws": "^8.16.0"
   }
 }

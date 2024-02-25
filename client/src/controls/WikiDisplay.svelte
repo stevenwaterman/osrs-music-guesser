@@ -1,33 +1,28 @@
 <script lang="ts">
   import { fade } from "svelte/transition";
-  import { finishedData } from "osrs-music-guesser-shared/src/cleanedData";
-  import { describeSong } from "../lib/wiki";
+  import { songs } from "osrs-music-guesser-shared";
   import type { State } from "../lib/clientState";
 
   export let state: State[
     | "SinglePlayer_EndOfRound"
     | "SinglePlayer_EndOfFinalRound"];
 
-  $: song = state.data.songs[state.data.round - 1];
-  $: songTitle = song ? finishedData[song].file : null;
+  $: songName = state.data.songs[state.data.round - 1];
+  $: song = songs[songName];
 </script>
 
-{#if songTitle}
-  {#await describeSong(songTitle) then data}
-    <div class="infoBox" transition:fade|global>
-      <a
-        class="title"
-        target="_blank"
-        href={`https://oldschool.runescape.wiki/w/${songTitle}`}>{song}</a
-      >
-      <div class="info">
-        {#each data as line}
-          <p>{line}</p>
-        {/each}
-      </div>
-    </div>
-  {/await}
-{/if}
+<div class="infoBox" transition:fade|global>
+  <a
+    class="title"
+    target="_blank"
+    href={song.wikiUrl}>{song.name}</a
+  >
+  <div class="info">
+    {#each song.description as line}
+      <p>{line}</p>
+    {/each}
+  </div>
+</div>
 
 <style>
   .infoBox {

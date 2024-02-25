@@ -1,6 +1,6 @@
 <script lang="ts">
   import L, { LatLngBounds } from "leaflet";
-  import { finishedData } from "osrs-music-guesser-shared/src/cleanedData";
+  import { songs } from "osrs-music-guesser-shared";
   import { greenIcon } from "../lib/icons";
   import type { State } from "../lib/clientState";
   import { onMount } from "svelte";
@@ -25,7 +25,7 @@
 
     const lineToClosest = new L.Polyline([guessLatLng, closestLatLng]);
 
-    const answerPolygons = finishedData[song].polygons.map((poly) => {
+    const answerPolygons = songs[song].locations.map((poly) => {
       const leafletPoly = convertLeaflet.polygon.to(poly);
       leafletPoly.setStyle({
         color: "#00FF00",

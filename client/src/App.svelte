@@ -1,7 +1,6 @@
 <script lang="ts">
   import Map from "./map/Map.svelte";
   import ControlOverlay from "./controls/ControlOverlay.svelte";
-
   let zoom: number;
 </script>
 

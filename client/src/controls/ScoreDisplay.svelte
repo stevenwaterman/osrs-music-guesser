@@ -2,7 +2,7 @@
   import { tweened } from "svelte/motion";
   import { fade } from "svelte/transition";
   import { type State } from "../lib/clientState";
-  import { sleep } from "osrs-music-guesser-shared/src/util";
+  import { sleep } from "osrs-music-guesser-shared";
 
   export let state: State[
     | "SinglePlayer_RevealingAnswer"

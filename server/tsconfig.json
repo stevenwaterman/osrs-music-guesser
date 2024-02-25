@@ -15,8 +15,6 @@
     "strict": true,
     "moduleResolution": "NodeNext"
   },
-  "references": [
-    { "path": "../shared" }
-  ],
-  "include": ["src"]
+  "references": [{ "path": "../shared" }],
+  "include": ["src", "../shared/src/data/raw/wikiFetch.ts"]
 }

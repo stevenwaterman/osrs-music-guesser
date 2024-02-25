@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { finishedData } from "osrs-music-guesser-shared/src/cleanedData";
+  import { songs } from "osrs-music-guesser-shared";
   import { fade } from "svelte/transition";
   import type { State, StateGroup } from "../lib/clientState";
 
@@ -18,9 +18,7 @@
       <td
         ><a
           target="_blank"
-          href={`https://oldschool.runescape.wiki/w/${
-            finishedData[guess.song].file
-          }`}>{guess.song}</a
+          href={songs[guess.song].wikiUrl}>{guess.song}</a
         ></td
       >
       <td>{guess.score}</td>

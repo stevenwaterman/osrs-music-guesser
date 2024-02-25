@@ -33,6 +33,34 @@ export function mapValues<InValue, OutValue>(
   return output;
 }
 
-export async function sleep(ms: number) {
+export async function sleep(ms: number): Promise<void> {
   return await new Promise(resolve => setTimeout(resolve, ms));
+}
+
+export function shuffle<T>(array: T[]): T[] {
+  let currentIndex = array.length,
+    randomIndex;
+
+  // While there remain elements to shuffle.
+  while (currentIndex > 0) {
+    // Pick a remaining element.
+    randomIndex = Math.floor(Math.random() * currentIndex);
+    currentIndex--;
+
+    // And swap it with the current element.
+    [array[currentIndex], array[randomIndex]] = [
+      array[randomIndex],
+      array[currentIndex],
+    ];
+  }
+
+  return array;
+}
+
+export function toMap<T>(entries: Array<[string, T]>): Record<string, T> {
+  const output: Record<string, T> = {};
+  for (const [key, value] of entries) {
+    output[key] = value;
+  }
+  return output;
 }

@@ -1,11 +1,12 @@
 import type { Coordinate, Polygon } from "./coordinates.js";
 
+type PolygonWithoutCenter = Omit<Polygon, "center">;
 function rectangle(
   left: number,
   top: number,
   right: number,
   bottom: number
-): Polygon {
+): PolygonWithoutCenter {
   const topLeft: Coordinate = [left, top];
   const bottomLeft: Coordinate = [left, bottom];
   const bottomRight: Coordinate = [right, bottom];
@@ -675,7 +676,7 @@ const morytaniaHespori = rectangle(3500, 3365, 3514, 3349);
 
 export const finishedData: Record<
   string,
-  { title: string; file: string; polygons: Polygon[] }
+  { title: string; file: string; polygons: PolygonWithoutCenter[] }
 > = {
   "7th Realm": {
     title: "7th Realm",
@@ -9764,8 +9765,8 @@ export const finishedData: Record<
 
 function song(
   name: string,
-  ...polygons: Polygon[]
-): Record<string, { title: string; file: string; polygons: Polygon[] }> {
+  ...polygons: PolygonWithoutCenter[]
+): Record<string, { title: string; file: string; polygons: PolygonWithoutCenter[] }> {
   return {
     [name]: {
       title: name,
@@ -9775,7 +9776,7 @@ function song(
   };
 }
 
-function polygon(coordinates: Array<Coordinate>): Polygon {
+function polygon(coordinates: Array<Coordinate>): PolygonWithoutCenter {
   return {
     coordinates,
     inMap: false,

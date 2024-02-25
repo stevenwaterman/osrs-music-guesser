@@ -1,7 +1,7 @@
 import Flatten from "@flatten-js/core";
 
 export type Coordinate = [number, number];
-export type Polygon = { coordinates: Coordinate[]; inMap: boolean };
+export type Polygon = { coordinates: Coordinate[]; inMap: boolean; center: Coordinate };
 
 export const convertFlatten = {
   coordinate: {
@@ -14,7 +14,7 @@ export const convertFlatten = {
     },
   },
   polygon: {
-    to: (poly: Polygon): Flatten.Polygon => {
+    to: (poly: Omit<Polygon, "center">): Flatten.Polygon => {
       const flattenPoly = new Flatten.Polygon();
       const flattenPoints = poly.coordinates.map((coord) =>
         convertFlatten.coordinate.to(coord)

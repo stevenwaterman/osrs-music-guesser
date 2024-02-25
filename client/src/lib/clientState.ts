@@ -1,13 +1,6 @@
 import { writable, type Readable, type Writable } from "svelte/store";
-import type { Coordinate } from "osrs-music-guesser-shared/src/coordinates";
-import { scoreGuess } from "osrs-music-guesser-shared/src/scoring";
-import { getSongs } from "osrs-music-guesser-shared/src/songs";
-import type {
-  AnyServerState,
-  ClientActions,
-  ClientStateData,
-  ServerStates,
-} from "osrs-music-guesser-shared/src/serverState";
+import type { Coordinate, StateInterface } from "osrs-music-guesser-shared";
+import { scoreGuess, randomSongs } from "osrs-music-guesser-shared";
 
 function omit<Input extends {}, Keys extends keyof Input>(
   input: Input,
@@ -57,7 +50,7 @@ class State_StartScreen extends BaseState<"StartScreen", {}> {
   }
   public singlePlayer() {
     const maxRounds = 5 as const;
-    const songs = getSongs(maxRounds);
+    const songs = randomSongs(maxRounds);
     internalStateStore.set(
       new State_SinglePlayer_NoGuess({
         timerStart: new Date(),
@@ -205,7 +198,7 @@ type WsMessage =
     }
   | {
       action: "state";
-      data: ClientStateData<any>;
+      data: StateInterface.ClientStateData<any>;
     };
 
 class State_StartScreen_Multiplayer extends BaseState<
@@ -252,13 +245,13 @@ class State_StartScreen_Multiplayer extends BaseState<
 }
 
 class State_Multiplayer_Active<
-  ServerStateName extends AnyServerState["stateName"]
-> extends BaseState<`Multiplayer_Active`, ClientStateData<ServerStateName>> {
+  ServerStateName extends StateInterface.AnyServerState["stateName"]
+> extends BaseState<`Multiplayer_Active`, StateInterface.ClientStateData<ServerStateName>> {
   public name = "Multiplayer_Active" as const;
 
   constructor(
     private readonly ws: WebSocket,
-    data: ClientStateData<ServerStateName>
+    data: StateInterface.ClientStateData<ServerStateName>
   ) {
     super(data);
   }
@@ -267,12 +260,12 @@ class State_Multiplayer_Active<
     this.ws.close(1000);
   }
 
-  send(action: ClientActions) {
+  send(action: StateInterface.ClientActions) {
     this.ws.send(JSON.stringify(action));
   }
 
   public isAnyMultiplayer<
-    Names extends ServerStates[keyof ServerStates]["stateName"]
+    Names extends StateInterface.ServerStates[keyof StateInterface.ServerStates]["stateName"]
   >(...names: Names[]): this is MultiplayerState<Names> {
     return (names as string[]).includes(this.data.stateName);
   }
@@ -289,11 +282,11 @@ export type State = {
   SinglePlayer_EndOfGame: State_SinglePlayer_EndOfGame;
   StartScreen_Multiplayer: State_StartScreen_Multiplayer;
   Multiplayer_Active: State_Multiplayer_Active<
-    ServerStates[keyof ServerStates]["stateName"]
+    StateInterface.ServerStates[keyof StateInterface.ServerStates]["stateName"]
   >;
 };
 export type MultiplayerState<
-  Name extends ServerStates[keyof ServerStates]["stateName"]
+  Name extends StateInterface.ServerStates[keyof StateInterface.ServerStates]["stateName"]
 > = State_Multiplayer_Active<Name>;
 
 export type AnyState = State[keyof State];

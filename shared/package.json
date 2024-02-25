@@ -4,10 +4,9 @@
   "type": "module",
   "scripts": {
     "build": "tsc --build",
-    "check": "where tsc"
+    "watch": "tsc --build --watch"
   },
   "devDependencies": {
-    "@types/leaflet": "^1.9.8",
     "@types/node": "^20.11.20",
     "@types/ws": "^8.5.10",
     "tslib": "^2.6.2",

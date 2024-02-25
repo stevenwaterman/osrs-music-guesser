@@ -1,6 +1,6 @@
-import { finishedData } from "./cleanedData.js";
 import { convertFlatten } from "./coordinates.js";
 import type { Coordinate, Polygon } from "./coordinates.js";
+import { songs } from "./index.js";
 
 export type Score = {
   closest: Coordinate;
@@ -43,8 +43,8 @@ function closestPoint(
 }
 
 export function scoreGuess(guess: Coordinate, song: string): Score {
-  const polygons = finishedData[song].polygons;
-  const { distance, closest } = closestPoint(guess, polygons);
+  const locations = songs[song].locations;
+  const { distance, closest } = closestPoint(guess, locations);
   const deduction = 100 * Math.pow(distance, 0.5);
   const score = Math.round(Math.max(0, 5000 - deduction));
   return { score, distance, closest };
