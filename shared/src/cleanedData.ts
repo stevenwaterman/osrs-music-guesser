@@ -7,10 +7,14 @@ function rectangle(
   right: number,
   bottom: number
 ): PolygonWithoutCenter {
-  const topLeft: Coordinate = [left, top];
-  const bottomLeft: Coordinate = [left, bottom];
-  const bottomRight: Coordinate = [right, bottom];
-  const topRight: Coordinate = [right, top];
+  const minX = Math.min(left, right) + 1;
+  const maxX = Math.max(left, right);
+  const minY = Math.min(top, bottom) + 1;
+  const maxY = Math.max(top, bottom);
+  const topLeft: Coordinate = [minX, maxY];
+  const bottomLeft: Coordinate = [minX, minY];
+  const bottomRight: Coordinate = [maxX, minY];
+  const topRight: Coordinate = [maxX, maxY];
   return {
     coordinates: [topLeft, bottomLeft, bottomRight, topRight],
     inMap: false,
@@ -673,6 +677,8 @@ const treeGnomeVillageDungeon = rectangle(2531, 3157, 2535, 3153);
 const varrockLibrary = rectangle(3206, 3499, 3215, 3489);
 const hespori = rectangle(1230, 3731, 1234, 3727);
 const morytaniaHespori = rectangle(3500, 3365, 3514, 3349);
+const aidOfMyrequeVanstromGadderanks = rectangle(3531, 3214, 3542, 3204);
+const sotfVanescula = rectangle(3542, 3521, 3554, 3513);
 
 export const finishedData: Record<
   string,
@@ -9754,13 +9760,13 @@ export const finishedData: Record<
   ...song("Tick Tock", ancientVaultDT2),
   ...song("Time Out"),
   ...song("The Tower of Voices", prif),
-  ...song("Vampyre Assault"),
-  ...song("Vanescula"),
-  ...song("Wally the Hero"),
+  ...song("Vampyre Assault", damienLeucurte, aidOfMyrequeVanstromGadderanks),
+  ...song("Vanescula", castleDrakanCourtyard, sotfVanescula),
+  ...song("Wally the Hero", delrith),
   ...song("We are the Fairies"),
   ...song("Winter Funfair"),
   ...song("A Worthy Foe", ancientVaultDT2),
-  ...song("You Have My Attention"),
+  ...song("You Have My Attention", castleDrakanCourtyard),
 };
 
 function song(
