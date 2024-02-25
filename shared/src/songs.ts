@@ -20,14 +20,9 @@ function shuffle<T>(array: T[]): T[] {
   return array;
 }
 
-Object.values(finishedData).forEach((song) => {
-  song.polygons = song.polygons.filter((poly) => poly.inMap);
-});
-Object.values(finishedData)
-  .filter((song) => song.polygons.length === 0)
-  .map((song) => song.title)
-  .forEach((title) => delete finishedData[title]);
-const allSongs = Object.keys(finishedData);
+const allSongs = Object.values(finishedData)
+  .filter((song) => song.polygons.length > 0)
+  .map((song) => song.title);
 
 export function getSongs(count?: number): string[] {
   shuffle(allSongs);
