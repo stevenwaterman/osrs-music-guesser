@@ -49,6 +49,8 @@ export default {
   "Morytania": "Morytania_(music_track)",
   "Nomad": "Nomad_(music_track)",
   "Pest Control": "Pest_Control_(music_track)",
+  "The Pharoh": "The_Pharaoh_(music_track)",
+  "Prison Break": "Prison_Break_(music_track)",
   "Quest": "Quest_(music_track)",
   "Relics": "Relics_(music_track)",
   "Rellekka": "Rellekka_(music_track)",
