@@ -31,6 +31,7 @@ function rectangle(
 // - crop circles (puro puro is in the lumbridge swamp shed)
 // - nightmare zone
 
+const darknessAmbush = rectangle(3587, 3334, 3594, 3326);
 const sotf = rectangle(3727, 3321, 3731, 3317);
 const mythsDungeon = [
   // myths
@@ -48,7 +49,7 @@ const brimhavenDungeon = [
   // south
   rectangle(2762, 3060, 2758, 3064),
 ];
-const karuulmSlayerDungeon = rectangle(1313, 3804, 1307, 3810);
+const karuulmSlayerDungeon = rectangle(1314, 3804, 1308, 3810);
 const zanaris = rectangle(3202, 3171, 3206, 3167);
 const clockTower = rectangle(2567, 3227, 2571, 3231);
 const ourania = rectangle(2450, 3229, 2454, 3233);
@@ -124,12 +125,6 @@ const iceQueen = [
   rectangle(2855, 3521, 2859, 3517),
 ];
 const abyss = rectangle(3099, 3563, 3107, 3556);
-const myrequeLaboratories = [
-  // canifis
-  rectangle(3507, 3450, 3511, 3446),
-  // meiyerditch
-  rectangle(3641, 3306, 3645, 3303),
-];
 const experiments = [
   // graves
   rectangle(3574, 3528, 3578, 3524),
@@ -274,7 +269,7 @@ const fisherRealm = rectangle(2738, 3236, 2745, 3229);
 const mta = rectangle(3358, 3324, 3369, 3313); // TODO make one per room, with small squares
 const witchaven = rectangle(2694, 3285, 2698, 3281);
 const penguin = rectangle(2623, 4056, 2679, 3999);
-const dream = rectangle(2071, 3913, 2074, 3910);
+const dream = rectangle(2071, 3914, 2075, 3910);
 const trollArenaPassage = [
   // north
   rectangle(2905, 3656, 2910, 3651),
@@ -303,12 +298,12 @@ const observatoryDungeon = [
 ];
 const camdozaal = rectangle(2997, 3495, 3001, 3491);
 const roguesDen = rectangle(2904, 3539, 2908, 3535);
-const glod = rectangle(2920, 3427, 2924, 3423);
+const glod = rectangle(2921, 3427, 2924, 3424);
 const soulsBane = rectangle(3307, 3452, 3311, 3448);
 const apeAtollDungeonMM1 = rectangle(2761, 2705, 2765, 2701);
 const cox = rectangle(1231, 3575, 1235, 3571);
 const lletya = rectangle(2310, 3198, 2363, 3143);
-const uzer = rectangle(3491, 3092, 3495, 3088);
+const uzer = rectangle(3491, 3093, 3496, 3088);
 const beneathCursedSands = rectangle(3406, 2850, 3410, 2846);
 const fossilIslandWyverns = [
   // north
@@ -318,15 +313,14 @@ const fossilIslandWyverns = [
 ];
 const giantsFoundry = rectangle(3359, 3152, 3363, 3148);
 const sorceressGarden = rectangle(3319, 3143, 3323, 3139);
-// TODO this is approx
-const gauntlet = rectangle(2199, 3367, 2210, 3355);
+const gauntlet = rectangle(2202, 3366, 2206, 3362);
 const genieCave = rectangle(3370, 2907, 3375, 2902);
-const natureGrotto = rectangle(3437, 3339, 3442, 3335);
+const natureGrotto = rectangle(3438, 3339, 3442, 3335);
 const goblinVillage = rectangle(2944, 3516, 2970, 3489);
 const hamHideout = rectangle(3163, 3254, 3167, 3250);
 const bodyAltar = rectangle(3049, 3447, 3056, 3440);
 const saba = rectangle(2851, 3579, 2856, 3574);
-const yarlo = rectangle(3236, 3398, 3242, 3392);
+const yarlo = rectangle(3237, 3399, 3243, 3392);
 const pohPortals = [
   // rimmington
   rectangle(2950, 3226, 2954, 3221),
@@ -341,9 +335,9 @@ const pohPortals = [
   // brimhaven
   rectangle(2754, 3180, 2758, 3175),
   // yanille
-  rectangle(2542, 3099, 2546, 3095),
-  // prifddinas TODO very approx
-  rectangle(2202, 3332, 2225, 3311),
+  rectangle(2542, 3100, 2546, 3095),
+  // prifddinas
+  rectangle(2213, 3327, 2217, 3323),
 ];
 const paterdomus = [
   // north
@@ -352,7 +346,7 @@ const paterdomus = [
   rectangle(3420, 3486, 3424, 3482),
 ];
 const xericsLookoutBasement = rectangle(1588, 3528, 1592, 3524);
-const icthlarinPyramid = rectangle(3287, 2779, 3302, 2765);
+const icthlarinPyramid = rectangle(3288, 2780, 3302, 2766);
 const kalphiteLair = rectangle(3225, 3110, 3229, 3106);
 const kalphiteCave = rectangle(3318, 3124, 3322, 3120);
 const toa = rectangle(3356, 2713, 3360, 2709);
@@ -363,8 +357,8 @@ const fossilIslandUnderwater = rectangle(3764, 3900, 3768, 3896);
 const shades = rectangle(3483, 3323, 3487, 3319);
 const jormungandPrison = rectangle(2463, 4014, 2467, 4010);
 const enakhrasTemple = rectangle(3187, 2929, 3195, 2922);
-const meiyerditchHideout = rectangle(3637, 3251, 3640, 3248);
-const oldManRal = rectangle(3604, 3216, 3606, 3214);
+const meiyerditchHideout = rectangle(3637, 3252, 3641, 3248);
+const oldManRal = rectangle(3604, 3217, 3607, 3214);
 const volcanicMine = rectangle(3814, 3810, 3818, 3806);
 const mosLeHarmlessCave = rectangle(3746, 2975, 3750, 2971);
 const desertMiningCamp = rectangle(3299, 3038, 3304, 3034);
@@ -551,16 +545,19 @@ const leafTraps = [
   rectangle(2272, 3175, 2274, 3173),
 ];
 const warrensPortPiscarilius = rectangle(1811, 3747, 1815, 3743);
-const eaglesTransport = [
+const eaglesTransportWithoutJungle = [
   // eagles peak dungeon
   rectangle(2326, 3496, 2331, 3493),
   // polar eagle
   rectangle(2742, 3834, 2750, 3827),
-  // jungle eagle
-  rectangle(2508, 2932, 2515, 2925),
   // desert eagle
   rectangle(3402, 3160, 3406, 3156),
 ];
+const eaglesTransport = [
+  ...eaglesTransportWithoutJungle,
+  // jungle eagle
+  rectangle(2508, 2932, 2515, 2925),
+]
 const waterAltar = rectangle(3181, 3167, 3186, 3161);
 const miscPrinceBrand = rectangle(2497, 3855, 2509, 3845);
 const rellekkaLongHall = rectangle(2655, 3686, 2663, 3665);
@@ -627,8 +624,8 @@ const icyeneGraveyard = rectangle(3678, 3197, 3716, 3172);
 const lumbridgeCastleDiningHall = rectangle(3205, 3227, 3213, 3218);
 const mythsGuildGalvek = rectangle(2464, 2850, 2468, 2844);
 const entranaBalloon = rectangle(2805, 3358, 2812, 3354);
-const jatizsoThroneRoom = rectangle(2403, 3807, 2411, 3799);
-const sophanemMenaphosGate = rectangle(3264, 2788, 3282, 2781);
+const jatizsoThroneRoom = rectangle(2404, 3807, 2411, 3800);
+const sophanemMenaphosGate = rectangle(3268, 2787, 3280, 2783);
 const poisonWasteTree = rectangle(2335, 3109, 2341, 3116);
 const cropCircles = [
   rectangle(2948, 3439, 2958, 3449),
@@ -651,7 +648,7 @@ const cropCircles = [
   rectangle(2533, 3840, 2543, 3850),
 ];
 const rellekkaSquare = rectangle(2627, 3683, 2653, 3667);
-const jester = rectangle(2333, 3801, 2338, 3797);
+const jester = rectangle(2334, 3801, 2338, 3798);
 const seaTrollQueen = rectangle(2337, 3708, 2352, 3692);
 const poisonWaste = rectangle(2321, 3117, 2359, 3081);
 const observatory = rectangle(2433, 3168, 2447, 3154);
@@ -701,6 +698,12 @@ const hespori = rectangle(1230, 3731, 1234, 3727);
 const morytaniaHespori = rectangle(3500, 3365, 3514, 3349);
 const aidOfMyrequeVanstromGadderanks = rectangle(3531, 3214, 3542, 3204);
 const sotfVanescula = rectangle(3542, 3521, 3554, 3513);
+const myrequeLaboratories = [
+  // canifis
+  myrequeHideoutCanifis,
+  // meiyerditch
+  rectangle(3641, 3306, 3645, 3303),
+];
 
 export const songPolygons: Record<
   string,
@@ -2640,8 +2643,8 @@ export const songPolygons: Record<
       },
     ],
   },
-  "Fangs for the Memory": { // TODO add polygons
-    polygons: [],
+  "Fangs for the Memory": {
+    polygons: [myrequeHideoutCanifis, darknessAmbush, sotf],
   },
   "Far Away": {
     polygons: [
@@ -3230,6 +3233,9 @@ export const songPolygons: Record<
   },
   Gaol: {
     polygons: [
+      rectangle(2560, 3027, 2564, 3023),
+      rectangle(2573, 3030, 2577, 3026),
+      rectangle(2499, 2993, 2503, 2989),
       {
         coordinates: [
           [2496, 3008],
@@ -3656,7 +3662,7 @@ export const songPolygons: Record<
     polygons: [dream],
   },
   Impetuous: {
-    polygons: [zanaris],
+    polygons: [zanaris, ...cropCircles],
   },
   "In Between": {
     polygons: keldagrim,
@@ -3815,7 +3821,7 @@ export const songPolygons: Record<
   },
   "Jungle Hunt": {
     polygons: [
-      ...eaglesTransport,
+      ...eaglesTransportWithoutJungle,
       {
         coordinates: [
           [2473, 2816],
@@ -4215,7 +4221,7 @@ export const songPolygons: Record<
   },
   "Lament of Meiyerditch": {
     polygons: [
-      ...myrequeLaboratories,
+      myrequeHideoutCanifis,
       meiyerditchHideout,
       oldManRal,
       {
@@ -8161,7 +8167,7 @@ export const songPolygons: Record<
       },
     ],
   },
-  "Getting Down to Business": {
+  "Getting Down to Business": { // todo cutout
     polygons: [
       {
         coordinates: [
@@ -8447,7 +8453,7 @@ export const songPolygons: Record<
   ...song("Healin' Feelin'", poisonWasteTree),
   ...song("High Spirits"),
   ...song("His Faithful Servants", ancientVaultDT2),
-  ...song("Impulses", zanaris, ...cropCircles),
+  ...song("Impulses", ...cropCircles),
   ...song("In the Shadows", ghorrockDungeon),
   ...song("Incantation", uzer),
   ...song("Iorwerth's Lament", prif),

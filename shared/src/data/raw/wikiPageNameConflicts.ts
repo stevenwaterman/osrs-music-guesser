@@ -32,6 +32,7 @@ export default {
   "Guardians of the Rift": "Guardians_of_the_Rift_(music_track)",
   "Harmony": "Harmony_(music_track)",
   "Haunted Mine": "Haunted_Mine_(music_track)",
+  "His Faithful Servants": "His_Faithful_Servants_(music_track)",
   "Iban": "Iban_(music_track)",
   "Inferno": "Inferno_(music_track)",
   "Into the Tombs": "Into_the_Tombs_(music_track)",
