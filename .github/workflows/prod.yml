@@ -15,9 +15,9 @@ jobs:
         with:
           node-version: "20.x"
       - run: yarn install --frozen-lockfile
-      - run: yarn run build
+      - run: yarn export-songs
         working-directory: ./data
-      - run: yarn run build
+      - run: yarn build
         working-directory: ./client
       - run: |
           git config --local user.email "action@github.com"
