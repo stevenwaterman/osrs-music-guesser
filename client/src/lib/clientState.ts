@@ -78,7 +78,7 @@ class State_StartScreen_HowToPlay extends BaseState<
 
 export abstract class SinglePlayerState<
   Name extends string,
-  Data extends {},
+  Data extends {}
 > extends BaseState<
   `SinglePlayer_${Name}`,
   Data & {
@@ -210,9 +210,7 @@ class State_StartScreen_Multiplayer extends BaseState<
     internalStateStore.set(new State_StartScreen(this.data));
   }
   public create(userId: string) {
-    const ws = new WebSocket(
-      `wss://api.tunescape07.com/create?user=${userId}`
-    );
+    const ws = new WebSocket(`wss://api.tunescape07.com/create?user=${userId}`);
     // const ws = new WebSocket(`ws://localhost:4433/create?user=${userId}`);
     this.listenToWs(ws);
   }
@@ -249,7 +247,7 @@ class State_StartScreen_Multiplayer extends BaseState<
 }
 
 class State_Multiplayer_Active<
-  ServerStateName extends StateInterface.AnyServerState["stateName"],
+  ServerStateName extends StateInterface.AnyServerState["stateName"]
 > extends BaseState<
   `Multiplayer_Active`,
   StateInterface.ClientStateData<ServerStateName>
@@ -272,8 +270,7 @@ class State_Multiplayer_Active<
   }
 
   public isAnyMultiplayer<
-    Names extends
-      StateInterface.ServerStates[keyof StateInterface.ServerStates]["stateName"],
+    Names extends StateInterface.ServerStates[keyof StateInterface.ServerStates]["stateName"]
   >(...names: Names[]): this is MultiplayerState<Names> {
     return (names as string[]).includes(this.data.stateName);
   }
@@ -294,28 +291,12 @@ export type State = {
   >;
 };
 export type MultiplayerState<
-  Name extends
-    StateInterface.ServerStates[keyof StateInterface.ServerStates]["stateName"],
+  Name extends StateInterface.ServerStates[keyof StateInterface.ServerStates]["stateName"]
 > = State_Multiplayer_Active<Name>;
 
 export type AnyState = State[keyof State];
-const song = Object.keys(songs)[755];
 const internalStateStore: Writable<AnyState> = writable(
-  // new State_StartScreen({})
-  new State_SinglePlayer_EndOfFinalRound({
-    result: {
-      guess: songs[song].locations[0]?.center,
-      score: 0,
-      distance: 0,
-      closest: songs[song].locations[0]?.center,
-      song,
-      timeMs: 0,
-    },
-    songs: [song],
-    guessHistory: [],
-    round: 1,
-    maxRounds: 5,
-  })
+  new State_StartScreen({})
 );
 export const stateStore: Readable<AnyState> = {
   subscribe: internalStateStore.subscribe,
