@@ -17,6 +17,10 @@ RUN yarn install --frozen-lockfile
 WORKDIR /data
 RUN yarn export-songs
 
+# We have to recompile because now data.ts will have changed
+WORKDIR /shared
+RUN yarn build
+
 WORKDIR /server
 RUN yarn build
 

@@ -18,6 +18,8 @@ jobs:
       - run: yarn export-songs
         working-directory: ./data
       - run: yarn build
+        working-directory: ./shared
+      - run: yarn build
         working-directory: ./client
       - run: |
           git config --local user.email "action@github.com"
@@ -26,7 +28,7 @@ jobs:
           git reset
           git add client/dist/* -f
           git mv client/dist/* ./ -k
-          echo 'tunescape07.com' > CNAME
+          echo "tunescape07.com" > CNAME
           git add CNAME
           touch .nojekyll
           git add .nojekyll
