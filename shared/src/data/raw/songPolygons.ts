@@ -31,6 +31,17 @@ function rectangle(
 // - crop circles (puro puro is in the lumbridge swamp shed)
 // - nightmare zone
 
+const zanikGetsHateCrimed = [
+  // Main door to lumbridge castle
+  rectangle(3216, 3221, 3219, 3217),
+  // Back door
+  rectangle(3202, 3217, 3205, 3213)
+]
+const taleOfTheRighteous = rectangle(1540, 3572, 1544, 3568);
+const mysticalMirror = rectangle(3210, 2958, 3217, 2951);
+const sote = rectangle(2567, 3334, 2571, 3330);
+const tempoross = rectangle(3008, 2944, 3072, 3008);
+const ripBob = rectangle(2929, 3560, 2934, 3555);
 const darknessAmbush = rectangle(3587, 3334, 3594, 3326);
 const sotf = rectangle(3727, 3321, 3731, 3317);
 const corsairCoveDungeon = [
@@ -165,13 +176,15 @@ const dwarvernMine = [
   rectangle(3016, 3452, 3020, 3448),
 ];
 const kendalCave = rectangle(2802, 3706, 2807, 3701);
+  
+  const lumbridgeWatermill = rectangle(3225, 3287, 3237, 3278);
 const swampCavesDorgeshKaanTears = [
   // Lumbridge castle basement
   rectangle(3207, 3220, 3211, 3216),
   // Lumbridge swamp
   rectangle(3167, 3174, 3171, 3170),
   // Watermill
-  rectangle(3225, 3287, 3237, 3278),
+  lumbridgeWatermill
 ];
 const deepWildyDungeon = rectangle(3043, 3926, 3047, 3922);
 const ardySewerWest = rectangle(2585, 3237, 2589, 3233);
@@ -192,7 +205,7 @@ const hauntedMine = [
 ];
 const culinaromancer = rectangle(3207, 3220, 3209, 3218);
 const recruitmentDrive = rectangle(2961, 3340, 2965, 3336);
-const clanWars = rectangle(3126, 3625, 3132, 3618);
+const clanWars = rectangle(3126, 3626, 3132, 3618);
 const lms = rectangle(3138, 3646, 3146, 3632);
 const clanHall = rectangle(3183, 3474, 3188, 3468);
 const wizardTowerBasement = rectangle(3103, 3164, 3106, 3159);
@@ -460,14 +473,14 @@ const runeEssenceMine = [
   // cromperty ardy
   rectangle(2680, 3326, 2684, 3322),
   // brimstail gnome
-  brimstail
+  brimstail,
 ];
 const sourhogCave = rectangle(3148, 3349, 3152, 3345);
 const ancientsPyramid = [
   // top entrance
   rectangle(3232, 2899, 3235, 2896),
   // back entrance
-  rectangle(3232, 2889, 3235, 2886)
+  rectangle(3232, 2889, 3235, 2886),
 ];
 const tutorialIslandCave = rectangle(3086, 3121, 3090, 3117);
 const woodcuttingGuildCave = rectangle(1602, 3510, 1606, 3506);
@@ -480,32 +493,38 @@ const scorpia = [
   // east
   rectangle(3242, 3951, 3246, 3947),
 ];
+const monkeyMadness = rectangle(2464, 3500, 2468, 3496);
 const ghorrockDungeon = rectangle(2865, 3943, 2869, 3939);
 const airAltar = rectangle(2981, 3296, 2989, 3288);
-const iorwerthDungeon = rectangle(2199, 3297, 2206, 3290);
-const lumbridgeWaterMillSigmundFight = rectangle(3225, 3286, 3236, 327);
+const iorwerthDungeon = rectangle(2199, 3294, 2203, 3290);
 const lletyaCouncilHutGrandLibrary = rectangle(2349, 3175, 2357, 3168);
 const riverElidWaterfall = rectangle(3369, 3134, 3373, 3130);
 const burghDeRottBasement = rectangle(3487, 3233, 3491, 3229);
 const isleOfSoulsDungeon = rectangle(2307, 2917, 2311, 2921);
 const shaikahan = rectangle(2893, 3109, 2925, 3082);
-const zalcano = rectangle(2253, 3311, 2263, 3301);
+const zalcano = rectangle(2255, 3309, 2259, 3305);
 const asgarnianIceDungeon = rectangle(3005, 3152, 3009, 3148);
 const daeyaltEssenceMine = rectangle(3630, 3342, 3634, 3338);
-const myrequeHideoutCanifis = rectangle(3507, 3450, 3511, 3446);
-const draynorManorUpstairsKillerwatts = rectangle(3107, 3365, 3110, 3362);
+const myrequeHideoutCanifis = [
+  // South
+  rectangle(3507, 3450, 3511, 3446),
+  // North
+  rectangle(3493, 3466, 3497, 3462)
+]
+const draynorManorUpstairsKillerwatts = rectangle(3108, 3365, 3110, 3363);
 const crabclawCaves = rectangle(1642, 3451, 1646, 3447);
-const towerofMagic = rectangle(1563, 3800, 1596, 3838);
+const towerofMagic = rectangle(1563, 3800, 1596, 3839);
 const viyeldiCaves = rectangle(2778, 2938, 2784, 2933);
 const karamjaShipYard = rectangle(2944, 3068, 3005, 3013);
 const verSinhaza = rectangle(3655, 3224, 3678, 3215);
-const grandTreeUpstairs = rectangle(2462, 3498, 2468, 3493);
-const slayerTower = rectangle(3403, 3579, 3453, 3530);
-const marimboDungeon = rectangle(2804, 2786, 2806, 2784);
+const grandTreeUpstairs = rectangle(2465, 3497, 2468, 3494);
+const slayerTower = rectangle(3405, 3580, 3453, 3530);
+const marimboDungeon = rectangle(2807, 2786, 2808, 2785);
+const mamuletCavern = rectangle(2759, 2773, 2771, 2764);
 const baxtorianWaterfallDungeon = rectangle(2509, 3467, 2513, 3461);
 const draynorManorCellar = rectangle(3113, 3359, 3117, 3355);
-const pyramidPlunder = rectangle(3282, 2801, 3294, 2785);
-const goblinVillageKitchen = rectangle(2958, 3505, 2961, 3508);
+const pyramidPlunder = rectangle(3283, 2801, 3295, 2785);
+const goblinVillageKitchen = rectangle(2959, 3505, 2963, 3509);
 const fishingTrawler = rectangle(2666, 3165, 2670, 3161);
 const weissMakingFriendsSneakCave = rectangle(2852, 3946, 2856, 3942);
 const kraken = rectangle(2276, 3613, 2280, 3609);
@@ -516,29 +535,30 @@ const digsiteDT2 = rectangle(3381, 3421, 3386, 3416);
 const balloonTransport = [
   // entrana
   rectangle(2805, 3358, 2812, 3354),
-  // taverley
-  rectangle(2935, 3424, 2939, 3420),
-  // crafting guild
-  rectangle(2920, 3303, 2924, 3299),
-  // varrock
-  rectangle(3297, 3482, 3301, 3478),
-  // castle wars
-  rectangle(2457, 3110, 2461, 3106),
-  // grand tree
-  rectangle(2477, 3461, 2481, 3457),
+  // // taverley
+  // rectangle(2935, 3424, 2939, 3420),
+  // // crafting guild
+  // rectangle(2920, 3303, 2924, 3299),
+  // // varrock
+  // rectangle(3297, 3482, 3301, 3478),
+  // // castle wars
+  // rectangle(2457, 3110, 2461, 3106),
+  // // grand tree
+  // rectangle(2477, 3461, 2481, 3457),
 ];
 const ancientVaultDT2 = rectangle(3500, 2978, 3519, 2965);
+const dt2 = rectangle(3506, 2973, 3510, 2969);
 const digsiteDungeon = [
   // east
-  rectangle(3366, 3431, 3373, 3422),
+  rectangle(3367, 3431, 3373, 3423),
   // west
-  rectangle(3349, 3419, 3356, 3414),
+  rectangle(3350, 3419, 3356, 3415),
 ];
 const championsChallenge = rectangle(3187, 3357, 3191, 3353);
 const shayzienCrypt = rectangle(1481, 3551, 1485, 3547);
-const koscheiFightFremTrials = rectangle(2661, 3696, 2669, 3689);
+const koscheiFightFremTrials = rectangle(2662, 3696, 2669, 3690);
 const poisonWasteDungeon = rectangle(2317, 3096, 2325, 3105);
-const hallowedSepulchre = rectangle(3652, 3388, 3656, 3384);
+const hallowedSepulchre = rectangle(3652, 3389, 3657, 3385);
 const jiggigZogreDungeon = rectangle(2483, 3045, 2487, 3041);
 const leafTraps = [
   // north
@@ -618,8 +638,8 @@ const varrockPalaceUpstairs = [
 ];
 const varrockSquare = rectangle(3205, 3438, 3225, 3421);
 const dragonSlayerCrandorCrash = rectangle(2840, 3238, 2870, 3217);
-const delrith = rectangle(3220, 3377, 3235, 3361);
-const castleDrakanCourtyard = rectangle(3560, 3369, 3590, 3349);
+const delrith = rectangle(3221, 3377, 3236, 3362);
+const castleDrakanCourtyard = rectangle(3561, 3368, 3590, 3349);
 const icyeneGraveyard = rectangle(3678, 3197, 3716, 3172);
 const lumbridgeCastleDiningHall = rectangle(3205, 3227, 3213, 3218);
 const mythsGuildGalvek = rectangle(2464, 2850, 2468, 2844);
@@ -693,17 +713,18 @@ const battleofWestArdougne = [
   rectangle(2566, 3311, 2590, 3282),
 ];
 const treeGnomeVillageDungeon = rectangle(2531, 3157, 2535, 3153);
-const varrockLibrary = rectangle(3206, 3499, 3215, 3489);
+const varrockLibrary = rectangle(3207, 3498, 3215, 3490);
 const hespori = rectangle(1230, 3731, 1234, 3727);
 const morytaniaHespori = rectangle(3500, 3365, 3514, 3349);
 const aidOfMyrequeVanstromGadderanks = rectangle(3531, 3214, 3542, 3204);
 const sotfVanescula = rectangle(3542, 3521, 3554, 3513);
 const ratcatchers = rectangle(3148, 3413, 3152, 3409);
+const laboratoriesOnlyMeiyerditch = rectangle(3641, 3306, 3645, 3303);
 const myrequeLaboratories = [
   // canifis
-  myrequeHideoutCanifis,
+  ...myrequeHideoutCanifis,
   // meiyerditch
-  rectangle(3641, 3306, 3645, 3303),
+  laboratoriesOnlyMeiyerditch,
 ];
 
 export const songPolygons: Record<
@@ -2650,7 +2671,7 @@ export const songPolygons: Record<
     ],
   },
   "Fangs for the Memory": {
-    polygons: [myrequeHideoutCanifis, darknessAmbush, sotf],
+    polygons: [...myrequeHideoutCanifis, darknessAmbush, sotf],
   },
   "Far Away": {
     polygons: [
@@ -3668,7 +3689,7 @@ export const songPolygons: Record<
     polygons: [dream],
   },
   Impetuous: {
-    polygons: [zanaris, ...cropCircles],
+    polygons: [zanaris],
   },
   "In Between": {
     polygons: keldagrim,
@@ -4227,7 +4248,7 @@ export const songPolygons: Record<
   },
   "Lament of Meiyerditch": {
     polygons: [
-      myrequeHideoutCanifis,
+      ...myrequeHideoutCanifis,
       meiyerditchHideout,
       oldManRal,
       {
@@ -6252,10 +6273,11 @@ export const songPolygons: Record<
     polygons: [...varrockSewers, tutorialIslandCave, woodcuttingGuildCave],
   },
   "Scape Main": {
-    polygons: [boatPartDS2],
+    polygons: [ds2],
   },
   "Scape Sad": {
     polygons: [
+      ripBob,
       {
         coordinates: [
           [3264, 3840],
@@ -6401,6 +6423,9 @@ export const songPolygons: Record<
   },
   "Sea Shanty 2": {
     polygons: [
+      // Prif docks
+      rectangle(2157, 3330, 2170, 3325),
+      tempoross,
       {
         coordinates: [
           [3065, 3250],
@@ -6585,7 +6610,7 @@ export const songPolygons: Record<
     ],
   },
   "Sigmund's Showdown": {
-    polygons: [lumbridgeWaterMillSigmundFight],
+    polygons: [lumbridgeWatermill],
   },
   "The Slayer": {
     polygons: [fremennikSlayerCave],
@@ -6617,7 +6642,7 @@ export const songPolygons: Record<
     ],
   },
   "Song of the Elves": {
-    polygons: [lletyaCouncilHutGrandLibrary],
+    polygons: [sote],
   },
   "Soul Fall": {
     polygons: [
@@ -6796,13 +6821,13 @@ export const songPolygons: Record<
     ],
   },
   Stillness: {
-    polygons: [daeyaltEssenceMine, myrequeHideoutCanifis],
+    polygons: [daeyaltEssenceMine, ...myrequeHideoutCanifis],
   },
   "Storm Brew": {
     polygons: [draynorManorUpstairsKillerwatts],
   },
   Stranded: {
-    polygons: [
+    polygons: [mysticalMirror,
       {
         coordinates: [
           [2816, 3712],
@@ -6902,10 +6927,10 @@ export const songPolygons: Record<
     ],
   },
   Superstition: {
-    polygons: [towerofMagic, viyeldiCaves],
+    polygons: [taleOfTheRighteous, viyeldiCaves],
   },
   Suspicious: {
-    polygons: [karamjaShipYard],
+    polygons: [karamjaShipYard, monkeyMadness],
   },
   "Tale of Keldagrim": {
     polygons: [...keldagrim],
@@ -6937,7 +6962,7 @@ export const songPolygons: Record<
     polygons: [slayerTower],
   },
   Temple: {
-    polygons: [marimboDungeon],
+    polygons: [marimboDungeon, mamuletCavern],
   },
   "Temple of Light": {
     polygons: [...undergroundPass],
@@ -7358,7 +7383,7 @@ export const songPolygons: Record<
     polygons: [championsChallenge],
   },
   Village: {
-    polygons: [
+    polygons: [mysticalMirror,
       {
         coordinates: [
           [3456, 3456],
@@ -7599,6 +7624,7 @@ export const songPolygons: Record<
   Waterlogged: {
     polygons: [
       ...templeTrekking,
+      sotf,
       {
         coordinates: [
           [3456, 3392],
@@ -7898,7 +7924,7 @@ export const songPolygons: Record<
     polygons: [godWars],
   },
   "Zanik's Theme": {
-    polygons: [...swampCavesDorgeshKaanTears],
+    polygons: [...swampCavesDorgeshKaanTears, ...zanikGetsHateCrimed],
   },
   "Zaros Zeitgeist": {
     polygons: [godWars],
@@ -8527,7 +8553,7 @@ export const songPolygons: Record<
   ...song("Sea Shanty Xmas"),
   ...song("The Seed of Crwys", prif),
   ...song("Shattered Relics"),
-  ...song("Showdown"),
+  ...song("Showdown", monkeyMadness),
   ...song("The Sinclairs", camelotCastleEastStatue),
   ...song("Snowflake & My Arm", weissCentre),
   ...song("Song of the Silent Choir", camdozaal),
@@ -8535,10 +8561,10 @@ export const songPolygons: Record<
   ...song("The Spymaster", sophanemOutsideAltar, maisasCampRuinsOfUllek),
   ...song("Stand Up and Be Counted", ...battleofWestArdougne),
   ...song("Storeroom Shuffle", treeGnomeVillageDungeon),
-  ...song("Strange Place"),
+  ...song("Strange Place", unferth),
   ...song("Surok's Theme", varrockLibrary),
   ...song("Tarn Razorlor", ...hauntedMine),
-  ...song("The Terrible Caverns", ...myrequeLaboratories),
+  ...song("The Terrible Caverns", laboratoriesOnlyMeiyerditch),
   ...song("Terrorbird Tussle", poisonWasteDungeon),
   ...song("Test of Companionship", toa),
   ...song("Test of Isolation", toa),
@@ -8554,7 +8580,7 @@ export const songPolygons: Record<
   ...song("Wally the Hero", delrith),
   ...song("We are the Fairies"),
   ...song("Winter Funfair"),
-  ...song("A Worthy Foe", ancientVaultDT2),
+  ...song("A Worthy Foe", dt2),
   ...song("You Have My Attention", castleDrakanCourtyard),
 };
 
