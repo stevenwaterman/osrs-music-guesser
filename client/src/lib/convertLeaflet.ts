@@ -1,4 +1,4 @@
-import type { Coordinate, Polygon } from "osrs-music-guesser-shared";
+import type { Coordinate, Polygon } from "tunescape07-shared";
 import L from "leaflet";
 
 export const convertLeaflet = {

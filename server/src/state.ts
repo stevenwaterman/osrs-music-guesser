@@ -1,6 +1,13 @@
 import WebSocket from "ws";
-import { randomSongs, scoreGuess, StateInterface, pick, omit, mapValues } from "osrs-music-guesser-shared";
-import type { Coordinate } from "osrs-music-guesser-shared";
+import {
+  randomSongs,
+  scoreGuess,
+  StateInterface,
+  pick,
+  omit,
+  mapValues,
+} from "tunescape07-shared";
+import type { Coordinate } from "tunescape07-shared";
 export class StateStore implements StateInterface.StateStore {
   public state: StateInterface.AnyServerState;
 

@@ -1,6 +1,6 @@
 import { writable, type Readable, type Writable } from "svelte/store";
-import type { Coordinate, StateInterface } from "osrs-music-guesser-shared";
-import { scoreGuess, randomSongs, songs } from "osrs-music-guesser-shared";
+import type { Coordinate, StateInterface } from "tunescape07-shared";
+import { scoreGuess, randomSongs, songs } from "tunescape07-shared";
 
 function omit<Input extends {}, Keys extends keyof Input>(
   input: Input,
@@ -78,7 +78,7 @@ class State_StartScreen_HowToPlay extends BaseState<
 
 export abstract class SinglePlayerState<
   Name extends string,
-  Data extends {}
+  Data extends {},
 > extends BaseState<
   `SinglePlayer_${Name}`,
   Data & {
@@ -210,12 +210,16 @@ class State_StartScreen_Multiplayer extends BaseState<
     internalStateStore.set(new State_StartScreen(this.data));
   }
   public create(userId: string) {
-    const ws = new WebSocket(`wss://osrs-music-api.stevenwaterman.uk/create?user=${userId}`);
+    const ws = new WebSocket(
+      `wss://api.tunescape07.com/create?user=${userId}`
+    );
     // const ws = new WebSocket(`ws://localhost:4433/create?user=${userId}`);
     this.listenToWs(ws);
   }
   public join(userId: string, gameId: string) {
-    const ws = new WebSocket(`wss://osrs-music-api.stevenwaterman.uk/join?user=${userId}&game=${gameId}`);
+    const ws = new WebSocket(
+      `wss://api.tunescape07.com/join?user=${userId}&game=${gameId}`
+    );
     // const ws = new WebSocket(`ws://localhost:4433/join?user=${userId}&game=${gameId}`);
     this.listenToWs(ws);
   }
@@ -245,8 +249,11 @@ class State_StartScreen_Multiplayer extends BaseState<
 }
 
 class State_Multiplayer_Active<
-  ServerStateName extends StateInterface.AnyServerState["stateName"]
-> extends BaseState<`Multiplayer_Active`, StateInterface.ClientStateData<ServerStateName>> {
+  ServerStateName extends StateInterface.AnyServerState["stateName"],
+> extends BaseState<
+  `Multiplayer_Active`,
+  StateInterface.ClientStateData<ServerStateName>
+> {
   public name = "Multiplayer_Active" as const;
 
   constructor(
@@ -265,7 +272,8 @@ class State_Multiplayer_Active<
   }
 
   public isAnyMultiplayer<
-    Names extends StateInterface.ServerStates[keyof StateInterface.ServerStates]["stateName"]
+    Names extends
+      StateInterface.ServerStates[keyof StateInterface.ServerStates]["stateName"],
   >(...names: Names[]): this is MultiplayerState<Names> {
     return (names as string[]).includes(this.data.stateName);
   }
@@ -286,7 +294,8 @@ export type State = {
   >;
 };
 export type MultiplayerState<
-  Name extends StateInterface.ServerStates[keyof StateInterface.ServerStates]["stateName"]
+  Name extends
+    StateInterface.ServerStates[keyof StateInterface.ServerStates]["stateName"],
 > = State_Multiplayer_Active<Name>;
 
 export type AnyState = State[keyof State];
@@ -300,12 +309,12 @@ const internalStateStore: Writable<AnyState> = writable(
       distance: 0,
       closest: songs[song].locations[0]?.center,
       song,
-      timeMs: 0
+      timeMs: 0,
     },
     songs: [song],
     guessHistory: [],
     round: 1,
-    maxRounds: 5
+    maxRounds: 5,
   })
 );
 export const stateStore: Readable<AnyState> = {

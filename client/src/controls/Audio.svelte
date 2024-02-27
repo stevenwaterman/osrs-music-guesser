@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { songs } from "osrs-music-guesser-shared";
+  import { songs } from "tunescape07
   import { fade } from "svelte/transition";
 
   export let song: string;

@@ -1,6 +1,6 @@
 <script lang="ts">
   import { fade } from "svelte/transition";
-  import { songs } from "osrs-music-guesser-shared";
+  import { songs } from "tunescape07-shared";
   import type { State } from "../lib/clientState";
 
   export let state: State[
@@ -12,11 +12,7 @@
 </script>
 
 <div class="infoBox" transition:fade|global>
-  <a
-    class="title"
-    target="_blank"
-    href={song.wikiUrl}>{song.name}</a
-  >
+  <a class="title" target="_blank" href={song.wikiUrl}>{song.name}</a>
   <div class="info">
     {#each song.description as line}
       <p>{line}</p>

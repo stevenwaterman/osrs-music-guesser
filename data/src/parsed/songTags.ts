@@ -1,4 +1,4 @@
-import { Song, toMap } from "osrs-music-guesser-shared";
+import { Song, toMap } from "tunescape07-shared";
 import { songsByModAsh, songsByModEd } from "../raw/songComposers.js";
 import { songNames } from "./wikiMusicPage.js";
 
@@ -9,5 +9,5 @@ export const songTags: Record<string, Song["tags"]> = toMap(
       modAsh: songsByModAsh.includes(name),
       modEd: songsByModEd.includes(name),
     },
-  ]),
+  ])
 );

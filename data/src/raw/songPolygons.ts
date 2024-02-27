@@ -1,11 +1,11 @@
-import type { Coordinate, Polygon } from "osrs-music-guesser-shared";
+import type { Coordinate, Polygon } from "tunescape07-shared";
 
 type PolygonWithoutCenter = Omit<Polygon, "center">;
 function rectangle(
   left: number,
   top: number,
   right: number,
-  bottom: number,
+  bottom: number
 ): PolygonWithoutCenter {
   const minX = Math.min(left, right);
   const maxX = Math.max(left, right);
@@ -8472,7 +8472,7 @@ export const songPolygons: Record<
     "Domain of the Vampyres",
     castleDrakanCourtyard,
     verSinhaza,
-    icyeneGraveyard,
+    icyeneGraveyard
   ),
   ...song("Don't Panic Zanik"),
   ...song("Dorgeshuun Treaty", lumbridgeCastleDiningHall),

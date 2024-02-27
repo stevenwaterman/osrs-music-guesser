@@ -1,10 +1,10 @@
 {
-  "name": "osrs-music-guesser-client",
+  "name": "tunescape07-client",
   "version": "1.0.0",
   "type": "module",
   "scripts": {
     "dev": "concurrently --kill-others \"cd ../shared && yarn run dev\" \"vite\"",
-    "build": "vite build --base=/osrs-music-guesser/"
+    "build": "vite build"
   },
   "devDependencies": {
     "@sveltejs/vite-plugin-svelte": "^3.0.2",
@@ -20,6 +20,6 @@
   "dependencies": {
     "flatten-js": "^0.6.9",
     "leaflet": "^1.9.4",
-    "osrs-music-guesser-shared": "1.0.0"
+    "tunescape07-shared": "1.0.0"
   }
 }

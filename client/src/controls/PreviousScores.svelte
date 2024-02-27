@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { songs } from "osrs-music-guesser-shared";
+  import { songs } from "tunescape07-shared";
   import { fade } from "svelte/transition";
   import type { State, StateGroup } from "../lib/clientState";
 
@@ -16,9 +16,7 @@
   {#each guessHistory as guess (guess.song)}
     <tr in:fade|global>
       <td
-        ><a
-          target="_blank"
-          href={songs[guess.song].wikiUrl}>{guess.song}</a
+        ><a target="_blank" href={songs[guess.song].wikiUrl}>{guess.song}</a
         ></td
       >
       <td>{guess.score}</td>

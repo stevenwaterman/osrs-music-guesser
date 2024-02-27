@@ -1,5 +1,5 @@
 {
-  "name": "osrs-music-guesser-data",
+  "name": "tunescape07-data",
   "version": "1.0.0",
   "type": "module",
   "scripts": {
@@ -12,7 +12,7 @@
     "typescript": "^5.2.2"
   },
   "dependencies": {
-    "osrs-music-guesser-shared": "1.0.0",
+    "tunescape07-shared": "1.0.0",
     "prettier": "^3.2.5"
   }
 }

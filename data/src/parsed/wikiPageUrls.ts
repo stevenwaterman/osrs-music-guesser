@@ -1,6 +1,6 @@
 import { songNames } from "./wikiMusicPage.js";
 import pageConflicts from "../raw/wikiPageNameConflicts.js";
-import { toMap } from "osrs-music-guesser-shared";
+import { toMap } from "tunescape07-shared";
 
 export const wikiPageUrls = toMap(
   songNames.map((song) => {
@@ -13,5 +13,5 @@ export const wikiPageUrls = toMap(
         `https://oldschool.runescape.wiki/w/${encodeURIComponent(song)}`,
       ];
     }
-  }),
+  })
 );

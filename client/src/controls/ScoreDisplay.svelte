@@ -2,7 +2,7 @@
   import { tweened } from "svelte/motion";
   import { fade } from "svelte/transition";
   import { type State } from "../lib/clientState";
-  import { sleep } from "osrs-music-guesser-shared";
+  import { sleep } from "tunescape07-shared";
 
   export let state: State[
     | "SinglePlayer_RevealingAnswer"
@@ -20,9 +20,7 @@
       })
       .then(() => sleep(500))
       .then(() => {
-        (
-          state as State["SinglePlayer_RevealingAnswer"]
-        ).animationComplete();
+        (state as State["SinglePlayer_RevealingAnswer"]).animationComplete();
       });
   }
 

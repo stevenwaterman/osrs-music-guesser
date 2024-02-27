@@ -1,5 +1,5 @@
 import { songPolygons } from "../raw/songPolygons.js";
-import { Polygon, convertFlatten, mapValues } from "osrs-music-guesser-shared";
+import { Polygon, convertFlatten, mapValues } from "tunescape07-shared";
 
 function addCenter(polygon: Omit<Polygon, "center">): Polygon {
   const centerPoint = convertFlatten.polygon.to(polygon).box.center;
@@ -29,5 +29,5 @@ export const songLocations: Record<string, Polygon[]> = mapValues(
   (song) =>
     song.polygons
       .map((poly) => addCenter(poly))
-      .map((poly) => removeDuplicateStartEnd(poly)),
+      .map((poly) => removeDuplicateStartEnd(poly))
 );

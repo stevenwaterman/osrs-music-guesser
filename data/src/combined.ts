@@ -1,4 +1,4 @@
-import { toMap, Song } from "osrs-music-guesser-shared";
+import { toMap, Song } from "tunescape07-shared";
 import { audioUrls } from "./parsed/audioUrls.js";
 import { songLocations } from "./parsed/songLocations.js";
 import {
@@ -23,5 +23,5 @@ export const songsAtRuntime: Record<string, Song> = toMap(
       locations: songLocations[name],
       tags: songTags[name],
     },
-  ]),
+  ])
 );

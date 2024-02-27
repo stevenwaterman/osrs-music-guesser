@@ -1,4 +1,4 @@
-import { toMap } from "osrs-music-guesser-shared";
+import { toMap } from "tunescape07-shared";
 import rawData from "../raw/wikiMusicPage.js";
 const songs: Array<{
   name: string;
@@ -20,8 +20,8 @@ const songs: Array<{
 
 export const songNames: string[] = songs.map(({ name }) => name);
 export const songUnlockHints: Record<string, string> = toMap(
-  songs.map(({ name, unlockHint }) => [name, unlockHint]),
+  songs.map(({ name, unlockHint }) => [name, unlockHint])
 );
 export const songDurations: Record<string, number> = toMap(
-  songs.map(({ name, durationSecs }) => [name, durationSecs]),
+  songs.map(({ name, durationSecs }) => [name, durationSecs])
 );

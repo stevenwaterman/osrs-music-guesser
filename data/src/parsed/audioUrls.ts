@@ -1,4 +1,4 @@
-import { toMap } from "osrs-music-guesser-shared";
+import { toMap } from "tunescape07-shared";
 import { songNames } from "./wikiMusicPage.js";
 import urlConflicts from "../raw/wikiSongNameConflicts.js";
 
@@ -8,6 +8,6 @@ export const audioUrls = toMap(
       urlConflicts[song as keyof typeof urlConflicts];
     const urlPart = conflict ?? song;
     const encoded = encodeURIComponent(urlPart.replaceAll(" ", "_"));
-    return [song, `https://oldschool.runescape.wiki/images/${encoded}.ogg`]; 
-  }),
+    return [song, `https://oldschool.runescape.wiki/images/${encoded}.ogg`];
+  })
 );
