@@ -1,4 +1,4 @@
-import { songs } from "./index.js";
+import { songs } from "./data.js";
 import { shuffle } from "./util.js";
 
 export function randomSongs(count?: number): string[] {

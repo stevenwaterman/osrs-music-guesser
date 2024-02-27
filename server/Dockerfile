@@ -15,10 +15,10 @@ RUN yarn install --frozen-lockfile
 
 # We have to do this manually to output data.ts
 WORKDIR /data
-RUN yarn run build
+RUN yarn export-songs
 
 WORKDIR /server
-RUN yarn run build
+RUN yarn build
 
 EXPOSE 4433
 ENTRYPOINT ["node", "/server/dist/index.js"]

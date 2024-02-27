@@ -1,6 +1,6 @@
 import { convertFlatten } from "./coordinates.js";
 import type { Coordinate, Polygon } from "./coordinates.js";
-import { songs } from "./index.js";
+import { songs } from "./data.js";
 
 export type Score = {
   closest: Coordinate;

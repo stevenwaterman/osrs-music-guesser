@@ -4,7 +4,7 @@
   "type": "module",
   "scripts": {
     "dev": "tsx watch src/index.ts --clear-screen=false",
-    "build": "tsx src/index.ts"
+    "export-songs": "tsc --build && node dist/index.js"
   },
   "devDependencies": {
     "@types/node": "^20.11.20",
