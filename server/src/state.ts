@@ -166,8 +166,8 @@ export class RoundOneGuess extends StateInterface.RoundOneGuess {
     const bestScore = Math.max(
       ...Object.values(results).map((result) => result?.score ?? 0)
     );
-    const draw = Object.values(results).every(
-      (result) => result?.score === bestScore
+    const bothPerfect = Object.values(results).every(
+      (result) => result?.distance === 0
     );
     const toState = new RoundOver(
       this.store,
@@ -175,9 +175,8 @@ export class RoundOneGuess extends StateInterface.RoundOneGuess {
       mapValues(this.users, (user) => {
         const result = results[user.userId];
         const score = result?.score ?? 0;
-        const loser = score < bestScore || (draw && user.userId === userId);
         const baseDamage = bestScore - score;
-        const damage = loser ? Math.max(baseDamage, 500) : baseDamage;
+        const damage = (bothPerfect && user.guessTime > 0) ? 500 : baseDamage;
 
         return {
           userId: user.userId,
