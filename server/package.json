@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "dev": "concurrently --kill-others \"cd ../shared && yarn run watch\" \"tsx watch src/index.ts\"",
+    "dev": "concurrently --kill-others \"cd ../shared && yarn run dev\" \"tsx watch src/index.ts --clear-screen=false\"",
     "build": "tsc --build"
   },
   "devDependencies": {

@@ -1,7 +1,7 @@
 export async function describeSong(pageTitle: string) {
   // This is what happens when ya boi cba to parse wikitext properly
   const data = await fetch(
-    `https://oldschool.runescape.wiki/api.php?action=query&prop=revisions&rvprop=content&titles=${pageTitle}&format=json`
+    `https://oldschool.runescape.wiki/api.php?action=query&prop=revisions&rvprop=content&titles=${pageTitle}&format=json`,
   ).then((res) => res.json());
   const content: string = (Object.values(data.query.pages) as any)[0]
     .revisions[0]["*"];
@@ -23,11 +23,11 @@ export async function describeSong(pageTitle: string) {
     .replaceAll(`\n*`, "\n");
   const withoutSquareBrackets = withoutBullets.replace(
     /\[\[([^\[\]\|]*?)\|?([^\[\]\|]+)\]\]/g,
-    "$2"
+    "$2",
   );
   const withoutCurlyBrakets = withoutSquareBrackets.replace(
     /\{\{(([^\{\}\|]*?)\|?)*?([^\{\}\|]+)\}\}/g,
-    "$3"
+    "$3",
   );
   return withoutCurlyBrakets.split("\n");
 }

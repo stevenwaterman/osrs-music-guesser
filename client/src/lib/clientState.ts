@@ -1,6 +1,6 @@
 import { writable, type Readable, type Writable } from "svelte/store";
 import type { Coordinate, StateInterface } from "osrs-music-guesser-shared";
-import { scoreGuess, randomSongs } from "osrs-music-guesser-shared";
+import { scoreGuess, randomSongs, songs } from "osrs-music-guesser-shared";
 
 function omit<Input extends {}, Keys extends keyof Input>(
   input: Input,
@@ -290,8 +290,23 @@ export type MultiplayerState<
 > = State_Multiplayer_Active<Name>;
 
 export type AnyState = State[keyof State];
+const song = Object.keys(songs)[755];
 const internalStateStore: Writable<AnyState> = writable(
-  new State_StartScreen({})
+  // new State_StartScreen({})
+  new State_SinglePlayer_EndOfFinalRound({
+    result: {
+      guess: songs[song].locations[0]?.center,
+      score: 0,
+      distance: 0,
+      closest: songs[song].locations[0]?.center,
+      song,
+      timeMs: 0
+    },
+    songs: [song],
+    guessHistory: [],
+    round: 1,
+    maxRounds: 5
+  })
 );
 export const stateStore: Readable<AnyState> = {
   subscribe: internalStateStore.subscribe,

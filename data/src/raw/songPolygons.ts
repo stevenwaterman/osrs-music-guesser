@@ -1,11 +1,11 @@
-import type { Coordinate, Polygon } from "../../coordinates.js";
+import type { Coordinate, Polygon } from "osrs-music-guesser-shared";
 
 type PolygonWithoutCenter = Omit<Polygon, "center">;
 function rectangle(
   left: number,
   top: number,
   right: number,
-  bottom: number
+  bottom: number,
 ): PolygonWithoutCenter {
   const minX = Math.min(left, right);
   const maxX = Math.max(left, right);
@@ -35,8 +35,8 @@ const zanikGetsHateCrimed = [
   // Main door to lumbridge castle
   rectangle(3216, 3221, 3219, 3217),
   // Back door
-  rectangle(3202, 3217, 3205, 3213)
-]
+  rectangle(3202, 3217, 3205, 3213),
+];
 const taleOfTheRighteous = rectangle(1540, 3572, 1544, 3568);
 const mysticalMirror = rectangle(3210, 2958, 3217, 2951);
 const sote = rectangle(2567, 3334, 2571, 3330);
@@ -176,15 +176,15 @@ const dwarvernMine = [
   rectangle(3016, 3452, 3020, 3448),
 ];
 const kendalCave = rectangle(2802, 3706, 2807, 3701);
-  
-  const lumbridgeWatermill = rectangle(3225, 3287, 3237, 3278);
+
+const lumbridgeWatermill = rectangle(3225, 3287, 3237, 3278);
 const swampCavesDorgeshKaanTears = [
   // Lumbridge castle basement
   rectangle(3207, 3220, 3211, 3216),
   // Lumbridge swamp
   rectangle(3167, 3174, 3171, 3170),
   // Watermill
-  lumbridgeWatermill
+  lumbridgeWatermill,
 ];
 const deepWildyDungeon = rectangle(3043, 3926, 3047, 3922);
 const ardySewerWest = rectangle(2585, 3237, 2589, 3233);
@@ -509,8 +509,8 @@ const myrequeHideoutCanifis = [
   // South
   rectangle(3507, 3450, 3511, 3446),
   // North
-  rectangle(3493, 3466, 3497, 3462)
-]
+  rectangle(3493, 3466, 3497, 3462),
+];
 const draynorManorUpstairsKillerwatts = rectangle(3108, 3365, 3110, 3363);
 const crabclawCaves = rectangle(1642, 3451, 1646, 3447);
 const towerofMagic = rectangle(1563, 3800, 1596, 3839);
@@ -6827,7 +6827,8 @@ export const songPolygons: Record<
     polygons: [draynorManorUpstairsKillerwatts],
   },
   Stranded: {
-    polygons: [mysticalMirror,
+    polygons: [
+      mysticalMirror,
       {
         coordinates: [
           [2816, 3712],
@@ -7383,7 +7384,8 @@ export const songPolygons: Record<
     polygons: [championsChallenge],
   },
   Village: {
-    polygons: [mysticalMirror,
+    polygons: [
+      mysticalMirror,
       {
         coordinates: [
           [3456, 3456],
@@ -8470,7 +8472,7 @@ export const songPolygons: Record<
     "Domain of the Vampyres",
     castleDrakanCourtyard,
     verSinhaza,
-    icyeneGraveyard
+    icyeneGraveyard,
   ),
   ...song("Don't Panic Zanik"),
   ...song("Dorgeshuun Treaty", lumbridgeCastleDiningHall),

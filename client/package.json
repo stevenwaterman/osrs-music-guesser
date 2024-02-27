@@ -3,9 +3,8 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "dev": "concurrently --kill-others \"cd ../shared && yarn run watch\" \"vite\"",
-    "build": "vite build --base=/osrs-music-guesser/",
-    "check": "svelte-check --tsconfig ./tsconfig.json"
+    "dev": "concurrently --kill-others \"cd ../shared && yarn run dev\" \"vite\"",
+    "build": "vite build --base=/osrs-music-guesser/"
   },
   "devDependencies": {
     "@sveltejs/vite-plugin-svelte": "^3.0.2",

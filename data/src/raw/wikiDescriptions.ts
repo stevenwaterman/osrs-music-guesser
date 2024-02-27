@@ -1427,7 +1427,7 @@ export const songDescriptions: Record<string, string[]> = {
   ],
   "Null and Void": ["Plays at Pest Control, on the Void Knights' Outpost."],
   "Ogre the Top": ["Plays in the Ice Troll Caves."],
-  "Oh Ratds!": [
+  "Oh Rats!": [
     "Plays while fighting the boss Scurrius in Varrock Sewers.",
     ...varrockSewers,
   ],

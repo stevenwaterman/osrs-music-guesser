@@ -1,0 +1,20 @@
+{
+  "compilerOptions": {
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true,
+    "composite": true,
+    "outDir": "dist",
+    "rootDir": "src",
+
+    "target": "ESNext",
+    "useDefineForClassFields": true,
+    "module": "NodeNext",
+    "isolatedModules": true,
+    "esModuleInterop": true,
+    "strict": true,
+    "moduleResolution": "NodeNext"
+  },
+  "references": [{ "path": "../shared" }],
+  "include": ["src"]
+}

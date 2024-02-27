@@ -1,5 +1,4 @@
-import { Polygon } from "../coordinates.js";
-import { toMap } from "../util.js";
+import { toMap, Song } from "osrs-music-guesser-shared";
 import { audioUrls } from "./parsed/audioUrls.js";
 import { songLocations } from "./parsed/songLocations.js";
 import {
@@ -9,18 +8,9 @@ import {
 } from "./parsed/wikiMusicPage.js";
 import { wikiPageUrls } from "./parsed/wikiPageUrls.js";
 import { songDescriptions } from "./raw/wikiDescriptions.js";
+import { songTags } from "./parsed/songTags.js";
 
-export type Song = {
-  name: string;
-  audioUrl: string;
-  wikiUrl: string;
-  unlockHint: string;
-  description: string[];
-  duration: number;
-  locations: Polygon[];
-};
-
-export const songs: Record<string, Song> = toMap(
+export const songsAtRuntime: Record<string, Song> = toMap(
   songNames.map((name) => [
     name,
     {
@@ -31,6 +21,7 @@ export const songs: Record<string, Song> = toMap(
       description: songDescriptions[name],
       duration: songDurations[name],
       locations: songLocations[name],
+      tags: songTags[name],
     },
-  ])
+  ]),
 );

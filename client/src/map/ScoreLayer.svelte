@@ -36,33 +36,19 @@
       return leafletPoly;
     });
 
-    const durationMs = 3500 - score / 2;
-    map.setView(guessLatLng, 5, { animate: true });
+    answerPolygons.forEach((poly) => poly.addTo(layer));
+    const answerMarkers =
+      answerPolygons.map(
+        (polygon) => new L.Marker(polygon.getCenter(), { icon: greenIcon })
+      ) ?? null;
+    answerMarkers.forEach((marker) => marker.addTo(layer));
+    lineToClosest.addTo(layer);
 
-    setTimeout(() => {
-      map.flyTo(convertLeaflet.coordinate.to(closest), 3, {
-        animate: true,
-        duration: durationMs / 1000,
-      });
-    }, 750);
-
-    setTimeout(() => {
-      answerPolygons.forEach((poly) => poly.addTo(layer));
-      const answerMarkers =
-        answerPolygons.map(
-          (polygon) => new L.Marker(polygon.getCenter(), { icon: greenIcon })
-        ) ?? null;
-      answerMarkers.forEach((marker) => marker.addTo(layer));
-      lineToClosest.addTo(layer);
-    }, durationMs + 1000);
-
-    setTimeout(() => {
-      const bounds = answerPolygons.reduce(
-        (acc, elem) => acc.extend(elem.getBounds()),
-        new LatLngBounds(guessMarker.getLatLng(), guessMarker.getLatLng())
-      );
-      map.fitBounds(bounds, { animate: true, padding: [100, 100] });
-    }, durationMs + 1500);
+    const bounds = answerPolygons.reduce(
+      (acc, elem) => acc.extend(elem.getBounds()),
+      new LatLngBounds(guessMarker.getLatLng(), guessMarker.getLatLng())
+    );
+    map.fitBounds(bounds, { animate: true, padding: [100, 100] });
 
     return () => {
       layer.remove();
