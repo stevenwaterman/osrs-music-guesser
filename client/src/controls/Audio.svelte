@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { songs } from "tunescape07
+  import { songs } from "tunescape07-shared";
   import { fade } from "svelte/transition";
 
   export let song: string;
