@@ -26,6 +26,8 @@ jobs:
           git reset
           git add client/dist/* -f
           git mv client/dist/* ./ -k
+          echo 'tunescape07.com' > CNAME
+          git add CNAME
           touch .nojekyll
           git add .nojekyll
           git commit -m "Update hosted version"
