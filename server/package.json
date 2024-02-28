@@ -4,7 +4,8 @@
   "type": "module",
   "scripts": {
     "dev": "concurrently --kill-others \"cd ../shared && yarn run dev\" \"tsx watch src/index.ts --clear-screen=false\"",
-    "build": "tsc --build"
+    "build": "yarn build:exportData && tsc --build",
+    "build:exportData": "cd ../data-exporter && yarn export"
   },
   "devDependencies": {
     "@types/node": "^20.11.20",
@@ -15,6 +16,7 @@
   },
   "dependencies": {
     "tunescape07-shared": "1.0.0",
+    "tunescape07-data": "1.0.0",
     "ws": "^8.16.0"
   }
 }

@@ -1,4 +1,5 @@
 import { Polygon } from "./coordinates.js";
+import { SongName } from "./songNames.js";
 
 export type SongTags = {
   modAsh: boolean;
@@ -6,12 +7,11 @@ export type SongTags = {
 }
 
 export type Song = {
-  name: string;
+  name: SongName;
   audioUrl: string;
   wikiUrl: string;
-  unlockHint: string;
-  description: string[];
+  description: readonly string[];
   duration: number;
-  locations: Polygon[];
+  locations: readonly Polygon[];
   tags: SongTags;
 };

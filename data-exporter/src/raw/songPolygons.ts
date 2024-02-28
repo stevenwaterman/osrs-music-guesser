@@ -1,4 +1,5 @@
 import type { Coordinate, Polygon } from "tunescape07-shared";
+import { SongName } from "tunescape07-shared";
 
 type PolygonWithoutCenter = Omit<Polygon, "center">;
 function rectangle(
@@ -728,7 +729,7 @@ const myrequeLaboratories = [
 ];
 
 export const songPolygons: Record<
-  string,
+  SongName,
   { polygons: PolygonWithoutCenter[] }
 > = {
   "7th Realm": {
@@ -8586,15 +8587,14 @@ export const songPolygons: Record<
   ...song("You Have My Attention", castleDrakanCourtyard),
 };
 
-function song(
-  name: string,
+function song<Name extends SongName>(
+  name: Name,
   ...polygons: PolygonWithoutCenter[]
-): Record<string, { polygons: PolygonWithoutCenter[] }> {
-  return {
-    [name]: {
-      polygons,
-    },
-  };
+): Record<Name, { polygons: PolygonWithoutCenter[] }> {
+  const output: Partial<Record<Name, { polygons: PolygonWithoutCenter[] }>> =
+    {};
+  output[name] = { polygons };
+  return output as Record<Name, { polygons: PolygonWithoutCenter[] }>;
 }
 
 function polygon(coordinates: Array<Coordinate>): PolygonWithoutCenter {

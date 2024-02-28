@@ -1,6 +1,6 @@
 <script lang="ts">
   import L, { LatLngBounds } from "leaflet";
-  import { songs } from "tunescape07-shared";
+  import { songs } from "tunescape07-data";
   import { greenIcon } from "../lib/icons";
   import type { State } from "../lib/clientState";
   import { onMount } from "svelte";

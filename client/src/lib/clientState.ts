@@ -1,6 +1,8 @@
 import { writable, type Readable, type Writable } from "svelte/store";
 import type { Coordinate, StateInterface } from "tunescape07-shared";
-import { scoreGuess, randomSongs, songs } from "tunescape07-shared";
+import { scoreGuess, sample } from "tunescape07-shared";
+import { songs } from "tunescape07-data";
+import type { SongName } from "tunescape07-shared";
 
 function omit<Input extends {}, Keys extends keyof Input>(
   input: Input,
@@ -25,7 +27,7 @@ function pick<Input extends {}, Keys extends keyof Input>(
 }
 
 export type GuessResult = {
-  song: string;
+  song: SongName;
   guess: Coordinate;
   closest: Coordinate;
   distance: number;
@@ -50,14 +52,15 @@ class State_StartScreen extends BaseState<"StartScreen", {}> {
   }
   public singlePlayer() {
     const maxRounds = 5 as const;
-    const songs = randomSongs(maxRounds);
+    const possibleSongs = Object.values(songs).filter(song => song.locations.length > 0).map(song => song.name)
+    const gameSongs = sample(possibleSongs, maxRounds);
     internalStateStore.set(
       new State_SinglePlayer_NoGuess({
         timerStart: new Date(),
         guessHistory: [],
         round: 1,
         maxRounds,
-        songs,
+        songs: gameSongs,
       })
     );
   }
@@ -82,7 +85,7 @@ export abstract class SinglePlayerState<
 > extends BaseState<
   `SinglePlayer_${Name}`,
   Data & {
-    songs: string[];
+    songs: SongName[];
     guessHistory: GuessResult[];
     round: number;
     maxRounds: 5;
@@ -121,7 +124,7 @@ class State_SinglePlayer_UnconfirmedGuess extends SinglePlayerState<
     const timeMs = timerEnd.getTime() - this.data.timerStart.getTime();
     const guess = this.data.guess;
     const song = this.data.songs[this.data.round - 1];
-    const { closest, distance, score } = scoreGuess(guess, song);
+    const { closest, distance, score } = scoreGuess(guess, songs[song]);
     const result = { song, guess, closest, distance, score, timeMs };
     internalStateStore.set(
       new State_SinglePlayer_RevealingAnswer({

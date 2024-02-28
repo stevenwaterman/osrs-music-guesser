@@ -1,8 +1,10 @@
-export const songsByModAsh = [
+import { SongName } from "tunescape07-shared";
+
+export const songsByModAsh: SongName[] = [
   `Ascent`,
   `Barren Land`,
   `Beneath the Stronghold`,
-  `Blood Rush (music track)`,
+  `Blood Rush`,
   `Box of Delights`,
   `Bunny's Sugar Rush`,
   `Coil`,
@@ -13,7 +15,7 @@ export const songsByModAsh = [
   `Dies Irae`,
   `The Doors of Dinh`,
   `The Forlorn Homestead`,
-  `The Forsaken Tower (music track)`,
+  `The Forsaken Tower`,
   `Gnome Village Party`,
   `Invader`,
   `Kourend the Magnificent`,
@@ -45,7 +47,7 @@ export const songsByModAsh = [
   `Warpath`,
 ];
 
-export const songsByModEd = [
+export const songsByModEd: SongName[] = [
   "Confrontation",
   "The Old Ones",
   "Rose",

@@ -64,3 +64,12 @@ export function toMap<T>(entries: Array<[string, T]>): Record<string, T> {
   }
   return output;
 }
+
+export function sample<T>(data: T[], count?: number): T[] {
+  shuffle(data);
+  if (count === undefined) {
+    return data.slice();
+  } else {
+    return data.slice(0, count);
+  }
+}

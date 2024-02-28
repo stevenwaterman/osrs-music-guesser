@@ -1,8 +1,9 @@
 <script lang="ts">
-  import { songs } from "tunescape07-shared";
+  import { songs } from "tunescape07-data";
   import { fade } from "svelte/transition";
+  import type { SongName } from "tunescape07-data/dist/data";
 
-  export let song: string;
+  export let song: SongName;
   export let control: boolean;
   export let startFraction: number;
 

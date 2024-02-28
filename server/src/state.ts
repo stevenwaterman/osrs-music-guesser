@@ -1,13 +1,14 @@
 import WebSocket from "ws";
 import {
-  randomSongs,
+  sample,
   scoreGuess,
   StateInterface,
   pick,
   omit,
   mapValues,
 } from "tunescape07-shared";
-import type { Coordinate } from "tunescape07-shared";
+import { songs } from "tunescape07-data";
+import type { Coordinate, SongName } from "tunescape07-shared";
 export class StateStore implements StateInterface.StateStore {
   public state: StateInterface.AnyServerState;
 
@@ -58,15 +59,16 @@ export class LobbyOnePlayer extends StateInterface.LobbyOnePlayer {
 
 export class LobbyTwoPlayer extends StateInterface.LobbyTwoPlayer {
   public start() {
-    const songs = randomSongs();
+    const possibleSongs = Object.values(songs).filter(song => song.locations.length > 0).map(song => song.name)
+    const gameSongs = sample(possibleSongs);
     const round = 1;
-    const song = songs[round];
+    const song = gameSongs[round];
     return this.transition(
       new RoundNoGuessYet(
         this.store,
         {
           ...this.game,
-          songs,
+          songs: gameSongs,
           round,
           song,
           songStartFraction: 0.9 * Math.random(),
@@ -156,9 +158,10 @@ export class RoundOneGuess extends StateInterface.RoundOneGuess {
     const guesses = mapValues(this.users, (user) =>
       user.userId === userId ? guess : user.guess
     );
+    const song = songs[this.game.song as SongName];
     const results = mapValues(guesses, (guess) => {
       if (guess) {
-        return scoreGuess(guess, this.game.song);
+        return scoreGuess(guess, song);
       } else {
         return null;
       }

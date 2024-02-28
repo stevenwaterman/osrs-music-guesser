@@ -1,3 +1,5 @@
+import { SongName } from "tunescape07-shared";
+
 const mythsGuild =
   "The Myths' guild basement can also be accessed from the Wrath Altar island or via the Corsair Cove dungeon, crossing the bridge to the west.";
 const taverleyDungeon =
@@ -46,7 +48,7 @@ const varrockSewers = [
   "They are also accessible through the pipe shortcut from Edgeville dungeon, meaning the three entrances to Edgeville Dungeon are also valid answers.",
 ];
 
-export const songDescriptions: Record<string, string[]> = {
+export const songDescriptions: Record<SongName, string[]> = {
   "7th Realm": [
     "Plays in the western part of Brimhaven Dungeon or in the basement of the Myths' Guild.",
     mythsGuild,

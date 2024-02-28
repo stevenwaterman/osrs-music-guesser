@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { songs } from "tunescape07-shared";
+  import { songs } from "tunescape07-data";
   import { fade } from "svelte/transition";
   import type { State, StateGroup } from "../lib/clientState";
 

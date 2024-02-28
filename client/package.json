@@ -4,7 +4,9 @@
   "type": "module",
   "scripts": {
     "dev": "concurrently --kill-others \"cd ../shared && yarn run dev\" \"vite\"",
-    "build": "vite build"
+    "build": "yarn build:exportData && yarn build:data && vite build",
+    "build:exportData": "cd ../data-exporter && yarn export",
+    "build:data": "cd ../data && yarn build"
   },
   "devDependencies": {
     "@sveltejs/vite-plugin-svelte": "^3.0.2",
@@ -20,6 +22,7 @@
   "dependencies": {
     "flatten-js": "^0.6.9",
     "leaflet": "^1.9.4",
-    "tunescape07-shared": "1.0.0"
+    "tunescape07-shared": "1.0.0",
+    "tunescape07-data": "1.0.0"
   }
 }

@@ -1,6 +1,7 @@
 import WebSocket from "ws";
 import { pick, mapValues } from "./util.js";
 import type { Coordinate } from "./coordinates.js";
+import { SongName } from "./songNames.js";
 
 export interface StateStore {
   state: AnyServerState;
@@ -180,8 +181,8 @@ export abstract class RoundNoGuessYet extends State<
   {
     gameId: string;
     owner: string;
-    songs: string[];
-    song: string;
+    songs: SongName[];
+    song: SongName;
     songStartFraction: number;
     round: number;
   },
@@ -211,8 +212,8 @@ export abstract class RoundOneGuess extends State<
   {
     gameId: string;
     owner: string;
-    songs: string[];
-    song: string;
+    songs: SongName[];
+    song: SongName;
     songStartFraction: number;
     round: number;
     timerStarted: Date;
@@ -257,8 +258,8 @@ export abstract class RoundOver extends State<
   {
     gameId: string;
     owner: string;
-    songs: string[];
-    song: string;
+    songs: SongName[];
+    song: SongName;
     songStartFraction: number;
     round: number;
   },

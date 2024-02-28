@@ -3,16 +3,18 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "dev": "tsx watch src/index.ts --clear-screen=false",
-    "export-songs": "tsc --build && node dist/index.js"
+    "dev": "concurrently --kill-others \"cd ../data-exporter && yarn run dev\" \"tsc --build --watch --preserveWatchOutput\"",
+    "build": "tsc --build"
   },
   "devDependencies": {
     "@types/node": "^20.11.20",
+    "@types/ws": "^8.5.10",
     "tslib": "^2.6.2",
-    "typescript": "^5.2.2"
+    "typescript": "^5.2.2",
+    "concurrently": "^8.2.2"
   },
   "dependencies": {
-    "tunescape07-shared": "1.0.0",
-    "prettier": "^3.2.5"
-  }
+  },
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts"
 }

@@ -1,0 +1,18 @@
+{
+  "name": "tunescape07-data-exporter",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "tsx watch src/index.ts --clear-screen=false",
+    "export": "tsc --build && node dist/index.js"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.20",
+    "tslib": "^2.6.2",
+    "typescript": "^5.2.2"
+  },
+  "dependencies": {
+    "tunescape07-shared": "1.0.0",
+    "prettier": "^3.2.5"
+  }
+}

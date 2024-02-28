@@ -1,5 +1,7 @@
+import { SongName } from "tunescape07-shared";
+
 // These are all the songs where the wiki page has (music track) on the end because of a name conflict
-export default {
+export const wikiPageUrlConflicts: Partial<Record<SongName, string>> = {
   "Al Kharid": "Al_Kharid_(music_track)",
   "Arachnids of Vampyrium": "Arachnids_of_Vampyrium_(music_track)",
   Arcane: "Arcane_(music_track)",
@@ -49,7 +51,7 @@ export default {
   Morytania: "Morytania_(music_track)",
   Nomad: "Nomad_(music_track)",
   "Pest Control": "Pest_Control_(music_track)",
-  "The Pharoh": "The_Pharaoh_(music_track)",
+  "The Pharaoh": "The_Pharaoh_(music_track)",
   "Prison Break": "Prison_Break_(music_track)",
   Quest: "Quest_(music_track)",
   Relics: "Relics_(music_track)",

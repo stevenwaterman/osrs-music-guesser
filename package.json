@@ -1,4 +1,12 @@
 {
   "private": true,
-  "workspaces": ["client", "server", "shared", "data"]
+  "workspaces": ["client", "server", "shared", "data", "data-exporter"],
+  "scripts": {
+    "clean": "yarn clean:data-exporter && yarn clean:data && yarn clean:shared && yarn clean:server && yarn clean:client",
+    "clean:data-exporter": "cd data-exporter && rm -f tsconfig.tsbuildinfo && rm -rf dist",
+    "clean:data": "cd data && rm -f tsconfig.tsbuildinfo && rm -rf dist && rm -f src/data.ts && cp src/dataTemplate.ts src/data.ts",
+    "clean:shared": "cd shared && rm -f tsconfig.tsbuildinfo && rm -rf dist",
+    "clean:server": "cd server && rm -f tsconfig.tsbuildinfo && rm -rf dist",
+    "clean:client": "cd client && rm -rf dist .vite"
+  }
 }

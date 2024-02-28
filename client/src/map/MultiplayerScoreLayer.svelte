@@ -1,6 +1,6 @@
 <script lang="ts">
   import L from "leaflet";
-  import { songs } from "tunescape07-shared";
+  import { songs } from "tunescape07-data";
   import type { MultiplayerState } from "../lib/clientState";
   import { onMount } from "svelte";
   import { mapBounds } from "./map";

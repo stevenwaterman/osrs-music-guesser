@@ -1,5 +1,5 @@
 import { songPolygons } from "../raw/songPolygons.js";
-import { Polygon, convertFlatten, mapValues } from "tunescape07-shared";
+import { Polygon, SongName, convertFlatten, mapValues } from "tunescape07-shared";
 
 function addCenter(polygon: Omit<Polygon, "center">): Polygon {
   const centerPoint = convertFlatten.polygon.to(polygon).box.center;
@@ -24,7 +24,7 @@ function removeDuplicateStartEnd(polygon: Polygon): Polygon {
   };
 }
 
-export const songLocations: Record<string, Polygon[]> = mapValues(
+export const songLocations: Record<SongName, Polygon[]> = mapValues(
   songPolygons,
   (song) =>
     song.polygons

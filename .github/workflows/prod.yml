@@ -10,15 +10,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v1
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
-          node-version: "20.x"
+          node-version: "20"
       - run: yarn install --frozen-lockfile
-      - run: yarn export-songs
-        working-directory: ./data
-      - run: yarn build
-        working-directory: ./shared
       - run: yarn build
         working-directory: ./client
       - run: |
