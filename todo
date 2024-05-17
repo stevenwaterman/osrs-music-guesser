@@ -22,3 +22,51 @@ fix quest polygons
 multipoly eg alone
 song release date
 mod ash alert
+
+github and about in bottom left
+short tutorial in display
+? long tutorial in bottom right
+tutorial is text dump at first, can become longer interactive chat afterwards
+wide logo above the box
+box either brown or blurred transparent
+mobile view: single & multiplayer buttons stacked
+taller box
+store volume
+Text changing size as you zoom in is weird
+Text zoom out of sync when zooming
+Varlamore
+Prevent cheating
+Play again
+Matchmaking
+Back button when clicking multiplayer
+bonus feature: share link to same songs; daily challenge 
+shareable/screenshot results
+zoom from current map view to show both guess and answer
+tween number of tiles and score
+remove score table from top right, replace with current round & total score
+show score total on final score page
+final score overall then breakdown of rounds (map, individual songs, number of points, distance, time) 
+create game and join game should be two buttons 
+game ID replaced with join link & reveal game code 
+unlimited players in casual multiplayer
+multiplayer lobby should be explicit about lobby: waiting for host/username of host to start the game
+host picks username (unique name for game) but joiners have random username
+to join type the name of the game
+multiplayer health should show a restricted view of the list, only showing top, bottom and neighbours OR top 3, your position, total players 
+show audio on multiplayer 
+add confirm guess
+multiplayer your marker vs other marker different colours
+hover markers to see names
+zoom to show all guesses (top 10 guesses and score, your guess, bottom 10 guesses)
+host can adjust starting health
+number of answers / guesses submitted
+timer should just be seconds (configurable)
+show score table of top 5 and you
+then show your old health 
+then show your damage
+deal damage to health 
+show how many players were eliminated and how many remain
+
+keep health display of top 5 and you
+host clicks next round
+health display on mobile
