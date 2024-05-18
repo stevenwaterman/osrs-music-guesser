@@ -1,8 +1,8 @@
 <script lang="ts">
   import { scale } from "svelte/transition";
-  import { type MultiplayerState } from "../lib/clientState";
+  import { type ActiveState } from "../lib/clientState";
 
-  export let state: MultiplayerState<"GameOver">;
+  export let state: ActiveState<"GameOver">;
 
   function playAgain() {
     state.send({ action: "playAgain" });
@@ -11,7 +11,7 @@
 
 <div class="container" transition:scale|global>
   <p class="title">Game Over</p>
-  {#if state.data.game.owner === state.data.me.userId}
+  {#if state.data.game.owner === state.data.me.id}
     <button on:click={() => playAgain()}>Play Again</button>
   {/if}
   <button on:click={() => state.disconnect()}>Main Menu</button>

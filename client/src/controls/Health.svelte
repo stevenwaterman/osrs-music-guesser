@@ -1,14 +1,18 @@
 <script lang="ts">
-  import { type MultiplayerState } from "../lib/clientState";
+  import type { StateInterface } from "tunescape07-shared";
+  import { type ActiveState } from "../lib/clientState";
 
-  export let state: MultiplayerState<
-    "RoundNoGuessYet" | "RoundOneGuess" | "RoundOver" | "GameOver"
+  export let state: ActiveState<"RoundActive" | "RoundOver" | "GameOver">;
+
+  let data: StateInterface.ClientStateData<
+    "RoundActive" | "RoundOver" | "GameOver"
   >;
+  $: data = state.data;
 
-  $: myHealth = state.data.me.health;
-  $: others = Object.values(state.data.users)
-    .filter((user) => user.userId !== state.data.me.userId)
-    .map((user) => [user.userId, user.health]);
+  $: myHealth = data.me.health;
+  $: others = Object.values(data.users)
+    .filter((user) => user.id !== state.data.me.id)
+    .map((user) => [user.id, user.health]);
 </script>
 
 <table>
@@ -44,7 +48,9 @@
 
   @media only screen and (max-width: 1000px) {
     table {
-      display: none;
+      grid-column-start: 1;
+      grid-column-end: 1;
+      /* display: none; */
     }
   }
 
@@ -56,9 +62,5 @@
 
   .header {
     background-color: rgba(255, 255, 255, 0.1);
-  }
-
-  a {
-    pointer-events: initial;
   }
 </style>

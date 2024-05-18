@@ -1,5 +1,6 @@
+import { songs } from "tunescape07-data";
+import { Lobby, StateStore } from "tunescape07-shared/src/states.js";
 import WebSocket, { WebSocketServer } from "ws";
-import { LobbyEmpty, LobbyOnePlayer, StateStore } from "./state.js";
 
 const wss = new WebSocketServer({ port: 4433 });
 const users: Set<string> = new Set<string>();
@@ -62,22 +63,17 @@ function getGame(
       })
     );
     ws.close(1011);
-    return;
+    throw new Error("MISSING_GAME");
   }
 
   if (!(gameId in games)) {
-    console.log("UNKNOWN_GAME", gameId);
-    ws.send(
-      JSON.stringify({
-        action: "error",
-        data: {
-          code: "UNKNOWN_GAME",
-          message: "could not find game",
-        },
-      })
+    const possibleSongs = Object.values(songs).filter(
+      (song) => song.locations.length > 0
     );
-    ws.close(1011);
-    return;
+
+    const stateStore = new StateStore(gameId, possibleSongs);
+    games[gameId] = stateStore;
+    return stateStore;
   }
 
   return games[gameId];
@@ -85,36 +81,15 @@ function getGame(
 
 wss.on("connection", (ws, req) => {
   const url = new URL(`http://localhost${req.url!}`);
-  if (url.pathname === "/create") {
-    onCreate(ws, url.searchParams);
-  } else if (url.pathname === "/join") {
+  if (url.pathname === "/join") {
     onJoin(ws, url.searchParams);
   }
 });
 
-function onCreate(ws: WebSocket, searchParams: URLSearchParams) {
-  console.log("create called");
-  const userId = getUserId(ws, searchParams);
-  if (!userId) {
-    return;
-  }
-  users.add(userId);
-
-  ws.addEventListener("close", () => {
-    console.log("deleting", userId);
-    users.delete(userId);
-  });
-
-  const gameId = Math.random().toString().split(".")[1];
-  const stateStore = new StateStore(gameId);
-  games[gameId] = stateStore;
-  (stateStore.state as LobbyEmpty).join(userId, ws);
-  console.log("created", userId, gameId);
-}
-
 function onJoin(ws: WebSocket, searchParams: URLSearchParams) {
   console.log("join called");
-  const userId = getUserId(ws, searchParams);
+  // const userId = getUserId(ws, searchParams);
+  const userId = Math.random().toString().split(".")[1];
   if (!userId) {
     return;
   }
@@ -125,13 +100,17 @@ function onJoin(ws: WebSocket, searchParams: URLSearchParams) {
   }
 
   users.add(userId);
-
   ws.addEventListener("close", () => {
     console.log("deleting", userId);
     users.delete(userId);
   });
 
-  if (game.state.stateName !== "LobbyOnePlayer") {
+  if (game.state?.stateName === "Lobby") {
+    (game.state as Lobby).join(userId, ws);
+    return;
+  }
+
+  if (game.state) {
     ws.send(
       JSON.stringify({
         action: "error",
@@ -145,9 +124,11 @@ function onJoin(ws: WebSocket, searchParams: URLSearchParams) {
     return;
   }
 
-  const state = game.state as LobbyOnePlayer;
-  state.join(userId, ws);
-  console.log("joined", userId, state.game.gameId);
+  game.state = new Lobby(
+    game,
+    { id: game.gameId, owner: userId, singlePlayer: false },
+    { [userId]: { id: userId, transport: ws } }
+  );
 }
 
 setInterval(function ping() {

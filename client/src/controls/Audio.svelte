@@ -1,9 +1,8 @@
 <script lang="ts">
-  import { songs } from "tunescape07-data";
   import { fade } from "svelte/transition";
-  import type { SongName } from "tunescape07-data/dist/data";
+  import type { Song } from "tunescape07-shared";
 
-  export let song: SongName;
+  export let song: Song;
   export let control: boolean;
   export let startFraction: number;
 
@@ -17,7 +16,7 @@
 </script>
 
 <audio
-  src={songs[song].audioUrl}
+  src={song.audioUrl}
   controls={control}
   autoplay
   loop

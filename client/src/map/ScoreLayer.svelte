@@ -1,68 +1,73 @@
 <script lang="ts">
   import L, { LatLngBounds } from "leaflet";
-  import { songs } from "tunescape07-data";
-  import { greenIcon } from "../lib/icons";
-  import type { State } from "../lib/clientState";
+  import type { ActiveState } from "../lib/clientState";
   import { onMount } from "svelte";
   import { convertLeaflet } from "../lib/convertLeaflet";
+  import type { StateInterface } from "tunescape07-shared";
 
-  export let state: State[
-    | "SinglePlayer_RevealingAnswer"
-    | "SinglePlayer_EndOfRound"
-    | "SinglePlayer_EndOfFinalRound"];
+  export let state: ActiveState<"RoundOver">;
   export let map: L.Map;
 
+  let data: StateInterface.ClientStateData<"RoundOver">;
+  $: data = state.data;
+
   onMount(() => {
-    const { song, guess, closest, score } = state.data.result;
+    const song = data.game.song;
+
     const layer = new L.LayerGroup();
     layer.addTo(map);
 
-    const guessLatLng = convertLeaflet.coordinate.to(guess);
-    const closestLatLng = convertLeaflet.coordinate.to(closest);
-
-    const guessMarker = new L.Marker(guessLatLng);
-    guessMarker.addTo(layer);
-
-    const lineToClosest = new L.Polyline([guessLatLng, closestLatLng]);
-
-    const answerPolygons = songs[song].locations.map((poly) => {
-      const leafletPoly = convertLeaflet.polygon.to(poly);
-      leafletPoly.setStyle({
+    const polys: L.Polygon[] = song.locations.map((poly) =>
+      convertLeaflet.polygon.to(poly).setStyle({
         color: "#00FF00",
         fillColor: "#00FF00",
         fillOpacity: 0.3,
         opacity: 0.6,
-      });
-      return leafletPoly;
-    });
+      })
+    );
+    const markers: L.Marker[] = [];
+    const lines: L.Polyline[] = [];
 
-    const durationMs = 3500 - score / 2;
-    map.setView(guessLatLng, 5, { animate: true });
+    for (const user of Object.values(data.users)) {
+      if (user.guess === null) {
+        continue;
+      }
 
-    setTimeout(() => {
-      map.flyTo(convertLeaflet.coordinate.to(closest), 3, {
-        animate: true,
-        duration: durationMs / 1000,
-      });
-    }, 750);
+      const { coordinate, closest } = user.guess;
+      const leafletCoordinate = convertLeaflet.coordinate.to(coordinate);
+      const leafletClosest = convertLeaflet.coordinate.to(closest);
 
-    setTimeout(() => {
-      answerPolygons.forEach((poly) => poly.addTo(layer));
-      const answerMarkers =
-        answerPolygons.map(
-          (polygon) => new L.Marker(polygon.getCenter(), { icon: greenIcon })
-        ) ?? null;
-      answerMarkers.forEach((marker) => marker.addTo(layer));
-      lineToClosest.addTo(layer);
-    }, durationMs + 1000);
-
-    setTimeout(() => {
-      const bounds = answerPolygons.reduce(
-        (acc, elem) => acc.extend(elem.getBounds()),
-        new LatLngBounds(guessMarker.getLatLng(), guessMarker.getLatLng())
+      const marker = new L.Marker(leafletCoordinate).addTo(layer);
+      const line = new L.Polyline([leafletCoordinate, leafletClosest]).addTo(
+        layer
       );
-      map.fitBounds(bounds, { animate: true, padding: [100, 100] });
-    }, durationMs + 1500);
+
+      const me = user.id === data.me.id;
+      if (me) {
+        (marker as any)._icon.style.filter = "hue-rotate(80deg)";
+        line.setStyle({ color: "#bd55cc" });
+      }
+
+      markers.push(marker);
+      lines.push(line);
+    }
+
+    polys.forEach((it) => it.addTo(layer));
+    markers.forEach((it) => it.addTo(layer));
+    lines.forEach((it) => it.addTo(layer));
+
+    const markerCoords = markers.map((m) => m.getLatLng());
+    const minLat = Math.min(...markerCoords.map((m) => m.lat));
+    const maxLat = Math.max(...markerCoords.map((m) => m.lat));
+    const minLng = Math.min(...markerCoords.map((m) => m.lng));
+    const maxLng = Math.max(...markerCoords.map((m) => m.lng));
+    const markerBounds = new LatLngBounds([minLat, minLng], [maxLat, maxLng]);
+
+    const bounds = [...lines, ...polys].reduce(
+      (acc, elem) => acc.extend(elem.getBounds()),
+      markerBounds
+    );
+    map.flyToBounds(bounds, { animate: true, duration: 1, padding: [50, 50] });
 
     return () => {
       layer.remove();

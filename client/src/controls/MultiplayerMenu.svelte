@@ -4,30 +4,25 @@
 
   export let state: State["StartScreen_Multiplayer"];
 
-  let userId: string = "";
   let gameId: string = "";
 </script>
 
 <div class="form" transition:scale|global>
-  <label for="userId">Username:</label>
-  <input id="userId" bind:value={userId} />
+  <label for="gameId">Lobby Name:</label>
+  <input id="gameId" bind:value={gameId} />
+
   <button
-    disabled={userId.trim().length === 0 || gameId.trim().length > 0}
-    on:click={() => state.create(userId)}>Create Game</button
+    disabled={gameId.trim().length === 0}
+    on:click={() => state.join(gameId)}>Join Game</button
   >
 
-  <label id="gameIdLabel" for="gameId">Game&nbsp;Code:</label>
-  <input id="gameId" bind:value={gameId} />
-  <button
-    disabled={userId.trim().length === 0 || gameId.trim().length === 0}
-    on:click={() => state.join(userId, gameId)}>Join Game</button
-  >
+  <button on:click={() => state.back()}>Main Menu</button>
 </div>
 
 <style>
   .form {
     display: grid;
-    grid-template-columns: auto auto 1fr;
+    grid-template-columns: auto auto;
     grid-template-rows: auto auto;
     column-gap: 1rem;
     row-gap: 2rem;
@@ -48,6 +43,7 @@
   }
 
   button {
+    grid-column: span 2;
     padding: 1rem 3rem;
     height: fit-content;
   }
@@ -58,10 +54,6 @@
       grid-template-columns: 1fr;
       grid-template-rows: auto auto;
       row-gap: 1rem;
-    }
-
-    #gameIdLabel {
-      margin-top: 2rem;
     }
   }
 </style>

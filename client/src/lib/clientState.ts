@@ -1,30 +1,14 @@
 import { writable, type Readable, type Writable } from "svelte/store";
-import type { Coordinate, StateInterface } from "tunescape07-shared";
-import { scoreGuess, sample } from "tunescape07-shared";
+import type { Coordinate, Song, StateInterface } from "tunescape07-shared";
 import { songs } from "tunescape07-data";
 import type { SongName } from "tunescape07-shared";
-
-function omit<Input extends {}, Keys extends keyof Input>(
-  input: Input,
-  ...keys: Keys[]
-): Omit<Input, Keys> {
-  const copy = { ...input };
-  for (const key of keys) {
-    delete copy[key];
-  }
-  return copy as Omit<Input, Keys>;
-}
-
-function pick<Input extends {}, Keys extends keyof Input>(
-  input: Input,
-  ...keys: Keys[]
-): Pick<Input, Keys> {
-  const copy: Partial<Pick<Input, Keys>> = {};
-  for (const key of keys) {
-    copy[key] = input[key];
-  }
-  return copy as Pick<Input, Keys>;
-}
+import {
+  Lobby,
+  StateStore,
+  type Transport,
+  type TransportClose,
+  type TransportMessage,
+} from "tunescape07-shared/src/states";
 
 export type GuessResult = {
   song: SongName;
@@ -51,18 +35,10 @@ class State_StartScreen extends BaseState<"StartScreen", {}> {
     internalStateStore.set(new State_StartScreen_HowToPlay(this.data));
   }
   public singlePlayer() {
-    const maxRounds = 5 as const;
-    const possibleSongs = Object.values(songs).filter(song => song.locations.length > 0).map(song => song.name)
-    const gameSongs = sample(possibleSongs, maxRounds);
-    internalStateStore.set(
-      new State_SinglePlayer_NoGuess({
-        timerStart: new Date(),
-        guessHistory: [],
-        round: 1,
-        maxRounds,
-        songs: gameSongs,
-      })
-    );
+    const transport = connectToLocalServer();
+    listenToTransport(transport, () => {
+      internalStateStore.set(new State_StartScreen({}));
+    });
   }
   public multiPlayer() {
     internalStateStore.set(new State_StartScreen_Multiplayer({}));
@@ -79,118 +55,6 @@ class State_StartScreen_HowToPlay extends BaseState<
   }
 }
 
-export abstract class SinglePlayerState<
-  Name extends string,
-  Data extends {}
-> extends BaseState<
-  `SinglePlayer_${Name}`,
-  Data & {
-    songs: SongName[];
-    guessHistory: GuessResult[];
-    round: number;
-    maxRounds: 5;
-  }
-> {}
-
-class State_SinglePlayer_NoGuess extends SinglePlayerState<
-  "NoGuess",
-  { timerStart: Date }
-> {
-  public name = "SinglePlayer_NoGuess" as const;
-  public placeGuess(location: Coordinate) {
-    internalStateStore.set(
-      new State_SinglePlayer_UnconfirmedGuess({
-        ...this.data,
-        guess: location,
-      })
-    );
-  }
-}
-class State_SinglePlayer_UnconfirmedGuess extends SinglePlayerState<
-  "UnconfirmedGuess",
-  { timerStart: Date; guess: Coordinate }
-> {
-  public name = "SinglePlayer_UnconfirmedGuess" as const;
-  public placeGuess(location: Coordinate) {
-    internalStateStore.set(
-      new State_SinglePlayer_UnconfirmedGuess({
-        ...this.data,
-        guess: location,
-      })
-    );
-  }
-  public confirm() {
-    const timerEnd = new Date();
-    const timeMs = timerEnd.getTime() - this.data.timerStart.getTime();
-    const guess = this.data.guess;
-    const song = this.data.songs[this.data.round - 1];
-    const { closest, distance, score } = scoreGuess(guess, songs[song]);
-    const result = { song, guess, closest, distance, score, timeMs };
-    internalStateStore.set(
-      new State_SinglePlayer_RevealingAnswer({
-        ...omit(this.data, "timerStart", "guess"),
-        result,
-      })
-    );
-  }
-}
-class State_SinglePlayer_RevealingAnswer extends SinglePlayerState<
-  "RevealingAnswer",
-  { result: GuessResult }
-> {
-  public name = "SinglePlayer_RevealingAnswer" as const;
-  public animationComplete() {
-    if (this.data.round < this.data.maxRounds) {
-      internalStateStore.set(
-        new State_SinglePlayer_EndOfRound({
-          ...this.data,
-          guessHistory: [...this.data.guessHistory, this.data.result],
-        })
-      );
-    } else {
-      internalStateStore.set(
-        new State_SinglePlayer_EndOfFinalRound({
-          ...this.data,
-          guessHistory: [...this.data.guessHistory, this.data.result],
-        })
-      );
-    }
-  }
-}
-class State_SinglePlayer_EndOfRound extends SinglePlayerState<
-  "EndOfRound",
-  { result: GuessResult }
-> {
-  public name = "SinglePlayer_EndOfRound" as const;
-  public nextRound() {
-    internalStateStore.set(
-      new State_SinglePlayer_NoGuess({
-        ...omit(this.data, "result"),
-        round: this.data.round + 1,
-        timerStart: new Date(),
-      })
-    );
-  }
-}
-class State_SinglePlayer_EndOfFinalRound extends SinglePlayerState<
-  "EndOfFinalRound",
-  { result: GuessResult }
-> {
-  public name = "SinglePlayer_EndOfFinalRound" as const;
-  public showResults() {
-    internalStateStore.set(new State_SinglePlayer_EndOfGame(this.data));
-  }
-}
-class State_SinglePlayer_EndOfGame extends SinglePlayerState<
-  "EndOfGame",
-  { guessHistory: GuessResult[] }
-> {
-  public name = "SinglePlayer_EndOfGame" as const;
-  public backToMainMenu() {
-    internalStateStore.set(new State_StartScreen({}));
-  }
-}
-
 type WsMessage =
   | {
       action: "error";
@@ -204,6 +68,116 @@ type WsMessage =
       data: StateInterface.ClientStateData<any>;
     };
 
+export function connectToLocalServer(): Transport {
+  let clientMessageListeners: Array<(ev: TransportMessage) => void> = [];
+  let serverMessageListeners: Array<(ev: TransportMessage) => void> = [];
+
+  let clientCloseListeners: Array<(ev: TransportClose) => void> = [];
+  let serverCloseListeners: Array<(ev: TransportClose) => void> = [];
+
+  const clientSide: Transport = {
+    send: (msg: string): void => {
+      serverMessageListeners.forEach((listener) => listener({ data: msg }));
+    },
+    close: (code: number) => {
+      clientCloseListeners.forEach((listener) => listener({ code }));
+      serverCloseListeners.forEach((listener) => listener({ code }));
+    },
+    addEventListener: (
+      type: "message" | "close",
+      cb: ((ev: TransportMessage) => void) | ((ev: TransportClose) => void)
+    ): void => {
+      if (type === "message") {
+        clientMessageListeners.push(cb as any);
+      } else {
+        clientCloseListeners.push(cb as any);
+      }
+    },
+    removeEventListener: (
+      type: "message" | "close",
+      cb: ((ev: TransportMessage) => void) | ((ev: TransportClose) => void)
+    ): void => {
+      if (type === "message") {
+        clientMessageListeners = clientMessageListeners.filter(
+          (listener) => listener !== cb
+        );
+      } else {
+        clientCloseListeners = clientCloseListeners.filter(
+          (listener) => listener !== cb
+        );
+      }
+    },
+  };
+
+  const serverSide: Transport = {
+    send: (msg: string): void => {
+      clientMessageListeners.forEach((listener) => listener({ data: msg }));
+    },
+    close: (code: number) => {
+      serverCloseListeners.forEach((listener) => listener({ code }));
+      clientCloseListeners.forEach((listener) => listener({ code }));
+    },
+    addEventListener: (
+      type: "message" | "close",
+      cb: ((ev: TransportMessage) => void) | ((ev: TransportClose) => void)
+    ): void => {
+      if (type === "message") {
+        serverMessageListeners.push(cb as any);
+      } else {
+        serverCloseListeners.push(cb as any);
+      }
+    },
+    removeEventListener: (
+      type: "message" | "close",
+      cb: ((ev: TransportMessage) => void) | ((ev: TransportClose) => void)
+    ): void => {
+      if (type === "message") {
+        serverMessageListeners = serverMessageListeners.filter(
+          (listener) => listener !== cb
+        );
+      } else {
+        serverCloseListeners = serverCloseListeners.filter(
+          (listener) => listener !== cb
+        );
+      }
+    },
+  };
+
+  const gameId = "local";
+  const userId = "me";
+  const possibleSongs = Object.values(songs).filter(
+    (song) => song.locations.length > 0
+  );
+  const store = new StateStore(gameId, possibleSongs);
+  store.state = new Lobby(
+    store,
+    { id: gameId, owner: userId, singlePlayer: true },
+    { [userId]: { id: userId, transport: serverSide } }
+  );
+
+  return clientSide;
+}
+
+function listenToTransport(transport: Transport, back: () => void) {
+  const onCloseHandler = (ev: TransportClose) => back();
+  const onMessageHandler = (ev: TransportMessage) => {
+    const message: WsMessage = JSON.parse(ev.data as string);
+    console.log("message from server", message);
+    if (message.action === "error") {
+      cleanup();
+      transport.close(1011);
+    } else if (message.action === "state") {
+      internalStateStore.set(new State_Game_Active(transport, message.data));
+    }
+  };
+  const cleanup = () => {
+    transport.removeEventListener("close", onCloseHandler);
+    transport.removeEventListener("message", onMessageHandler);
+  };
+  transport.addEventListener("close", onCloseHandler);
+  transport.addEventListener("message", onMessageHandler);
+}
+
 class State_StartScreen_Multiplayer extends BaseState<
   "StartScreen_Multiplayer",
   {}
@@ -212,69 +186,42 @@ class State_StartScreen_Multiplayer extends BaseState<
   public back() {
     internalStateStore.set(new State_StartScreen(this.data));
   }
-  public create(userId: string) {
-    const ws = new WebSocket(`wss://api.tunescape07.com/create?user=${userId}`);
-    // const ws = new WebSocket(`ws://localhost:4433/create?user=${userId}`);
-    this.listenToWs(ws);
-  }
-  public join(userId: string, gameId: string) {
-    const ws = new WebSocket(
-      `wss://api.tunescape07.com/join?user=${userId}&game=${gameId}`
-    );
-    // const ws = new WebSocket(`ws://localhost:4433/join?user=${userId}&game=${gameId}`);
-    this.listenToWs(ws);
-  }
-
-  private listenToWs(ws: WebSocket) {
-    const onCloseHandler = () => {
-      this.back();
-    };
-    const onMessageHandler = (ev: MessageEvent<any>) => {
-      const message: WsMessage = JSON.parse(ev.data);
-      console.log("message from server", message);
-      if (message.action === "error") {
-        cleanup();
-        ws.close(1011);
-      } else if (message.action === "state") {
-        console.log("setting state store");
-        internalStateStore.set(new State_Multiplayer_Active(ws, message.data));
-      }
-    };
-    const cleanup = () => {
-      ws.removeEventListener("close", onCloseHandler);
-      ws.removeEventListener("message", onMessageHandler);
-    };
-    ws.addEventListener("close", onCloseHandler);
-    ws.addEventListener("message", onMessageHandler);
+  public join(gameId: string) {
+    const prod = document.location.host.includes("tunescape07");
+    const transport = prod
+      ? new WebSocket(`wss://api.tunescape07.com/join?game=${gameId}`)
+      : new WebSocket(`ws://192.168.8.17:4433/join?game=${gameId}`);
+    listenToTransport(transport, () => this.back());
   }
 }
 
-class State_Multiplayer_Active<
-  ServerStateName extends StateInterface.AnyServerState["stateName"]
+class State_Game_Active<
+  ServerStateName extends StateInterface.AnyServerState["stateName"],
 > extends BaseState<
-  `Multiplayer_Active`,
+  `Game_Active`,
   StateInterface.ClientStateData<ServerStateName>
 > {
-  public name = "Multiplayer_Active" as const;
+  public name = "Game_Active" as const;
 
   constructor(
-    private readonly ws: WebSocket,
+    private readonly transport: Transport,
     data: StateInterface.ClientStateData<ServerStateName>
   ) {
     super(data);
   }
 
   disconnect() {
-    this.ws.close(1000);
+    this.transport.close(1000);
   }
 
   send(action: StateInterface.ClientActions) {
-    this.ws.send(JSON.stringify(action));
+    this.transport.send(JSON.stringify(action));
   }
 
-  public isAnyMultiplayer<
-    Names extends StateInterface.ServerStates[keyof StateInterface.ServerStates]["stateName"]
-  >(...names: Names[]): this is MultiplayerState<Names> {
+  public isAnyActive<
+    Names extends
+      StateInterface.ServerStates[keyof StateInterface.ServerStates]["stateName"],
+  >(...names: Names[]): this is ActiveState<Names> {
     return (names as string[]).includes(this.data.stateName);
   }
 }
@@ -282,20 +229,15 @@ class State_Multiplayer_Active<
 export type State = {
   StartScreen: State_StartScreen;
   StartScreen_HowToPlay: State_StartScreen_HowToPlay;
-  SinglePlayer_NoGuess: State_SinglePlayer_NoGuess;
-  SinglePlayer_UnconfirmedGuess: State_SinglePlayer_UnconfirmedGuess;
-  SinglePlayer_RevealingAnswer: State_SinglePlayer_RevealingAnswer;
-  SinglePlayer_EndOfRound: State_SinglePlayer_EndOfRound;
-  SinglePlayer_EndOfFinalRound: State_SinglePlayer_EndOfFinalRound;
-  SinglePlayer_EndOfGame: State_SinglePlayer_EndOfGame;
   StartScreen_Multiplayer: State_StartScreen_Multiplayer;
-  Multiplayer_Active: State_Multiplayer_Active<
+  Game_Active: State_Game_Active<
     StateInterface.ServerStates[keyof StateInterface.ServerStates]["stateName"]
   >;
 };
-export type MultiplayerState<
-  Name extends StateInterface.ServerStates[keyof StateInterface.ServerStates]["stateName"]
-> = State_Multiplayer_Active<Name>;
+export type ActiveState<
+  Name extends
+    StateInterface.ServerStates[keyof StateInterface.ServerStates]["stateName"],
+> = State_Game_Active<Name>;
 
 export type AnyState = State[keyof State];
 const internalStateStore: Writable<AnyState> = writable(
@@ -303,8 +245,4 @@ const internalStateStore: Writable<AnyState> = writable(
 );
 export const stateStore: Readable<AnyState> = {
   subscribe: internalStateStore.subscribe,
-};
-
-export type StateGroup = {
-  Playing: SinglePlayerState<string, {}>;
 };

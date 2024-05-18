@@ -1,19 +1,27 @@
 <script lang="ts">
   import { scale } from "svelte/transition";
-  import { type MultiplayerState } from "../lib/clientState";
+  import { type ActiveState } from "../lib/clientState";
   import { tweened } from "svelte/motion";
 
-  export let state: MultiplayerState<"RoundOneGuess">;
+  export let state: ActiveState<"RoundActive">;
+
+  $: show =
+    Object.keys(state.data.users).length > 1 && state.data.game.timerStarted;
 
   let tween = tweened(state.data.game.timerDurationSecs, {
     duration: state.data.game.timerDurationSecs * 1000,
   });
-  $: tween.set(0);
+
+  $: if (show) {
+    tween.set(0);
+  }
 </script>
 
-<span class="timer" transition:scale|global>
-  {$tween.toFixed(2)}
-</span>
+{#if show}
+  <span class="timer" transition:scale|global>
+    {Math.floor($tween)}
+  </span>
+{/if}
 
 <style>
   .timer {

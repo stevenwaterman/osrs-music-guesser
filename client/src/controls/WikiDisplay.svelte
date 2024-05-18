@@ -1,14 +1,10 @@
 <script lang="ts">
   import { fade } from "svelte/transition";
-  import { songs } from "tunescape07-data";
-  import type { State } from "../lib/clientState";
+  import type { ActiveState } from "../lib/clientState";
 
-  export let state: State[
-    | "SinglePlayer_EndOfRound"
-    | "SinglePlayer_EndOfFinalRound"];
+  export let state: ActiveState<"RoundOver">;
 
-  $: songName = state.data.songs[state.data.round - 1];
-  $: song = songs[songName];
+  $: song = state.data.game.song;
 </script>
 
 <div class="infoBox" transition:fade|global>

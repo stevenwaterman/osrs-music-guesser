@@ -1,25 +1,15 @@
 <script lang="ts">
   import { fade } from "svelte/transition";
-  import { type State } from "../lib/clientState";
+  import { type ActiveState } from "../lib/clientState";
 
-  export let state: State[
-    | "SinglePlayer_EndOfRound"
-    | "SinglePlayer_EndOfFinalRound"];
+  export let state: ActiveState<"RoundOver">;
 
   function next() {
-    if (state.isAny("SinglePlayer_EndOfRound")) {
-      state.nextRound();
-    } else {
-      state.showResults();
-    }
+    state.send({ action: "nextRound" });
   }
 </script>
 
-{#if state.isAny("SinglePlayer_EndOfRound")}
-  <button in:fade|global on:click={() => next()}>Next&nbsp;Round</button>
-{:else}
-  <button in:fade|global on:click={() => next()}>Show&nbsp;Results</button>
-{/if}
+<button in:fade|global on:click={() => next()}>Next&nbsp;Round</button>
 
 <style>
   button {
