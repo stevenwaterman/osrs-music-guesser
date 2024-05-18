@@ -4,6 +4,7 @@
   import { onMount } from "svelte";
   import { convertLeaflet } from "../lib/convertLeaflet";
   import type { ClientStateData } from "tunescape07-shared/src/states";
+  import { resetView } from "./map";
 
   export let state: ActiveState<"RoundActive">;
   export let map: L.Map;
@@ -34,5 +35,7 @@
     return () => {
       marker.remove();
     };
+
+    resetView(map);
   });
 </script>

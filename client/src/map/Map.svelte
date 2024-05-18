@@ -16,14 +16,6 @@
       zoom = event.target.getZoom();
     });
   });
-
-  $: if (
-    map &&
-    state.isAny("Game_Active") &&
-    state.isAnyActive("RoundActive")
-  ) {
-    resetView(map);
-  }
 </script>
 
 <BaseMap bind:map />

@@ -1,6 +1,7 @@
 import { songs } from "tunescape07-data";
 import { StateInterface } from "tunescape07-shared";
 import WebSocket, { WebSocketServer } from "ws";
+import { randomName } from "./userNames.js";
 
 const wss = new WebSocketServer({ port: 4433 });
 const users: Set<string> = new Set<string>();
@@ -34,11 +35,16 @@ function getGame(
 
     const onTransition = (value: StateInterface.AnyServerState | null) => {
       if (value === null) {
+        console.log("deleting game", gameId);
         delete games[gameId];
       }
     };
-    
-    const stateStore = new StateInterface.StateStore(gameId, possibleSongs, onTransition);
+
+    const stateStore = new StateInterface.StateStore(
+      gameId,
+      possibleSongs,
+      onTransition
+    );
     games[gameId] = stateStore;
     return stateStore;
   }
@@ -54,11 +60,10 @@ wss.on("connection", (ws, req) => {
 });
 
 function onJoin(ws: WebSocket, searchParams: URLSearchParams) {
-  console.log("join called");
-  // const userId = getUserId(ws, searchParams);
-  const userId = Math.random().toString().split(".")[1];
-  if (!userId) {
-    return;
+  // Randomly generate names until we get a new one
+  let userId = randomName();
+  while (users.has(userId)) {
+    userId = randomName();
   }
 
   const game = getGame(ws, searchParams);
@@ -68,7 +73,7 @@ function onJoin(ws: WebSocket, searchParams: URLSearchParams) {
 
   users.add(userId);
   ws.addEventListener("close", () => {
-    console.log("deleting", userId);
+    console.log("deleting user", userId);
     users.delete(userId);
   });
 
@@ -96,6 +101,8 @@ function onJoin(ws: WebSocket, searchParams: URLSearchParams) {
     { id: game.gameId, owner: userId, singlePlayer: false },
     { [userId]: { id: userId, transport: ws } }
   );
+
+  console.log(`${userId} joined ${game.gameId}`)
 }
 
 setInterval(function ping() {

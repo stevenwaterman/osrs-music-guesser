@@ -21,7 +21,11 @@
     <th>Health</th>
   </tr>
   <tr>
-    <td>Me</td>
+    {#if state.data.game.singlePlayer}
+      <td>Me</td>
+    {:else}
+      <td>{state.data.me.id} (Me)</td>
+    {/if}
     <td>{myHealth}</td>
   </tr>
   {#each others as user (user[0])}

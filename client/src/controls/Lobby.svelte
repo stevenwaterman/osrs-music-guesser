@@ -34,8 +34,10 @@
     </div>
   {:else}
     <p class="title">Multiplayer</p>
-    <p>Game Name: <span class="gameId">{state.data.game.id}</span></p>
+    <p>Game Name: {state.data.game.id}</p>
     <p>Connected Players: {players}</p>
+
+    <p>Your Name: {state.data.me.id}</p>
 
     {#if myLobby}
       <div>Timer duration: {timerDurationSecs}s</div>
