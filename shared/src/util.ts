@@ -34,7 +34,7 @@ export function mapValues<InValue, OutValue>(
 }
 
 export async function sleep(ms: number): Promise<void> {
-  return await new Promise(resolve => setTimeout(resolve, ms));
+  return await new Promise((resolve) => setTimeout(resolve, ms));
 }
 
 export function shuffle<T>(array: T[]): T[] {
