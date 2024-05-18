@@ -6,45 +6,6 @@ const wss = new WebSocketServer({ port: 4433 });
 const users: Set<string> = new Set<string>();
 const games: Record<string, StateInterface.StateStore> = {};
 
-function getUserId(
-  ws: WebSocket,
-  searchParams: URLSearchParams
-): string | undefined {
-  const userId = searchParams.get("user");
-
-  if (!userId) {
-    console.log("MISSING_USER");
-    ws.send(
-      JSON.stringify({
-        action: "error",
-        data: {
-          code: "MISSING_USER",
-          message: "No user provided in query string",
-        },
-      })
-    );
-    ws.close(1011);
-    return;
-  }
-
-  if (users.has(userId)) {
-    console.log("DUPLICATE_USER", userId);
-    ws.send(
-      JSON.stringify({
-        action: "error",
-        data: {
-          code: "DUPLICATE_USER",
-          message: "user already exists",
-        },
-      })
-    );
-    ws.close(1011);
-    return;
-  }
-
-  return userId;
-}
-
 function getGame(
   ws: WebSocket,
   searchParams: URLSearchParams
@@ -71,7 +32,13 @@ function getGame(
       (song) => song.locations.length > 0
     );
 
-    const stateStore = new StateInterface.StateStore(gameId, possibleSongs);
+    const onTransition = (value: StateInterface.AnyServerState | null) => {
+      if (value === null) {
+        delete games[gameId];
+      }
+    };
+    
+    const stateStore = new StateInterface.StateStore(gameId, possibleSongs, onTransition);
     games[gameId] = stateStore;
     return stateStore;
   }

@@ -27,10 +27,19 @@ export type TransportMessage = { data: WebSocket.Data };
 export type TransportClose = { code: number };
 
 export class StateStore {
-  public state: AnyServerState | null = null;
+  private _state: AnyServerState | null = null;
+
+  public get state(): AnyServerState | null {
+    return this._state;
+  }
+  public set state(value: AnyServerState | null) {
+    this._state = value;
+    this.onTransition(value);
+  }
   constructor(
     public readonly gameId: string,
-    public readonly possibleSongs: Song[]
+    public readonly possibleSongs: Song[],
+    private readonly onTransition: (to: AnyServerState | null) => void = () => {}
   ) {}
 }
 
