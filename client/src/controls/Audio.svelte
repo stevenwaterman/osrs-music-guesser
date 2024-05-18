@@ -20,7 +20,6 @@
   controls={control}
   autoplay
   loop
-  transition:fade
   on:loadedmetadata={(ev) => seek(ev.currentTarget, startFraction)}
 />
 

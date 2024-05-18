@@ -18,7 +18,7 @@
 </script>
 
 {#if show}
-  <span class="timer" transition:scale|global>
+  <span class="timer">
     {Math.floor($tween)}
   </span>
 {/if}

@@ -17,15 +17,17 @@
     const layer = new L.LayerGroup();
     layer.addTo(map);
 
-    const polys: L.Polygon[] = song.locations.map((poly) =>
-      convertLeaflet.polygon.to(poly).setStyle({
-        color: "#00FF00",
-        fillColor: "#00FF00",
-        fillOpacity: 0.3,
-        opacity: 0.6,
-      })
+    song.locations.forEach((poly) =>
+      convertLeaflet.polygon
+        .to(poly)
+        .setStyle({
+          color: "#00FF00",
+          fillColor: "#00FF00",
+          fillOpacity: 0.3,
+          opacity: 0.6,
+        })
+        .addTo(layer)
     );
-    const markers: L.Marker[] = [];
     const lines: L.Polyline[] = [];
 
     for (const user of Object.values(data.users)) {
@@ -41,31 +43,18 @@
       const line = new L.Polyline([leafletCoordinate, leafletClosest]).addTo(
         layer
       );
+      lines.push(line);
 
       const me = user.id === data.me.id;
       if (me) {
         (marker as any)._icon.style.filter = "hue-rotate(80deg)";
         line.setStyle({ color: "#bd55cc" });
       }
-
-      markers.push(marker);
-      lines.push(line);
     }
 
-    polys.forEach((it) => it.addTo(layer));
-    markers.forEach((it) => it.addTo(layer));
-    lines.forEach((it) => it.addTo(layer));
-
-    const markerCoords = markers.map((m) => m.getLatLng());
-    const minLat = Math.min(...markerCoords.map((m) => m.lat));
-    const maxLat = Math.max(...markerCoords.map((m) => m.lat));
-    const minLng = Math.min(...markerCoords.map((m) => m.lng));
-    const maxLng = Math.max(...markerCoords.map((m) => m.lng));
-    const markerBounds = new LatLngBounds([minLat, minLng], [maxLat, maxLng]);
-
-    const bounds = [...lines, ...polys].reduce(
+    const bounds = lines.reduce(
       (acc, elem) => acc.extend(elem.getBounds()),
-      markerBounds
+      lines[0].getBounds()
     );
     map.flyToBounds(bounds, { animate: true, duration: 1, padding: [50, 50] });
 

@@ -9,7 +9,7 @@
   }
 </script>
 
-<button in:fade|global on:click={() => next()}>Next&nbsp;Round</button>
+<button on:click={() => next()}>Next&nbsp;Round</button>
 
 <style>
   button {

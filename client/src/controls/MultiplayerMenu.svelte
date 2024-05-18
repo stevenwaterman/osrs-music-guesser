@@ -7,7 +7,7 @@
   let gameId: string = "";
 </script>
 
-<div class="form" transition:scale|global>
+<div class="form">
   <label for="gameId">Lobby Name:</label>
   <input id="gameId" bind:value={gameId} />
 

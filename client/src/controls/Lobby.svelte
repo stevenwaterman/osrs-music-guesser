@@ -5,13 +5,13 @@
   export let state: ActiveState<"Lobby">;
 
   let timerDurationSecs: number = 10;
-  let health: number = 5000;
+  let health: number = state.data.game.singlePlayer ? 10000 : 5000;
 
   $: myLobby = state.data.game.owner === state.data.me.id;
   $: players = Object.keys(state.data.users).length;
 </script>
 
-<div class="container" transition:scale|global>
+<div class="container">
   {#if state.data.game.singlePlayer}
     <p class="title">Single Player</p>
 

@@ -6,9 +6,10 @@
   import GameOver from "./GameOver.svelte";
   import Lobby from "./Lobby.svelte";
   import Timer from "./Timer.svelte";
-  import Health from "./Health.svelte";
   import NextRound from "./NextRound.svelte";
   import WikiDisplay from "./WikiDisplay.svelte";
+  import HealthLeaderboard from "./HealthLeaderboard.svelte";
+  import Damage from "./Damage.svelte";
   $: state = $stateStore;
 </script>
 
@@ -43,10 +44,11 @@
         <NextRound {state} />
       {/if}
       <WikiDisplay {state} />
+      <Damage {state} />
     {/if}
 
-    {#if state.isAnyActive("RoundActive", "RoundOver", "GameOver")}
-      <Health {state} />
+    {#if state.isAnyActive("RoundActive")}
+      <HealthLeaderboard {state} />
     {/if}
 
     {#if state.isAnyActive("GameOver")}

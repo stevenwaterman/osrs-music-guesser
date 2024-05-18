@@ -6,10 +6,10 @@
 </script>
 
 <div class="buttons">
-  <button transition:scale|global on:click={() => state.singlePlayer()}
+  <button on:click={() => state.singlePlayer()}
     >Single Player</button
   >
-  <button transition:scale|global on:click={() => state.multiPlayer()}
+  <button on:click={() => state.multiPlayer()}
     >Multiplayer</button
   >
 </div>

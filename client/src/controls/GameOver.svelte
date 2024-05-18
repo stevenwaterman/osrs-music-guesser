@@ -9,8 +9,10 @@
   }
 </script>
 
-<div class="container" transition:scale|global>
+<div class="container">
   <p class="title">Game Over</p>
+  <p class="title">Survived {state.data.game.round - 1} rounds</p>
+  <!-- TODO starting health, scores, guess times -->
   {#if state.data.game.owner === state.data.me.id}
     <button on:click={() => playAgain()}>Play Again</button>
   {/if}

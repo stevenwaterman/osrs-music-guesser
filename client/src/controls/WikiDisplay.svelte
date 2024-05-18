@@ -7,7 +7,7 @@
   $: song = state.data.game.song;
 </script>
 
-<div class="infoBox" transition:fade|global>
+<div class="infoBox">
   <a class="title" target="_blank" href={song.wikiUrl}>{song.name}</a>
   <div class="info">
     {#each song.description as line}
@@ -39,8 +39,8 @@
       width: fit-content;
       max-width: 100%;
       grid-column: 1;
-      grid-row: 2;
-      align-self: center;
+      grid-row: 1;
+      align-self: flex-start;
       justify-self: center;
     }
   }
