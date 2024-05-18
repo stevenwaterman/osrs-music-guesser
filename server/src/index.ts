@@ -1,10 +1,10 @@
 import { songs } from "tunescape07-data";
-import { Lobby, StateStore } from "tunescape07-shared/src/states.js";
+import { StateInterface } from "tunescape07-shared";
 import WebSocket, { WebSocketServer } from "ws";
 
 const wss = new WebSocketServer({ port: 4433 });
 const users: Set<string> = new Set<string>();
-const games: Record<string, StateStore> = {};
+const games: Record<string, StateInterface.StateStore> = {};
 
 function getUserId(
   ws: WebSocket,
@@ -48,7 +48,7 @@ function getUserId(
 function getGame(
   ws: WebSocket,
   searchParams: URLSearchParams
-): StateStore | undefined {
+): StateInterface.StateStore | undefined {
   const gameId = searchParams.get("game");
 
   if (!gameId) {
@@ -71,7 +71,7 @@ function getGame(
       (song) => song.locations.length > 0
     );
 
-    const stateStore = new StateStore(gameId, possibleSongs);
+    const stateStore = new StateInterface.StateStore(gameId, possibleSongs);
     games[gameId] = stateStore;
     return stateStore;
   }
@@ -106,7 +106,7 @@ function onJoin(ws: WebSocket, searchParams: URLSearchParams) {
   });
 
   if (game.state?.stateName === "Lobby") {
-    (game.state as Lobby).join(userId, ws);
+    (game.state as StateInterface.Lobby).join(userId, ws);
     return;
   }
 
@@ -124,7 +124,7 @@ function onJoin(ws: WebSocket, searchParams: URLSearchParams) {
     return;
   }
 
-  game.state = new Lobby(
+  game.state = new StateInterface.Lobby(
     game,
     { id: game.gameId, owner: userId, singlePlayer: false },
     { [userId]: { id: userId, transport: ws } }
