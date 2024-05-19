@@ -33,7 +33,7 @@
 
     {#if state.isAnyActive("RoundActive", "RoundOver")}
       <Audio
-        audioUrl={state.data.game.song.audioUrl}
+        audioUrl={state.data.game.songUrl}
         control={state.isAnyActive("RoundOver")}
         startFraction={state.data.game.songStartFraction}
         loop={true}

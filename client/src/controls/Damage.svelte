@@ -2,7 +2,6 @@
   import { tweened } from "svelte/motion";
   import { type ActiveState } from "../lib/clientState";
   import { onMount } from "svelte";
-  import Audio from "./Audio.svelte";
   import SoundEffect from "./SoundEffect.svelte";
 
   export let state: ActiveState<"RoundOver">;
@@ -12,49 +11,75 @@
 
   $: health = tweened(healthStart);
 
-  let show = false;
-  let playHit = false;
+  let showHealth = false;
+  let showHealing = false;
+  let showHit = false;
+  let showVenom = false;
 
   onMount(() => {
     setTimeout(() => {
-      show = true;
+      showHealth = true;
     }, 1000);
 
     setTimeout(() => {
-      playHit = true;
+      showHealing = true;
+    }, 1300);
+
+    setTimeout(() => {
+      showHit = true;
+    }, 1600);
+
+    setTimeout(() => {
+      showVenom = true;
+    }, 1900);
+
+    setTimeout(() => {
       health.set(healthEnd, { duration: 300 });
-    }, 1400);
+    }, 2200);
   });
 
   $: roundedHealth = Math.round($health);
-  $: firstDigit = Math.floor(roundedHealth / 10000);
-  $: secondDigit = Math.floor((roundedHealth % 10000) / 1000);
-  $: thirdDigit = Math.floor((roundedHealth % 1000) / 100);
-  $: fourthDigit = Math.floor((roundedHealth % 100) / 10);
-  $: fifthDigit = Math.floor(roundedHealth % 10);
+  $: firstDigit = Math.floor((roundedHealth % 100) / 10);
+  $: secondDigit = Math.floor(roundedHealth % 10);
 </script>
 
-{#if show}
-  <div class="wrapper">
-    <span class="label">Health:</span>
-    <div class="health" style="">
-      <span class="digit">{firstDigit}</span>
-      <span class="digit">{secondDigit}</span>
-      <span class="digit">{thirdDigit}</span>
-      <span class="digit">{fourthDigit}</span>
-      <span class="digit">{fifthDigit}</span>
+{#if healthStart > 0}
+  {#if showHealth}
+    <div class="wrapper">
+      <span class="label">Health:</span>
+      <div class="health" style="">
+        <span class="digit">{firstDigit}</span>
+        <span class="digit">{secondDigit}</span>
+      </div>
     </div>
-  </div>
-{/if}
+  {/if}
 
-{#if playHit && healthStart > 0}
-  <SoundEffect audioUrl="/hit.ogg" />
-{/if}
+  {#if showHealing && state.data.me.damage.healing > 0}
+    <!-- Show healing icon -->
+    <SoundEffect audioUrl="/eat.ogg" />
+  {/if}
 
-{#if healthStart > 0 && $health === 0}
-  <SoundEffect
-    audioUrl="https://oldschool.runescape.wiki/images/Oh_dear%2C_you_are_dead%21.ogg"
-  />
+  {#if showHit}
+    {#if state.data.me.damage.hit === 0}
+      <!-- Show blue hitsplat icon -->
+      <SoundEffect audioUrl="/block.ogg" />
+    {:else}
+      <!-- Show red hitsplat icon -->
+      <SoundEffect audioUrl="/hit.ogg" />
+    {/if}
+  {/if}
+
+  {#if showVenom && state.data.me.damage.venom > 0}
+    <!-- Show venom hitsplat -->
+    <SoundEffect audioUrl="/venom.ogg" />
+  {/if}
+
+  {#if $health === 0}
+    <!-- Show skull or some indication that you are dead -->
+    <SoundEffect
+      audioUrl="https://oldschool.runescape.wiki/images/Oh_dear%2C_you_are_dead%21.ogg"
+    />
+  {/if}
 {/if}
 
 <style>
@@ -74,7 +99,7 @@
   .health {
     line-height: 1;
     display: grid;
-    grid-template-columns: repeat(5, 5rem);
+    grid-template-columns: repeat(2, 5rem);
     justify-content: center;
   }
   .digit {

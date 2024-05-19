@@ -1,7 +1,7 @@
 import WebSocket from "ws";
-import { pick, mapValues, omit, sample } from "./util.js";
+import { pick, mapValues, omit, sample, shuffle } from "./util.js";
 import type { Coordinate } from "./coordinates.js";
-import { scoreGuess } from "./scoring.js";
+import { calculateRoundResult } from "./scoring.js";
 import { Song } from "./songTypes.js";
 
 export interface Transport {
@@ -39,7 +39,9 @@ export class StateStore {
   constructor(
     public readonly gameId: string,
     public readonly possibleSongs: Song[],
-    private readonly onTransition: (to: AnyServerState | null) => void = () => {}
+    private readonly onTransition: (
+      to: AnyServerState | null
+    ) => void = () => {}
   ) {}
 }
 
@@ -49,6 +51,7 @@ abstract class State<
     id: string;
     owner: string;
     singlePlayer: boolean;
+    damageScaling: number;
   },
   PublicGameKeys extends Array<keyof GameState>,
   UserState extends {
@@ -175,6 +178,7 @@ abstract class State<
             id: this.game.id,
             owner: newOwner,
             singlePlayer: this.game.singlePlayer,
+            damageScaling: this.game.damageScaling,
           },
           newUsers
         )
@@ -191,8 +195,10 @@ export class Lobby extends State<
     id: string;
     owner: string;
     singlePlayer: boolean;
+    damageScaling: number;
+    // TODO difficulty and timer settings
   },
-  ["id", "owner", "singlePlayer"],
+  ["id", "owner", "singlePlayer", "damageScaling"],
   {
     id: string;
     transport: Transport;
@@ -201,7 +207,12 @@ export class Lobby extends State<
   []
 > {
   public stateName = "Lobby" as const;
-  public publicGameKeys = ["id", "owner", "singlePlayer"] as const;
+  public publicGameKeys = [
+    "id",
+    "owner",
+    "singlePlayer",
+    "damageScaling",
+  ] as const;
   public publicUserKeys = ["id"] as const;
   public privateUserKeys = [] as const;
 
@@ -215,10 +226,10 @@ export class Lobby extends State<
     );
   }
 
-  public start(timerDurationSecs: number = 10, health: number = 5000) {
+  public start() {
     const gameSongs = sample(this.store.possibleSongs);
     const round = 1;
-    const song = gameSongs[round];
+    const song = gameSongs[0];
     return this.transition(
       new RoundActive(
         this.store,
@@ -227,12 +238,13 @@ export class Lobby extends State<
           songs: gameSongs,
           round,
           song,
+          songUrl: song.audioUrl,
           songStartFraction: 0.9 * Math.random(),
-          timerDurationSecs,
+          timerDurationSecs: 10,
         },
         mapValues(this.users, (user) => ({
           ...user,
-          health,
+          health: 99,
         }))
       )
     );
@@ -243,9 +255,7 @@ export class Lobby extends State<
     message: { action: string; data?: any }
   ): void {
     if (userId === this.game.owner && message.action === "start") {
-      const timerDurationSecs = message.data?.timerDurationSecs;
-      const health = message.data?.health;
-      this.start(timerDurationSecs, health);
+      this.start();
     }
   }
 }
@@ -258,11 +268,13 @@ export class RoundActive extends State<
       singlePlayer: boolean;
       songs: Song[];
       song: Song;
+      songUrl: string;
       songStartFraction: number;
       round: number;
       timerDurationSecs: number;
       timerStarted?: undefined;
       timerId?: undefined;
+      damageScaling: number;
     }
   | {
       id: string;
@@ -270,21 +282,24 @@ export class RoundActive extends State<
       singlePlayer: boolean;
       songs: Song[];
       song: Song;
+      songUrl: string;
       songStartFraction: number;
       round: number;
       timerDurationSecs: number;
       timerStarted: Date;
       timerId: NodeJS.Timeout;
+      damageScaling: number;
     },
   [
     "id",
     "owner",
     "singlePlayer",
-    "song",
+    "songUrl",
     "songStartFraction",
     "round",
     "timerStarted",
     "timerDurationSecs",
+    "damageScaling",
   ],
   | {
       id: string;
@@ -308,11 +323,12 @@ export class RoundActive extends State<
     "id",
     "owner",
     "singlePlayer",
-    "song",
+    "songUrl",
     "songStartFraction",
     "round",
     "timerStarted",
     "timerDurationSecs",
+    "damageScaling",
   ] as const;
   public publicUserKeys = ["id", "health", "guessTime"] as const;
   public privateUserKeys = ["guess"] as const;
@@ -366,47 +382,37 @@ export class RoundActive extends State<
   private roundOver() {
     clearTimeout(this.game.timerId);
 
-    const guesses = mapValues(this.users, (user) => user.guess);
-    const results = mapValues(guesses, (guess) => {
-      if (guess) {
-        return scoreGuess(guess, this.game.song);
-      } else {
-        return null;
-      }
-    });
-
-    // In a single player game, you always lose health as if someone else got it perfect
-    const scores = Object.values(results).map((r) => r?.score ?? 0);
-    const bestScore = this.game.singlePlayer ? 5000 : Math.max(...scores);
-
-    const newUserState: RoundOver["users"] = mapValues(this.users, (user) => {
-      const result = results[user.id];
-      const score = result?.score ?? 0;
-      const damage = bestScore - score;
-      const newHealth = user.health - damage;
-      const guess =
-        result === null
-          ? null
-          : {
-              coordinate: user.guess!,
-              time: user.guessTime!,
-              closest: result.closest,
-              distance: result.distance,
-            };
+    const roundResult = calculateRoundResult(this);
+    const newUserState = mapValues(this.users, (user) => {
+      const result = roundResult.users[user.id];
       return {
-        id: user.id,
+        ...pick(user, "id", "transport"),
         healthBefore: user.health,
-        health: Math.max(newHealth, 0),
-        guess,
-        score,
-        transport: user.transport,
+        health: Math.min(Math.max(0, user.health - result.damage.total), 99),
+        guessResult: result.guessResult,
+        damage: result.damage,
       };
     });
 
     return this.transition(
       new RoundOver(
         this.store,
-        omit(this.game, "timerStarted", "timerId"),
+        {
+          ...pick(
+            this.game,
+            "id",
+            "owner",
+            "singlePlayer",
+            "songs",
+            "song",
+            "songUrl",
+            "songStartFraction",
+            "round",
+            "timerDurationSecs",
+            "damageScaling"
+          ),
+          bestGuess: roundResult.bestGuess,
+        },
         newUserState
       )
     );
@@ -416,7 +422,11 @@ export class RoundActive extends State<
     userId: string,
     message: { action: string; data?: any }
   ): void {
-    if (message.action === "guess" && this.users[userId].guess === undefined && this.users[userId].health >= 0) {
+    if (
+      message.action === "guess" &&
+      this.users[userId].guess === undefined &&
+      this.users[userId].health >= 0
+    ) {
       this.guess(userId, message.data);
     }
   }
@@ -430,33 +440,52 @@ export class RoundOver extends State<
     singlePlayer: boolean;
     songs: Song[];
     song: Song;
+    songUrl: string;
     songStartFraction: number;
     round: number;
     timerDurationSecs: number;
+    bestGuess: {
+      userId: string;
+      coordinate: Coordinate;
+      time: Date;
+      closest: Coordinate;
+      distance: number;
+      perfect: boolean;
+    } | null;
+    damageScaling: number;
   },
   [
     "id",
     "owner",
     "singlePlayer",
     "song",
+    "songUrl",
     "songStartFraction",
     "round",
     "timerDurationSecs",
+    "bestGuess",
+    "damageScaling",
   ],
   {
     id: string;
     healthBefore: number;
     health: number;
-    guess: {
+    guessResult: {
       coordinate: Coordinate;
       time: Date;
       closest: Coordinate;
       distance: number;
+      perfect: boolean;
     } | null;
-    score: number;
+    damage: {
+      hit: number;
+      healing: number;
+      venom: number;
+      total: number;
+    };
     transport: Transport;
   },
-  ["id", "healthBefore", "health", "guess", "score"],
+  ["id", "healthBefore", "health", "guessResult", "damage"],
   []
 > {
   public stateName = "RoundOver" as const;
@@ -465,16 +494,19 @@ export class RoundOver extends State<
     "owner",
     "singlePlayer",
     "song",
+    "songUrl",
     "songStartFraction",
     "round",
     "timerDurationSecs",
+    "bestGuess",
+    "damageScaling",
   ] as const;
   public publicUserKeys = [
     "id",
     "healthBefore",
     "health",
-    "guess",
-    "score",
+    "guessResult",
+    "damage",
   ] as const;
   public privateUserKeys = [] as const;
 
@@ -499,13 +531,24 @@ export class RoundOver extends State<
         )
       );
     } else {
+      // Handle shuffling songs if you manage to play like 600 rounds
+      const round = this.game.round + 1;
+      const songIdx = (round - 1) % this.game.songs.length;
+      let songs = this.game.songs;
+      if (songIdx === 0) {
+        songs = shuffle([...songs]);
+      }
+      const song = songs[songIdx];
+
       return this.transition(
         new RoundActive(
           this.store,
           {
             ...this.game,
-            round: this.game.round + 1,
-            song: this.game.songs[this.game.round + 1],
+            songs,
+            round,
+            song,
+            songUrl: song.audioUrl,
           },
           mapValues(this.users, (user) =>
             pick(user, "id", "health", "transport")
@@ -532,8 +575,9 @@ export class GameOver extends State<
     owner: string;
     singlePlayer: boolean;
     round: number;
+    damageScaling: number;
   },
-  ["id", "owner", "singlePlayer", "round"],
+  ["id", "owner", "singlePlayer", "round", "damageScaling"],
   {
     id: string;
     health: number;
@@ -543,7 +587,13 @@ export class GameOver extends State<
   []
 > {
   public stateName = "GameOver" as const;
-  public publicGameKeys = ["id", "owner", "singlePlayer", "round"] as const;
+  public publicGameKeys = [
+    "id",
+    "owner",
+    "singlePlayer",
+    "round",
+    "damageScaling",
+  ] as const;
   public publicUserKeys = ["id", "health"] as const;
   public privateUserKeys = [] as const;
 
@@ -551,7 +601,7 @@ export class GameOver extends State<
     return this.transition(
       new Lobby(
         this.store,
-        pick(this.game, "id", "owner", "singlePlayer"),
+        pick(this.game, "id", "owner", "singlePlayer", "damageScaling"),
         mapValues(this.users, (user) => pick(user, "id", "transport"))
       )
     );
@@ -582,7 +632,7 @@ export type ClientStateData<StateName extends AnyServerState["stateName"]> = {
 };
 
 export type ClientActions =
-  | { action: "start"; data?: { timerDurationSecs?: number; health?: number; } }
+  | { action: "start"; data?: { timerDurationSecs?: number; health?: number } }
   | { action: "guess"; data: Coordinate }
   | { action: "nextRound" }
   | { action: "playAgain" };

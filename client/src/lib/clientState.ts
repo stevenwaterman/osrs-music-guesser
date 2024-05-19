@@ -151,7 +151,7 @@ export function connectToLocalServer(): Transport {
   const store = new StateStore(gameId, possibleSongs);
   store.state = new Lobby(
     store,
-    { id: gameId, owner: userId, singlePlayer: true },
+    { id: gameId, owner: userId, singlePlayer: true, damageScaling: 1 },
     { [userId]: { id: userId, transport: serverSide } }
   );
 

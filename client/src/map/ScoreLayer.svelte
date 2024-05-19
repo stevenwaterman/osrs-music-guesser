@@ -31,15 +31,17 @@
     const lines: L.Polyline[] = [];
 
     for (const user of Object.values(data.users)) {
-      if (user.guess === null) {
+      if (user.guessResult === null) {
         continue;
       }
 
-      const { coordinate, closest } = user.guess;
+      const { coordinate, closest } = user.guessResult;
       const leafletCoordinate = convertLeaflet.coordinate.to(coordinate);
       const leafletClosest = convertLeaflet.coordinate.to(closest);
 
-      const marker = new L.Marker(leafletCoordinate, { title: user.id }).addTo(layer);
+      const marker = new L.Marker(leafletCoordinate, { title: user.id }).addTo(
+        layer
+      );
       const line = new L.Polyline([leafletCoordinate, leafletClosest]).addTo(
         layer
       );

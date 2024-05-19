@@ -98,11 +98,11 @@ function onJoin(ws: WebSocket, searchParams: URLSearchParams) {
 
   game.state = new StateInterface.Lobby(
     game,
-    { id: game.gameId, owner: userId, singlePlayer: false },
+    { id: game.gameId, owner: userId, singlePlayer: false, damageScaling: 1 },
     { [userId]: { id: userId, transport: ws } }
   );
 
-  console.log(`${userId} joined ${game.gameId}`)
+  console.log(`${userId} joined ${game.gameId}`);
 }
 
 setInterval(function ping() {

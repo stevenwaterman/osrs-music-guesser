@@ -1,6 +1,5 @@
 export { type Coordinate, type Polygon } from "./coordinates.js";
 export { convertFlatten } from "./coordinates.js";
-export { scoreGuess } from "./scoring.js";
 export * as StateInterface from "./states.js";
 export { type Song } from "./songTypes.js";
 export * from "./util.js";
