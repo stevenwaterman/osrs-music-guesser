@@ -22,15 +22,15 @@
     }, 1000);
 
     setTimeout(() => {
-      showHealing = true;
+      showHit = true;
     }, 1300);
 
     setTimeout(() => {
-      showHit = true;
+      showVenom = true;
     }, 1600);
 
     setTimeout(() => {
-      showVenom = true;
+      showHealing = true;
     }, 1900);
 
     setTimeout(() => {
@@ -54,25 +54,31 @@
     </div>
   {/if}
 
-  {#if showHealing && state.data.me.damage.healing > 0}
-    <!-- Show healing icon -->
-    <SoundEffect audioUrl="/eat.ogg" />
-  {/if}
-
-  {#if showHit}
-    {#if state.data.me.damage.hit === 0}
-      <!-- Show blue hitsplat icon -->
-      <SoundEffect audioUrl="/block.ogg" />
-    {:else}
-      <!-- Show red hitsplat icon -->
-      <SoundEffect audioUrl="/hit.ogg" />
+  <div class="column">
+    {#if showHit}
+      {#if state.data.me.damage.hit === 0}
+        <!-- Show blue hitsplat icon -->
+        <span class="splash splat">{state.data.me.damage.healing}</span>
+        <SoundEffect audioUrl="/block.ogg" />
+      {:else}
+        <!-- Show red hitsplat icon -->
+        <span class="hit splat">{state.data.me.damage.healing}</span>
+        <SoundEffect audioUrl="/hit.ogg" />
+      {/if}
     {/if}
-  {/if}
 
-  {#if showVenom && state.data.me.damage.venom > 0}
-    <!-- Show venom hitsplat -->
-    <SoundEffect audioUrl="/venom.ogg" />
-  {/if}
+    {#if showVenom && state.data.me.damage.venom > 0}
+      <!-- Show venom hitsplat -->
+      <span class="venom splat">{state.data.me.damage.healing}</span>
+      <SoundEffect audioUrl="/venom.ogg" />
+    {/if}
+
+    {#if showHealing && state.data.me.damage.healing > 0}
+      <!-- Show healing icon -->
+      <span class="healing splat">{state.data.me.damage.healing}</span>
+      <SoundEffect audioUrl="/eat.ogg" />
+    {/if}
+  </div>
 
   {#if $health === 0}
     <!-- Show skull or some indication that you are dead -->
@@ -107,6 +113,46 @@
     font-size: 10rem;
     font-weight: bold;
     -webkit-text-stroke: 4px black;
+  }
+
+  .column {
+    display: grid;
+    grid-template-rows: 1fr 1fr 1fr;
+    align-items: center;
+    position: fixed;
+    right: 2rem;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 5rem;
+  }
+
+  .splat {
+    padding: 1rem;
+    display: inline;
+    padding: 1rem 3rem;
+    border-radius: 1rem;
+    margin: 1rem;
+    color: black;
+  }
+
+  .splash {
+    background-color: blue;
+    grid-row: 1;
+  }
+
+  .hit {
+    background-color: red;
+    grid-row: 1;
+  }
+
+  .venom {
+    background-color: green;
+    grid-row: 2;
+  }
+
+  .healing {
+    background-color: magenta;
+    grid-row: 3;
   }
   @media only screen and (max-width: 1000px) {
     .wrapper {
