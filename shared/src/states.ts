@@ -482,6 +482,7 @@ export class RoundOver extends State<
       healing: number;
       venom: number;
       total: number;
+      max: boolean;
     };
     transport: Transport;
   },

@@ -58,7 +58,11 @@
       (acc, elem) => acc.extend(elem.getBounds()),
       lines[0].getBounds()
     );
-    map.flyToBounds(bounds, { animate: true, duration: 1, padding: [50, 50] });
+    map.flyToBounds(bounds, {
+      animate: true,
+      duration: 0.6,
+      padding: [50, 50],
+    });
 
     return () => {
       layer.remove();

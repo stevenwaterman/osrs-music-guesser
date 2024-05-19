@@ -6,23 +6,19 @@
 </script>
 
 <div class="buttons">
-  <button on:click={() => state.singlePlayer()}
-    >Single Player</button
-  >
-  <button on:click={() => state.multiPlayer()}
-    >Multiplayer</button
-  >
+  <button on:click={() => state.singlePlayer()}>Single Player</button>
+  <button on:click={() => state.multiPlayer()}>Multiplayer</button>
 </div>
 
 <style>
   .buttons {
     grid-column-start: 1;
     grid-column-end: 4;
-    grid-row: 3;
+    grid-row: 4;
     align-self: flex-end;
     justify-self: center;
     pointer-events: initial;
-    
+
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 1rem;
@@ -35,8 +31,7 @@
   @media only screen and (max-width: 1000px) {
     .buttons {
       grid-column: 1;
-      grid-template-columns: 1fr;
-      grid-template-rows: auto auto;
+      grid-template-columns: 1fr 1fr;
     }
   }
 </style>

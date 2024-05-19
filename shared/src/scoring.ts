@@ -55,6 +55,7 @@ type RoundResult = {
         healing: number;
         venom: number;
         total: number;
+        max: boolean;
       };
     }
   >;
@@ -153,6 +154,7 @@ export function calculateRoundResult(state: RoundActive): RoundResult {
     const maxHit = Math.min(80, distanceMaxHit);
 
     const originalHit = extraDistance / 10;
+    const wasMax = originalHit > maxHit;
     const hit = Math.ceil(Math.min(originalHit, maxHit));
 
     return {
@@ -160,6 +162,7 @@ export function calculateRoundResult(state: RoundActive): RoundResult {
       healing,
       venom,
       total: hit + venom - healing,
+      max: wasMax,
     };
   });
 
@@ -175,6 +178,7 @@ export function calculateRoundResult(state: RoundActive): RoundResult {
             healing: 0,
             venom: 0,
             total: 0,
+            max: false,
           },
         };
       }
