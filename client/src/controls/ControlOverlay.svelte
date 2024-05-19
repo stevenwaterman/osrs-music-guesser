@@ -10,10 +10,14 @@
   import WikiDisplay from "./WikiDisplay.svelte";
   import HealthLeaderboard from "./HealthLeaderboard.svelte";
   import Damage from "./Damage.svelte";
+  import VolumeSlider from "./VolumeSlider.svelte";
+  import ConfirmGuess from "./ConfirmGuess.svelte";
   $: state = $stateStore;
 </script>
 
 <div class="grid">
+  <VolumeSlider />
+
   {#if state.isAny("StartScreen")}
     <MainMenu {state} />
   {/if}
@@ -29,14 +33,16 @@
 
     {#if state.isAnyActive("RoundActive", "RoundOver")}
       <Audio
-        song={state.data.game.song}
+        audioUrl={state.data.game.song.audioUrl}
         control={state.isAnyActive("RoundOver")}
         startFraction={state.data.game.songStartFraction}
+        loop={true}
       />
     {/if}
 
     {#if state.isAnyActive("RoundActive")}
       <Timer {state} />
+      <ConfirmGuess {state} />
     {/if}
 
     {#if state.isAnyActive("RoundOver")}
@@ -77,7 +83,7 @@
   @media only screen and (max-width: 1000px) {
     .grid {
       grid-template-columns: 1fr;
-      grid-template-rows: 1fr 1fr 4rem 3rem;
+      grid-template-rows: 1fr 1fr 1fr 4rem 3rem;
     }
   }
 </style>

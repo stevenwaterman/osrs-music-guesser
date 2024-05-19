@@ -1,26 +1,37 @@
 <script lang="ts">
-  import { fade } from "svelte/transition";
-  import type { Song } from "tunescape07-shared";
+  import { volumeStore } from "../lib/stores";
 
-  export let song: Song;
+  export let audioUrl: string;
   export let control: boolean;
   export let startFraction: number;
+  export let loop: boolean;
 
-  function seek(audio: HTMLAudioElement, fraction: number) {
+  let audio: HTMLAudioElement;
+
+  function seek(fraction: number) {
     const desiredCurrentTime = audio.duration * fraction;
     const delta = Math.abs(audio.currentTime - desiredCurrentTime);
     if (delta > 0.1) {
       audio.currentTime = audio.duration * fraction;
     }
   }
+
+  $: if (audio) {
+    audio.volume = $volumeStore;
+  }
+  function volumeChange() {
+    volumeStore.set(audio.volume);
+  }
 </script>
 
 <audio
-  src={song.audioUrl}
+  bind:this={audio}
+  src={audioUrl}
   controls={control}
   autoplay
-  loop
-  on:loadedmetadata={(ev) => seek(ev.currentTarget, startFraction)}
+  {loop}
+  on:loadedmetadata={() => seek(startFraction)}
+  on:volumechange={() => volumeChange()}
 />
 
 <style>
@@ -39,7 +50,7 @@
   @media only screen and (max-width: 1000px) {
     audio {
       grid-column: 1;
-      grid-row: 4;
+      grid-row: 5;
     }
   }
 </style>

@@ -1,7 +1,9 @@
 <script lang="ts">
   import { tweened } from "svelte/motion";
-  import { fade } from "svelte/transition";
   import { type ActiveState } from "../lib/clientState";
+  import { onMount } from "svelte";
+  import Audio from "./Audio.svelte";
+  import SoundEffect from "./SoundEffect.svelte";
 
   export let state: ActiveState<"RoundOver">;
 
@@ -9,7 +11,20 @@
   $: healthEnd = state.data.me.health;
 
   $: health = tweened(healthStart);
-  $: health.set(healthEnd, { duration: 1000 });
+
+  let show = false;
+  let playHit = false;
+
+  onMount(() => {
+    setTimeout(() => {
+      show = true;
+    }, 1000);
+
+    setTimeout(() => {
+      playHit = true;
+      health.set(healthEnd, { duration: 300 });
+    }, 1400);
+  });
 
   $: roundedHealth = Math.round($health);
   $: firstDigit = Math.floor(roundedHealth / 10000);
@@ -19,16 +34,28 @@
   $: fifthDigit = Math.floor(roundedHealth % 10);
 </script>
 
-<div class="wrapper">
-  <span class="label">Health:</span>
-  <div class="health" style="">
-    <span class="digit">{firstDigit}</span>
-    <span class="digit">{secondDigit}</span>
-    <span class="digit">{thirdDigit}</span>
-    <span class="digit">{fourthDigit}</span>
-    <span class="digit">{fifthDigit}</span>
+{#if show}
+  <div class="wrapper">
+    <span class="label">Health:</span>
+    <div class="health" style="">
+      <span class="digit">{firstDigit}</span>
+      <span class="digit">{secondDigit}</span>
+      <span class="digit">{thirdDigit}</span>
+      <span class="digit">{fourthDigit}</span>
+      <span class="digit">{fifthDigit}</span>
+    </div>
   </div>
-</div>
+{/if}
+
+{#if playHit && healthStart > 0}
+  <SoundEffect audioUrl="/hit.ogg" />
+{/if}
+
+{#if healthStart > 0 && $health === 0}
+  <SoundEffect
+    audioUrl="https://oldschool.runescape.wiki/images/Oh_dear%2C_you_are_dead%21.ogg"
+  />
+{/if}
 
 <style>
   .wrapper {
@@ -59,8 +86,7 @@
   @media only screen and (max-width: 1000px) {
     .wrapper {
       grid-column: 1;
-      grid-row-start: 1;
-      grid-row-end: 3;
+      grid-row: 2;
       align-self: center;
     }
     .health {

@@ -39,7 +39,7 @@
       const leafletCoordinate = convertLeaflet.coordinate.to(coordinate);
       const leafletClosest = convertLeaflet.coordinate.to(closest);
 
-      const marker = new L.Marker(leafletCoordinate).addTo(layer);
+      const marker = new L.Marker(leafletCoordinate, { title: user.id }).addTo(layer);
       const line = new L.Polyline([leafletCoordinate, leafletClosest]).addTo(
         layer
       );
