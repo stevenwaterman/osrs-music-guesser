@@ -98,7 +98,7 @@ export function calculateRoundResult(state: RoundActive): RoundResult {
       return elem;
     }
 
-    if (elem[1].time < acc[1].time) {
+    if (elem[1].distance === acc[1].distance && elem[1].time < acc[1].time) {
       return elem;
     }
 
@@ -132,7 +132,7 @@ export function calculateRoundResult(state: RoundActive): RoundResult {
     minimumHealing
   );
 
-  const noVenomUntilRound = 0;
+  const noVenomUntilRound = 10;
   const venomIncreasePerRound = 1;
   const roundsOfVenom = Math.max(state.game.round - noVenomUntilRound, 0);
   const venomAmount = roundsOfVenom * venomIncreasePerRound;
@@ -147,8 +147,11 @@ export function calculateRoundResult(state: RoundActive): RoundResult {
     const distance = myGuess?.distance ?? Number.MAX_SAFE_INTEGER;
     const extraDistance = distance - bestDistance;
 
+    const distanceMultiple =
+      bestDistance === 0 ? Number.MAX_SAFE_INTEGER : distance / bestDistance;
+    const maxHit = Math.min(80, distanceMultiple * 10);
+
     const originalHit = Math.ceil(extraDistance / 10);
-    const maxHit = 80;
     const hit = Math.min(originalHit, maxHit);
 
     return {
