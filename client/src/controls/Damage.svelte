@@ -58,18 +58,18 @@
     {#if showHit}
       {#if state.data.me.damage.hit === 0}
         <!-- Show blue hitsplat icon -->
-        <span class="splash splat">{state.data.me.damage.healing}</span>
+        <span class="splash splat">{state.data.me.damage.hit}</span>
         <SoundEffect audioUrl="/block.ogg" />
       {:else}
         <!-- Show red hitsplat icon -->
-        <span class="hit splat">{state.data.me.damage.healing}</span>
+        <span class="hit splat">{state.data.me.damage.hit}</span>
         <SoundEffect audioUrl="/hit.ogg" />
       {/if}
     {/if}
 
     {#if showVenom && state.data.me.damage.venom > 0}
       <!-- Show venom hitsplat -->
-      <span class="venom splat">{state.data.me.damage.healing}</span>
+      <span class="venom splat">{state.data.me.damage.venom}</span>
       <SoundEffect audioUrl="/venom.ogg" />
     {/if}
 
@@ -123,14 +123,14 @@
     right: 2rem;
     top: 50%;
     transform: translateY(-50%);
-    font-size: 5rem;
+    font-size: 4rem;
   }
 
   .splat {
     padding: 1rem;
     display: inline;
-    padding: 1rem 3rem;
-    border-radius: 1rem;
+    padding: 1rem 2rem;
+    border-radius: 100%;
     margin: 1rem;
     color: black;
   }
