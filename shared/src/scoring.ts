@@ -149,10 +149,11 @@ export function calculateRoundResult(state: RoundActive): RoundResult {
 
     const distanceMultiple =
       bestDistance === 0 ? Number.MAX_SAFE_INTEGER : distance / bestDistance;
-    const maxHit = Math.min(80, distanceMultiple * 10);
+    const distanceMaxHit = distanceMultiple * 20;
+    const maxHit = Math.min(80, distanceMaxHit);
 
-    const originalHit = Math.ceil(extraDistance / 10);
-    const hit = Math.min(originalHit, maxHit);
+    const originalHit = extraDistance / 10;
+    const hit = Math.ceil(Math.min(originalHit, maxHit));
 
     return {
       hit,
