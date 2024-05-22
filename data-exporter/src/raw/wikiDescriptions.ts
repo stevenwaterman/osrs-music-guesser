@@ -263,7 +263,7 @@ export const songDescriptions: Record<SongName, string[]> = {
   ],
   "Bob's on Holiday": [
     "Plays during A Tail of Two Cats. It can be heard during the cutscene showing the various adventures of Bob and Neite.",
-    "Valid answers include the Sophanem Pyramid, the King Black Dragon's Lair, and the Quest Icon in Burthorpe (for the scene parodying Titanic which has no specific location)",
+    "The only locations shown in the cutscene that are visible on the map are the Sophanem Pyramid and the King Black Dragon's Lair.",
   ],
   "Body Parts": [
     "Plays in the Experiment Cave under Fenkenstrain's Castle.",
@@ -788,10 +788,7 @@ export const songDescriptions: Record<SongName, string[]> = {
     ...keldagrim,
   ],
   Forgotten: ["Plays in the temple basement under the Ruins of Uzer."],
-  "A Forgotten Religion": [
-    "Plays upon entering the Forthos Dungeon.",
-    ...forthos,
-  ],
+  "A Forgotten Religion": ["Plays upon entering the Forthos Dungeon.", forthos],
   "The Forgotten Tomb": [
     "Plays during the Beneath Cursed Sands quest, in the tombs below Ruins of Ullek.",
   ],
@@ -1498,7 +1495,7 @@ export const songDescriptions: Record<SongName, string[]> = {
     "Plays while playing the Pest Control minigame, or during the first part of the naval assault in Dragon Slayer II.",
     "As it's impossible to pinpoint the exact location of the naval assault, the Dragon Slayer II quest icon is a valid answer.",
   ],
-  "Pharaoh's Tomb": ["Plays in the Agility Pyramid."],
+  "Pharaoh's Tomb": ["Plays around and on the Agility Pyramid."],
   "The Pharaoh": [
     "Plays during the ending cutscene of Beneath Cursed Sands, when Pharaoh Kemesis makes an appearance",
   ],

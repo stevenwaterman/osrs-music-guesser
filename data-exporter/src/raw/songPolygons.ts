@@ -65,7 +65,7 @@ const karuulmSlayerDungeon = rectangle(1314, 3804, 1308, 3810);
 const zanaris = rectangle(3202, 3171, 3206, 3167);
 const clockTower = rectangle(2567, 3227, 2571, 3231);
 const ourania = rectangle(2450, 3229, 2454, 3233);
-const varrockStatue = rectangle(3280, 3465, 3287, 3471);
+const varrockStatue = rectangle(3280, 3465, 3288, 3472);
 const godWars = rectangle(2916, 3750, 2922, 3744);
 const taverleyDungeon = [
   // main entrance
@@ -73,7 +73,11 @@ const taverleyDungeon = [
   // fire obelisk entrance
   rectangle(2840, 3426, 2844, 3422),
 ];
-const tob = rectangle(3675, 3221, 3679, 3217);
+const tob = [
+  rectangle(3675, 3221, 3679, 3217),
+  rectangle(3660, 3221, 3664, 3217),
+];
+
 const wildyGodWars = rectangle(3019, 3737, 3015, 3741);
 const barbAssault = rectangle(2538, 3575, 2529, 3566);
 const tzhaar = [
@@ -91,7 +95,7 @@ const yanilleAgility = [
   rectangle(2602, 3080, 2606, 3076),
 ];
 const kbd = rectangle(3015, 3851, 3019, 3847);
-const lithkren = rectangle(3559, 3988, 3546, 4007);
+const lithkren = rectangle(3560, 3988, 3547, 4008);
 const ogreEnclave = rectangle(2504, 3041, 2508, 3037);
 const braindeath = rectangle(3676, 3540, 3683, 3533);
 const brimhavenAgility = rectangle(2807, 3196, 2811, 3192);
@@ -141,7 +145,7 @@ const experiments = [
   // graves
   rectangle(3574, 3528, 3578, 3524),
   // north - mausoleum
-  rectangle(3502, 3572, 3507, 3569),
+  rectangle(3502, 3574, 3508, 3569),
 ];
 const pollnivneachSmokeDungeon = rectangle(3308, 2964, 3312, 2960);
 const mimic = rectangle(1642, 3573, 1649, 3570);
@@ -186,12 +190,12 @@ const swampCavesDorgeshKaanTears = [
 ];
 const deepWildyDungeon = rectangle(3043, 3926, 3047, 3922);
 const ardySewerWest = rectangle(2585, 3237, 2589, 3233);
-const elenaPrisonPlagueCity = rectangle(2534, 3271, 2538, 3267);
+const elenaPrisonPlagueCity = rectangle(2535, 3272, 2539, 3268);
 const carnelianBasement = rectangle(2569, 3269, 2572, 3266);
-const varrockWestBankVault = rectangle(3186, 3436, 3192, 3433);
+const varrockWestBankVault = rectangle(3186, 3436, 3191, 3433);
 const templeOfIkov = [
   // Main entrance
-  rectangle(2675, 3406, 2679, 3402),
+  rectangle(2675, 3407, 2680, 3402),
   // McGrubbor's wood
   rectangle(2657, 3494, 2661, 3490),
 ];
@@ -201,7 +205,8 @@ const hauntedMine = [
   // south west
   rectangle(3438, 3234, 3442, 3230),
 ];
-const culinaromancer = rectangle(3207, 3220, 3209, 3218);
+const culinaromancer = rectangle(3205, 3220, 3212, 3212);
+const rfd = rectangle(3205, 3217, 3212, 3212);
 const recruitmentDrive = rectangle(2961, 3340, 2965, 3336);
 const clanWars = rectangle(3126, 3626, 3132, 3618);
 const lms = rectangle(3138, 3646, 3146, 3632);
@@ -286,9 +291,9 @@ const penguin = rectangle(2623, 4056, 2679, 3999);
 const dream = rectangle(2071, 3914, 2075, 3910);
 const trollArenaPassage = [
   // north
-  rectangle(2905, 3656, 2910, 3651),
+  rectangle(2906, 3656, 2911, 3651),
   // south
-  rectangle(2901, 3646, 2907, 3641),
+  rectangle(2902, 3646, 2908, 3641),
 ];
 const trollIceTunnel = [
   // north
@@ -315,7 +320,7 @@ const roguesDen = rectangle(2904, 3539, 2908, 3535);
 const glod = rectangle(2921, 3427, 2924, 3424);
 const soulsBane = rectangle(3307, 3452, 3311, 3448);
 const apeAtollDungeonMM1 = rectangle(2761, 2705, 2765, 2701);
-const cox = rectangle(1231, 3575, 1235, 3571);
+const cox = [rectangle(1231, 3575, 1235, 3571), rectangle(1231, 3560, 1235, 3556)];
 const lletya = rectangle(2310, 3198, 2363, 3143);
 const uzer = rectangle(3491, 3093, 3496, 3088);
 const beneathCursedSands = rectangle(3406, 2850, 3410, 2846);
@@ -363,10 +368,10 @@ const xericsLookoutBasement = rectangle(1588, 3528, 1592, 3524);
 const icthlarinPyramid = rectangle(3288, 2780, 3302, 2766);
 const kalphiteLair = rectangle(3225, 3110, 3229, 3106);
 const kalphiteCave = rectangle(3318, 3124, 3322, 3120);
-const toa = rectangle(3356, 2713, 3360, 2709);
+const toa = rectangle(3352, 2717, 3360, 2709);
 const morytaniaSpiderNest = rectangle(3655, 3411, 3659, 3407);
 const yama = rectangle(1808, 3692, 1824, 3688);
-const keepLeFaye = rectangle(2763, 3409, 2776, 3393);
+const keepLeFaye = rectangle(2764, 3410, 2776, 3395);
 const fossilIslandUnderwater = rectangle(3764, 3900, 3768, 3896);
 const shades = rectangle(3483, 3323, 3487, 3319);
 const jormungandPrison = rectangle(2463, 4014, 2467, 4010);
@@ -393,7 +398,48 @@ const oldSchoolMuseum = [
   // east ladder
   rectangle(3053, 3385, 3055, 3383),
 ];
-const prif = rectangle(2181, 3386, 2297, 3269);
+const prif = [
+  [2183, 3359],
+  [2180, 3362],
+  [2180, 3365],
+  [2183, 3368],
+  [2186, 3368],
+  [2200, 3382],
+  [2200, 3385],
+  [2203, 3388],
+  [2206, 3388],
+  [2209, 3385],
+  [2271, 3385],
+  [2274, 3388],
+  [2277, 3388],
+  [2280, 3385],
+  [2280, 3382],
+  [2294, 3368],
+  [2297, 3368],
+  [2300, 3365],
+  [2300, 3362],
+  [2297, 3359],
+  [2297, 3297],
+  [2300, 3294],
+  [2300, 3291],
+  [2297, 3288],
+  [2294, 3288],
+  [2280, 3274],
+  [2280, 3271],
+  [2277, 3268],
+  [2273, 3268],
+  [2270, 3271],
+  [2209, 3271],
+  [2206, 3268],
+  [2203, 3268],
+  [2200, 3271],
+  [2200, 3274],
+  [2186, 3288],
+  [2183, 3288],
+  [2180, 3291],
+  [2180, 3294],
+  [2183, 3297],
+] as Face;
 const grandTreeTunnels = rectangle(2461, 3498, 2465, 3494);
 const swensenPuzzle = rectangle(2643, 3659, 2646, 3657);
 const iceTrollCaves = [
@@ -577,9 +623,9 @@ const eaglesTransportWithoutJungle = [eaglesPeak, polarEagle, desertEagle];
 const eaglesTransportWithoutPolar = [eaglesPeak, desertEagle, jungleEagle];
 const eaglesTransport = [eaglesPeak, polarEagle, desertEagle, jungleEagle];
 const waterAltar = rectangle(3181, 3167, 3186, 3161);
-const miscPrinceBrand = rectangle(2497, 3855, 2509, 3845);
+const miscPrinceBrand = rectangle(2498, 3855, 2509, 3846);
 const rellekkaLongHall = rectangle(2655, 3686, 2663, 3665);
-const vardorvis = rectangle(1120, 3427, 1138, 3409);
+const vardorvis = rectangle(1121, 3427, 1138, 3410);
 const sophanemBobAdventure = rectangle(3282, 2778, 3302, 2797);
 
 const atlasCutscene = [
@@ -717,7 +763,7 @@ const morytaniaHespori = rectangle(3500, 3365, 3514, 3349);
 const aidOfMyrequeVanstromGadderanks = rectangle(3531, 3214, 3542, 3204);
 const sotfVanescula = rectangle(3542, 3521, 3554, 3513);
 const ratcatchers = rectangle(3148, 3413, 3152, 3409);
-const laboratoriesOnlyMeiyerditch = rectangle(3641, 3306, 3645, 3303);
+const laboratoriesOnlyMeiyerditch = rectangle(3641, 3307, 3645, 3303);
 const myrequeLaboratories = [
   // canifis
   ...myrequeHideoutCanifis,
@@ -869,7 +915,7 @@ export const songPolygons: Record<SongName, Polygon> = {
     ],
   ],
   Arabique: taverleyDungeon,
-  "Arachnids of Vampyrium": [tob],
+  "Arachnids of Vampyrium": tob,
   Arboretum: [
     [
       [3615, 3365],
@@ -1104,7 +1150,7 @@ export const songPolygons: Record<SongName, Polygon> = {
   "Bandos Battalion": [godWars],
   Bane: [corp],
   "The Bane of Ashihama": [...nightmare],
-  "Barb Wire": [lithkren, ancientCavern],
+  "Barb Wire": [ancientCavern],
   Barbarianism: [
     [
       [3072, 3392],
@@ -1502,14 +1548,13 @@ export const songPolygons: Record<SongName, Polygon> = {
   "Creature Cruelty": [towerOfLifeUpstairs],
   "Creeping Vines": [hespori],
   "Crystal Castle": [
-    // TODO this doesn't play in prif only around it
     [
       [2112, 3264],
       [2112, 3392],
       [2304, 3392],
       [2304, 3264],
-      [2112, 3264],
     ],
+    prif,
   ],
   "Crystal Cave": [zanaris],
   "Crystal Sword": [
@@ -1524,10 +1569,10 @@ export const songPolygons: Record<SongName, Polygon> = {
     ],
   ],
   Cursed: [wrathAltar, rabbitCave, ...undergroundPass],
-  "The Curtain Closes": [tob],
+  "The Curtain Closes": tob,
   "Dagannoth Dawn": dks,
   "Dance of Death": [strongholdOfSecurity],
-  "Dance of the Nylocas": [tob],
+  "Dance of the Nylocas": tob,
   "Dance of the Undead": [
     [
       [3520, 3264],
@@ -1566,7 +1611,7 @@ export const songPolygons: Record<SongName, Polygon> = {
       [3264, 3648],
     ],
   ],
-  "The Dark Beast Sotetseg": [tob],
+  "The Dark Beast Sotetseg": tob,
   "Darkly Altared": catacombsGiantsDen,
   "Darkness in the Depths": [chasmOfFire],
   "Davy Jones' Locker": [mogreCamp],
@@ -2093,7 +2138,7 @@ export const songPolygons: Record<SongName, Polygon> = {
       [1244, 3732],
     ],
   ],
-  "The Fat Lady Sings": [tob],
+  "The Fat Lady Sings": tob,
   "Fe Fi Fo Fum": [glod],
   "Fear and Loathing": [soulsBane],
   "Fenkenstrain's Refrain": [
@@ -2108,7 +2153,7 @@ export const songPolygons: Record<SongName, Polygon> = {
   "Fight or Flight": [...undergroundPass],
   "Find My Way": [apeAtollDungeonMM1],
   "Fire and Brimstone": tzhaar,
-  "Fire in the Deep": [cox],
+  "Fire in the Deep": [...cox],
   "The Fires of Lletya": [lletya],
   Fishing: [
     [
@@ -2497,14 +2542,6 @@ export const songPolygons: Record<SongName, Polygon> = {
       [1389, 3830],
       [1376, 3830],
     ],
-
-    [
-      [1368, 10240],
-      [1400, 10240],
-      [1400, 10208],
-      [1368, 10208],
-      [1368, 10240],
-    ],
   ],
   "The Forsaken": [lithkren],
   Fossilised: fossilIslandWyverns,
@@ -2890,7 +2927,7 @@ export const songPolygons: Record<SongName, Polygon> = {
       [2112, 3840],
     ],
   ],
-  "It's not over 'til...": [tob],
+  "It's not over 'til...": tob,
   "Itsy Bitsy...": [morytaniaSpiderNest],
   "Jolly R": [
     [
@@ -3270,7 +3307,7 @@ export const songPolygons: Record<SongName, Polygon> = {
       [2688, 3136],
     ],
   ],
-  "Last King of the Yarasa": [tob],
+  "Last King of the Yarasa": tob,
   "Last Man Standing": [lms],
   "The Last Shanty": [
     [
@@ -3307,8 +3344,6 @@ export const songPolygons: Record<SongName, Polygon> = {
     ],
   ],
   Legion: [
-    barbAssault,
-
     [
       [2496, 3520],
       [2496, 3584],
@@ -3421,7 +3456,7 @@ export const songPolygons: Record<SongName, Polygon> = {
     ],
   ],
   "The Lost Tribe": [...swampCavesDorgeshKaanTears],
-  "Lower Depths": [cox, quidamortemCave],
+  "Lower Depths": [...cox, quidamortemCave],
   "Lucid Dream": [dream],
   "Lucid Nightmare": [dream],
   Lullaby: [
@@ -3501,7 +3536,7 @@ export const songPolygons: Record<SongName, Polygon> = {
       [2688, 3392],
     ],
   ],
-  "The Maiden's Anger": [tob],
+  "The Maiden's Anger": tob,
   "The Maiden's Sorrow": [verSinhaza],
   "Major Miner": [jatizsoMine],
   "Making Waves": [
@@ -4081,7 +4116,7 @@ export const songPolygons: Record<SongName, Polygon> = {
       [2944, 3264],
     ],
   ],
-  "The Nightmare Continues": [tob],
+  "The Nightmare Continues": tob,
   "No Pasaran": [...undergroundPass],
   "No Way Out": [soulsBane],
   Nomad: [
@@ -4347,8 +4382,8 @@ export const songPolygons: Record<SongName, Polygon> = {
     ],
   ],
   "The Power of Tears": [...swampCavesDorgeshKaanTears],
-  "Power of the Shadow Realm": [tob],
-  "Predator Xarpus": [tob],
+  "Power of the Shadow Realm": tob,
+  "Predator Xarpus": tob,
   Preservation: [
     [
       [3648, 3904],
@@ -5417,7 +5452,7 @@ export const songPolygons: Record<SongName, Polygon> = {
       [3584, 3368],
     ],
   ],
-  "Upper Depths": [cox],
+  "Upper Depths": [...cox],
   "The Vault": [ancientVaultDT2],
   Venomous: [
     [
@@ -5636,7 +5671,7 @@ export const songPolygons: Record<SongName, Polygon> = {
   "Way of the Enchanter": [lunarIsleMine],
   "Way of the Wyrm": [karuulmSlayerDungeon],
   Wayward: [jiggigZogreDungeon],
-  "Welcome to my Nightmare": [tob],
+  "Welcome to my Nightmare": tob,
   "Welcome to the Theatre": [
     [
       [3683, 3239],
@@ -6288,7 +6323,7 @@ export const songPolygons: Record<SongName, Polygon> = {
   ...song("Barbarian Workout", ...atlasCutscene),
   ...song("Beneath Cursed Sands", toa),
   ...song("Blood Rush", vardorvis),
-  ...song("Bob's on Holiday", kbd, sophanemBobAdventure, unferth),
+  ...song("Bob's on Holiday", kbd, sophanemBobAdventure),
   ...song("Bolrie's Diary", brimstail, ...pathOfGlouphrieCutscenes),
   ...song("Brain Battle", barrelchestFight),
   ...song("Bunny's Sugar Rush"),
@@ -6317,7 +6352,7 @@ export const songPolygons: Record<SongName, Polygon> = {
   ...song("Eve's Epinette"),
   ...song("Eye See You", ghorrockDungeon),
   ...song("Eye of the Storm", dragonSlayerCrandorCrash),
-  ...song("The Fairy Dragon", lumbridgeCastleDiningHall),
+  ...song("The Fairy Dragon", rfd),
   ...song("Faith of the Hefin", prif),
   ...song("A Festive Party"),
   ...song("Fight of the Basilisk", jormungandPrison),

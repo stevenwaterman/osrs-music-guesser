@@ -2,7 +2,6 @@ import { writable, type Writable } from "svelte/store";
 import type { Coordinate } from "tunescape07-shared";
 
 const initialVolume = localStorage.getItem("volume");
-console.log({ initialVolume });
 export const volumeStore: Writable<number> = writable(
   parseFloat(initialVolume ?? "1")
 );

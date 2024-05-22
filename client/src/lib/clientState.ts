@@ -145,7 +145,7 @@ export function connectToLocalServer(): Transport {
 
   const gameId = "Single Player";
   const possibleSongs = Object.values(songs).filter(
-    (song) => song.locations.length > 0
+    (song) => song.location.length > 0
   );
   const store = new StateStore(gameId, possibleSongs);
   const avatar = store.avatarLibrary.take();
