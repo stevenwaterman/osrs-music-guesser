@@ -28,7 +28,7 @@ function getGame(
 
   if (!(gameId in games)) {
     const possibleSongs = Object.values(songs).filter(
-      (song) => song.locations.length > 0
+      (song) => song.location.length > 0
     );
 
     const onTransition = (value: StateInterface.AnyServerState | null) => {

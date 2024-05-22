@@ -12,6 +12,6 @@ export type Song = {
   wikiUrl: string;
   description: readonly string[];
   duration: number;
-  locations: readonly Polygon[];
+  location: Polygon;
   tags: SongTags;
 };

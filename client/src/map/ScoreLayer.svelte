@@ -8,29 +8,24 @@
   export let state: ActiveState<"RoundOver">;
   export let map: L.Map;
 
-  let data: StateInterface.ClientStateData<"RoundOver">;
-  $: data = state.data;
-
   onMount(() => {
-    const song = data.game.song;
+    const song = state.data.game.song;
 
     const layer = new L.LayerGroup();
     layer.addTo(map);
 
-    song.locations.forEach((poly) =>
-      convertLeaflet.polygon
-        .to(poly)
-        .setStyle({
-          color: "#00FF00",
-          fillColor: "#00FF00",
-          fillOpacity: 0.3,
-          opacity: 0.6,
-        })
-        .addTo(layer)
-    );
+    const answer = convertLeaflet.polygon
+      .to(song.location)
+      .setStyle({
+        color: "#00FF00",
+        fillColor: "#00FF00",
+        fillOpacity: 0.3,
+        opacity: 0.6,
+      })
+      .addTo(layer);
     const lines: L.Polyline[] = [];
 
-    for (const user of Object.values(data.users)) {
+    for (const user of Object.values(state.data.users)) {
       if (user.guessResult === null) {
         continue;
       }
@@ -39,15 +34,15 @@
       const leafletCoordinate = convertLeaflet.coordinate.to(coordinate);
       const leafletClosest = convertLeaflet.coordinate.to(closest);
 
-      const marker = new L.Marker(leafletCoordinate, { title: user.avatar.name }).addTo(
-        layer
-      );
+      const marker = new L.Marker(leafletCoordinate, {
+        title: user.avatar.name,
+      }).addTo(layer);
       const line = new L.Polyline([leafletCoordinate, leafletClosest]).addTo(
         layer
       );
       lines.push(line);
 
-      const me = user.avatar.name === data.me.avatar.name;
+      const me = user.avatar.name === state.data.me.avatar.name;
       if (me) {
         (marker as any)._icon.style.filter = "hue-rotate(80deg)";
         line.setStyle({ color: "#bd55cc" });

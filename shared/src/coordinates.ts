@@ -1,7 +1,8 @@
 import Flatten from "@flatten-js/core";
 
 export type Coordinate = readonly [number, number];
-export type Polygon = { coordinates: readonly Coordinate[]; inMap: boolean; center: Coordinate };
+export type Face = readonly Coordinate[];
+export type Polygon = readonly Face[];
 
 export const convertFlatten = {
   coordinate: {
@@ -14,12 +15,12 @@ export const convertFlatten = {
     },
   },
   polygon: {
-    to: (poly: Omit<Polygon, "center">): Flatten.Polygon => {
+    to: (poly: Polygon): Flatten.Polygon => {
       const flattenPoly = new Flatten.Polygon();
-      const flattenPoints = poly.coordinates.map((coord) =>
-        convertFlatten.coordinate.to(coord)
-      );
-      flattenPoly.addFace(flattenPoints);
+      poly.forEach((face) => {
+        const points = face.map((coord) => convertFlatten.coordinate.to(coord));
+        flattenPoly.addFace(points);
+      });
       return flattenPoly;
     },
   },

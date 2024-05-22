@@ -10,7 +10,6 @@
   export let map: L.Map;
 
   $: confirmedGuess = state.data.me.guess;
-  $: canGuess = confirmedGuess === undefined && state.data.me.health > 0;
 
   $: map.on("click", (click) => {
     if (confirmedGuess === undefined) {

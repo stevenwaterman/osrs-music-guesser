@@ -1,3 +1,4 @@
+import { Face } from "@flatten-js/core";
 import { convertFlatten } from "./coordinates.js";
 import type { Coordinate, Polygon } from "./coordinates.js";
 import { RoundActive } from "./states.js";
@@ -5,11 +6,11 @@ import { mapValues } from "./util.js";
 
 function closestPoint(
   coord: Coordinate,
-  polygons: readonly Polygon[]
+  polygon: Polygon
 ): { distance: number; closest: Coordinate } {
   const point = convertFlatten.coordinate.to(coord);
-  const flattenPolys = polygons.map((p) => convertFlatten.polygon.to(p));
-  const isInside = flattenPolys.some((polygon) => polygon.contains(point));
+  const flattenPoly = convertFlatten.polygon.to(polygon);
+  const isInside = flattenPoly.contains(point);
   if (isInside) {
     return {
       distance: 0,
@@ -17,24 +18,11 @@ function closestPoint(
     };
   }
 
-  // TODO sort polys
-  // TODO cache polys
-  // TODO bounding box optimisation
-  return flattenPolys.reduce<{ distance: number; closest: Coordinate }>(
-    (acc, poly) => {
-      const [distance, segment] = poly.distanceTo(point);
-
-      if (distance >= acc.distance) {
-        return acc;
-      }
-
-      return {
-        distance,
-        closest: convertFlatten.coordinate.from(segment.ps),
-      };
-    },
-    { distance: Number.MAX_VALUE, closest: [0, 0] }
-  );
+  const [distance, segment] = flattenPoly.distanceTo(point);
+  return {
+    distance,
+    closest: convertFlatten.coordinate.from(segment.ps),
+  };
 }
 
 type GuessResult = {
@@ -63,7 +51,7 @@ type RoundResult = {
 
 export function calculateRoundResult(state: RoundActive): RoundResult {
   const song = state.game.song;
-  const locations = song.locations;
+  const location = song.location;
 
   const guessResults: Record<string, GuessResult | null> = mapValues(
     state.users,
@@ -73,7 +61,7 @@ export function calculateRoundResult(state: RoundActive): RoundResult {
         return null;
       }
 
-      const { distance, closest } = closestPoint(guess, locations);
+      const { distance, closest } = closestPoint(guess, location);
       return {
         coordinate: guess,
         time: user.guessTime,
@@ -116,9 +104,9 @@ export function calculateRoundResult(state: RoundActive): RoundResult {
   if (state.game.singlePlayer && bestGuess?.perfect !== true) {
     bestGuess = {
       userName: "AI",
-      coordinate: locations[0].center,
+      coordinate: location[0][0],
       time: new Date(),
-      closest: locations[0].center,
+      closest: location[0][0],
       distance: 0,
       perfect: true,
     };

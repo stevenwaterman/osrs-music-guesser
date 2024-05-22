@@ -13,8 +13,8 @@ export const convertLeaflet = {
   },
   polygon: {
     to: (poly: Polygon): L.Polygon => {
-      const latLngs = poly.coordinates.map((coord) =>
-        convertLeaflet.coordinate.to(coord)
+      const latLngs = poly.map((face) =>
+        face.map((coord) => convertLeaflet.coordinate.to(coord))
       );
       return new L.Polygon(latLngs);
     },

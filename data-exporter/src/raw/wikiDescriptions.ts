@@ -59,7 +59,7 @@ export const songDescriptions: Record<SongName, string[]> = {
     "Plays during the fight with the Alchemical Hydra, inside Mount Karuulm.",
   ],
   "All's Fairy in Love & War": [
-    "Plays at the Fairy Resistance Hideout during the Fairytale II - Cure a Queen quest.",
+    "Plays at the Fairy Resistance Hideout during and after the Fairytale II - Cure a Queen quest.",
     "Only accessible via fairy rings.",
   ],
   Alone: [

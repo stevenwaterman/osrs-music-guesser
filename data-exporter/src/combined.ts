@@ -16,7 +16,7 @@ export const songsAtRuntime: Record<SongName, Song> = toMap(
       wikiUrl: wikiPageUrls[name],
       description: songDescriptions[name],
       duration: songDurations[name],
-      locations: songLocations[name],
+      location: songLocations[name],
       tags: songTags[name],
     },
   ])

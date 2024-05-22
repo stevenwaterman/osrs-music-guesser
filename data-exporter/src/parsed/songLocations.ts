@@ -1,33 +1,21 @@
+import { Face } from "tunescape07-shared/src/coordinates.js";
 import { songPolygons } from "../raw/songPolygons.js";
-import { Polygon, SongName, convertFlatten, mapValues } from "tunescape07-shared";
+import {
+  Polygon,
+  SongName,
+  convertFlatten,
+  mapValues,
+} from "tunescape07-shared";
 
-function addCenter(polygon: Omit<Polygon, "center">): Polygon {
-  const centerPoint = convertFlatten.polygon.to(polygon).box.center;
-  return {
-    inMap: polygon.inMap,
-    coordinates: polygon.coordinates,
-    center: convertFlatten.coordinate.from(centerPoint),
-  };
-}
-
-function removeDuplicateStartEnd(polygon: Polygon): Polygon {
-  const [x1, y1] = polygon.coordinates[0];
-  const [x2, y2] = polygon.coordinates[polygon.coordinates.length - 1];
+function removeDuplicateStartEnd(face: Face): Face {
+  const [x1, y1] = face[0];
+  const [x2, y2] = face[face.length - 1];
   const duplicate = x1 === x2 && y1 === y2;
-  const deduped = duplicate
-    ? polygon.coordinates.slice(1)
-    : polygon.coordinates;
-  return {
-    inMap: polygon.inMap,
-    coordinates: deduped,
-    center: polygon.center,
-  };
+  const deduped = duplicate ? face.slice(1) : face;
+  return deduped;
 }
 
-export const songLocations: Record<SongName, Polygon[]> = mapValues(
+export const songLocations: Record<SongName, Polygon> = mapValues(
   songPolygons,
-  (song) =>
-    song.polygons
-      .map((poly) => addCenter(poly))
-      .map((poly) => removeDuplicateStartEnd(poly))
+  (poly) => poly.map((face) => removeDuplicateStartEnd(face))
 );
