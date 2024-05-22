@@ -10,6 +10,7 @@
 <div class="infoBox">
   <a class="title" target="_blank" href={song.wikiUrl}>{song.name}</a>
   <div class="info">
+    <p>Difficulty: {song.difficulty}</p>
     {#each song.description as line}
       <p>{line}</p>
     {/each}

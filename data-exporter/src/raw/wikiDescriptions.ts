@@ -60,7 +60,7 @@ export const songDescriptions: Record<SongName, string[]> = {
   ],
   "All's Fairy in Love & War": [
     "Plays at the Fairy Resistance Hideout during and after the Fairytale II - Cure a Queen quest.",
-    "Only accessible via fairy rings.",
+    "Since fairy rings are not allowed as a method of transport, the correct answer is the shed in Lumbridge swamp, since this is how you get to Zanaris to start the quest.",
   ],
   Alone: [
     "Plays in the Clock Tower Dungeon and a wide area around Ice Mountain, including Edgeville Monastery (but not the Black Knight's Fortress).",

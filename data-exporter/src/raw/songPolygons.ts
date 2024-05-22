@@ -320,7 +320,10 @@ const roguesDen = rectangle(2904, 3539, 2908, 3535);
 const glod = rectangle(2921, 3427, 2924, 3424);
 const soulsBane = rectangle(3307, 3452, 3311, 3448);
 const apeAtollDungeonMM1 = rectangle(2761, 2705, 2765, 2701);
-const cox = [rectangle(1231, 3575, 1235, 3571), rectangle(1231, 3560, 1235, 3556)];
+const cox = [
+  rectangle(1231, 3575, 1235, 3571),
+  rectangle(1231, 3560, 1235, 3556),
+];
 const lletya = rectangle(2310, 3198, 2363, 3143);
 const uzer = rectangle(3491, 3093, 3496, 3088);
 const beneathCursedSands = rectangle(3406, 2850, 3410, 2846);
@@ -568,14 +571,14 @@ const mamuletCavern = rectangle(2759, 2773, 2771, 2764);
 const baxtorianWaterfallDungeon = rectangle(2509, 3467, 2513, 3461);
 const draynorManorCellar = rectangle(3113, 3359, 3117, 3355);
 const pyramidPlunder = rectangle(3283, 2801, 3295, 2785);
-const goblinVillageKitchen = rectangle(2959, 3505, 2963, 3509);
+const goblinVillageKitchen = rectangle(2959, 3504, 2963, 3508);
 const fishingTrawler = rectangle(2666, 3165, 2670, 3161);
 const weissMakingFriendsSneakCave = rectangle(2852, 3946, 2856, 3942);
 const kraken = rectangle(2276, 3613, 2280, 3609);
 const entranaDungeon = rectangle(2818, 3376, 2822, 3372);
 const wildyAgilityDungeon = rectangle(3003, 3965, 3007, 3961);
 const natureAltar = rectangle(2860, 3028, 2876, 3012);
-const digsiteDT2 = rectangle(3381, 3421, 3386, 3416);
+const digsiteDT2 = rectangle(3382, 3422, 3386, 3416);
 const balloonTransport = [
   // entrana
   rectangle(2805, 3358, 2812, 3354),
