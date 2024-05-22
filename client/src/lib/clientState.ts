@@ -151,7 +151,7 @@ export function connectToLocalServer(): Transport {
   const avatar = store.avatarLibrary.take();
   store.state = new Lobby(
     store,
-    { id: gameId, owner: avatar.name, singlePlayer: true, damageScaling: 1 },
+    { id: gameId, owner: avatar.name, singlePlayer: true, damageScaling: 0.25 },
     { [avatar.name]: { avatar, transport: serverSide } }
   );
 
