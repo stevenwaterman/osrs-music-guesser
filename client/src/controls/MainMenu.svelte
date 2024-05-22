@@ -27,11 +27,4 @@
     padding: 1rem 3rem;
     height: fit-content;
   }
-
-  @media only screen and (max-width: 1000px) {
-    .buttons {
-      grid-column: 1;
-      grid-template-columns: 1fr 1fr;
-    }
-  }
 </style>

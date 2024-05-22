@@ -47,13 +47,4 @@
     padding: 1rem 3rem;
     height: fit-content;
   }
-
-  @media only screen and (max-width: 1000px) {
-    .form {
-      grid-column: 1;
-      grid-template-columns: 1fr;
-      grid-template-rows: auto auto;
-      row-gap: 1rem;
-    }
-  }
 </style>

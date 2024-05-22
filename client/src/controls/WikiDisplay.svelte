@@ -34,17 +34,6 @@
     pointer-events: initial;
   }
 
-  @media only screen and (max-width: 1000px) {
-    .infoBox {
-      width: fit-content;
-      max-width: 100%;
-      grid-column: 1;
-      grid-row: 1;
-      align-self: flex-start;
-      justify-self: center;
-    }
-  }
-
   .info {
     padding-left: 1.5rem;
     padding-right: 1.5rem;

@@ -46,14 +46,6 @@
     width: fit-content;
   }
 
-  @media only screen and (max-width: 1000px) {
-    table {
-      grid-column-start: 1;
-      grid-column-end: 1;
-      /* display: none; */
-    }
-  }
-
   th,
   td {
     padding-left: 1rem;

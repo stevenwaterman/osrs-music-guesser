@@ -47,11 +47,4 @@
     pointer-events: initial;
     max-width: 40rem;
   }
-
-  @media only screen and (max-width: 1000px) {
-    audio {
-      grid-column: 1;
-      grid-row: 5;
-    }
-  }
 </style>

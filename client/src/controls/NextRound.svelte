@@ -19,11 +19,4 @@
     justify-self: center;
     pointer-events: initial;
   }
-
-  @media only screen and (max-width: 1000px) {
-    button {
-      grid-column: 1;
-      grid-row: 4;
-    }
-  }
 </style>

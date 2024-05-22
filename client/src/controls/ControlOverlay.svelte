@@ -79,11 +79,4 @@
     pointer-events: none;
     gap: 1rem;
   }
-
-  @media only screen and (max-width: 1000px) {
-    .grid {
-      grid-template-columns: 1fr;
-      grid-template-rows: 1fr 1fr 1fr 4rem 3rem;
-    }
-  }
 </style>

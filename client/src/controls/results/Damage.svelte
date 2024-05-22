@@ -114,11 +114,4 @@
   .multipleSplats {
     padding-right: 3rem;
   }
-
-  @media only screen and (max-width: 1000px) {
-    .container {
-      grid-column: 1;
-      grid-row: 2;
-    }
-  }
 </style>

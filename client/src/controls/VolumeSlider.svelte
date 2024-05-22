@@ -43,10 +43,4 @@
   .container:hover .volume {
     display: initial;
   }
-
-  @media only screen and (max-width: 1000px) {
-    .container {
-      display: none;
-    }
-  }
 </style>
