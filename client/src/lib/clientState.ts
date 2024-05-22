@@ -143,7 +143,7 @@ export function connectToLocalServer(): Transport {
     },
   };
 
-  const gameId = "local";
+  const gameId = "Single Player";
   const possibleSongs = Object.values(songs).filter(
     (song) => song.locations.length > 0
   );

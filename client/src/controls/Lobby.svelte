@@ -1,21 +1,18 @@
 <script lang="ts">
   import { type ActiveState } from "../lib/clientState";
+  import AvatarSmall from "./results/AvatarSmall.svelte";
 
   export let state: ActiveState<"Lobby">;
 
-  $: myLobby = state.data.game.owner === state.data.me.id;
+  $: myLobby = state.data.game.owner === state.data.me.avatar.name;
   $: players = Object.keys(state.data.users).length;
 </script>
 
 <div class="container">
-  {#if state.data.game.singlePlayer}
-    <p class="title">Single Player</p>
-  {:else}
-    <p class="title">Multiplayer</p>
-    <p>Game Name: <span class="gameId">{state.data.game.id}</span></p>
-    <p>Connected Players: {players}</p>
-    <p>Your Name: {state.data.me.id}</p>
-  {/if}
+  <p class="title">Lobby</p>
+  <p>Game Name: <span class="gameId">{state.data.game.id}</span></p>
+  <p>Connected Players: {players}</p>
+  <AvatarSmall avatar={state.data.me.avatar} me />
 
   <div>
     {#if state.data.game.singlePlayer || (myLobby && players > 1)}

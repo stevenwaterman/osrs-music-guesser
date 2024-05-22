@@ -9,7 +9,7 @@
   import NextRound from "./NextRound.svelte";
   import WikiDisplay from "./WikiDisplay.svelte";
   import HealthLeaderboard from "./HealthLeaderboard.svelte";
-  import Damage from "./Damage.svelte";
+  import Damage from "./results/Damage.svelte";
   import VolumeSlider from "./VolumeSlider.svelte";
   import ConfirmGuess from "./ConfirmGuess.svelte";
   $: state = $stateStore;
@@ -46,7 +46,7 @@
     {/if}
 
     {#if state.isAnyActive("RoundOver")}
-      {#if state.data.game.owner === state.data.me.id}
+      {#if state.data.game.owner === state.data.me.avatar.name}
         <NextRound {state} />
       {/if}
       <WikiDisplay {state} />
@@ -75,7 +75,7 @@
 
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
-    grid-template-rows: 1fr 1fr 1fr 1fr 3rem;
+    grid-template-rows: auto 1fr 1fr auto auto;
     pointer-events: none;
     gap: 1rem;
   }

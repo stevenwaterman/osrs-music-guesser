@@ -17,10 +17,11 @@
   }
 
   $: if (audio) {
+    audio.muted = false;
     audio.volume = $volumeStore;
   }
   function volumeChange() {
-    volumeStore.set(audio.volume);
+    volumeStore.set(audio.muted ? 0 : audio.volume);
   }
 </script>
 

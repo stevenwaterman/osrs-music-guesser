@@ -13,7 +13,7 @@
   <p class="title">Game Over</p>
   <p class="title">Survived {state.data.game.round - 1} rounds</p>
   <!-- TODO starting health, scores, guess times -->
-  {#if state.data.game.owner === state.data.me.id}
+  {#if state.data.game.owner === state.data.me.avatar.name}
     <button on:click={() => playAgain()}>Play Again</button>
   {/if}
   <button on:click={() => state.disconnect()}>Main Menu</button>
