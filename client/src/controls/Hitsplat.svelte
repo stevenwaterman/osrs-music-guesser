@@ -1,6 +1,6 @@
 <script lang="ts">
   import SoundEffect from "./SoundEffect.svelte";
-
+  // TODO don't show text until hitspat image has loaded
   export let type: "hit" | "venom" | "healing";
   export let damage: {
     hit: number;

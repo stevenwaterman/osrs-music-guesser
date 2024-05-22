@@ -72,9 +72,7 @@
 
   {#if playDeath}
     <!-- Show skull or some indication that you are dead -->
-    <SoundEffect
-      audioUrl="https://oldschool.runescape.wiki/images/Oh_dear%2C_you_are_dead%21.ogg"
-    />
+    <SoundEffect audioUrl="/dead.ogg" />
   {/if}
 {/if}
 
