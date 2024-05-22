@@ -9,7 +9,7 @@
 
   $: startingHealth = state.data.me.healthBefore;
   let health = state.data.me.healthBefore;
-  $: displayHealth = Math.max(0, Math.round(health));
+  $: displayHealth = Math.min(Math.max(0, Math.round(health)), 99);
 
   let showHealth = false;
   let showHealing = false;
@@ -23,60 +23,78 @@
     }, 600);
 
     setTimeout(() => {
-      showHit = true;
-      health -= state.data.me.damage.hit;
-    }, 1200);
-
-    setTimeout(() => {
-      showVenom = true;
-      health -= state.data.me.damage.venom;
-    }, 1800);
-
-    setTimeout(() => {
       showHealing = true;
       health += state.data.me.damage.healing;
 
       if (health <= 0) {
         playDeath = true;
       }
+    }, 1800);
+
+    setTimeout(() => {
+      showHit = true;
+      health -= state.data.me.damage.hit;
     }, 2400);
+
+    setTimeout(() => {
+      showVenom = true;
+      health -= state.data.me.damage.venom;
+    }, 3000);
   });
 </script>
 
 {#if startingHealth > 0}
-  {#if showHealth}
-    <div class="wrapper">
-      <span class="label">Health: {displayHealth}</span>
+  <div class="wrapper">
+    <div class="row">
+      {#if showHit}
+        <div style="grid-column: 2">
+          <Hitsplat type="hit" damage={state.data.me.damage} />
+        </div>
+      {/if}
+
+      {#if showVenom && state.data.me.damage.venom > 0}
+        <div style="grid-column: 1">
+          <Hitsplat type="venom" damage={state.data.me.damage} />
+        </div>
+      {/if}
+
+      {#if showHealing && state.data.me.damage.healing > 0}
+        <div style="grid-column: 3">
+          <Hitsplat type="healing" damage={state.data.me.damage} />
+        </div>
+      {/if}
     </div>
-  {/if}
 
-  <div class="row">
-    {#if showHit}
-      <div style="grid-column: 2">
-        <Hitsplat type="hit" damage={state.data.me.damage} />
-      </div>
+    {#if playDeath}
+      <!-- Show skull or some indication that you are dead -->
+      <SoundEffect audioUrl="/dead.ogg" />
     {/if}
 
-    {#if showVenom && state.data.me.damage.venom > 0}
-      <div style="grid-column: 1">
-        <Hitsplat type="venom" damage={state.data.me.damage} />
-      </div>
-    {/if}
-
-    {#if showHealing && state.data.me.damage.healing > 0}
-      <div style="grid-column: 3">
-        <Hitsplat type="healing" damage={state.data.me.damage} />
+    {#if showHealth}
+      <div class="healthBackground">
+        <div
+          class="healthInner"
+          style={`width: ${(100 * displayHealth) / 99}%`}
+        ></div>
+        <div class="healthText"></div>
       </div>
     {/if}
   </div>
-
-  {#if playDeath}
-    <!-- Show skull or some indication that you are dead -->
-    <SoundEffect audioUrl="/dead.ogg" />
-  {/if}
 {/if}
 
 <style>
+  .healthBackground {
+    height: 1rem;
+    width: 10rem;
+    background-color: red;
+  }
+
+  .healthInner {
+    height: 1rem;
+    width: 1rem;
+    background-color: #00ff00;
+  }
+
   .wrapper {
     grid-column: 2;
     grid-row: 2;
@@ -97,6 +115,7 @@
     grid-template-columns: 1fr 1fr 1fr;
     align-items: center;
     justify-items: center;
+    margin: auto;
 
     grid-column-start: 1;
     grid-column-end: 4;

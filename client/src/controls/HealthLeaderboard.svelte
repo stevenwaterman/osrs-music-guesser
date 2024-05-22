@@ -11,8 +11,8 @@
 
   $: myHealth = data.me.health;
   $: others = Object.values(data.users)
-    .filter((user) => user.id !== state.data.me.id)
-    .map((user) => [user.id, user.health]);
+    .filter((user) => user.avatar.name !== state.data.me.avatar.name)
+    .map((user) => [user.avatar.name, user.health]);
 </script>
 
 <table>
@@ -21,11 +21,7 @@
     <th>Health</th>
   </tr>
   <tr>
-    {#if state.data.game.singlePlayer}
-      <td>Me</td>
-    {:else}
-      <td>{state.data.me.id} (Me)</td>
-    {/if}
+    <td>{state.data.me.avatar.name} (Me)</td>
     <td>{myHealth}</td>
   </tr>
   {#each others as user (user[0])}

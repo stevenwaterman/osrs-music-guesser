@@ -1,10 +1,8 @@
 import { songs } from "tunescape07-data";
 import { StateInterface } from "tunescape07-shared";
 import WebSocket, { WebSocketServer } from "ws";
-import { randomName } from "./userNames.js";
 
 const wss = new WebSocketServer({ port: 4433 });
-const users: Set<string> = new Set<string>();
 const games: Record<string, StateInterface.StateStore> = {};
 
 function getGame(
@@ -60,25 +58,13 @@ wss.on("connection", (ws, req) => {
 });
 
 function onJoin(ws: WebSocket, searchParams: URLSearchParams) {
-  // Randomly generate names until we get a new one
-  let userId = randomName();
-  while (users.has(userId)) {
-    userId = randomName();
-  }
-
   const game = getGame(ws, searchParams);
   if (!game) {
     return;
   }
 
-  users.add(userId);
-  ws.addEventListener("close", () => {
-    console.log("deleting user", userId);
-    users.delete(userId);
-  });
-
   if (game.state?.stateName === "Lobby") {
-    (game.state as StateInterface.Lobby).join(userId, ws);
+    (game.state as StateInterface.Lobby).join(ws);
     return;
   }
 
@@ -96,13 +82,20 @@ function onJoin(ws: WebSocket, searchParams: URLSearchParams) {
     return;
   }
 
+  const avatar = game.avatarLibrary.take();
+
   game.state = new StateInterface.Lobby(
     game,
-    { id: game.gameId, owner: userId, singlePlayer: false, damageScaling: 1 },
-    { [userId]: { id: userId, transport: ws } }
+    {
+      id: game.gameId,
+      owner: avatar.name,
+      singlePlayer: false,
+      damageScaling: 1,
+    },
+    { [avatar.name]: { avatar, transport: ws } }
   );
 
-  console.log(`${userId} joined ${game.gameId}`);
+  console.log(`${avatar.name} joined ${game.gameId}`);
 }
 
 setInterval(function ping() {

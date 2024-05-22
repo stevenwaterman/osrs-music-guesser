@@ -45,7 +45,7 @@ type GuessResult = {
   perfect: boolean;
 };
 type RoundResult = {
-  bestGuess: (GuessResult & { userId: string }) | null;
+  bestGuess: (GuessResult & { userName: string }) | null;
   users: Record<
     string,
     {
@@ -106,16 +106,16 @@ export function calculateRoundResult(state: RoundActive): RoundResult {
     return acc;
   });
 
-  let bestGuess: (GuessResult & { userId: string }) | null = null;
+  let bestGuess: (GuessResult & { userName: string }) | null = null;
   if (bestGuessTuple[1] !== null) {
-    bestGuess = { ...bestGuessTuple[1], userId: bestGuessTuple[0] };
+    bestGuess = { ...bestGuessTuple[1], userName: bestGuessTuple[0] };
   }
 
   // In singleplayer games, if you don't get it perfect
   // then you lose health as if someone else did
   if (state.game.singlePlayer && bestGuess?.perfect !== true) {
     bestGuess = {
-      userId: "AI",
+      userName: "AI",
       coordinate: locations[0].center,
       time: new Date(),
       closest: locations[0].center,
@@ -140,11 +140,12 @@ export function calculateRoundResult(state: RoundActive): RoundResult {
 
   const bestDistance = bestGuess?.distance ?? Number.MAX_SAFE_INTEGER;
   const damage = mapValues(state.users, (user) => {
-    const wasFirstPerfect = bestGuess?.userId === user.id && bestGuess.perfect;
+    const wasFirstPerfect =
+      bestGuess?.userName === user.avatar.name && bestGuess.perfect;
     const healing = wasFirstPerfect ? healingAmount : 0;
     const venom = venomAmount;
 
-    const myGuess = guessResults[user.id];
+    const myGuess = guessResults[user.avatar.name];
     const distance = myGuess?.distance ?? Number.MAX_SAFE_INTEGER;
     const extraDistance = distance - bestDistance;
 
@@ -184,8 +185,8 @@ export function calculateRoundResult(state: RoundActive): RoundResult {
       }
 
       return {
-        guessResult: guessResults[user.id],
-        damage: damage[user.id],
+        guessResult: guessResults[user.avatar.name],
+        damage: damage[user.avatar.name],
       };
     }),
   };

@@ -39,7 +39,7 @@
       const leafletCoordinate = convertLeaflet.coordinate.to(coordinate);
       const leafletClosest = convertLeaflet.coordinate.to(closest);
 
-      const marker = new L.Marker(leafletCoordinate, { title: user.id }).addTo(
+      const marker = new L.Marker(leafletCoordinate, { title: user.avatar.name }).addTo(
         layer
       );
       const line = new L.Polyline([leafletCoordinate, leafletClosest]).addTo(
@@ -47,7 +47,7 @@
       );
       lines.push(line);
 
-      const me = user.id === data.me.id;
+      const me = user.avatar.name === data.me.avatar.name;
       if (me) {
         (marker as any)._icon.style.filter = "hue-rotate(80deg)";
         line.setStyle({ color: "#bd55cc" });
