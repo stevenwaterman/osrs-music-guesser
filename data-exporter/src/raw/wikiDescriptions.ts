@@ -68,7 +68,7 @@ export const songDescriptions: Record<SongName, string[]> = {
   ],
   "Altar Ego": ["Plays in the Ourania Cave near the Observatory."],
   "Alternative Root": [
-    "Plays in the Tunnel of Chaos, under the statue east of Varrock, during What Lies Below.",
+    "Plays in the Tunnel of Chaos, under the statue east of Varrock, unlocked during What Lies Below.",
   ],
   "Amascut's Promise": [
     "Plays during the fight with Tumeken's Warden and Elidinis' Warden in the Tombs of Amascut, inside the Necropolis.",
@@ -170,7 +170,7 @@ export const songDescriptions: Record<SongName, string[]> = {
     "The song does cannonically have lyrics, but they make little difference to the overall experience.",
   ],
   "Aye Car Rum Ba": [
-    "Plays on Braindeath Island during Rum Deal, accessible from the dock to the north-west of the Ectofuntus.",
+    "Plays on Braindeath Island, first visited during Rum Deal, accessible from the dock to the north-west of the Ectofuntus.",
   ],
   Aztec: ["Plays in the Brimhaven Agility Arena."],
   "Back to Life": [
@@ -214,7 +214,7 @@ export const songDescriptions: Record<SongName, string[]> = {
   ],
   "Barbarian Workout": [
     "Plays while doing the Below Ice Mountain quest, during the training session with Atlas.",
-    "The areas marked on the map are all the areas your character is shown in during the cutscene.",
+    "The areas marked on the map are all the areas your character is shown training during the cutscene.",
   ],
   Barbarianism: [
     "Plays at Barbarian Village.",
@@ -252,7 +252,7 @@ export const songDescriptions: Record<SongName, string[]> = {
     "This track has a rather slow and tranquil tune with strings, wind and piano. The melody is uplifting with high notes.",
   ],
   "Blistering Barnacles": [
-    "Plays on Braindeath Island's mountain, during Rum Deal.",
+    "Plays on Braindeath Island's mountain, first visited during Rum Deal.",
   ],
   "Blood Rush": [
     "Plays when fighting Vardorvis during and after Desert Treasure II - The Fallen Empire.",
@@ -274,7 +274,7 @@ export const songDescriptions: Record<SongName, string[]> = {
     "The locations shown in the cutscene are the Gnome Stronghold, the ground floor of the Grand Tree, Brimstail's cave, and the Tree Gnome Village throne.",
   ],
   "Bone Dance": [
-    "Plays on the western side of Mort'ton, or during Sins of the Father when fighting the Nail Beasts during the Temple Trek with Ivan Strom. It can also be heard on the island in the River Salve.",
+    "Plays on the western side of Mort'ton, or during Sins of the Father when fighting the Nail Beasts on the Temple Trek with Ivan Strom. It can also be heard on the island in the River Salve.",
     "It is possible, although difficult, to unlock the track during Sins of the Father. This would require the player to complete the Nature Spirit, In Search of the Myreque, In Aid of the Myreque, and A Taste of Hope quests without ever passing through the path left of Mort'ton, and by following an extremely specific route to the Nature Grotto. So far, no player is recorded as having accomplished this.",
   ],
   "Bone Dry": [
@@ -289,7 +289,7 @@ export const songDescriptions: Record<SongName, string[]> = {
     "This is often a player's last song to unlock in order to earn the Music Cape, as fighting the Mimic is only possible sporadically after compliting Elite and Master clue scrolls.",
   ],
   "Brain Battle": [
-    "Plays during The Great Brain Robbery. It can be heard during the battle with Barrelchest.",
+    "Plays during The Great Brain Robbery, when fighting Barrelchest.",
   ],
   Breeze: ["Plays at Isafdar near the Underground Pass."],
   "Brew Hoo Hoo!": ["Plays at the Port Phasmatys brewery basement."],
@@ -312,7 +312,7 @@ export const songDescriptions: Record<SongName, string[]> = {
     "The exact location of the naval battle is unknown, as it takes place in an instanced bit of ocean.",
   ],
   "Cain's Tutorial": [
-    "Plays during Barbarian Assault. It can be heard during the tutorial for the minigame presented by Captain Cain.",
+    "Plays during the Barbarian Assault tutorial.",
     'If the player chose to skip the tutorial, the track can be obtained by selecting the "Getting Started" option from Cain\'s Tutorial menu.',
     "It is a remix of Barbarianism.",
   ],
@@ -325,7 +325,7 @@ export const songDescriptions: Record<SongName, string[]> = {
     'Prior to an update, the music track was named "Castlewars", and is still listed as such on the RuneScape: Original Soundtrack Classics album.',
   ],
   "Catacombs and Tombs": [
-    "Plays during Land of the Goblins within the crypt in the Goblin Temple.",
+    "Plays within the crypt in the Goblin Temple, unlocked in Land of the Goblins.",
   ],
   "Catch Me If You Can": [
     "Plays at the Ardougne Rat Pits. The Rat Pits are accessible through a trapdoor in Jimmy Dazzler's house, or though the main entrance to the western section fo the Ardougne Sewers.",
@@ -345,21 +345,21 @@ export const songDescriptions: Record<SongName, string[]> = {
     "Plays at the Yanille Agility Dungeon and the Deep Wilderness Dungeon.",
   ],
   "The Cellar Dwellers": [
-    "Plays in the Ardougne west Sewers during Hazeel Cult, Elena's prison during Plague City, and the basement of the Carnillean Mansion.",
+    "Plays in the Ardougne west Sewers visited during Hazeel Cult, Elena's prison from Plague City, and the basement of the Carnillean Mansion.",
   ],
   "Cellar Song": ["Plays at the vault of the Varrock West Bank."],
   "Chain of Command": [
     "Plays in the Temple of Ikov. The entrance inside McGrubor's Wood requires a shiny key.",
   ],
   Chamber: [
-    "Plays during the Haunted Mine quest, on Levels 4 and 5 of the Abandoned Mine.",
+    "Plays on Levels 4 and 5 of the Abandoned Mine, visited during the Haunted Mine quest.",
   ],
   "Chef Surprise": [
     "Plays during Recipe for Disaster upon following the Culinaromancer into the portal.",
     "Plucked strings are the accompaniment while a French horn has the melody. In the second phrase, the song changes key and a tenor sax takes the melody.",
   ],
   "Chickened Out": [
-    "Plays during Recipe for Disaster: Freeing Sir Amik Varze. It is located in the Evil Chicken's Lair in Zanaris.",
+    "Plays in the Evil Chicken's Lair in Zanaris, visited during Recipe for Disaster: Freeing Sir Amik Varze.",
     zanaris,
   ],
   "Children of the Sun": [
@@ -369,7 +369,7 @@ export const songDescriptions: Record<SongName, string[]> = {
     "Plays at the chompy bird hunting location east of Feldip Hills. It can also be heard in Rantz's Cave.",
   ],
   "The Chosen": [
-    "Plays during the Recruitment Drive quest, during the challenges. The location is in an instance not accessible outside of the quest, so the correct answer is the quest icon.",
+    "Plays during the challenges in the Recruitment Drive quest. The location is in an instance not accessible outside of the quest, so the correct answer is the quest icon.",
   ],
   "City of the Dead": [
     "Plays north of Menaphos and in Sophanem before Contact! is completed, being replaced after the quest by Back to Life.",
@@ -379,7 +379,7 @@ export const songDescriptions: Record<SongName, string[]> = {
   ],
   Clanliness: ["Plays upon entering a Clan Hall."],
   Claustrophobia: [
-    "Plays during the Between a Rock... quest, within the Arzinian Mine inside Keldagrim.",
+    "Plays within the Arzinian Mine inside Keldagrim, visited during the Between a Rock... quest.",
     ...keldagrim,
   ],
   "Close Quarters": [
@@ -408,7 +408,7 @@ export const songDescriptions: Record<SongName, string[]> = {
     ...keldagrim,
   ],
   Conspiracy: [
-    "Appears four separte times during the Vampire quest line. First while spying on Ranis Drakan and Vanstrom Klause on the walls of Ver Sinhaza during A Taste of Hope. Then in the basement of Serafina's house, in Meiyerditch.",
+    "Appears four separate times during the Vampire quest line. First while spying on Ranis Drakan and Vanstrom Klause on the walls of Ver Sinhaza during A Taste of Hope. Then in the basement of Serafina's house, in Meiyerditch.",
     "In Sins of the Father, it plays twice more. First when following Carl around Slepe, and again during the cutscene when Damien Leucurte is confronted upstairs in Crombwick Manor.",
   ],
   Contest: [
@@ -513,7 +513,7 @@ export const songDescriptions: Record<SongName, string[]> = {
   ],
   Deadlands: ["Plays in the Haunted Woods."],
   "Deep Down": [
-    "Plays during the Haunted Mine quest, on Levels 2 and 3 of the Abandoned Mine. It can also be heard when attempting to enter Level 6 without a light source.",
+    "Plays on Levels 2 and 3 of the Abandoned Mine, visited during the Haunted Mine quest. It can also be heard when attempting to enter Level 6 without a light source.",
   ],
   "Deep Wildy": [
     "Plays near the Chaos Temple or south of the Ice Plateau in the Wilderness.",
@@ -566,11 +566,11 @@ export const songDescriptions: Record<SongName, string[]> = {
     "Plays on the first level of the Stronghold of Security, down the ladder in Barbarian Village.",
   ],
   Dogfight: [
-    "Plays during The General's Shadow. It can be heard during the battle with the ghost of Bouncer inside the Goblin Cave.",
+    "Plays during The General's Shadow, while battling the ghost of Bouncer inside the Goblin Cave.",
   ],
   "Domain of the Vampyres": [
     "Plays during the meeting between Vanstrom Klause, Ranis Drakan and Vanescula Drakan in the Darkness of Hallowvale.",
-    "It later plays during the cutscene of the speech by Ranis Drakan during A Taste of Hope. The track also returns in Sins of the Father, when it plays during the cutscene with Vanescula Drakan at the Icyene Graveyard.",
+    "It later plays during the cutscene of the speech by Ranis Drakan in A Taste of Hope. The track also returns in Sins of the Father, when it plays during the cutscene with Vanescula Drakan at the Icyene Graveyard.",
     "It is based on Distant Land, which plays in Burgh de Rott.",
   ],
   "Don't Panic Zanik": [
@@ -618,7 +618,7 @@ export const songDescriptions: Record<SongName, string[]> = {
     "It probably wasn't meant to play in the crypt, but the two underground areas are right next to each other and there's some musical spillage from Taverley Dungeon.",
   ],
   "Dusk in Yu'biusk": [
-    "Plays during Land of the Goblins, upon arriving in Yu'biusk.",
+    "Plays in Yu'biusk, visited in Land of the Goblins.",
   ],
   "Dwarf Theme": [
     "Plays around the Dwarven Mine and on the path between Falador and the Barbarian Village.",
@@ -692,12 +692,12 @@ export const songDescriptions: Record<SongName, string[]> = {
     "Plays when fighting Duke Sucellus in the Ghorrock Dungeon under Weiss during and after Desert Treasure II - The Fallen Empire.",
   ],
   "Eye of the Storm": [
-    "Plays during Dragon Slayer I. It can be heard during the cutscene when Elvarg attacks the Lady Lumbridge, while the player and Captain Ned are sailing to Crandor.",
+    "Plays during Dragon Slayer I. It can be heard in the cutscene when Elvarg attacks the Lady Lumbridge, while the player and Captain Ned are sailing to Crandor.",
     crandor,
   ],
   Faerie: ["Plays in western Zanaris and outside the Cosmic Altar.", zanaris],
   "The Fairy Dragon": [
-    "Plays during Sir Amik Varze's subquest of Recipe for Disaster. It can be heard during the cutscene when meeting with K'klik, after rubbing the Dragon token.",
+    "Plays during Sir Amik Varze's subquest of Recipe for Disaster. It can be heard in the cutscene when meeting with K'klik, after rubbing the Dragon token.",
     "As this cutscene can be triggered by the player anywhere, and takes place on another plane, the quest start location is marked.",
   ],
   "Faith of the Hefin": [
@@ -707,7 +707,7 @@ export const songDescriptions: Record<SongName, string[]> = {
     "Plays around the Chaos Temple and to the east in the Wilderness.",
   ],
   "The Fallen Empire": [
-    "Plays during the quest Desert Treasure II. It plays inside the Lassar Undercity, accessible through the ruins of Camdozaal under Ice Mountain.",
+    "Plays inside the Lassar Undercity, accessible through the ruins of Camdozaal under Ice Mountain during and after Desert Treasure II.",
   ],
   Fanfare: ["Plays in western Falador."],
   "Fanfare 2": [
@@ -790,13 +790,13 @@ export const songDescriptions: Record<SongName, string[]> = {
   Forgotten: ["Plays in the temple basement under the Ruins of Uzer."],
   "A Forgotten Religion": ["Plays upon entering the Forthos Dungeon.", forthos],
   "The Forgotten Tomb": [
-    "Plays during the Beneath Cursed Sands quest, in the tombs below Ruins of Ullek.",
+    "Plays in the tombs below Ruins of Ullek, visited in Beneath Cursed Sands.",
   ],
   "The Forlorn Homestead": ["Plays in Hosidius."],
   "The Forsaken Tower": [
-    "The Forsaken Tower plays in The Forsaken Tower during The Forsaken Tower. Hope that helps.",
+    "The Forsaken Tower plays in The Forsaken Tower which is visisted in The Forsaken Tower. Hope that helps.",
   ],
-  "The Forsaken": ["Plays in the Lithkren Vault during Dragon Slayer II."],
+  "The Forsaken": ["Plays in the Lithkren Vault, unlocked during Dragon Slayer II."],
   Fossilised: [
     "Plays on Fossil Island, inside either Wyvern Cave.",
     "According to data crowdsourced via RuneLite, approximately 51% of players unlock the track in the northern task-only cave, while 49% unlock it in the southern cave.",
@@ -893,7 +893,7 @@ export const songDescriptions: Record<SongName, string[]> = {
     'It may be a reference to English gothic punk band The Damned\'s 1985 song "Grimly Fiendish".',
   ],
   "Grip of the Talon": [
-    "Plays during the fight with Agrith Naar during Shadow of the Storm. Outside of this battle, Throne of the Demon plays in this area.",
+    "Plays during the fight with Agrith Naar in Shadow of the Storm. Outside of this battle, Throne of the Demon plays in this area.",
   ],
   Grotto: ["Plays at the Nature Spirit's grotto in Mort Myre Swamp."],
   "Grow Grow Grow": ["Plays in the north wing of the Farming Guild."],
@@ -912,10 +912,10 @@ export const songDescriptions: Record<SongName, string[]> = {
     "It is a pun on the popular children's game, Hide-and-Seek.",
   ],
   "H.A.M. Attack": [
-    "Plays during the Another Slice of H.A.M. quest during the assault on Goblin Village.",
+    "Plays during the Another Slice of H.A.M. quest in the assault on Goblin Village.",
   ],
   "H.A.M. Fisted": [
-    "Plays in the H.A.M. Storerooms inside the H.A.M. hideout during the Death to the Dorgeshuun quest.",
+    "Plays in the H.A.M. Storerooms inside the H.A.M. hideout, unlocked in Death to the Dorgeshuun.",
     "This track is similar to Monster Melee except it has typical swing variation with characteristic blues tones and 6/8 tempo. It uses a pizziccato violin section, a drumset, percussion, a double bass, and a bassoon.",
   ],
   Harmony: [
@@ -938,7 +938,7 @@ export const songDescriptions: Record<SongName, string[]> = {
     "Plays inside the Body Altar, which is south of the Edgeville Monastery.",
   ],
   "Hells Bells": ["Plays while sledding down Trollweiss Mountain."],
-  Hermit: ["Plays in Saba's cave during the Death Plateau quest."],
+  Hermit: ["Plays in Saba's cave, visisted in the Death Plateau quest."],
   "High Seas": ["Plays in Brimhaven."],
   "High Spirits": ["Plays by completing future Halloween events."],
   "His Faithful Servants": [
@@ -972,7 +972,7 @@ export const songDescriptions: Record<SongName, string[]> = {
     "Another version of this track, Impulses, plays when the player is standing nearby a wheat field with a portal to Puro-Puro open.",
   ],
   Impulses: [
-    "Plays during Impetuous Impulses. It can be heard when standing near an active Crop circle.",
+    "Plays during Impetuous Impulses (Puro Puro). It can be heard when standing near an active Crop circle.",
     "It is a remix of Impetuous.",
   ],
   "In Between": [
@@ -1034,7 +1034,7 @@ export const songDescriptions: Record<SongName, string[]> = {
   ],
   "Isle of Everywhere": ["Plays on the east coast of Lunar Isle."],
   "It's not over 'til...": [
-    "Plays during upon entering Lady Verzik Vitur's room in the Theatre of Blood. The vocals for Lady Verzik were done by Kate Smith.",
+    "Plays upon entering Lady Verzik Vitur's room in the Theatre of Blood. The vocals for Lady Verzik were done by Kate Smith.",
     'This track and The Fat Lady Sings are a reference to the phrase "It ain\'t over till the fat lady sings".',
   ],
   "Itsy Bitsy...": [
@@ -1098,7 +1098,7 @@ export const songDescriptions: Record<SongName, string[]> = {
     "Plays in Brimhaven Dungeon, in the areas with red dragons, black demons, or metal dragons.",
   ],
   "King of the Trolls": [
-    "Plays during The Fremennik Isles. It can be heard during the battle that takes places in the Ice Troll Caves.",
+    "Plays during The Fremennik Isles. It can be heard in the battle that takes places in the Ice Troll Caves.",
   ],
   Kingdom: ["Plays around the Warriors' Guild."],
   Knightly: [
@@ -1106,7 +1106,7 @@ export const songDescriptions: Record<SongName, string[]> = {
     "The song has a steady march tempo, and an organ in the first phrase. A flute joins with a counter-melody in the second phrase. The song then fades out steadily with a French horn.",
   ],
   Knightmare: [
-    "Plays at the Black Knights' Fortress. It is also played during the escape from Keep Le Faye during the King's Ransom quest.",
+    "Plays at the Black Knights' Fortress. It is also played during the escape from Keep Le Faye in the King's Ransom quest.",
     'The name of the song is a pun on the word "nightmare".',
     "Along with Lore and Order, it was the last music track to be added to the game before the creation of the August 2007 Archive of RuneScape.",
   ],
@@ -1121,12 +1121,12 @@ export const songDescriptions: Record<SongName, string[]> = {
   ],
   Lair: ["Plays at the Shade Catacombs beneath Mort'ton."],
   "Lair of the Basilisk": [
-    "Plays upon entering the Jormungand's Prison during The Fremennik Exiles quest. It also plays in the prison after the quest. During different stages of the fights during the quest, this song will be replaced with both Fight of the Basilisk and Reign of the Basilisk.",
+    "Plays upon entering the Jormungand's Prison during The Fremennik Exiles quest. It also plays in the prison after the quest. At different stages of the fights in the quest, this song will be replaced with both Fight of the Basilisk and Reign of the Basilisk.",
     'The track was originally released on 1 April 2009, being played during the quest Glorious Memories in RuneScape. It was originally composed by Chris Jolley and was titled "Lair of Kang Admi".',
   ],
-  Lament: ["Plays in Enakhra's Temple during the Enakhra's Lament quest."],
+  Lament: ["Plays in Enakhra's Temple during and after the Enakhra's Lament quest."],
   "Lament for the Hallowed": [
-    "Plays during the quest Sins of the Father. It plays upon arriving at the Icyene Graveyard, and can later be heard during the ending cutscene.",
+    "Plays during the quest Sins of the Father. It plays upon arriving at the Icyene Graveyard, and can later be heard in the final cutscene.",
     "The track was originally released on 14 September 2015, being played during the quest The Lord of Vampyrium in RuneScape.",
   ],
   "Lament of Meiyerditch": [
@@ -1151,7 +1151,7 @@ export const songDescriptions: Record<SongName, string[]> = {
   "Last Man Standing": ["Plays in the Last Man Standing minigame."],
   "The Last Shanty": ["Plays in southern Meiyerditch."],
   "Last Stand": [
-    "Plays during the battle against the Sea Troll Queen during Swan Song. Outside of this fight, Making Waves plays in this area.",
+    "Plays during the battle against the Sea Troll Queen in Swan Song. Outside of this fight, Making Waves plays in this area.",
   ],
   Lasting: ["Plays at Hemenster and the Ranging Guild."],
   "Lava is Mine": ["Plays on Fossil Island at the Volcanic Mine."],
@@ -1169,7 +1169,7 @@ export const songDescriptions: Record<SongName, string[]> = {
   Lightwalk: ["Plays at Keep Le Faye and western Catherby."],
   "Little Cave of Horrors": ["Plays in the Mos Le'Harmless Cave."],
   Lonesome: [
-    "Plays in the mines under the Desert Mining Camp during The Tourist Trap quest.",
+    "Plays in the mines under the Desert Mining Camp, unlocked in The Tourist Trap.",
   ],
   "Long Ago": [
     "Plays on Hazelmere's island south-east of Yanille.",
@@ -1177,10 +1177,10 @@ export const songDescriptions: Record<SongName, string[]> = {
   ],
   "Long Way Home": ["Plays in Rimmington."],
   "The Longramble Scramble": [
-    "Plays during the quest The Path of Glouphrie. It plays upon arriving at the Galarpos Mountains, where Longramble is.",
+    "Plays at the Galarpos Mountains, where Longramble is during The Path of Glouphrie.",
   ],
   "Look to the Stars": [
-    "Plays during the Observatory Quest. It can be heard during the cutscene when the player and the Observatory professor first arrive at the Observatory.",
+    "Plays during the Observatory Quest. It can be heard in the cutscene when the player and the Observatory professor first arrive at the Observatory.",
   ],
   "Looking Back": ["Plays at the Varrock Museum and its basement."],
   "Lore and Order": [
@@ -1196,7 +1196,7 @@ export const songDescriptions: Record<SongName, string[]> = {
     ...swampCaves,
   ],
   "Lower Depths": [
-    "Plays in the second level of the Chambers of Xeric or in the Quidamortem Cave during Tale of the Righteous.",
+    "Plays in the second level of the Chambers of Xeric or in the Quidamortem Cave visited in Tale of the Righteous.",
     "According to data crowdsourced via RuneLite, approximately 64% of players unlock the track in the Quidamortem Cave, while 36% unlock it in the Chambers of Xeric.",
   ],
   "Lucid Dream": [
@@ -1231,7 +1231,7 @@ export const songDescriptions: Record<SongName, string[]> = {
   ],
   "The Maiden's Sorrow": [
     "Plays upon entering The Maiden of Sugadinti's room in the Theatre of Blood.",
-    "The track can also be heard during the ending cutscene of A Taste of Hope in Ver Sinhaza.",
+    "The track can also be heard in the final cutscene of A Taste of Hope in Ver Sinhaza.",
   ],
   "Major Miner": ["Plays in the Jatizso mine."],
   "Making Waves": [
@@ -1245,7 +1245,7 @@ export const songDescriptions: Record<SongName, string[]> = {
     "Plays at the Shayziens' Wall, Lizardman Settlement, or Lizardman Canyon. It can also be heard in the Lizardman Caves.",
   ],
   Marooned: [
-    "Plays on Crash Island. It can later be heard during the underground area of Crash Island during King Awowogei's subquest in Recipe for Disaster.",
+    "Plays on Crash Island. It can later be heard during the underground area of Crash Island in King Awowogei's subquest in Recipe for Disaster.",
   ],
   Marzipan: [
     "Plays in the tunnel to Keldagrim, in the Troll Stronghold, and in the ice cave that leads to Trollweiss Mountain.",
@@ -1306,13 +1306,13 @@ export const songDescriptions: Record<SongName, string[]> = {
     "It can later be heard in the Crash Site Cavern after the quest.",
   ],
   "Monkey Madness": [
-    "Plays in Marim.",
+    "Plays in Marim, Ape Atoll.",
     "It can later be heard at the airship platform during Monkey Madness II, which has no known location, meaning that the quest icon inside the Grand Tree is also marked as a correct answer.",
   ],
   "Monkey Sadness": [
     "Plays in Glough's laboratory during Monkey Madness II. It can later be heard there when hunting Maniacal monkeys.",
   ],
-  "Monkey Trouble": ["Plays in Kruk's Dungeon during Monkey Madness II."],
+  "Monkey Trouble": ["Plays in Kruk's Dungeon, visited in Monkey Madness II."],
   "Monster Melee": ["Plays in the H.A.M. hideout."],
   "The Monsters Below": ["Plays under Waterbirth Island.", waterbirth],
   Moody: [
@@ -1330,14 +1330,14 @@ export const songDescriptions: Record<SongName, string[]> = {
     "Plays when you get on the path to Paterdomus and the entrance to Morytania.",
   ],
   "Morytanian Mystery": [
-    "Plays during the cutscene in which the player is knocked out by shadowy figures during the quest Darkness of Hallowvale. It can also be heard during Sins of the Father, in the cutscene showing the meeting between Damien Leucurte and the werewolves.",
+    "Plays during the cutscene in which the player is knocked out by shadowy figures in Darkness of Hallowvale. It can also be heard during Sins of the Father, in the cutscene showing the meeting between Damien Leucurte and the werewolves.",
     "It is based upon The Last Shanty.",
   ],
   "A Mother's Curse": [
     "Plays during the fight with Kephri in the Tombs of Amascut in the Necropolis.",
   ],
   "Mother Ruckus": [
-    "Plays during the fight with Mother in Weiss during Making Friends with My Arm.",
+    "Plays during the fight with Mother in Weiss in Making Friends with My Arm.",
   ],
   "Mouse Trap": [
     "Plays in the Mouse Hole during Grim Tales.",
@@ -1397,7 +1397,7 @@ export const songDescriptions: Record<SongName, string[]> = {
     "The Nightmare Continues is one of two music tracks that share name with a RuneScape music track, but being completely unrelated. The other being Sands of Time.",
   ],
   "No Pasaran": [
-    "Plays during the defence of the dwarven camp in the Underground Pass during the Song of the Elves quest.",
+    "Plays during the defence of the dwarven camp in the Underground Pass in the Song of the Elves quest.",
     '"¡No pasarán!" translates to "they shall not pass" in Spanish. This phrase was used as a battle cry most famously by anti-Francoist forces during Spanish Civil War.',
     ...undergroundPass,
   ],
@@ -1405,7 +1405,7 @@ export const songDescriptions: Record<SongName, string[]> = {
     "Plays in the hopelessness room in Tolna's Rift during A Soul's Bane.",
   ],
   "The Noble Rodent": [
-    "Plays during the fight between the player's cat and the King rat during the Ratcatchers quest.",
+    "Plays during the fight between the player's cat and the King rat in Ratcatchers.",
     "Of the two Rat Kings in Varrock, this one would probably lose in a 1v1.",
   ],
   Nomad: [
@@ -1431,7 +1431,7 @@ export const songDescriptions: Record<SongName, string[]> = {
     ...varrockSewers,
   ],
   "The Old Ones": [
-    "Plays during The Garden of Death. It plays in various dungeons visited during the quest: Near the start point of the quest, Beneath Molch Island, Beneath Xeric's Shrine, and Beneath the Ruins of Morra.",
+    "Plays in various dungeons visited during The Garden of Death: Near the start point of the quest, Beneath Molch Island, Beneath Xeric's Shrine, and Beneath the Ruins of Morra.",
   ],
   "On the Frontline": [
     "Plays at the Battlefront west of Great Kourend.",
@@ -1448,14 +1448,14 @@ export const songDescriptions: Record<SongName, string[]> = {
     "Plays when fighting Vorkath during and after Dragon Slayer II.",
   ],
   "Oncoming Foe": [
-    "Plays during the fourth phase of the naval assault during Dragon Slayer II, when several metal dragons are fought.",
+    "Plays during the fourth phase of the naval assault in Dragon Slayer II, when several metal dragons are fought.",
     "As the exact location of the cutscene is not known, the quest start icon is marked instead.",
   ],
   "Organ Music 1": [
-    "Plays automatically. It can be heard when playing a Church organ in Lumbridge, Seers' Village, Entrana, Tutorial Island, or Paterdomus.",
+    "Plays when playing a Church organ in Lumbridge, Seers' Village, Entrana, Tutorial Island, or Paterdomus.",
   ],
   "Organ Music 2": [
-    "Plays automatically. It can be heard when playing a church organ in Lumbridge, Seers' Village, Entrana, Tutorial Island, or Paterdomus.",
+    "Plays when playing a Church organ in Lumbridge, Seers' Village, Entrana, Tutorial Island, or Paterdomus.",
   ],
   Oriental: [
     "Plays in the top floor of the temple of Ah Za Rhoon under Karamja, which is visited during the Shilo Village quest.",
@@ -1482,17 +1482,17 @@ export const songDescriptions: Record<SongName, string[]> = {
     "Plays at the Shadow Dungeon, down the ladder west of the Fishing Guild.",
   ],
   "The Penguin Bards": [
-    "Plays during Cold War. It can be heard during the musical performances of Ping and Pong in the Iceberg.",
+    "Plays during Cold War, in the musical performances of Ping and Pong in the Iceberg.",
   ],
   "Penguin Plots": [
-    "Plays during Cold War. It can be heard during the cutscenes when witnessing the Penguin handshake, and when Pescaling Pax describes the penguin plans for world domination.",
+    "Plays during Cold War, in cutscenes when witnessing the Penguin handshake, and when Pescaling Pax describes the penguin plans for world domination.",
     "It is a remix of Espionage.",
     "Jagex if you're reading this, please continue the Penguin quest line. It's amazing.",
     "In hindsight, this was not a good place to submit my request.",
   ],
   Pathways: ["Plays just inside the northern entrance to Brimhaven Dungeon."],
   "Pest Control": [
-    "Plays while playing the Pest Control minigame, or during the first part of the naval assault in Dragon Slayer II.",
+    "Plays during the Pest Control minigame, or in the first part of the naval assault in Dragon Slayer II.",
     "As it's impossible to pinpoint the exact location of the naval assault, the Dragon Slayer II quest icon is a valid answer.",
   ],
   "Pharaoh's Tomb": ["Plays around and on the Agility Pyramid."],
@@ -1555,7 +1555,7 @@ export const songDescriptions: Record<SongName, string[]> = {
   ],
   "Rat a Tat Tat": ["Plays by entering the Varrock Rat Pits."],
   "Rat Hunt": [
-    "Plays at the Ratcatchers Mansion during the Ratcatchers quest.",
+    "Plays at the Mansion during the Ratcatchers quest.",
     "Since the Mansion does not exist anywhere on the map, the quest icon in Gertrude's house is marked instead.",
   ],
   "Ready for Battle": ["Plays in the Castle Wars waiting room."],
@@ -1593,7 +1593,7 @@ export const songDescriptions: Record<SongName, string[]> = {
     ...keldagrim,
   ],
   Righteousness: ["Plays inside the Law Altar on Entrana."],
-  "Rising Damp": ["Plays in the Brine Rat Cavern during Olaf's Quest."],
+  "Rising Damp": ["Plays in the Brine Rat Cavern during and after Olaf's Quest."],
   Riverside: ["Plays to the west of Tyras Camp."],
   "Roc and Roll": [
     "Plays during My Arm's Big Adventure while fighting the giant roc. Outside this battle, Sojourn plays here instead.",
@@ -1609,7 +1609,7 @@ export const songDescriptions: Record<SongName, string[]> = {
     ...varrockSewers,
   ],
   Rose: [
-    "Plays during the quest A Kingdom Divided, when the player discovers Rose in the basement of the shack at the base of Mount Karuulm, and is also played during her funeral and around the shack afterwards.",
+    "Plays during the quest A Kingdom Divided, when the player discovers Rose in the basement of the shack at the base of Mount Karuulm, and also during her funeral and around the shack afterwards.",
   ],
   Royale: [
     "Plays in the Black Knights' base in the Taverley Dungeon.",
@@ -1627,7 +1627,7 @@ export const songDescriptions: Record<SongName, string[]> = {
     "Plays at the Rune Essence mine.",
     "The NPCs that can teleport you to the rune essence mine are highlighted.",
   ],
-  "Sad Meadow": ["Plays in West Ardougne during the Plague City quest."],
+  "Sad Meadow": ["Plays in West Ardougne."],
   "Safety in Numbers": [
     "Plays in the Sourhog Cave east of Draynor Manor.",
     "The track was originally released on 11 March 2008, being played in the Stronghold of Player Safety in RuneScape.",
@@ -1750,17 +1750,17 @@ export const songDescriptions: Record<SongName, string[]> = {
     "This boss fight has no specific location on the map, as the player can teleport to it from anywhere. Therefore the quest icon is marked instead.",
   ],
   "Sigmund's Showdown": [
-    "Plays in the Lumbridge water mill, during the battle with Sigmund in Death to the Dorgeshuun.",
+    "Plays under the Lumbridge water mill, during the battle with Sigmund in Death to the Dorgeshuun.",
     "The Lumbridge water mill basement is accessible from the swamp caves after the quest, but not during the quest.",
   ],
   "The Sinclairs": [
-    "Plays during King's Ransom. It can be heard during the cutscene when the player spies on the Sinclairs, revealing that Anna and David have betrayed the player.",
+    "Plays during King's Ransom. It can be heard in the cutscene when the player spies on the Sinclairs, revealing that Anna and David have betrayed the player.",
   ],
   "The Slayer": ["Plays at the entrance cave to the Fremennik Slayer Dungeon."],
   "Slice of Silent Movie": [
     "Plays during the battle with Sigmund in Another Slice of H.A.M.",
     ...swampCaves,
-    'The name comes from the cliché during old silent movies where a hero would have to defeat a villain while the female was tied to the train tracks to be run over. The female, in this case, is Zanik; and the villain, Sigmund. The "Slice of" is taken from the name of the quest: Another Slice of H.A.M..',
+    'The name comes from a silent movie cliché where a hero would have to defeat a villain while the female was tied to the train tracks to be run over. The female, in this case, is Zanik; and the villain, Sigmund. The "Slice of" is taken from the name of the quest: Another Slice of H.A.M..',
   ],
   "Slice of Station": [
     "Plays at the Dorgesh-Kaan Keldagrim train system after the completion of Another Slice of H.A.M.",
@@ -1773,7 +1773,7 @@ export const songDescriptions: Record<SongName, string[]> = {
   ],
   "Slug a Bug Ball": ["Plays in Mother Mallum's lair under Witchaven."],
   "Snowflake & My Arm": [
-    "Plays during the ending cutscene of Making Friends with My Arm. At 1 minute and 17 seconds, it is the shortest listed music track in Old School RuneScape.",
+    "Plays during the final cutscene of Making Friends with My Arm. At 1 minute and 17 seconds, it is the shortest listed music track in Old School RuneScape.",
   ],
   Sojourn: [
     "Plays without having completed any quests, on the eastern side of the Mountain Camp.",
@@ -1799,7 +1799,7 @@ export const songDescriptions: Record<SongName, string[]> = {
   Sphinx: ["Plays north and east of Sophanem."],
   Spirit: ["Plays in western Varrock."],
   "Spirits of the Elid": [
-    "Plays during the Spirits of the Elid quest, inside the waterfall at the source of the River Elid.",
+    "Plays inside the waterfall at the source of the River Elid, first visited in Spirits of the Elid.",
   ],
   Splendour: [
     "Plays between Taverley and Burthorpe, and at the Chaos Temple.",
@@ -1810,7 +1810,7 @@ export const songDescriptions: Record<SongName, string[]> = {
     "Plays in the Haunted Mine quest on the first level of the Abandoned Mine. It also plays in the bar basement in Burgh de Rott and in the Isle of Souls Dungeon.",
   ],
   "Spooky Jungle": [
-    "Plays in the south-west of the Kharazi Jungle, in Rashiliyia's Tomb, and during cutscenes in Tai Bwo Wannai Trio when Tamayu fights The Shaikahan.",
+    "Plays in the south-west of the Kharazi Jungle, in Rashiliyia's Tomb, and while when Tamayu fights The Shaikahan in Tai Bwo Wannai Trio.",
   ],
   "The Spurned Demon": ["Plays while fighting Zalcano in Prifddinas."],
   "The Spymaster": [
@@ -1831,7 +1831,7 @@ export const songDescriptions: Record<SongName, string[]> = {
     "Plays in the Myreque Hideout south of Canifis. It also plays in Daeyalt essence mine under Darkmeyer.",
   ],
   "Storeroom Shuffle": [
-    "Plays during the quest The Path of Glouphrie. It plays upon arriving in the storeroom within the Tree Gnome Village Dungeon.",
+    "Plays during The Path of Glouphrie. It plays upon arriving in the storeroom within the Tree Gnome Village Dungeon.",
   ],
   "Storm Brew": ["Plays in the Killerwatt plane."],
   Stranded: [
@@ -1860,7 +1860,7 @@ export const songDescriptions: Record<SongName, string[]> = {
     "As the player is teleported to the prison, the quest icon is marked instead.",
   ],
   "Surok's Theme": [
-    "Plays during What Lies Below. It can be heard during the battle with King Roald.",
+    "Plays during What Lies Below, in the battle with King Roald.",
   ],
   Suspicious: [
     "Plays during cutscenes in Monkey Madness I.",
@@ -1872,7 +1872,7 @@ export const songDescriptions: Record<SongName, string[]> = {
     "Plays during the Lair of Tarn Razorlor in the final battle with mutant Tarn, inside the Abandoned Mine.",
   ],
   "A Taste of Hope": [
-    "Plays during the final fight with Ranis Drakan during the quest A Taste of Hope.",
+    "Plays during the final fight with Ranis Drakan in A Taste of Hope.",
   ],
   "Tears of Guthix": [
     "Plays in the Chasm of Tears, accessible from the Lumbridge Swamp Caves.",
@@ -1892,7 +1892,7 @@ export const songDescriptions: Record<SongName, string[]> = {
     "Plays inside the Guardians of the Rift lobby and before the prep phase of the minigame.",
   ],
   "Temple of Tribes": [
-    "Plays during Land of the Goblins, within the Goblin Temple.",
+    "Plays within the Goblin Temple, visited in Land of the Goblins.",
     "It is a slower version of the track Goblin Village with added bass drums and other sound effects to give a creepy temple feeling.",
   ],
   "Tempor of the Storm": ["Plays while fighting Tempoross in Tempoross Cove."],
@@ -1929,11 +1929,11 @@ export const songDescriptions: Record<SongName, string[]> = {
     "Plays at the Seers' Village Coal Trucks, or in the Waterfall Dungeon.",
   ],
   "A Thorn in My Side": [
-    "Plays during the fight with the player-grown hespori at the Farming Guild and when fighting the wild hespori during A Night at the Theatre.",
+    "Plays during the fight with the player-grown hespori at the Farming Guild and when fighting the wild hespori in A Night at the Theatre.",
     "When not fighting the Hespori, Creeping Vines plays in the Farming Guild cave and Stagnant on the Morytania island.",
   ],
   "Thrall of the Devourer": [
-    "Plays during the Beneath Cursed Sands quest. It plays during the fight with the Champion of Scabaras and the Menaphite Akh.",
+    "Plays during the Beneath Cursed Sands quest, when fighting the Champion of Scabaras and the Menaphite Akh.",
   ],
   "Thrall of the Serpent": [
     "Plays at Zul-Andra. It was the 500th music track added to Old School RuneScape.",
@@ -2005,10 +2005,10 @@ export const songDescriptions: Record<SongName, string[]> = {
   Understanding: ["Plays at the Nature Altar."],
   "Unknown Land": ["Plays in southern Draynor Village."],
   Untouchable: [
-    "Plays during the fight with The Untouchable during the Dream Mentor quest.",
+    "Plays during the fight with The Untouchable in the Dream Mentor quest.",
   ],
   "Unturned Stones": [
-    "Plays during Desert Treasure II, in the dungeon under the Digsite where the golem encountered during the quest resides.",
+    "Plays during Desert Treasure II, in the dungeon under the Digsite where the golem encountered in the quest resides.",
     "It is based on the RuneScape unlisted music track Tomb Stones, which plays inside the Digsite Dungeon during the The Temple at Senntisten quest, which Desert Treasure II takes a number of elements from.",
   ],
   Upcoming: [
@@ -2023,7 +2023,7 @@ export const songDescriptions: Record<SongName, string[]> = {
     "Plays upon entering the Chambers of Xeric under Mount Quidamortem.",
   ],
   "Vampyre Assault": [
-    "Plays during the meeting between Gadderanks and Vanstrom Klause during the quest In Aid of the Myreque. It also plays during Sins of the Father in the battle with Damien Leucurte upstairs in Crombwick Manor.",
+    "Plays during the meeting between Gadderanks and Vanstrom Klause in the quest In Aid of the Myreque. It also plays during Sins of the Father in the battle with Damien Leucurte upstairs in Crombwick Manor.",
     "It is based upon Distant Land and Fangs for the Memory.",
   ],
   Vanescula: [
@@ -2053,7 +2053,7 @@ export const songDescriptions: Record<SongName, string[]> = {
   Voyage: ["Plays at the top of Baxtorian Falls."],
   "The Waiting Game": ["Plays in the Soul Wars lobby."],
   "Waking Dream": [
-    "Plays during Lunar Diplomacy, upon first entering the Dream World and during the fight with Me.",
+    "Plays during Lunar Diplomacy, upon first entering the Dream World and while fighting Me.",
   ],
   "Waste Defaced": [
     "Plays in the Poison Waste Dungeon, during and after Path of Glouphrie.",
@@ -2066,7 +2066,7 @@ export const songDescriptions: Record<SongName, string[]> = {
     "This track's name is a reference to the like-named series The Walking Dead.",
   ],
   "Wally the Hero": [
-    "Plays during Demon Slayer. It can be heard during the cutscene where Aris describes how Wally first defeated Delrith.",
+    "Plays during Demon Slayer in the cutscene where Aris describes how Wally first defeated Delrith.",
   ],
   Wander: [
     "Plays at the Falador Farm.",
@@ -2140,11 +2140,11 @@ export const songDescriptions: Record<SongName, string[]> = {
   ],
   Workshop: ["Plays in eastern Falador."],
   "A Worthy Foe": [
-    "Plays during Desert Treasure II - The Fallen Empire, during encounters with the Mysterious Figure.",
+    "Plays during Desert Treasure II - The Fallen Empire, when encountering the Mysterious Figure.",
     "As the Mysterious Figure can attack the player in any location, the quest icon is marked instead.",
   ],
   "Wrath and Ruin": [
-    "Plays in the anger room of Tolna's Rift during A Soul's Bane, and during the battle with Tolna.",
+    "Plays in the anger room of Tolna's Rift during A Soul's Bane, and in the battle with Tolna.",
   ],
   Xenophobe: [
     "Plays at the Waterbirth Island Dungeon. It plays in the deeper area from rooms 12-15, and in the lairs of the Dagannoth Kings.",
@@ -2152,7 +2152,7 @@ export const songDescriptions: Record<SongName, string[]> = {
   ],
   Yesteryear: ["Plays in the eastern part of Lumbridge swamp."],
   "You Have My Attention": [
-    "Plays during the quest Sins of the Father. It plays during the cutscene where Lowerniel Drakan confronts the player.",
+    "Plays during the quest Sins of the Father in the cutscene where Lowerniel Drakan confronts the player.",
     "The track is split into two distinctive parts, the last part bears resemblance to A Forgotten Religion.",
     'The cache id number of the track is 666, which is a reference to the "Number of the Beast", as well as the combat level of Lowerniel Drakan in RuneScape; fittingly the track is played at Lowerniel Drakan\'s first appearance in the game.',
   ],

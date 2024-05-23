@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "dev": "concurrently --kill-others \"cd ../shared && yarn run dev\" \"vite\"",
+    "dev": "vite --clearScreen false",
     "build": "yarn build:exportData && yarn build:data && vite build",
     "build:exportData": "cd ../data-exporter && yarn export",
     "build:data": "cd ../data && yarn build"

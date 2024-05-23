@@ -2,6 +2,7 @@
   "private": true,
   "workspaces": ["client", "server", "shared", "data", "data-exporter"],
   "scripts": {
+    "dev": "concurrently --kill-others -n \"data-exporter,data,shared,client,server\" -c \"bgYellow,bgBlue,bgMagenta,bgRed,bgGreen\" \"cd data-exporter && yarn run dev\" \"cd data && yarn run dev\" \"cd shared && yarn run dev\" \"cd client && yarn run dev\" \"cd server && yarn run dev\"",
     "clean": "yarn clean:data-exporter && yarn clean:data && yarn clean:shared && yarn clean:server && yarn clean:client",
     "clean:data-exporter": "cd data-exporter && rm -f tsconfig.tsbuildinfo && rm -rf dist",
     "clean:data": "cd data && rm -f tsconfig.tsbuildinfo && rm -rf dist && rm -f src/data.ts && cp src/dataTemplate.ts src/data.ts",

@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "dev": "concurrently --kill-others \"cd ../data-exporter && yarn run dev\" \"tsc --build --watch --preserveWatchOutput\"",
+    "dev": "tsc --build --watch --preserveWatchOutput",
     "build": "tsc --build"
   },
   "devDependencies": {
