@@ -95,7 +95,7 @@ function onJoin(ws: WebSocket, searchParams: URLSearchParams) {
       id: game.gameId,
       owner: avatar.name,
       singlePlayer: false,
-      damageScaling: 0.5,
+      damageScaling: 1,
     },
     { [avatar.name]: { avatar, transport: ws, health: 99 } }
   );

@@ -112,9 +112,9 @@ export function calculateRoundResult(state: RoundActive): RoundResult {
     };
   }
 
-  // Healing starts at 22 and decreases 2 per round
-  const initialHealing = 22;
-  const healingDecreasePerRound = 2;
+  // Healing starts at 20 and decreases 1 per round
+  const initialHealing = 20;
+  const healingDecreasePerRound = 1;
   const minimumHealing = 0;
   const healingAmount = Math.max(
     initialHealing - healingDecreasePerRound * (state.game.round - 1),
@@ -127,6 +127,9 @@ export function calculateRoundResult(state: RoundActive): RoundResult {
   const venom = roundsOfVenom * venomIncreasePerRound;
 
   const bestDistance = bestGuess?.distance ?? Number.MAX_SAFE_INTEGER;
+  const bestMaxHit = getMaxHit(bestDistance, state.game.damageScaling);
+  const absoluteMaxHit = getMaxHit(0, state.game.damageScaling);
+
   const damage = mapValues(state.users, (user) => {
     const wasFirstPerfect =
       bestGuess?.userName === user.avatar.name && bestGuess.perfect;
@@ -134,16 +137,11 @@ export function calculateRoundResult(state: RoundActive): RoundResult {
 
     const myGuess = guessResults[user.avatar.name];
     const distance = myGuess?.distance ?? Number.MAX_SAFE_INTEGER;
-    const extraDistance = distance - bestDistance;
+    const maxHit = getMaxHit(distance, state.game.damageScaling);
 
-    const distanceMultiple =
-      bestDistance === 0 ? Number.MAX_SAFE_INTEGER : distance / bestDistance;
-    const distanceMaxHit = distanceMultiple * 20;
-    const maxHit = Math.min(80, distanceMaxHit);
-
-    const originalHit = extraDistance / 10;
-    const wasMax = originalHit > maxHit;
-    const hit = Math.ceil(Math.min(originalHit, maxHit));
+    const originalHit = Math.ceil(bestMaxHit - maxHit);
+    const wasMax = originalHit === absoluteMaxHit;
+    const hit = originalHit === 0 ? 0 : 4 + originalHit;
 
     return {
       hit,
@@ -177,4 +175,13 @@ export function calculateRoundResult(state: RoundActive): RoundResult {
       };
     }),
   };
+}
+
+function getMaxHit(distance: number, scaling: number) {
+  const powerPart = 40 / Math.pow(1.003, distance);
+  const linearPart = Math.max(40 - 0.025 * distance, 0);
+  const average = powerPart * 0.85 + linearPart * 0.15;
+  const output = average * scaling;
+  console.log(distance, output);
+  return output;
 }

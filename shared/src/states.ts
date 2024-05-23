@@ -177,7 +177,8 @@ abstract class State<
     const ownerStillPresent = this.game.owner in newUsers;
     const newOwner = ownerStillPresent
       ? this.game.owner
-      : Object.keys(this.users)[0];
+      : Object.keys(newUsers)[0];
+    console.log(ownerStillPresent, newOwner);
 
     if (newUserCount === 1) {
       return this.transition(
