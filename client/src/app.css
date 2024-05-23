@@ -8,7 +8,7 @@
   -webkit-font-smoothing: subpixel-antialiased;
   -moz-osx-font-smoothing: grayscale;
 
-  --semi-transparent-black: rgba(0, 0, 0, 0.9);
+  --semi-transparent-black: rgba(0, 0, 0, 0.8);
   user-select: none;
 }
 

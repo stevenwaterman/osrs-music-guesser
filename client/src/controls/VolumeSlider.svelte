@@ -3,7 +3,7 @@
 </script>
 
 <div class="container">
-  <span style="margin-bottom: 0.4rem;"><strong>Volume</strong></span>
+  <span class="left"><strong>Volume:</strong></span>
   <input
     bind:value={$volumeStore}
     class="volume"
@@ -12,35 +12,57 @@
     max="1"
     step="0.01"
   />
-  <span>{Math.round($volumeStore * 100)}%</span>
+  <span class="right">{Math.round($volumeStore * 100)}%</span>
 </div>
 
 <style>
   .container {
+    grid-column: 3;
+    grid-row: 1;
+    justify-self: flex-end;
+
     display: grid;
-    grid-template-rows: auto 1fr auto;
-    position: fixed;
-    bottom: 1rem;
-    right: 1rem;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    justify-items: center;
+
     pointer-events: initial;
-    width: 4rem;
 
     background-color: var(--semi-transparent-black);
     border-radius: 8px;
-    padding: 0.4em 0em;
+
+    max-width: 100%;
   }
 
   .volume {
     display: none;
-    transform: rotate(270deg);
     pointer-events: initial;
-    width: 10rem;
-    height: 10rem;
-    margin: 0 -3rem;
-    margin-bottom: 0.4rem;
+    min-width: 0;
+    max-width: 100%;
+    margin-left: 2rem;
+    margin-right: 2rem;
+    box-sizing: border-box;
   }
 
   .container:hover .volume {
     display: initial;
+  }
+
+  .left {
+    padding: 0.6rem 0.3rem 0.6rem 1.2rem;
+  }
+
+  .container:hover .left {
+    padding-right: 0.6rem;
+  }
+
+  .right {
+    padding: 0.6rem 1.2rem 0.6rem 0.3rem;
+    width: 2rem;
+    text-align: right;
+  }
+
+  .container:hover .right {
+    padding-left: 0.6rem;
   }
 </style>

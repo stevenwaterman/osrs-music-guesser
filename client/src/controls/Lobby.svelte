@@ -1,6 +1,6 @@
 <script lang="ts">
   import { type ActiveState } from "../lib/clientState";
-  import AvatarSmall from "./results/AvatarSmall.svelte";
+  import Avatar from "./results/Avatar.svelte";
 
   export let state: ActiveState<"Lobby">;
 
@@ -9,10 +9,10 @@
 </script>
 
 <div class="container">
-  <p class="title">Lobby</p>
-  <p>Game Name: <span class="gameId">{state.data.game.id}</span></p>
-  <p>Connected Players: {players}</p>
-  <AvatarSmall avatar={state.data.me.avatar} me />
+  <span class="title">Lobby</span>
+  <span>Game Name: <span class="gameId">{state.data.game.id}</span></span>
+  <span>Connected Players: {players}</span>
+  <Avatar avatar={state.data.me.avatar} me />
 
   <div>
     {#if state.data.game.singlePlayer || (myLobby && players > 1)}
@@ -24,15 +24,16 @@
       >
     {/if}
   </div>
-  <button on:click={() => state.disconnect()}>Main Menu</button>
 </div>
 
 <style>
+  .title {
+    font-weight: bold;
+  }
+
   .container {
-    grid-column-start: 1;
-    grid-column-end: 4;
-    grid-row-start: 1;
-    grid-row-end: 4;
+    grid-column: 2;
+    grid-row: 2 / y;
     font-size: 2rem;
     background-color: var(--semi-transparent-black);
     justify-self: center;
@@ -40,6 +41,11 @@
     padding: 2rem;
     border-radius: 2rem;
     pointer-events: initial;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
   }
   .gameId {
     user-select: all;

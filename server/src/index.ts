@@ -1,6 +1,7 @@
 import { songs } from "tunescape07-data";
 import { StateInterface } from "tunescape07-shared";
 import WebSocket, { WebSocketServer } from "ws";
+import { recordDistances } from "./scoreTracker.js";
 
 const wss = new WebSocketServer({ port: 4433 });
 const games: Record<string, StateInterface.StateStore> = {};
@@ -28,13 +29,17 @@ function getGame(
 
   if (!(gameId in games)) {
     const possibleSongs = Object.values(songs).filter(
-      (song) => song.location.length > 0
+      (song) => song.location.length > 0 && song.difficulty !== "extreme"
     );
 
     const onTransition = (value: StateInterface.AnyServerState | null) => {
       if (value === null) {
         console.log("deleting game", gameId);
         delete games[gameId];
+      }
+
+      if (value?.stateName === "RoundOver") {
+        recordDistances(value);
       }
     };
 
@@ -92,10 +97,8 @@ function onJoin(ws: WebSocket, searchParams: URLSearchParams) {
       singlePlayer: false,
       damageScaling: 1,
     },
-    { [avatar.name]: { avatar, transport: ws } }
+    { [avatar.name]: { avatar, transport: ws, health: 99 } }
   );
-
-  console.log(`${avatar.name} joined ${game.gameId}`);
 }
 
 setInterval(function ping() {

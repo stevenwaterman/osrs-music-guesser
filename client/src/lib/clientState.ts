@@ -145,14 +145,14 @@ export function connectToLocalServer(): Transport {
 
   const gameId = "Single Player";
   const possibleSongs = Object.values(songs).filter(
-    (song) => song.location.length > 0
+    (song) => song.location.length > 0 && song.difficulty !== "extreme"
   );
   const store = new StateStore(gameId, possibleSongs);
   const avatar = store.avatarLibrary.take();
   store.state = new Lobby(
     store,
     { id: gameId, owner: avatar.name, singlePlayer: true, damageScaling: 0.25 },
-    { [avatar.name]: { avatar, transport: serverSide } }
+    { [avatar.name]: { avatar, transport: serverSide, health: 99 } }
   );
 
   return clientSide;

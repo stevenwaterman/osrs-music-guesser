@@ -12,7 +12,7 @@
   $: confirmedGuess = state.data.me.guess;
 
   $: map.on("click", (click) => {
-    if (confirmedGuess === undefined) {
+    if (confirmedGuess === undefined && state.data.me.health > 0) {
       const coord = convertLeaflet.coordinate.from(click.latlng);
       unconfirmedGuessStore.set(coord);
     }

@@ -37,14 +37,14 @@
 
 <style>
   audio {
-    border-radius: 5rem;
-    grid-column-start: 1;
-    grid-column-end: 4;
+    grid-column: 2;
     grid-row: 5;
-    width: calc(100% - 2rem);
-    align-self: flex-end;
-    justify-self: center;
+
     pointer-events: initial;
+
+    max-height: 100%;
+    width: 100%;
     max-width: 40rem;
+    border-radius: 5rem;
   }
 </style>

@@ -10,7 +10,7 @@
 <div class="infoBox">
   <a class="title" target="_blank" href={song.wikiUrl}>{song.name}</a>
   <div class="info">
-    <p>Difficulty: {song.difficulty}</p>
+    <!-- <p>Difficulty: {song.difficulty}</p> -->
     {#each song.description as line}
       <p>{line}</p>
     {/each}
@@ -20,17 +20,16 @@
 <style>
   .infoBox {
     background-color: var(--semi-transparent-black);
-    width: 20rem;
 
-    grid-column-start: 1;
-    grid-column-end: 4;
-    grid-row: 1;
+    width: 100%;
+    max-height: 100%;
     align-self: flex-start;
-    justify-self: flex-start;
+
+    grid-column: 1;
+    grid-row: 2 / 6;
 
     display: flex;
     flex-direction: column;
-    max-height: 100%;
     overflow-y: hidden;
     pointer-events: initial;
   }

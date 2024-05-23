@@ -3,13 +3,15 @@
   import { onMount } from "svelte";
   import SoundEffect from "../SoundEffect.svelte";
   import Hitsplat from "./Hitsplat.svelte";
-  import AvatarLarge from "./AvatarLarge.svelte";
   import AllHealth from "./AllHealth.svelte";
+  import Health from "./Health.svelte";
+  import { avatarImageSrc } from "tunescape07-shared";
 
   export let state: ActiveState<"RoundOver">;
 
   $: startingHealth = state.data.me.healthBefore;
   let health = state.data.me.healthBefore;
+  $: dead = health !== undefined && health <= 0;
 
   let showAvatar = false;
   let showHealing = false;
@@ -43,13 +45,25 @@
       showAll = true;
     }, 4200);
   });
+
+  let render = false;
+  function loaded() {
+    render = true;
+  }
 </script>
 
-{#if startingHealth > 0}
+{#if startingHealth > 0 && showAvatar}
   <div class="container">
-    {#if showAvatar}
-      <AvatarLarge avatar={state.data.me.avatar} {health} />
-
+    {#if health !== undefined && render}
+      <Health {health} scale={1} />
+    {/if}
+    <div class="imageWrapper">
+      <!-- svelte-ignore a11y-missing-attribute -->
+      <img
+        src={avatarImageSrc(state.data.me.avatar)}
+        class:dead
+        on:load={loaded}
+      />
       {#if showVenom && state.data.me.damage.venom > 0}
         <div
           class="hitContainer"
@@ -79,36 +93,71 @@
           <Hitsplat type="hit" damage={state.data.me.damage} />
         </div>
       {/if}
+    </div>
+    {#if render}
+      <p class="name">{state.data.me.avatar.name} (Me)</p>
     {/if}
   </div>
 {/if}
 
-{#if health <= 0 && startingHealth > 0}
+{#if startingHealth > 0 && dead}
   <SoundEffect audioUrl="/dead.ogg" />
 {/if}
 
-{#if showAll}
+{#if showAll && !state.data.game.singlePlayer}
   <AllHealth {state} />
 {/if}
 
 <style>
-  .container {
-    grid-column: 2;
-    grid-row: 2;
+  .imageWrapper {
+    max-height: 100%;
+    max-width: 100%;
+    min-height: 0;
+    min-width: 0;
 
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+  }
+
+  img {
+    max-height: 50%;
+    max-width: 50%;
     min-height: 0;
     min-width: 0;
+  }
+
+  .name {
+    font-size: 3rem;
+    margin: 0;
+    text-shadow: 0.2rem 0.2rem black;
+  }
+
+  .dead {
+    filter: grayscale();
+  }
+
+  .container {
+    grid-column: 2;
+    grid-row: 2 / 4;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    min-height: 0;
+    min-width: 0;
+    max-height: 100%;
+    max-width: 100%;
 
     position: relative;
   }
 
   .hitContainer {
     position: absolute;
-    transform: translate(-50%, -100%);
+    transform: translate(-50%, -50%);
   }
 
   .multipleSplats {

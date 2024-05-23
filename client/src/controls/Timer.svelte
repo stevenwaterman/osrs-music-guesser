@@ -37,7 +37,7 @@
       4px 0 0 #000,
       -4px 0 0 #000;
 
-    grid-row: 1;
+    grid-row: 2;
     grid-column: 2;
     align-self: flex-start;
     justify-self: center;

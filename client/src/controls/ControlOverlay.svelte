@@ -8,15 +8,20 @@
   import Timer from "./Timer.svelte";
   import NextRound from "./NextRound.svelte";
   import WikiDisplay from "./WikiDisplay.svelte";
-  import HealthLeaderboard from "./HealthLeaderboard.svelte";
   import Damage from "./results/Damage.svelte";
   import VolumeSlider from "./VolumeSlider.svelte";
   import ConfirmGuess from "./ConfirmGuess.svelte";
+  import QuitGame from "./QuitGame.svelte";
+  import GuessCount from "./GuessCount.svelte";
   $: state = $stateStore;
 </script>
 
 <div class="grid">
   <VolumeSlider />
+
+  {#if state.isAny("Game_Active")}
+    <QuitGame {state} />
+  {/if}
 
   {#if state.isAny("StartScreen")}
     <MainMenu {state} />
@@ -43,6 +48,7 @@
     {#if state.isAnyActive("RoundActive")}
       <Timer {state} />
       <ConfirmGuess {state} />
+      <GuessCount {state} />
     {/if}
 
     {#if state.isAnyActive("RoundOver")}
@@ -51,10 +57,6 @@
       {/if}
       <WikiDisplay {state} />
       <Damage {state} />
-    {/if}
-
-    {#if state.isAnyActive("RoundActive")}
-      <HealthLeaderboard {state} />
     {/if}
 
     {#if state.isAnyActive("GameOver")}
@@ -72,11 +74,14 @@
     right: 0;
     bottom: 0;
     left: 0;
+    pointer-events: none;
 
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    grid-template-rows: auto 1fr 1fr auto auto;
-    pointer-events: none;
+    grid-template-columns: 1fr 3fr 1fr;
+    grid-template-rows: auto 1fr 1fr auto 3rem;
     gap: 1rem;
+
+    align-items: center;
+    justify-items: center;
   }
 </style>

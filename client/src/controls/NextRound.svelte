@@ -15,8 +15,6 @@
   button {
     grid-column: 2;
     grid-row: 4;
-    align-self: flex-end;
-    justify-self: center;
     pointer-events: initial;
   }
 </style>

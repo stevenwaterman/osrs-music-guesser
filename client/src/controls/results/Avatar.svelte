@@ -6,16 +6,22 @@
   export let health: number | undefined = undefined;
   export let me: boolean = false;
   $: dead = health !== undefined && health <= 0;
+
+  let render = false;
+  function onLoad() {
+    render = true;
+  }
 </script>
 
 <div class="container">
-  {#if health !== undefined}
-    <Health {health} scale={0.5} />
+  {#if health !== undefined && render}
+    <Health {health} scale={0.3} />
   {/if}
-  <div class="imgContainer">
-    <img src={avatarThumbnailSrc(avatar)} alt={avatar.name} class:dead />
-  </div>
-  <p class="name">{avatar.name}{me ? " (Me)" : ""}</p>
+  <!-- svelte-ignore a11y-missing-attribute -->
+  <img src={avatarThumbnailSrc(avatar)} class:dead on:load={onLoad} />
+  {#if render}
+    <p class="name">{avatar.name}{me ? " (Me)" : ""}</p>
+  {/if}
 </div>
 
 <style>
@@ -24,31 +30,19 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    min-height: 0;
-    min-width: 0;
 
-    height: 9rem;
-    width: 9rem;
-    margin: auto;
-  }
-
-  .imgContainer {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 6rem;
     width: 6rem;
   }
 
   img {
-    max-height: 100%;
-    max-width: 100%;
-    min-height: 0;
-    min-width: 0;
+    height: 6rem;
+    width: 6rem;
+    object-fit: contain;
+    margin: 0.4rem 0;
   }
 
   .name {
-    font-size: 1.2rem;
+    font-size: 1rem;
     margin: 0;
     text-shadow: 0.1rem 0.1rem black;
   }

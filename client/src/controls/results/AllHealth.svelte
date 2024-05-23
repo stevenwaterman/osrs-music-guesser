@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { ActiveState } from "../../lib/clientState";
-  import AvatarSmall from "./AvatarSmall.svelte";
+  import Avatar from "./Avatar.svelte";
 
   export let state: ActiveState<"RoundOver">;
 
@@ -10,34 +10,57 @@
 </script>
 
 <div class="container">
-  {#each others as other}
-    <AvatarSmall
-      avatar={other.avatar}
-      health={other.health}
-      me={other.avatar.name === state.data.me.avatar.name}
-    />
+  {#each others as other, idx}
+    <div class="avatarContainer">
+      <span class="label">{idx + 1}.</span>
+      <Avatar
+        avatar={other.avatar}
+        health={other.health}
+        me={other.avatar.name === state.data.me.avatar.name}
+      />
+    </div>
   {/each}
 </div>
 
 <style>
+  .avatarContainer {
+    position: relative;
+  }
+  .label {
+    position: absolute;
+    top: 0;
+    left: 0;
+    font-weight: bold;
+  }
   .container {
-    grid-column-start: 1;
-    grid-column-end: 4;
-    grid-row: 3;
+    grid-column: 3;
+    grid-row: 2/6;
 
     background-color: rgba(0, 0, 0, 70%);
     border-radius: 1rem;
     padding: 1rem;
-    overflow-y: scroll;
 
     display: flex;
     flex-direction: row;
-    align-items: flex-start;
+    flex-wrap: wrap;
+    row-gap: 1rem;
+    column-gap: 1rem;
+
+    align-items: center;
     justify-content: center;
 
-    height: fit-content;
+    align-self: flex-start;
+    justify-self: flex-end;
+
+    min-width: 0;
+    max-width: 100%;
     width: fit-content;
-    align-self: center;
-    justify-self: center;
+
+    min-height: 0;
+    max-height: 100%;
+
+    pointer-events: initial;
+    overflow-y: auto;
+    box-sizing: border-box;
   }
 </style>

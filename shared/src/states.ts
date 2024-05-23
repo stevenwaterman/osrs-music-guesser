@@ -59,6 +59,7 @@ abstract class State<
   UserState extends {
     avatar: Avatar;
     transport: Transport;
+    health: number;
   },
   PublicUserKeys extends Array<keyof UserState>,
   PrivateUserKeys extends Array<keyof UserState>,
@@ -160,10 +161,14 @@ abstract class State<
       return;
     }
 
+    console.log(`${userName} leaving ${this.game.id}`);
+
     this.store.avatarLibrary.release(this.users[userName].avatar);
 
-    const newUsers = omit(this.users, userName);
-    const newUserCount = Object.keys(newUsers).length;
+    const newUsers: Record<string, UserState> = omit(this.users, userName);
+    const newUserCount = Object.values(newUsers).filter(
+      (user) => user.health > 0
+    ).length;
 
     if (newUserCount === 0) {
       return this.transition(null);
@@ -206,6 +211,7 @@ export class Lobby extends State<
   {
     avatar: Avatar;
     transport: Transport;
+    health: number;
   },
   ["avatar"],
   []
@@ -222,15 +228,16 @@ export class Lobby extends State<
 
   public join(transport: Transport) {
     const avatar = this.store.avatarLibrary.take();
+    console.log(`${avatar.name} joined ${this.game.id}`);
     return this.transition(
       new Lobby(this.store, this.game, {
         ...this.users,
-        [avatar.name]: { avatar, transport },
+        [avatar.name]: { avatar, transport, health: 99 },
       })
     );
   }
 
-  public start() {
+  private start() {
     const gameSongs = sample(this.store.possibleSongs);
     const round = 1;
     const song = gameSongs[0];
@@ -363,8 +370,8 @@ export class RoundActive extends State<
         ...newGameState,
         timerStarted: now,
         timerId: setTimeout(() => {
-          if (this.store.state === newState) {
-            newState.roundOver();
+          if (this.store.state?.stateName === "RoundActive") {
+            this.store.state.roundOver();
           }
         }, newGameState.timerDurationSecs * 1000),
       };
@@ -607,7 +614,11 @@ export class GameOver extends State<
       new Lobby(
         this.store,
         pick(this.game, "id", "owner", "singlePlayer", "damageScaling"),
-        mapValues(this.users, (user) => pick(user, "avatar", "transport"))
+        mapValues(this.users, (user) => ({
+          avatar: user.avatar,
+          transport: user.transport,
+          health: 99,
+        }))
       )
     );
   }
