@@ -128,7 +128,7 @@ export function calculateRoundResult(state: RoundActive): RoundResult {
 
   const bestDistance = bestGuess?.distance ?? Number.MAX_SAFE_INTEGER;
   const bestMaxHit = getMaxHit(bestDistance, state.game.damageScaling);
-  const absoluteMaxHit = getMaxHit(0, state.game.damageScaling);
+  const absoluteMaxHit = Math.ceil(getMaxHit(0, state.game.damageScaling));
 
   const damage = mapValues(state.users, (user) => {
     const wasFirstPerfect =
@@ -139,9 +139,8 @@ export function calculateRoundResult(state: RoundActive): RoundResult {
     const distance = myGuess?.distance ?? Number.MAX_SAFE_INTEGER;
     const maxHit = getMaxHit(distance, state.game.damageScaling);
 
-    const originalHit = Math.ceil(bestMaxHit - maxHit);
-    const wasMax = originalHit === absoluteMaxHit;
-    const hit = originalHit === 0 ? 0 : 4 + originalHit;
+    const hit = Math.ceil(bestMaxHit - maxHit);
+    const wasMax = hit === absoluteMaxHit;
 
     return {
       hit,
