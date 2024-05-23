@@ -190,7 +190,7 @@ class State_StartScreen_Multiplayer extends BaseState<
     const prod = document.location.host.includes("tunescape07");
     const transport = prod
       ? new WebSocket(`wss://api.tunescape07.com/join?game=${gameId}`)
-      : new WebSocket(`ws://192.168.8.17:4433/join?game=${gameId}`);
+      : new WebSocket(`ws://localhost:4433/join?game=${gameId}`);
     listenToTransport(transport, () => this.back());
   }
 }
