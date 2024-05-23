@@ -1,6 +1,6 @@
 <script lang="ts">
   import SoundEffect from "../SoundEffect.svelte";
-  // TODO don't show text until hitspat image has loaded
+  // TODO don't show text until hitsplat image has loaded
   export let type: "hit" | "venom" | "healing";
   export let damage: {
     hit: number;
@@ -31,7 +31,7 @@
   {:else if type === "venom"}
     <img src="/venom.webp" alt={`${damage.venom} venom damage`} />
     <SoundEffect audioUrl="/venom.ogg" />
-    <span>{damage.healing}</span>
+    <span>{damage.venom}</span>
   {/if}
 </div>
 

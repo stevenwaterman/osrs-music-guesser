@@ -124,14 +124,13 @@ export function calculateRoundResult(state: RoundActive): RoundResult {
   const noVenomUntilRound = 10;
   const venomIncreasePerRound = 1;
   const roundsOfVenom = Math.max(state.game.round - noVenomUntilRound, 0);
-  const venomAmount = roundsOfVenom * venomIncreasePerRound;
+  const venom = roundsOfVenom * venomIncreasePerRound;
 
   const bestDistance = bestGuess?.distance ?? Number.MAX_SAFE_INTEGER;
   const damage = mapValues(state.users, (user) => {
     const wasFirstPerfect =
       bestGuess?.userName === user.avatar.name && bestGuess.perfect;
     const healing = wasFirstPerfect ? healingAmount : 0;
-    const venom = venomAmount;
 
     const myGuess = guessResults[user.avatar.name];
     const distance = myGuess?.distance ?? Number.MAX_SAFE_INTEGER;
