@@ -80,11 +80,13 @@ abstract class State<
     // Listen for incoming messages
     this.unsubscribeFromWsMessages = Object.values(users).map((user) => {
       const messageHandler = (ev: TransportMessage) => {
-        const message = ev.data.toString();
-        const parsedMessage = JSON.parse(message);
-        if ("action" in parsedMessage) {
-          // TODO error handling
-          this.onMessage(user.avatar.name, parsedMessage);
+        const message = ev.data.toString("utf8");
+        if (message.startsWith("{")) {
+          const parsedMessage = JSON.parse(message);
+          if ("action" in parsedMessage) {
+            // TODO error handling
+            this.onMessage(user.avatar.name, parsedMessage);
+          }
         }
       };
       user.transport.addEventListener("message", messageHandler);

@@ -60,6 +60,12 @@ wss.on("connection", (ws, req) => {
   if (url.pathname === "/join") {
     onJoin(ws, url.searchParams);
   }
+
+  ws.addEventListener("message", ({ data }) => {
+    if (data.toString("utf8") === "ping") {
+      ws.send("pong");
+    }
+  });
 });
 
 function onJoin(ws: WebSocket, searchParams: URLSearchParams) {
@@ -100,11 +106,5 @@ function onJoin(ws: WebSocket, searchParams: URLSearchParams) {
     { [avatar.name]: { avatar, transport: ws, health: 99 } }
   );
 }
-
-setInterval(function ping() {
-  wss.clients.forEach(function each(ws) {
-    ws.ping();
-  });
-}, 30000);
 
 console.log("Running");

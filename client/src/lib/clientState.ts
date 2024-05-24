@@ -9,6 +9,7 @@ import {
   type TransportClose,
   type TransportMessage,
 } from "tunescape07-shared/src/states";
+import { HeartbeatWebSocket } from "./HeartbeatWebSocket";
 
 export type GuessResult = {
   song: SongName;
@@ -161,13 +162,16 @@ export function connectToLocalServer(): Transport {
 function listenToTransport(transport: Transport, back: () => void) {
   const onCloseHandler = (ev: TransportClose) => back();
   const onMessageHandler = (ev: TransportMessage) => {
-    const message: WsMessage = JSON.parse(ev.data as string);
-    console.log("message from server", message);
-    if (message.action === "error") {
-      cleanup();
-      transport.close(1011);
-    } else if (message.action === "state") {
-      internalStateStore.set(new State_Game_Active(transport, message.data));
+    const data = ev.data.toString("utf8");
+    if (data.startsWith("{")) {
+      const message: WsMessage = JSON.parse(data);
+      console.log("message from server", message);
+      if (message.action === "error") {
+        cleanup();
+        transport.close(1011);
+      } else if (message.action === "state") {
+        internalStateStore.set(new State_Game_Active(transport, message.data));
+      }
     }
   };
   const cleanup = () => {
@@ -189,8 +193,8 @@ class State_StartScreen_Multiplayer extends BaseState<
   public join(gameId: string) {
     const prod = document.location.host.includes("tunescape07");
     const transport = prod
-      ? new WebSocket(`wss://api.tunescape07.com/join?game=${gameId}`)
-      : new WebSocket(`ws://localhost:4433/join?game=${gameId}`);
+      ? new HeartbeatWebSocket(`wss://api.tunescape07.com/join?game=${gameId}`)
+      : new HeartbeatWebSocket(`ws://localhost:4433/join?game=${gameId}`);
     listenToTransport(transport, () => this.back());
   }
 }
