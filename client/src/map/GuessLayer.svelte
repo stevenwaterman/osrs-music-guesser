@@ -1,5 +1,5 @@
 <script lang="ts">
-  import L from "leaflet";
+  import L, { type LeafletMouseEvent } from "leaflet";
   import { type ActiveState } from "../lib/clientState";
   import { onMount } from "svelte";
   import { convertLeaflet } from "../lib/convertLeaflet";
@@ -10,13 +10,6 @@
   export let map: L.Map;
 
   $: confirmedGuess = state.data.me.guess;
-
-  $: map.on("click", (click) => {
-    if (confirmedGuess === undefined && state.data.me.health > 0) {
-      const coord = convertLeaflet.coordinate.from(click.latlng);
-      unconfirmedGuessStore.set(coord);
-    }
-  });
 
   let marker: L.Marker = new L.Marker(new L.LatLng(0, 0));
 
@@ -30,11 +23,21 @@
 
   onMount(() => {
     resetView(map);
+
     marker.addTo(map);
     (marker as any)._icon.style.filter = "hue-rotate(80deg)";
 
+    const onClick = (click: LeafletMouseEvent) => {
+      if (confirmedGuess === undefined && state.data.me.health > 0) {
+        const coord = convertLeaflet.coordinate.from(click.latlng);
+        unconfirmedGuessStore.set(coord);
+      }
+    };
+    map.on("click", onClick);
+
     return () => {
       marker.remove();
+      map.off("click", onClick);
     };
   });
 </script>

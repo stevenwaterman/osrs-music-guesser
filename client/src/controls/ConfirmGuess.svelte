@@ -1,7 +1,8 @@
 <script lang="ts">
-  import { onDestroy, onMount } from "svelte";
+  import { onDestroy } from "svelte";
   import type { ActiveState } from "../lib/clientState";
   import { unconfirmedGuessStore } from "../lib/stores";
+  import Buttons from "./Buttons.svelte";
 
   export let state: ActiveState<"RoundActive">;
   $: confirmedGuess = state.data.me.guess;
@@ -20,15 +21,7 @@
 </script>
 
 {#if canGuess && $unconfirmedGuessStore}
-  <button on:click={confirm}>Submit Guess</button>
+  <Buttons>
+    <button on:click={confirm}>Submit Guess</button>
+  </Buttons>
 {/if}
-
-<style>
-  button {
-    grid-column: 2;
-    grid-row: 4;
-    align-self: flex-end;
-    justify-self: center;
-    pointer-events: initial;
-  }
-</style>

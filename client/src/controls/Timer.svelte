@@ -2,6 +2,7 @@
   import { scale } from "svelte/transition";
   import { type ActiveState } from "../lib/clientState";
   import { tweened } from "svelte/motion";
+  import SoundEffect from "./SoundEffect.svelte";
 
   export let state: ActiveState<"RoundActive">;
 
@@ -21,21 +22,14 @@
   <span class="timer">
     {Math.floor($tween)}
   </span>
+
+  <SoundEffect audioUrl="/clock.ogg" loop />
 {/if}
 
 <style>
   .timer {
     font-size: 5rem;
     font-weight: bold;
-    text-shadow:
-      4px 4px 0 #000,
-      0 4px 0 #000,
-      0 -4px 0 #000,
-      -4px 4px 0 #000,
-      -4px -4px 0 #000,
-      4px -4px 0 #000,
-      4px 0 0 #000,
-      -4px 0 0 #000;
 
     grid-row: 2;
     grid-column: 2;

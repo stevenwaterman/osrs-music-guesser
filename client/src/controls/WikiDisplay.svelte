@@ -31,6 +31,7 @@
     display: flex;
     flex-direction: column;
     overflow-y: hidden;
+
     pointer-events: initial;
   }
 

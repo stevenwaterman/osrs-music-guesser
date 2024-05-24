@@ -181,6 +181,5 @@ function getMaxHit(distance: number, scaling: number) {
   const linearPart = Math.max(40 - 0.025 * distance, 0);
   const average = powerPart * 0.85 + linearPart * 0.15;
   const output = average * scaling;
-  console.log(distance, output);
   return output;
 }

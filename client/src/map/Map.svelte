@@ -21,17 +21,14 @@
 <BaseMap bind:map />
 {#if map}
   <TileLayer {map} />
-  <!-- <LocationLayer {map} /> -->
 
-  {#if state.isAny("Game_Active")}
-    {#if state.isAnyActive("RoundActive")}
-      <GuessLayer {map} {state} />
-    {/if}
+  {#if state.isAny("RoundActive")}
+    <GuessLayer {map} {state} />
+  {/if}
 
-    {#if state.isAnyActive("RoundOver")}
-      {#key state.data.game.song.name}
-        <ScoreLayer {map} {state} />
-      {/key}
-    {/if}
+  {#if state.isAny("RoundOver")}
+    {#key state.data.game.song.name}
+      <ScoreLayer {map} {state} />
+    {/key}
   {/if}
 {/if}

@@ -20,23 +20,22 @@
     grid-column: 3;
     grid-row: 1;
     justify-self: flex-end;
+    align-self: flex-start;
 
     display: grid;
     grid-template-columns: auto 1fr auto;
     align-items: center;
     justify-items: center;
 
-    pointer-events: initial;
-
     background-color: var(--semi-transparent-black);
     border-radius: 8px;
 
     max-width: 100%;
+    pointer-events: initial;
   }
 
   .volume {
     display: none;
-    pointer-events: initial;
     min-width: 0;
     max-width: 100%;
     margin-left: 2rem;
@@ -49,20 +48,20 @@
   }
 
   .left {
-    padding: 0.6rem 0.3rem 0.6rem 1.2rem;
+    margin: 0.6rem 0.3rem 0.6rem 1.2rem;
   }
 
   .container:hover .left {
-    padding-right: 0.6rem;
+    margin-right: 0.6rem;
   }
 
   .right {
-    padding: 0.6rem 1.2rem 0.6rem 0.3rem;
+    margin: 0.6rem 1.2rem 0.6rem 0.3rem;
     width: 2rem;
     text-align: right;
   }
 
   .container:hover .right {
-    padding-left: 0.6rem;
+    margin-left: 0.6rem;
   }
 </style>

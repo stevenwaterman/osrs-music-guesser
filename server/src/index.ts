@@ -61,7 +61,11 @@ wss.on("connection", (ws, req) => {
     onJoin(ws, url.searchParams);
   }
 
+  let kickTimeout = setTimeout(() => ws.terminate(), 30_000);
   ws.addEventListener("message", ({ data }) => {
+    clearInterval(kickTimeout);
+    kickTimeout = setTimeout(() => ws.terminate(), 30_000);
+
     if (data.toString("utf8") === "ping") {
       ws.send("pong");
     }

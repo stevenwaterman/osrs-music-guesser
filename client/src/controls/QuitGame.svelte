@@ -14,11 +14,11 @@
   button {
     grid-column: 1;
     grid-row: 1;
-    pointer-events: initial;
 
     align-self: flex-start;
     justify-self: flex-start;
 
     font-size: 1rem;
+    pointer-events: initial;
   }
 </style>

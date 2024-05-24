@@ -6,7 +6,7 @@
 
 <div
   class="healthBackground"
-  style={`transform: scale(${scale}); margin-bottom: ${scale}rem;`}
+  style={`margin-bottom: ${scale * 2}rem; width: ${scale * 10}rem; height: ${scale}rem;`}
 >
   <div
     class="healthInner"
@@ -24,8 +24,7 @@
   }
 
   .healthInner {
-    height: 1rem;
-    width: 1rem;
+    height: 100%;
     background-color: #00ff00;
   }
 </style>

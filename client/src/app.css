@@ -8,16 +8,25 @@
   -webkit-font-smoothing: subpixel-antialiased;
   -moz-osx-font-smoothing: grayscale;
 
-  --semi-transparent-black: rgba(0, 0, 0, 0.8);
+  --semi-transparent-black: rgba(30, 30, 30, 0.85);
   user-select: none;
+}
+
+html {
+  width: 100dvw;
+  height: 100dvh;
+  overflow: hidden;
 }
 
 * {
   color: yellow;
+  text-shadow: 0.05em 0.05em black;
+  box-sizing: border-box;
 }
 
 input {
   color: black;
+  text-shadow: none;
 }
 
 audio {
@@ -45,6 +54,13 @@ h1 {
   line-height: 1.1;
 }
 
+h1,
+h2,
+h3,
+h4 {
+  margin: 0;
+}
+
 #app {
   text-align: center;
   width: 100%;
@@ -55,19 +71,37 @@ button {
   font-size: 1.5rem;
   font-weight: bold;
   border-radius: 8px;
-  padding: 0.6em 1.2em;
+  padding: 0 1.2em;
+  height: 2.2em;
   font-family: inherit;
-  cursor: pointer;
 
-  transition: border-color 0.25s;
+  transition-property: border-color, background-color;
+  transition-duration: 0.25s;
+
   border-left: 2px solid rgba(255, 255, 255, 0.1);
   border-bottom: 2px solid rgba(255, 255, 255, 0.1);
   border-top: none;
   border-right: none;
 }
-button:hover {
+
+button:disabled {
+  opacity: 80%;
+}
+
+button:not(:disabled):hover {
+  cursor: pointer;
+}
+
+button:not(:disabled):not(:active):hover {
   border-color: yellow;
 }
+
+button:active {
+  background-color: rgba(50, 50, 50, 0.8);
+  border-color: red;
+  transition-duration: 0s;
+}
+
 button:focus,
 button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;

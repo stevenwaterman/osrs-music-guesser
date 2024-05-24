@@ -1,7 +1,6 @@
 import { writable, type Readable, type Writable } from "svelte/store";
-import type { Coordinate, Song, StateInterface } from "tunescape07-shared";
+import type { StateInterface } from "tunescape07-shared";
 import { songs } from "tunescape07-data";
-import type { SongName } from "tunescape07-shared";
 import {
   Lobby,
   StateStore,
@@ -10,51 +9,6 @@ import {
   type TransportMessage,
 } from "tunescape07-shared/src/states";
 import { HeartbeatWebSocket } from "./HeartbeatWebSocket";
-
-export type GuessResult = {
-  song: SongName;
-  guess: Coordinate;
-  closest: Coordinate;
-  distance: number;
-  score: number;
-  timeMs: number;
-};
-
-abstract class BaseState<Name extends string, Data extends {}> {
-  public abstract name: Name;
-  constructor(public readonly data: Data) {}
-  public isAny<Names extends keyof State>(
-    ...names: Names[]
-  ): this is State[Names] {
-    return (names as string[]).includes(this.name);
-  }
-}
-
-class State_StartScreen extends BaseState<"StartScreen", {}> {
-  public name = "StartScreen" as const;
-  public howToPlay() {
-    internalStateStore.set(new State_StartScreen_HowToPlay(this.data));
-  }
-  public singlePlayer() {
-    const transport = connectToLocalServer();
-    listenToTransport(transport, () => {
-      internalStateStore.set(new State_StartScreen({}));
-    });
-  }
-  public multiPlayer() {
-    internalStateStore.set(new State_StartScreen_Multiplayer({}));
-  }
-}
-
-class State_StartScreen_HowToPlay extends BaseState<
-  "StartScreen_HowToPlay",
-  {}
-> {
-  public name = "StartScreen_HowToPlay" as const;
-  public back() {
-    internalStateStore.set(new State_StartScreen(this.data));
-  }
-}
 
 type WsMessage =
   | {
@@ -69,7 +23,15 @@ type WsMessage =
       data: StateInterface.ClientStateData<any>;
     };
 
-export function connectToLocalServer(): Transport {
+function connectToRemoteServer(gameId: string): Transport {
+  const prod = document.location.host.includes("tunescape07");
+  const transport = prod
+    ? new HeartbeatWebSocket(`wss://api.tunescape07.com/join?game=${gameId}`)
+    : new HeartbeatWebSocket(`ws://localhost:4433/join?game=${gameId}`);
+  return transport;
+}
+
+function connectToLocalServer(): Transport {
   let clientMessageListeners: Array<(ev: TransportMessage) => void> = [];
   let serverMessageListeners: Array<(ev: TransportMessage) => void> = [];
 
@@ -159,18 +121,20 @@ export function connectToLocalServer(): Transport {
   return clientSide;
 }
 
-function listenToTransport(transport: Transport, back: () => void) {
-  const onCloseHandler = (ev: TransportClose) => back();
+function listenToTransport(transport: Transport) {
+  const onCloseHandler = () => {
+    internalStateStore.set(new InactiveState());
+  };
+
   const onMessageHandler = (ev: TransportMessage) => {
     const data = ev.data.toString("utf8");
     if (data.startsWith("{")) {
       const message: WsMessage = JSON.parse(data);
-      console.log("message from server", message);
       if (message.action === "error") {
         cleanup();
         transport.close(1011);
       } else if (message.action === "state") {
-        internalStateStore.set(new State_Game_Active(transport, message.data));
+        internalStateStore.set(new ActiveState(message.data as any, transport));
       }
     }
   };
@@ -182,37 +146,35 @@ function listenToTransport(transport: Transport, back: () => void) {
   transport.addEventListener("message", onMessageHandler);
 }
 
-class State_StartScreen_Multiplayer extends BaseState<
-  "StartScreen_Multiplayer",
-  {}
-> {
-  public name = "StartScreen_Multiplayer" as const;
-  public back() {
-    internalStateStore.set(new State_StartScreen(this.data));
+export class InactiveState {
+  public readonly isActive = false;
+
+  singlePlayer() {
+    const transport = connectToLocalServer();
+    listenToTransport(transport);
   }
-  public join(gameId: string) {
-    const prod = document.location.host.includes("tunescape07");
-    const transport = prod
-      ? new HeartbeatWebSocket(`wss://api.tunescape07.com/join?game=${gameId}`)
-      : new HeartbeatWebSocket(`ws://localhost:4433/join?game=${gameId}`);
-    listenToTransport(transport, () => this.back());
+
+  rankedMultiplayer() {
+    throw new Error();
+  }
+
+  casualMultiplayer(gameId: string) {
+    const transport = connectToRemoteServer(gameId);
+    listenToTransport(transport);
+  }
+
+  public isAny(..._: string[]): false {
+    return false;
   }
 }
 
-class State_Game_Active<
-  ServerStateName extends StateInterface.AnyServerState["stateName"],
-> extends BaseState<
-  `Game_Active`,
-  StateInterface.ClientStateData<ServerStateName>
-> {
-  public name = "Game_Active" as const;
+export class ActiveState<Name extends keyof StateInterface.ServerStates> {
+  public readonly isActive = true;
 
   constructor(
-    private readonly transport: Transport,
-    data: StateInterface.ClientStateData<ServerStateName>
-  ) {
-    super(data);
-  }
+    public readonly data: StateInterface.ClientStateData<Name>,
+    private readonly transport: Transport
+  ) {}
 
   disconnect() {
     this.transport.close(1000);
@@ -222,31 +184,15 @@ class State_Game_Active<
     this.transport.send(JSON.stringify(action));
   }
 
-  public isAnyActive<
-    Names extends
-      StateInterface.ServerStates[keyof StateInterface.ServerStates]["stateName"],
-  >(...names: Names[]): this is ActiveState<Names> {
+  public isAny<Names extends keyof StateInterface.ServerStates>(
+    ...names: Names[]
+  ): this is ActiveState<Names> {
     return (names as string[]).includes(this.data.stateName);
   }
 }
 
-export type State = {
-  StartScreen: State_StartScreen;
-  StartScreen_HowToPlay: State_StartScreen_HowToPlay;
-  StartScreen_Multiplayer: State_StartScreen_Multiplayer;
-  Game_Active: State_Game_Active<
-    StateInterface.ServerStates[keyof StateInterface.ServerStates]["stateName"]
-  >;
-};
-export type ActiveState<
-  Name extends
-    StateInterface.ServerStates[keyof StateInterface.ServerStates]["stateName"],
-> = State_Game_Active<Name>;
-
-export type AnyState = State[keyof State];
-const internalStateStore: Writable<AnyState> = writable(
-  new State_StartScreen({})
-);
-export const stateStore: Readable<AnyState> = {
+type ClientState = InactiveState | ActiveState<any>;
+const internalStateStore: Writable<ClientState> = writable(new InactiveState());
+export const stateStore: Readable<ClientState> = {
   subscribe: internalStateStore.subscribe,
 };

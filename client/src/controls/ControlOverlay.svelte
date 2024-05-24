@@ -2,13 +2,12 @@
   import { stateStore } from "../lib/clientState";
   import Audio from "./Audio.svelte";
   import MainMenu from "./MainMenu.svelte";
-  import MultiplayerMenu from "./MultiplayerMenu.svelte";
   import GameOver from "./GameOver.svelte";
   import Lobby from "./Lobby.svelte";
   import Timer from "./Timer.svelte";
   import NextRound from "./NextRound.svelte";
   import WikiDisplay from "./WikiDisplay.svelte";
-  import Damage from "./results/Damage.svelte";
+  import Damage from "./Damage.svelte";
   import VolumeSlider from "./VolumeSlider.svelte";
   import ConfirmGuess from "./ConfirmGuess.svelte";
   import QuitGame from "./QuitGame.svelte";
@@ -19,49 +18,43 @@
 <div class="grid">
   <VolumeSlider />
 
-  {#if state.isAny("Game_Active")}
-    <QuitGame {state} />
-  {/if}
-
-  {#if state.isAny("StartScreen")}
+  {#if !state.isActive}
     <MainMenu {state} />
   {/if}
 
-  {#if state.isAny("StartScreen_Multiplayer")}
-    <MultiplayerMenu {state} />
+  {#if state.isAny("RoundActive", "RoundOver", "GameOver")}
+    <QuitGame {state} />
   {/if}
 
-  {#if state.isAny("Game_Active")}
-    {#if state.isAnyActive("Lobby")}
-      <Lobby {state} />
-    {/if}
+  {#if state.isAny("Lobby")}
+    <Lobby {state} />
+  {/if}
 
-    {#if state.isAnyActive("RoundActive", "RoundOver")}
-      <Audio
-        audioUrl={state.data.game.songUrl}
-        control={state.isAnyActive("RoundOver")}
-        startFraction={state.data.game.songStartFraction}
-        loop={true}
-      />
-    {/if}
+  {#if state.isAny("RoundActive", "RoundOver")}
+    <Audio
+      audioUrl={state.data.game.songUrl}
+      control={state.isAny("RoundOver")}
+      startFraction={state.data.game.songStartFraction}
+      loop={true}
+    />
+  {/if}
 
-    {#if state.isAnyActive("RoundActive")}
-      <Timer {state} />
-      <ConfirmGuess {state} />
-      <GuessCount {state} />
-    {/if}
+  {#if state.isAny("RoundActive")}
+    <Timer {state} />
+    <ConfirmGuess {state} />
+    <GuessCount {state} />
+  {/if}
 
-    {#if state.isAnyActive("RoundOver")}
-      {#if state.data.game.owner === state.data.me.avatar.name}
-        <NextRound {state} />
-      {/if}
-      <WikiDisplay {state} />
-      <Damage {state} />
+  {#if state.isAny("RoundOver")}
+    {#if state.data.game.owner === state.data.me.avatar.name}
+      <NextRound {state} />
     {/if}
+    <WikiDisplay {state} />
+    <Damage {state} />
+  {/if}
 
-    {#if state.isAnyActive("GameOver")}
-      <GameOver {state} />
-    {/if}
+  {#if state.isAny("GameOver")}
+    <GameOver {state} />
   {/if}
 </div>
 
@@ -74,14 +67,14 @@
     right: 0;
     bottom: 0;
     left: 0;
-    pointer-events: none;
 
     display: grid;
     grid-template-columns: 1fr 3fr 1fr;
-    grid-template-rows: auto 1fr 1fr auto 3rem;
+    grid-template-rows: auto 1fr 1fr auto auto;
     gap: 1rem;
 
     align-items: center;
     justify-items: center;
+    pointer-events: none;
   }
 </style>

@@ -32,7 +32,4 @@
     padding: 2rem;
     border-radius: 2rem;
   }
-  button {
-    pointer-events: initial;
-  }
 </style>

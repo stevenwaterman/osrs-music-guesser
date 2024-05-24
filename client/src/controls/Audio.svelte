@@ -40,11 +40,11 @@
     grid-column: 2;
     grid-row: 5;
 
-    pointer-events: initial;
-
-    max-height: 100%;
     width: 100%;
     max-width: 40rem;
+    max-height: 3rem;
     border-radius: 5rem;
+
+    pointer-events: initial;
   }
 </style>

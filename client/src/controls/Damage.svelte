@@ -1,11 +1,11 @@
 <script lang="ts">
-  import { type ActiveState } from "../../lib/clientState";
+  import { type ActiveState } from "../lib/clientState";
   import { onMount } from "svelte";
-  import SoundEffect from "../SoundEffect.svelte";
+  import SoundEffect from "./SoundEffect.svelte";
   import Hitsplat from "./Hitsplat.svelte";
-  import AllHealth from "./AllHealth.svelte";
   import Health from "./Health.svelte";
   import { avatarImageSrc } from "tunescape07-shared";
+  import HealthLeaderboard from "./HealthLeaderboard.svelte";
 
   export let state: ActiveState<"RoundOver">;
 
@@ -39,11 +39,8 @@
     setTimeout(() => {
       showVenom = true;
       health -= state.data.me.damage.venom;
-    }, 3000);
-
-    setTimeout(() => {
       showAll = true;
-    }, 4200);
+    }, 3000);
   });
 
   let render = false;
@@ -105,7 +102,7 @@
 {/if}
 
 {#if showAll && !state.data.game.singlePlayer}
-  <AllHealth {state} />
+  <HealthLeaderboard {state} />
 {/if}
 
 <style>
@@ -131,7 +128,6 @@
   .name {
     font-size: 3rem;
     margin: 0;
-    text-shadow: 0.2rem 0.2rem black;
   }
 
   .dead {

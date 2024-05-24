@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { fade } from "svelte/transition";
   import { type ActiveState } from "../lib/clientState";
 
   export let state: ActiveState<"RoundOver">;

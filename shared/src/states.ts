@@ -180,7 +180,6 @@ abstract class State<
     const newOwner = ownerStillPresent
       ? this.game.owner
       : Object.keys(newUsers)[0];
-    console.log(ownerStillPresent, newOwner);
 
     if (newUserCount === 1) {
       return this.transition(
@@ -196,7 +195,14 @@ abstract class State<
         )
       );
     }
+
+    this.transition(this.recreate({ ...this.game, owner: newOwner }, newUsers));
   }
+
+  protected abstract recreate(
+    game: GameState,
+    users: Record<string, UserState>
+  ): AnyServerState;
 
   protected onMessage(userName: string, message: ClientActions): void {}
 }
@@ -216,7 +222,7 @@ export class Lobby extends State<
     transport: Transport;
     health: number;
   },
-  ["avatar"],
+  ["avatar", "health"],
   []
 > {
   public stateName = "Lobby" as const;
@@ -226,7 +232,7 @@ export class Lobby extends State<
     "singlePlayer",
     "damageScaling",
   ] as const;
-  public publicUserKeys = ["avatar"] as const;
+  public publicUserKeys = ["avatar", "health"] as const;
   public privateUserKeys = [] as const;
 
   public join(transport: Transport) {
@@ -262,6 +268,10 @@ export class Lobby extends State<
         }))
       )
     );
+  }
+
+  protected recreate(game: Lobby["game"], users: Lobby["users"]) {
+    return new Lobby(this.store, game, users);
   }
 
   protected onMessage(
@@ -432,6 +442,10 @@ export class RoundActive extends State<
     );
   }
 
+  protected recreate(game: RoundActive["game"], users: RoundActive["users"]) {
+    return new RoundActive(this.store, game, users);
+  }
+
   protected onMessage(
     userName: string,
     message: { action: string; data?: any }
@@ -573,6 +587,10 @@ export class RoundOver extends State<
     }
   }
 
+  protected recreate(game: RoundOver["game"], users: RoundOver["users"]) {
+    return new RoundOver(this.store, game, users);
+  }
+
   protected onMessage(
     userName: string,
     message: { action: string; data?: any }
@@ -624,6 +642,10 @@ export class GameOver extends State<
         }))
       )
     );
+  }
+
+  protected recreate(game: GameOver["game"], users: GameOver["users"]) {
+    return new GameOver(this.store, game, users);
   }
 
   protected onMessage(
