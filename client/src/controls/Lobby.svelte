@@ -8,7 +8,7 @@
   $: myLobby = state.data.game.owner === state.data.me.avatar.name;
   $: players = Object.keys(state.data.users).length;
 
-  $: inviteUrl = `${location.host}/?join=${encodeURIComponent(state.data.game.id)}`;
+  $: inviteUrl = `?join=${encodeURIComponent(state.data.game.id)}`;
 </script>
 
 <h1>Lobby</h1>
@@ -30,7 +30,7 @@
     {:else if "clipboard" in navigator}
       <button
         class="share copy"
-        on:click={() => navigator.clipboard.writeText(inviteUrl)}
+        on:click={() => navigator.clipboard.writeText(`${location.hostname}${inviteUrl}`)}
       ></button>
     {/if}
   {/if}
