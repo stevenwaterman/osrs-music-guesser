@@ -22,6 +22,6 @@
 
 {#if canGuess && $unconfirmedGuessStore}
   <Buttons>
-    <button on:click={confirm}>Submit Guess</button>
+    <button on:click={confirm}>Guess</button>
   </Buttons>
 {/if}

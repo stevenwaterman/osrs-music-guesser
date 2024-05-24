@@ -30,6 +30,6 @@
     justify-self: center;
     align-self: center;
     padding: 2rem;
-    border-radius: 2rem;
+    border-radius: 0.5em;
   }
 </style>

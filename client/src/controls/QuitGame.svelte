@@ -8,7 +8,7 @@
   }
 </script>
 
-<button on:click={() => exit()}>Quit Game</button>
+<button on:click={() => exit()}>Quit</button>
 
 <style>
   button {

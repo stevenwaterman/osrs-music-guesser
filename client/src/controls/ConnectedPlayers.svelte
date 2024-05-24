@@ -37,7 +37,7 @@
 
     display: flex;
     max-height: 100%;
-    border-radius: 1rem;
+    border-radius: 0.5em;
     background-color: var(--semi-transparent-black);
   }
 

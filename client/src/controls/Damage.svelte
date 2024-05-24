@@ -52,7 +52,7 @@
 {#if startingHealth > 0 && showAvatar}
   <div class="container">
     {#if health !== undefined && render}
-      <Health {health} scale={1} />
+      <Health {health} />
     {/if}
     <div class="imageWrapper">
       <!-- svelte-ignore a11y-missing-attribute -->
@@ -158,5 +158,15 @@
 
   .multipleSplats {
     padding-right: 3rem;
+  }
+
+  @media only screen and (max-width: 750px) {
+    .name {
+      font-size: 2rem;
+    }
+
+    .container {
+      font-size: 0.5em;
+    }
   }
 </style>

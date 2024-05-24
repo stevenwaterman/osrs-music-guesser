@@ -21,9 +21,7 @@
   <ConnectedPlayers {state} />
 {/if}
 
-<Buttons>
-  <button on:click={() => state.disconnect()}>←</button>
-
+<Buttons column="1 / 4">
   {#if !state.data.game.singlePlayer}
     {#if "share" in navigator && navigator.canShare({ url: inviteUrl })}
       <button class="share" on:click={() => navigator.share({ url: inviteUrl })}

@@ -28,7 +28,7 @@
     justify-items: center;
 
     background-color: var(--semi-transparent-black);
-    border-radius: 8px;
+    border-radius: 0.5em;
 
     max-width: 100%;
     pointer-events: initial;
@@ -63,5 +63,11 @@
 
   .container:hover .right {
     margin-left: 0.6rem;
+  }
+
+  @media only screen and (max-width: 750px) {
+    .container {
+      display: none;
+    }
   }
 </style>

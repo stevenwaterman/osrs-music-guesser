@@ -19,50 +19,46 @@
   <p>Win by being the last player alive.</p>
 </div>
 
-{#if menu === "main"}
-  <Buttons>
+<Buttons column="1 / 4">
+  {#if menu === "main"}
     <button on:click={() => state.singlePlayer()}>Single Player</button>
     <button on:click={() => (menu = "multiplayer")}>Multiplayer</button>
-  </Buttons>
-{/if}
+  {/if}
 
-{#if menu === "multiplayer"}
-  <Buttons>
+  {#if menu === "multiplayer"}
     <button on:click={() => (menu = "main")}>←</button>
     <button on:click={() => (menu = "casual")}>Casual</button>
     <button on:click={() => state.rankedMultiplayer()}>Ranked</button>
-  </Buttons>
-{/if}
+  {/if}
 
-{#if menu === "casual"}
-  <Buttons>
+  {#if menu === "casual"}
     <button
       on:click={() => {
-        menu = "main";
+        menu = "multiplayer";
         casualGameId = "";
       }}>←</button
     >
-
-    <div class="casualGameNameInputContainer">
-      <span>Game Name:</span>
-      <input
-        class="casualGameNameInput"
-        type="text"
-        bind:value={casualGameId}
-        on:keypress={(ev) => {
-          if (ev.key === "Enter" && casualGameId.trim().length > 0) {
-            state.casualMultiplayer(casualGameId.trim());
-          }
-        }}
-      />
-    </div>
 
     <button
       on:click={() => state.casualMultiplayer(casualGameId.trim())}
       disabled={casualGameId.trim().length === 0}>Join Game</button
     >
-  </Buttons>
-{/if}
+  {/if}
+</Buttons>
+
+<div class="casualGameNameInputContainer" class:invisible={menu !== "casual"}>
+  <span>Game Name:</span>
+  <input
+    class="casualGameNameInput"
+    type="text"
+    bind:value={casualGameId}
+    on:keypress={(ev) => {
+      if (ev.key === "Enter" && casualGameId.trim().length > 0) {
+        state.casualMultiplayer(casualGameId.trim());
+      }
+    }}
+  />
+</div>
 
 <style>
   h1 {
@@ -75,12 +71,16 @@
   }
 
   .casualGameNameInputContainer {
+    grid-column: 2;
+    grid-row: 4;
+
     display: flex;
     flex-direction: row;
     justify-content: center;
     align-items: center;
     gap: 1rem;
     font-size: 2rem;
+    pointer-events: initial;
   }
 
   .info {
@@ -91,6 +91,11 @@
     padding-top: 1rem;
 
     background-color: var(--semi-transparent-black);
-    border-radius: 1rem;
+    border-radius: 0.5em;
+  }
+
+  .invisible {
+    opacity: 0;
+    pointer-events: none;
   }
 </style>

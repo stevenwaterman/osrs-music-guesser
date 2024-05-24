@@ -43,7 +43,7 @@
     width: 100%;
     max-width: 40rem;
     max-height: 3rem;
-    border-radius: 5rem;
+    border-radius: 5em;
 
     pointer-events: initial;
   }

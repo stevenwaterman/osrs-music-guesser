@@ -1,12 +1,11 @@
 <script lang="ts">
   export let health: number;
-  export let scale: number = 1;
   $: displayHealth = Math.min(Math.max(0, Math.round(health)), 99);
 </script>
 
 <div
   class="healthBackground"
-  style={`margin-bottom: ${scale * 2}rem; width: ${scale * 10}rem; height: ${scale}rem;`}
+  style={`margin-bottom: 2em; width: 10em; height: 1em;`}
 >
   <div
     class="healthInner"
@@ -17,8 +16,6 @@
 
 <style>
   .healthBackground {
-    height: 1rem;
-    width: 10rem;
     background-color: red;
     transform-origin: bottom;
   }

@@ -12,6 +12,9 @@
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+
     gap: 1rem;
     pointer-events: initial;
   }

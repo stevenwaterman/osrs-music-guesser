@@ -33,11 +33,12 @@
     overflow-y: hidden;
 
     pointer-events: initial;
+    border-radius: 0.5em;
   }
 
   .info {
-    padding-left: 1.5rem;
-    padding-right: 1.5rem;
+    padding-left: 0.8em;
+    padding-right: 0.8em;
     overflow-y: scroll;
     max-height: 100%;
     flex-shrink: 1;
@@ -50,7 +51,22 @@
     display: block;
     font-size: 2.5rem;
     font-weight: bold;
-    padding: 0.25rem 1rem;
+    padding: 0.2em 0.4em;
     color: yellow;
+  }
+
+  @media only screen and (max-width: 750px) {
+    .title {
+      font-size: 1.2rem;
+    }
+
+    .info {
+      font-size: 0.8rem;
+    }
+
+    p {
+      margin-block-start: 0.5em;
+      margin-block-end: 0.5em;
+    }
   }
 </style>

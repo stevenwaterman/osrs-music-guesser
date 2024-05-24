@@ -7,17 +7,17 @@
   export let me: boolean = false;
   export let owner: boolean = false;
 
-  $: suffix = me ? " (Me)" : owner ? " (Owner)" : "";
+  $: suffix = me ? " (Me)" : "";
   $: dead = health !== undefined && health <= 0;
 </script>
 
 <div class="container" class:dead>
   {#if health !== undefined}
-    <Health {health} scale={0.3} />
+    <Health {health} />
   {/if}
   <!-- svelte-ignore a11y-missing-attribute -->
   <img src={avatarThumbnailSrc(avatar)} />
-  <p class="name" class:me>{avatar.name}{suffix}</p>
+  <p class="name" class:owner>{avatar.name}{suffix}</p>
 </div>
 
 <style>
@@ -28,6 +28,7 @@
     justify-items: center;
 
     width: 6rem;
+    font-size: 0.3em;
   }
 
   img {
@@ -48,7 +49,7 @@
     filter: grayscale();
   }
 
-  .me {
+  .owner {
     font-weight: bold;
   }
 </style>

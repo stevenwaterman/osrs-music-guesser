@@ -11,7 +11,7 @@
   ).length;
 </script>
 
-<div class="guesses">Guesses: {guessed} / {total}</div>
+<div class="guesses">Guesses: {guessed}&nbsp;/&nbsp;{total}</div>
 
 <style>
   .guesses {
@@ -21,6 +21,13 @@
     padding: 0.6rem 1.2rem;
     font-weight: bold;
     background: var(--semi-transparent-black);
-    border-radius: 1rem;
+    border-radius: 0.5em;
+  }
+
+  @media only screen and (max-width: 750px) {
+    .guesses {
+      grid-column: 2 / 4;
+      justify-self: flex-end;
+    }
   }
 </style>

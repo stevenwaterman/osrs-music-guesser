@@ -22,7 +22,7 @@
     <MainMenu {state} />
   {/if}
 
-  {#if state.isAny("RoundActive", "RoundOver", "GameOver")}
+  {#if state.isActive}
     <QuitGame {state} />
   {/if}
 
@@ -76,5 +76,12 @@
     align-items: center;
     justify-items: center;
     pointer-events: none;
+  }
+
+  @media only screen and (max-width: 750px) {
+    .grid {
+      padding: 0.5rem;
+      gap: 0.5rem;
+    }
   }
 </style>
