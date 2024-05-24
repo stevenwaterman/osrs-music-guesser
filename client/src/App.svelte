@@ -6,14 +6,12 @@
   let zoom: number;
 
   onMount(() => {
-    if (location.pathname === "/join") {
-      const params = new URLSearchParams(location.search);
-      const casualGameId = params.get("game");
-      if (casualGameId) {
-        const state = $stateStore;
-        if (!state.isActive) {
-          state.casualMultiplayer(casualGameId);
-        }
+    const params = new URLSearchParams(location.search);
+    const casualGameId = params.get("join");
+    if (casualGameId) {
+      const state = $stateStore;
+      if (!state.isActive) {
+        state.casualMultiplayer(casualGameId);
       }
     }
   });

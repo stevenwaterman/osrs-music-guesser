@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { stateStore, type ActiveState } from "../lib/clientState";
+  import { type ActiveState } from "../lib/clientState";
   import Buttons from "./Buttons.svelte";
   import ConnectedPlayers from "./ConnectedPlayers.svelte";
 
@@ -8,7 +8,7 @@
   $: myLobby = state.data.game.owner === state.data.me.avatar.name;
   $: players = Object.keys(state.data.users).length;
 
-  $: inviteUrl = `${location.host}/join?game=${encodeURIComponent(state.data.game.id)}`;
+  $: inviteUrl = `${location.host}/?join=${encodeURIComponent(state.data.game.id)}`;
 </script>
 
 <h1>Lobby</h1>

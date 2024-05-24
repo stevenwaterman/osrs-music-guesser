@@ -31,5 +31,6 @@
     align-self: center;
     padding: 2rem;
     border-radius: 0.5em;
+    pointer-events: initial;
   }
 </style>
