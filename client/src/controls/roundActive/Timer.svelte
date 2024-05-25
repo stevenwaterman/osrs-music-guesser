@@ -1,15 +1,26 @@
 <script lang="ts">
-  import { scale } from "svelte/transition";
-  import { type ActiveState } from "../lib/clientState";
+  import { type ActiveState } from "../../lib/clientState";
   import { tweened } from "svelte/motion";
-  import SoundEffect from "./SoundEffect.svelte";
+  import Audio from "../shared/Audio.svelte";
+  import { sounds } from "../../lib/sounds";
+  import { onDestroy } from "svelte";
 
   export let state: ActiveState<"RoundActive">;
 
   $: show =
     Object.keys(state.data.users).length > 1 && state.data.game.timerStarted;
 
-  let tween = tweened(state.data.game.timerDurationSecs, {
+  $: if (show) {
+    sounds.clock.start();
+  } else {
+    sounds.clock.stop();
+  }
+
+  onDestroy(() => {
+    sounds.clock.stop();
+  });
+
+  $: tween = tweened(state.data.game.timerDurationSecs, {
     duration: state.data.game.timerDurationSecs * 1000,
   });
 
@@ -22,8 +33,6 @@
   <span class="timer">
     {Math.floor($tween)}
   </span>
-
-  <SoundEffect audioUrl="/clock.ogg" loop />
 {/if}
 
 <style>

@@ -1,5 +1,6 @@
 <script lang="ts">
-  import { type ActiveState } from "../lib/clientState";
+  import { scale } from "svelte/transition";
+  import { type ActiveState } from "../../lib/clientState";
 
   export let state: ActiveState<"RoundActive">;
 
@@ -11,7 +12,9 @@
   ).length;
 </script>
 
-<div class="guesses">Guesses: {guessed}&nbsp;/&nbsp;{total}</div>
+<div class="guesses" out:scale|global>
+  Guesses: {guessed}&nbsp;/&nbsp;{total}
+</div>
 
 <style>
   .guesses {

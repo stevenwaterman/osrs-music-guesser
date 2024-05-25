@@ -2,10 +2,8 @@
   import { stateStore } from "../lib/clientState";
   import BaseMap from "./BaseMap.svelte";
   import GuessLayer from "./GuessLayer.svelte";
-  import LocationLayer from "./LocationLayer.svelte";
   import ScoreLayer from "./ScoreLayer.svelte";
   import TileLayer from "./TileLayer.svelte";
-  import { resetView } from "./map";
 
   $: state = $stateStore;
   let map: L.Map;

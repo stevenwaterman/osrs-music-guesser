@@ -8,5 +8,5 @@ export const tileBounds = L.latLngBounds(
   L.latLng(4140, 3950)
 );
 export function resetView(map: L.Map | null | undefined) {
-  map?.setView(tileBounds.getCenter(), -1);
+  map?.setView(tileBounds.getCenter(), -1, { animate: false });
 }

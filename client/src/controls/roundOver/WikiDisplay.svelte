@@ -1,13 +1,13 @@
 <script lang="ts">
-  import { fade } from "svelte/transition";
-  import type { ActiveState } from "../lib/clientState";
+  import { fade, slide } from "svelte/transition";
+  import type { ActiveState } from "../../lib/clientState";
 
   export let state: ActiveState<"RoundOver">;
 
   $: song = state.data.game.song;
 </script>
 
-<div class="infoBox">
+<div class="infoBox" in:slide>
   <a class="title" target="_blank" href={song.wikiUrl}>{song.name}</a>
   <div class="info">
     <!-- <p>Difficulty: {song.difficulty}</p> -->
@@ -42,14 +42,14 @@
     overflow-y: scroll;
     max-height: 100%;
     flex-shrink: 1;
-    font-size: 1.25rem;
+    font-size: 1rem;
   }
 
   .title {
     background-color: rgba(255, 255, 255, 0.1);
     text-align: center;
     display: block;
-    font-size: 2.5rem;
+    font-size: 2rem;
     font-weight: bold;
     padding: 0.2em 0.4em;
     color: yellow;

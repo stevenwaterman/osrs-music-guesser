@@ -1,6 +1,7 @@
 <script lang="ts">
-  import { type ActiveState } from "../lib/clientState";
-  import Buttons from "./Buttons.svelte";
+  import { type ActiveState } from "../../lib/clientState";
+  import Button from "../shared/Button.svelte";
+  import Buttons from "../shared/Buttons.svelte";
   import ConnectedPlayers from "./ConnectedPlayers.svelte";
 
   export let state: ActiveState<"Lobby">;
@@ -15,7 +16,7 @@
 
 {#if !state.data.game.singlePlayer}
   <h2 class="gameName">
-    Lobby Name: <span class="selectAll">{state.data.game.id}</span>
+    Lobby Name: {state.data.game.id}
   </h2>
 
   <ConnectedPlayers {state} />
@@ -24,25 +25,28 @@
 <Buttons column="1 / 4">
   {#if !state.data.game.singlePlayer}
     {#if "share" in navigator && navigator.canShare({ url: inviteUrl })}
-      <button class="share" on:click={() => navigator.share({ url: inviteUrl })}
-        >Share Invite</button
+      <Button on:click={() => navigator.share({ url: inviteUrl })}
+        >Share Invite</Button
       >
     {:else if "clipboard" in navigator}
-      <button
-        class="share copy"
-        on:click={() => navigator.clipboard.writeText(`${location.hostname}${inviteUrl}`)}
-      ></button>
+      <Button
+        style="width: 8em;"
+        on:click={() =>
+          navigator.clipboard.writeText(
+            `${location.protocol}//${location.host}${inviteUrl}`
+          )}><span class="copy"></span></Button
+      >
     {/if}
   {/if}
 
   {#if state.data.game.singlePlayer || myLobby}
-    <button
+    <Button
       class="start"
       disabled={!state.data.game.singlePlayer && players <= 1}
       on:click={() =>
         state.send({
           action: "start",
-        })}>Start Game</button
+        })}>Start Game</Button
     >
   {/if}
 </Buttons>
@@ -53,23 +57,16 @@
     grid-column: 2;
   }
 
-  .copy {
-    width: 8em;
-  }
   .copy::before {
     content: "Copy Invite";
   }
 
-  .copy:active::before {
+  :global(button):active > .copy::before {
     content: "🚀 Copied! 🚀";
   }
 
   .gameName {
     grid-row: 4;
     grid-column: 2;
-  }
-
-  .selectAll {
-    user-select: all;
   }
 </style>

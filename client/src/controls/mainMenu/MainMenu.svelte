@@ -1,6 +1,8 @@
 <script lang="ts">
-  import type { InactiveState } from "../lib/clientState";
-  import Buttons from "./Buttons.svelte";
+  import type { InactiveState } from "../../lib/clientState";
+  import Button from "../shared/Button.svelte";
+  import Buttons from "../shared/Buttons.svelte";
+  import Logo from "../shared/Logo.svelte";
 
   export let state: InactiveState;
 
@@ -9,7 +11,7 @@
   let casualGameId: string = "";
 </script>
 
-<h1>TuneScape07</h1>
+<Logo />
 
 <div class="info">
   <h2>Rules</h2>
@@ -21,33 +23,33 @@
 
 <Buttons column="1 / 4">
   {#if menu === "main"}
-    <button on:click={() => state.singlePlayer()}>Single Player</button>
-    <button on:click={() => (menu = "multiplayer")}>Multiplayer</button>
+    <Button on:click={() => state.singlePlayer()}>Single Player</Button>
+    <Button on:click={() => (menu = "multiplayer")}>Multiplayer</Button>
   {/if}
 
   {#if menu === "multiplayer"}
-    <button on:click={() => (menu = "main")}>←</button>
-    <button on:click={() => (menu = "casual")}>Casual</button>
-    <button on:click={() => state.rankedMultiplayer()}>Ranked</button>
+    <Button on:click={() => (menu = "main")}>←</Button>
+    <Button on:click={() => (menu = "casual")}>Casual</Button>
+    <Button on:click={() => state.rankedMultiplayer()}>Ranked</Button>
   {/if}
 
   {#if menu === "casual"}
-    <button
+    <Button
       on:click={() => {
         menu = "multiplayer";
         casualGameId = "";
-      }}>←</button
+      }}>←</Button
     >
 
-    <button
+    <Button
       on:click={() => state.casualMultiplayer(casualGameId.trim())}
-      disabled={casualGameId.trim().length === 0}>Join Game</button
+      disabled={casualGameId.trim().length === 0}>Join Game</Button
     >
   {/if}
 </Buttons>
 
 <div class="casualGameNameInputContainer" class:invisible={menu !== "casual"}>
-  <span>Game Name:</span>
+  <span><strong>Game Name:</strong></span>
   <input
     class="casualGameNameInput"
     type="text"
@@ -61,11 +63,6 @@
 </div>
 
 <style>
-  h1 {
-    grid-row: 1;
-    grid-column: 2;
-  }
-
   h2 {
     margin-bottom: 1rem;
   }

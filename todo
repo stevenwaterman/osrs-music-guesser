@@ -1,68 +1,36 @@
 hiscores
-name
 logo
-more dramatic when you're perfect
 instructions
 
-animate score
-animate answers
-fade in music
 competitive games
 
-check all polygons
 wait for everyone to load audio before starting
 gap in audio before next round
 
-sound effects
-
-- damage
-- perfect
-- winning / game over
-
-fix descriptions
-fix quest polygons
-multipoly eg alone
 song release date
 mod ash alert
 song difficulties
 
 github and about in bottom left
-short tutorial in display
 ? long tutorial in bottom right
 tutorial is text dump at first, can become longer interactive chat afterwards
 wide logo above the box
 box either brown or blurred transparent
-mobile view: single & multiplayer buttons stacked
-taller box
-store volume
 Varlamore
 Prevent cheating
 Play again
-Matchmaking
-Back button when clicking multiplayer
 bonus feature: share link to same songs; daily challenge
 shareable/screenshot results
-tween number of tiles and score
-remove score table from top right, replace with current round & total score
 show score total on final score page
 final score overall then breakdown of rounds (map, individual songs, number of points, distance, time)
-game ID replaced with join link & reveal game code
-multiplayer health should show a restricted view of the list, only showing top, bottom and neighbours OR top 3, your position, total players
-hover markers to see names
-zoom to show all guesses (top 10 guesses and score, your guess, bottom 10 guesses)
-host can adjust starting health
-number of answers / guesses submitted
+host can adjust damage scaling
 timer should just be seconds (configurable)
-show score table of top 5 and you
-then show your old health
-then show your damage
-deal damage to health
-show how many players were eliminated and how many remain
 
-keep health display of top 5 and you
-host clicks next round
 guess history in multiplayer
 different timer settings
 
 allow joining as spectator
 mobile buttons
+
+fix when both die at the same time
+button sound effects

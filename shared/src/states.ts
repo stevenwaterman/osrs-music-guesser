@@ -163,8 +163,6 @@ abstract class State<
       return;
     }
 
-    console.log(`${userName} leaving ${this.game.id}`);
-
     this.store.avatarLibrary.release(this.users[userName].avatar);
 
     const newUsers: Record<string, UserState> = omit(this.users, userName);
@@ -237,7 +235,6 @@ export class Lobby extends State<
 
   public join(transport: Transport) {
     const avatar = this.store.avatarLibrary.take();
-    console.log(`${avatar.name} joined ${this.game.id}`);
     return this.transition(
       new Lobby(this.store, this.game, {
         ...this.users,

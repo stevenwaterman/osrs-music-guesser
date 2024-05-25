@@ -1,13 +1,14 @@
 <script lang="ts">
-  import type { ActiveState } from "../lib/clientState";
-  import Players from "./Players.svelte";
+  import type { ActiveState } from "../../lib/clientState";
+  import Players from "../shared/Players.svelte";
 
-  export let state: ActiveState<"RoundOver">;
+  export let state: ActiveState<
+    "GameOver" | "Lobby" | "RoundActive" | "RoundOver"
+  >;
 
-  $: players = Object.values(state.data.users)
-    .filter((user) => user.healthBefore > 0)
-    .toSorted((a, b) => b.health - a.health)
-    .map((user) => ({ avatar: user.avatar, health: user.health }));
+  $: players = Object.values(state.data.users).map((user) => ({
+    avatar: user.avatar,
+  }));
 </script>
 
 <div class="wrapper">
@@ -18,16 +19,23 @@
       owner={state.data.game.owner}
     />
   </div>
+  <h2>Players</h2>
 </div>
 
 <style>
+  h2 {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+
   .wrapper {
     position: relative;
-    grid-column: 3;
-    grid-row: 2 / 6;
+    grid-column: 1 / 4;
+    grid-row: 2 / 4;
 
     display: flex;
-    max-width: 100%;
     max-height: 100%;
     border-radius: 0.5em;
     background-color: var(--semi-transparent-black);
@@ -44,10 +52,8 @@
     max-height: 100%;
 
     min-width: 0;
-    max-width: 100%;
-
-    min-width: 0;
     padding: 1rem;
+    padding-top: 2rem;
 
     overflow-y: auto;
     pointer-events: initial;

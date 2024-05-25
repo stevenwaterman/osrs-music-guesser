@@ -1,14 +1,22 @@
 <script lang="ts">
+  import { createEventDispatcher } from "svelte";
   import AvatarDisplay from "./Avatar.svelte";
   import type { Avatar } from "tunescape07-shared";
 
   export let me: string;
   export let owner: string;
   export let players: Array<{ avatar: Avatar; health?: number }>;
+
+  const dispatch = createEventDispatcher();
 </script>
 
 {#each players as player, idx (player.avatar.name)}
-  <div class="avatarContainer">
+  <!-- svelte-ignore a11y-click-events-have-key-events -->
+  <!-- svelte-ignore a11y-no-static-element-interactions -->
+  <div
+    class="avatarContainer"
+    on:click={() => dispatch("clickAvatar", { name: player.avatar.name })}
+  >
     <span class="label">{idx + 1}.</span>
     <AvatarDisplay
       avatar={player.avatar}

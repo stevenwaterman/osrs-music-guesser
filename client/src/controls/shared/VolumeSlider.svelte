@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { volumeStore } from "../lib/stores";
+  import { volumeStore } from "../../lib/stores";
 </script>
 
 <div class="container">

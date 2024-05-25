@@ -1,30 +1,33 @@
-import { SongName, mapValues, songNames } from "tunescape07-shared";
 import fs from "fs/promises";
 import fsSync from "fs";
 import { RoundOver } from "tunescape07-shared/src/states.js";
+import { Coordinate } from "tunescape07-shared";
 
-let batch: string[] = [];
+let batch: Array<{ song: string; distance?: number; guess?: Coordinate }> = [];
 
-const dir = "distances";
+const dir = "./distances";
 
 export function recordDistances(state: RoundOver) {
   const song = state.game.song.name;
-  const distances = Object.values(state.users).map(
-    (user) => user.guessResult?.distance
-  );
+  const guesses = Object.values(state.users).map((user) => ({
+    distance: user.guessResult?.distance,
+    guess: user.guessResult?.coordinate,
+  }));
 
-  const lines = distances.map(
-    (distance) => `(${song}) ${Math.ceil(distance ?? -1)}`
-  );
-  batch.push(...lines);
+  const entries = guesses.map(({ distance, guess }) => ({
+    song,
+    distance,
+    guess,
+  }));
+  batch.push(...entries);
 
   if (batch.length > 10_000) {
     const oldBatch = batch;
     batch = [];
 
     const title = new Date().toISOString();
-    fs.mkdir(`./${dir}`).then(() =>
-      fs.writeFile(`./${dir}/${title}.txt`, oldBatch.join("\n"))
+    fs.mkdir(dir, { recursive: true }).then(() =>
+      fs.writeFile(`${dir}/${title}.txt`, JSON.stringify(oldBatch))
     );
   }
 }
@@ -32,7 +35,9 @@ export function recordDistances(state: RoundOver) {
 process.on("exit", function () {
   if (batch.length > 0) {
     const title = new Date().toISOString();
-    fsSync.mkdirSync("./distances");
-    fsSync.writeFileSync(`./${dir}/${title}.txt`, batch.join("\n"));
+    if (!fsSync.existsSync(dir)) {
+      fsSync.mkdirSync(dir, { recursive: true });
+    }
+    fsSync.writeFileSync(`./${dir}/${title}.txt`, JSON.stringify(batch));
   }
 });

@@ -1,26 +1,20 @@
 <script lang="ts">
   import { stateStore } from "../lib/clientState";
-  import Audio from "./Audio.svelte";
-  import MainMenu from "./MainMenu.svelte";
-  import GameOver from "./GameOver.svelte";
-  import Lobby from "./Lobby.svelte";
-  import Timer from "./Timer.svelte";
-  import NextRound from "./NextRound.svelte";
-  import WikiDisplay from "./WikiDisplay.svelte";
-  import Damage from "./Damage.svelte";
-  import VolumeSlider from "./VolumeSlider.svelte";
-  import ConfirmGuess from "./ConfirmGuess.svelte";
-  import QuitGame from "./QuitGame.svelte";
-  import GuessCount from "./GuessCount.svelte";
+  import Audio from "./shared/Audio.svelte";
+  import MainMenu from "./mainMenu/MainMenu.svelte";
+  import GameOver from "./gameOver/GameOver.svelte";
+  import Lobby from "./lobby/Lobby.svelte";
+  import Timer from "./roundActive/Timer.svelte";
+  import VolumeSlider from "./shared/VolumeSlider.svelte";
+  import ConfirmGuess from "./roundActive/ConfirmGuess.svelte";
+  import QuitGame from "./shared/QuitGame.svelte";
+  import GuessCount from "./roundActive/GuessCount.svelte";
+  import RoundOver from "./roundOver/RoundOver.svelte";
   $: state = $stateStore;
 </script>
 
 <div class="grid">
   <VolumeSlider />
-
-  {#if !state.isActive}
-    <MainMenu {state} />
-  {/if}
 
   {#if state.isActive}
     <QuitGame {state} />
@@ -33,7 +27,7 @@
   {#if state.isAny("RoundActive", "RoundOver")}
     <Audio
       audioUrl={state.data.game.songUrl}
-      control={state.isAny("RoundOver")}
+      controls={state.isAny("RoundOver")}
       startFraction={state.data.game.songStartFraction}
       loop={true}
     />
@@ -46,16 +40,14 @@
   {/if}
 
   {#if state.isAny("RoundOver")}
-    {#if state.data.game.owner === state.data.me.avatar.name}
-      <NextRound {state} />
-    {/if}
-    <WikiDisplay {state} />
-    <Damage {state} />
+    <RoundOver {state} />
   {/if}
 
   {#if state.isAny("GameOver")}
     <GameOver {state} />
   {/if}
+
+  <slot />
 </div>
 
 <style>
