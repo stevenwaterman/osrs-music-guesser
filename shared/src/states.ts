@@ -544,8 +544,8 @@ export class RoundOver extends State<
 
     // If single player has died or only 1 person left alive in multiplayer
     if (
-      (totalUsers === 1 && aliveUsers === 0) ||
-      (totalUsers > 1 && aliveUsers === 1)
+      (this.game.singlePlayer && aliveUsers <= 0) ||
+      (!this.game.singlePlayer && aliveUsers <= 1)
     ) {
       return this.transition(
         new GameOver(

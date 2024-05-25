@@ -49,6 +49,7 @@
     justify-content: center;
     align-items: flex-start;
 
+    align-self: flex-start;
     justify-self: flex-end;
     cursor: pointer;
   }

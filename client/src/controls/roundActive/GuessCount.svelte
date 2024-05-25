@@ -12,7 +12,7 @@
   ).length;
 </script>
 
-<div class="guesses" out:scale|global>
+<div class="guesses">
   Guesses: {guessed}&nbsp;/&nbsp;{total}
 </div>
 

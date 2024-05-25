@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { fade, slide } from "svelte/transition";
+  import { scale, slide } from "svelte/transition";
   import type { ActiveState } from "../../lib/clientState";
 
   export let state: ActiveState<"RoundOver">;
@@ -7,39 +7,69 @@
   $: song = state.data.game.song;
 </script>
 
-<div class="infoBox" in:slide>
-  <a class="title" target="_blank" href={song.wikiUrl}>{song.name}</a>
-  <div class="info">
-    <!-- <p>Difficulty: {song.difficulty}</p> -->
-    {#each song.description as line}
-      <p>{line}</p>
-    {/each}
+<div class="wrapper" in:scale>
+  <div class="infoBox">
+    <div class="title">
+      <a target="_blank" href={song.wikiUrl}>{song.name}</a>
+      {#if song.tags.modAsh}
+        <!-- svelte-ignore a11y-missing-attribute -->
+        <img
+          class="head"
+          src="/modAsh.png"
+          title="Certified Mod Ash Banger™"
+        />
+      {:else if song.tags.modEd}
+        <!-- svelte-ignore a11y-missing-attribute -->
+        <img class="head" src="/modEd.png" title="Certified Mod Ed Banger™" />
+      {/if}
+    </div>
+    <div class="info">
+      <!-- <p>Difficulty: {song.difficulty}</p> -->
+      {#each song.description as line}
+        <p>{line}</p>
+      {/each}
+    </div>
   </div>
 </div>
 
 <style>
-  .infoBox {
-    background-color: var(--semi-transparent-black);
+  .head {
+    position: absolute;
+    top: 0;
+    right: 0;
+    transform: translate(20%, -20%);
+    z-index: 0;
+  }
 
-    width: 100%;
-    max-height: 100%;
-    align-self: flex-start;
-
+  .wrapper {
     grid-column: 1;
     grid-row: 2 / 6;
 
+    align-self: flex-start;
+    justify-self: flex-start;
+    min-height: 0;
+    max-height: 100%;
+    pointer-events: initial;
+
+    display: flex;
+  }
+
+  .infoBox {
+    background-color: var(--semi-transparent-black);
+
+    max-height: 100%;
+    width: 100%;
+
     display: flex;
     flex-direction: column;
-    overflow-y: hidden;
 
-    pointer-events: initial;
     border-radius: 0.5em;
   }
 
   .info {
     padding-left: 0.8em;
     padding-right: 0.8em;
-    overflow-y: scroll;
+    overflow-y: auto;
     max-height: 100%;
     flex-shrink: 1;
     font-size: 1rem;
@@ -53,6 +83,13 @@
     font-weight: bold;
     padding: 0.2em 0.4em;
     color: yellow;
+    position: relative;
+    z-index: 0;
+  }
+
+  .title a {
+    z-index: 1;
+    position: relative;
   }
 
   @media only screen and (max-width: 750px) {

@@ -8,7 +8,6 @@ wait for everyone to load audio before starting
 gap in audio before next round
 
 song release date
-mod ash alert
 song difficulties
 
 github and about in bottom left
@@ -23,8 +22,6 @@ bonus feature: share link to same songs; daily challenge
 shareable/screenshot results
 show score total on final score page
 final score overall then breakdown of rounds (map, individual songs, number of points, distance, time)
-host can adjust damage scaling
-timer should just be seconds (configurable)
 
 guess history in multiplayer
 different timer settings
@@ -32,5 +29,29 @@ different timer settings
 allow joining as spectator
 mobile buttons
 
-fix when both die at the same time
-button sound effects
+difficulties:
+
+- easy:
+
+  - 50% damage
+  - easy songs only
+  - no time limit in singleplayer
+
+- normal:
+
+  - 100% damage
+  - easy / normal songs
+  - no time limit in singleplayer
+
+- hard:
+
+  - 100% damage
+  - easy / normal / hard songs
+  - venom
+  - 60s time limit in singleplayer
+
+- extreme
+  - 200% damage
+  - all songs
+  - venom
+  - 20s time limit in singleplayer

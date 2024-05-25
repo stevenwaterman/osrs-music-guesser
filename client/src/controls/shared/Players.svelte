@@ -15,6 +15,9 @@
   <!-- svelte-ignore a11y-no-static-element-interactions -->
   <div
     class="avatarContainer"
+    title={player.health === undefined
+      ? undefined
+      : `${player.avatar.name}\nRank ${idx + 1}\nHealth ${player.health} / 99`}
     on:click={() => dispatch("clickAvatar", { name: player.avatar.name })}
   >
     <span class="label">{idx + 1}.</span>

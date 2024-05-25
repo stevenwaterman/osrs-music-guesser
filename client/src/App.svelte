@@ -12,6 +12,8 @@
 
   function clearJoining() {
     if (joining !== null) {
+      joining = null;
+
       const url = new URL(window.location.href);
       url.searchParams.delete("join");
       window.history.pushState({ path: url.href }, "", url.href);
@@ -30,16 +32,18 @@
 <main class="container zoom{zoom}">
   <Map bind:zoom />
   <ControlOverlay>
-    {#if joining && !state.isActive}
-      <JoinGame
-        {state}
-        id={joining}
-        on:back={() => {
-          clearJoining();
-        }}
-      />
-    {:else if !state.isActive}
-      <MainMenu {state} />
+    {#if !state.isActive}
+      {#if joining}
+        <JoinGame
+          {state}
+          id={joining}
+          on:back={() => {
+            clearJoining();
+          }}
+        />
+      {:else if !state.isActive}
+        <MainMenu {state} />
+      {/if}
     {/if}
   </ControlOverlay>
 </main>
