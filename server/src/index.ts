@@ -90,8 +90,8 @@ function onJoin(ws: WebSocket, searchParams: URLSearchParams) {
     {
       id: game.gameId,
       owner: avatar.name,
+      difficulty: "normal",
       singlePlayer: false,
-      damageScaling: 1,
     },
     {},
     { [avatar.name]: { avatar, transport: ws } }

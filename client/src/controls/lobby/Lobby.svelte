@@ -1,4 +1,5 @@
 <script lang="ts">
+  import type { Difficulty } from "tunescape07-shared";
   import { type ActiveState } from "../../lib/clientState";
   import Button from "../shared/Button.svelte";
   import Buttons from "../shared/Buttons.svelte";
@@ -8,8 +9,14 @@
 
   $: myLobby = state.data.game.owner === state.data.me.avatar.name;
   $: players = Object.keys(state.data.spectators).length;
+  $: difficultyConfig = state.difficultyConfig;
 
   $: inviteUrl = `?join=${encodeURIComponent(state.data.game.id)}`;
+
+  let difficulty: Difficulty = state.data.game.difficulty;
+  $: if (difficulty !== difficultyConfig.name) {
+    state.send({ action: "settings", data: { difficulty } });
+  }
 </script>
 
 <h1>Lobby</h1>
@@ -51,6 +58,22 @@
   {/if}
 </Buttons>
 
+<div class="difficultyPanel">
+  <h2>Difficulty</h2>
+  <select bind:value={difficulty} disabled={!myLobby}>
+    <option value="tutorial">Tutorial</option>
+    <option value="normal">Normal</option>
+    <option value="hard">Hard</option>
+    <option value="extreme">Extreme</option>
+  </select>
+
+  <div class="scroll">
+    {#each difficultyConfig.description as line}
+      <p>{line}</p>
+    {/each}
+  </div>
+</div>
+
 <style>
   h1 {
     grid-row: 1;
@@ -68,5 +91,48 @@
   .gameName {
     grid-row: 4;
     grid-column: 2;
+  }
+
+  .difficultyPanel {
+    grid-column: 1;
+    grid-row: 2 / 6;
+
+    padding: 1em;
+    border-radius: 0.5em;
+
+    background-color: var(--semi-transparent-black);
+
+    align-self: flex-start;
+    justify-self: flex-start;
+
+    max-height: 100%;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .difficultyPanel h2 {
+    margin-bottom: 1rem;
+  }
+
+  .difficultyPanel select {
+    pointer-events: initial;
+    background-color: rgba(255, 255, 255, 0.1);
+    outline: none;
+    border: none;
+
+    border-radius: 0.5em;
+    padding: 0.5rem;
+    padding-left: 1rem;
+    border-right: 0.5rem solid transparent;
+  }
+
+  .difficultyPanel .scroll {
+    overflow-y: auto;
+    max-height: 100%;
+    pointer-events: initial;
+    padding: 0.5rem;
+    margin: -0.5rem;
   }
 </style>

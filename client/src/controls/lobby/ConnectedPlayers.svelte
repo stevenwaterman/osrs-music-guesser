@@ -32,7 +32,7 @@
 
   .wrapper {
     position: relative;
-    grid-column: 1 / 4;
+    grid-column: 2;
     grid-row: 2 / 4;
 
     display: flex;

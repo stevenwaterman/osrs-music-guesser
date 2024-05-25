@@ -11,3 +11,8 @@ export {
   avatarUrl,
   type Avatar,
 } from "./avatars.js";
+export {
+  getDifficultyConfig,
+  type Difficulty,
+  type DifficultyConfig,
+} from "./difficulty.js";

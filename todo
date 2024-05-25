@@ -18,33 +18,4 @@ guess history in multiplayer
 mobile buttons
 public lobby
 
-difficulties:
-
-- easy:
-
-  - 50% damage
-  - easy songs only
-  - no time limit in singleplayer
-  - songs start at the start
-
-- normal:
-
-  - 100% damage
-  - easy / normal songs
-  - no time limit in singleplayer
-  - songs start at the start
-
-- hard:
-
-  - 100% damage
-  - easy / normal / hard songs
-  - venom
-  - 60s time limit in singleplayer
-  - songs start at random points
-
-- extreme
-  - 200% damage
-  - all songs
-  - venom
-  - 20s time limit in singleplayer
-  - songs start at random points
+broadcast diffs instead of full objects (currently n^3 scaling)

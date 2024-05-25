@@ -1,5 +1,9 @@
 import { writable, type Readable, type Writable } from "svelte/store";
-import type { StateInterface } from "tunescape07-shared";
+import {
+  getDifficultyConfig,
+  type DifficultyConfig,
+  type StateInterface,
+} from "tunescape07-shared";
 import { songs } from "tunescape07-data";
 import {
   Lobby,
@@ -114,7 +118,12 @@ function connectToLocalServer(): Transport {
   const avatar = store.avatarLibrary.take()!;
   store.state = new Lobby(
     store,
-    { id: gameId, owner: avatar.name, singlePlayer: true, damageScaling: 0.5 },
+    {
+      id: gameId,
+      owner: avatar.name,
+      singlePlayer: true,
+      difficulty: "normal",
+    },
     {},
     { [avatar.name]: { avatar, transport: serverSide } }
   );
@@ -176,6 +185,13 @@ export class ActiveState<Name extends keyof StateInterface.ServerStates> {
     public readonly data: StateInterface.ClientStateData<Name>,
     private readonly transport: Transport
   ) {}
+
+  public get difficultyConfig(): DifficultyConfig {
+    return getDifficultyConfig(
+      this.data.game.difficulty,
+      this.data.game.singlePlayer
+    );
+  }
 
   disconnect() {
     this.transport.close(1000);

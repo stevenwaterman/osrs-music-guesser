@@ -4,6 +4,11 @@ import type { Coordinate } from "./coordinates.js";
 import { calculateRoundResult } from "./scoring.js";
 import { Song } from "./songTypes.js";
 import { Avatar, AvatarLibrary } from "./avatars.js";
+import {
+  Difficulty,
+  DifficultyConfig,
+  getDifficultyConfig,
+} from "./difficulty.js";
 
 export interface Transport {
   send(msg: string): void;
@@ -51,16 +56,15 @@ type BaseGameState = {
   id: string;
   owner: string;
   singlePlayer: boolean;
-  damageScaling: number;
+  difficulty: "tutorial" | "normal" | "hard" | "extreme";
 };
-type BasePublicGameKeys = "id" | "owner" | "singlePlayer" | "damageScaling";
+type BasePublicGameKeys = "id" | "owner" | "singlePlayer" | "difficulty";
 
 type BaseUserState = {
   avatar: Avatar;
   transport: Transport;
-  health: number;
 };
-type BasePublicUserKeys = "avatar" | "health";
+type BasePublicUserKeys = "avatar";
 
 type SpectatorState = {
   avatar: Avatar;
@@ -82,6 +86,10 @@ abstract class State<
 
   private readonly unsubscribeFromWsMessages: Array<() => void>;
   private readonly unsubscribeFromWsClose: Array<() => void>;
+
+  public get difficultyConfig(): DifficultyConfig {
+    return getDifficultyConfig(this.game.difficulty, this.game.singlePlayer);
+  }
 
   constructor(
     protected readonly store: StateStore,
@@ -133,7 +141,7 @@ abstract class State<
       "id",
       "owner",
       "singlePlayer",
-      "damageScaling",
+      "difficulty",
     ];
     return pick(this.game, ...combinedKeys);
   }
@@ -145,7 +153,6 @@ abstract class State<
     const combinedKeys: Array<PublicUserKeys[number] | BasePublicUserKeys> = [
       ...this.publicUserKeys,
       "avatar",
-      "health",
     ];
     return mapValues(this.users, (user) => pick(user, ...combinedKeys));
   }
@@ -158,7 +165,7 @@ abstract class State<
   > {
     const combinedKeys: Array<
       PrivateUserKeys[number] | PublicUserKeys[number] | BasePublicUserKeys
-    > = [...this.privateUserKeys, ...this.publicUserKeys, "avatar", "health"];
+    > = [...this.privateUserKeys, ...this.publicUserKeys, "avatar"];
     return pick(this.users[userName], ...combinedKeys);
   }
 
@@ -265,10 +272,8 @@ abstract class State<
         new Lobby(
           this.store,
           {
-            id: this.game.id,
+            ...pick(this.game, "id", "singlePlayer", "difficulty"),
             owner: newOwner,
-            singlePlayer: this.game.singlePlayer,
-            damageScaling: this.game.damageScaling,
           },
           {},
           allSpectators
@@ -306,32 +311,10 @@ abstract class State<
   protected onMessage(userName: string, message: ClientActions): void {}
 }
 
-export class Lobby extends State<
-  "Lobby",
-  {
-    id: string;
-    owner: string;
-    singlePlayer: boolean;
-    damageScaling: number;
-    // TODO difficulty and timer settings
-  },
-  ["id", "owner", "singlePlayer", "damageScaling"],
-  {
-    avatar: Avatar;
-    transport: Transport;
-    health: number;
-  },
-  ["avatar", "health"],
-  []
-> {
+export class Lobby extends State<"Lobby", {}, [], {}, [], []> {
   public stateName = "Lobby" as const;
-  public publicGameKeys = [
-    "id",
-    "owner",
-    "singlePlayer",
-    "damageScaling",
-  ] as const;
-  public publicUserKeys = ["avatar", "health"] as const;
+  public publicGameKeys = [] as const;
+  public publicUserKeys = [] as const;
   public privateUserKeys = [] as const;
 
   private start() {
@@ -348,7 +331,6 @@ export class Lobby extends State<
           song,
           songUrl: song.audioUrl,
           songStartFraction: 0.9 * Math.random(),
-          timerDurationSecs: 10,
         },
         mapValues(this.spectators, (spectator) => ({
           avatar: spectator.avatar,
@@ -369,12 +351,27 @@ export class Lobby extends State<
     return new Lobby(this.store, game, users, spectators);
   }
 
-  protected onMessage(
-    userName: string,
-    message: { action: string; data?: any }
-  ): void {
-    if (userName === this.game.owner && message.action === "start") {
+  protected updateSettings(settings: { difficulty?: Difficulty }) {
+    this.transition(
+      this.recreate(
+        {
+          ...this.game,
+          difficulty: settings.difficulty ?? this.game.difficulty,
+        },
+        { ...this.users },
+        { ...this.spectators }
+      )
+    );
+  }
+
+  protected onMessage(userName: string, message: ClientActions): void {
+    const owner = userName === this.game.owner;
+    if (owner && message.action === "start") {
       this.start();
+    }
+
+    if (owner && message.action === "settings") {
+      this.updateSettings(message.data);
     }
   }
 }
@@ -382,74 +379,45 @@ export class Lobby extends State<
 export class RoundActive extends State<
   "RoundActive",
   | {
-      id: string;
-      owner: string;
-      singlePlayer: boolean;
       songs: Song[];
       song: Song;
       songUrl: string;
       songStartFraction: number;
       round: number;
-      timerDurationSecs: number;
       timerStarted?: undefined;
       timerId?: undefined;
-      damageScaling: number;
     }
   | {
-      id: string;
-      owner: string;
-      singlePlayer: boolean;
       songs: Song[];
       song: Song;
       songUrl: string;
       songStartFraction: number;
       round: number;
-      timerDurationSecs: number;
       timerStarted: Date;
       timerId: NodeJS.Timeout;
-      damageScaling: number;
     },
-  [
-    "id",
-    "owner",
-    "singlePlayer",
-    "songUrl",
-    "songStartFraction",
-    "round",
-    "timerStarted",
-    "timerDurationSecs",
-    "damageScaling",
-  ],
+  ["songUrl", "songStartFraction", "round", "timerStarted"],
   | {
-      avatar: Avatar;
       health: number;
       guess?: undefined;
       guessTime?: undefined;
-      transport: Transport;
     }
   | {
-      avatar: Avatar;
       health: number;
       guess: Coordinate;
       guessTime: Date;
-      transport: Transport;
     },
-  ["avatar", "health", "guessTime"],
+  ["guessTime", "health"],
   ["guess"]
 > {
   public stateName = "RoundActive" as const;
   public publicGameKeys = [
-    "id",
-    "owner",
-    "singlePlayer",
     "songUrl",
     "songStartFraction",
     "round",
     "timerStarted",
-    "timerDurationSecs",
-    "damageScaling",
   ] as const;
-  public publicUserKeys = ["avatar", "health", "guessTime"] as const;
+  public publicUserKeys = ["guessTime", "health"] as const;
   public privateUserKeys = ["guess"] as const;
 
   constructor(
@@ -458,10 +426,29 @@ export class RoundActive extends State<
     users: RoundActive["users"],
     spectators: RoundActive["spectators"]
   ) {
+    const difficultyConfig = getDifficultyConfig(
+      game.difficulty,
+      game.singlePlayer
+    );
+    if (
+      difficultyConfig.timeLimit.type === "immediately" &&
+      game.timerStarted === undefined
+    ) {
+      game = {
+        ...game,
+        timerStarted: new Date(),
+        timerId: setTimeout(() => {
+          if (store.state?.stateName === "RoundActive") {
+            store.state.roundOver();
+          }
+        }, difficultyConfig.timeLimit.duration * 1000),
+      };
+    }
+
     super(store, game, users, spectators);
 
     const allGuessed = Object.values(this.users).every(
-      (u) => u.health <= 0 || u.guess !== undefined
+      (u) => u.guess !== undefined
     );
     if (allGuessed) {
       this.roundOver();
@@ -472,9 +459,12 @@ export class RoundActive extends State<
     // TODO check they haven't already guessed
     const now = new Date();
 
-    // If first guess, set timer
     let newGameState = { ...this.game };
-    if (newGameState.timerStarted === undefined) {
+    if (
+      this.difficultyConfig.timeLimit.type === "afterFirstGuess" &&
+      newGameState.timerStarted === undefined
+    ) {
+      // If first guess, set timer
       newGameState = {
         ...newGameState,
         timerStarted: now,
@@ -482,7 +472,7 @@ export class RoundActive extends State<
           if (this.store.state?.stateName === "RoundActive") {
             this.store.state.roundOver();
           }
-        }, newGameState.timerDurationSecs * 1000),
+        }, this.difficultyConfig.timeLimit.duration * 1000),
       };
     }
 
@@ -529,13 +519,12 @@ export class RoundActive extends State<
             "id",
             "owner",
             "singlePlayer",
+            "difficulty",
             "songs",
             "song",
             "songUrl",
             "songStartFraction",
-            "round",
-            "timerDurationSecs",
-            "damageScaling"
+            "round"
           ),
           bestGuess: roundResult.bestGuess,
         },
@@ -553,10 +542,7 @@ export class RoundActive extends State<
     return new RoundActive(this.store, game, users, spectators);
   }
 
-  protected onMessage(
-    userName: string,
-    message: { action: string; data?: any }
-  ): void {
+  protected onMessage(userName: string, message: ClientActions): void {
     if (
       message.action === "guess" &&
       this.users[userName].guess === undefined &&
@@ -570,15 +556,11 @@ export class RoundActive extends State<
 export class RoundOver extends State<
   "RoundOver",
   {
-    id: string;
-    owner: string;
-    singlePlayer: boolean;
     songs: Song[];
     song: Song;
     songUrl: string;
     songStartFraction: number;
     round: number;
-    timerDurationSecs: number;
     bestGuess: {
       userName: string;
       coordinate: Coordinate;
@@ -587,24 +569,11 @@ export class RoundOver extends State<
       distance: number;
       perfect: boolean;
     } | null;
-    damageScaling: number;
   },
-  [
-    "id",
-    "owner",
-    "singlePlayer",
-    "song",
-    "songUrl",
-    "songStartFraction",
-    "round",
-    "timerDurationSecs",
-    "bestGuess",
-    "damageScaling",
-  ],
+  ["song", "songUrl", "songStartFraction", "round", "bestGuess"],
   {
-    avatar: Avatar;
-    healthBefore: number;
     health: number;
+    healthBefore: number;
     guessResult: {
       coordinate: Coordinate;
       time: Date;
@@ -619,28 +588,21 @@ export class RoundOver extends State<
       total: number;
       max: boolean;
     };
-    transport: Transport;
   },
-  ["avatar", "healthBefore", "health", "guessResult", "damage"],
+  ["health", "healthBefore", "guessResult", "damage"],
   []
 > {
   public stateName = "RoundOver" as const;
   public publicGameKeys = [
-    "id",
-    "owner",
-    "singlePlayer",
     "song",
     "songUrl",
     "songStartFraction",
     "round",
-    "timerDurationSecs",
     "bestGuess",
-    "damageScaling",
   ] as const;
   public publicUserKeys = [
-    "avatar",
-    "healthBefore",
     "health",
+    "healthBefore",
     "guessResult",
     "damage",
   ] as const;
@@ -676,9 +638,9 @@ export class RoundOver extends State<
             "id",
             "owner",
             "singlePlayer",
+            "difficulty",
             "songs",
-            "round",
-            "damageScaling"
+            "round"
           ),
           newUsers,
           newSpectators
@@ -698,14 +660,7 @@ export class RoundOver extends State<
         new RoundActive(
           this.store,
           {
-            ...pick(
-              this.game,
-              "id",
-              "owner",
-              "singlePlayer",
-              "damageScaling",
-              "timerDurationSecs"
-            ),
+            ...pick(this.game, "id", "owner", "singlePlayer", "difficulty"),
             songs,
             round,
             song,
@@ -729,10 +684,7 @@ export class RoundOver extends State<
     return new RoundOver(this.store, game, users, spectators);
   }
 
-  protected onMessage(
-    userName: string,
-    message: { action: string; data?: any }
-  ): void {
+  protected onMessage(userName: string, message: ClientActions): void {
     if (message.action === "nextRound" && this.game.owner === userName) {
       this.next();
     }
@@ -742,37 +694,23 @@ export class RoundOver extends State<
 export class GameOver extends State<
   "GameOver",
   {
-    id: string;
-    owner: string;
-    singlePlayer: boolean;
     round: number;
-    damageScaling: number;
   },
-  ["id", "owner", "singlePlayer", "round", "damageScaling"],
-  {
-    avatar: Avatar;
-    health: number;
-    transport: Transport;
-  },
-  ["avatar", "health"],
+  ["round"],
+  {},
+  [],
   []
 > {
   public stateName = "GameOver" as const;
-  public publicGameKeys = [
-    "id",
-    "owner",
-    "singlePlayer",
-    "round",
-    "damageScaling",
-  ] as const;
-  public publicUserKeys = ["avatar", "health"] as const;
+  public publicGameKeys = ["round"] as const;
+  public publicUserKeys = [] as const;
   public privateUserKeys = [] as const;
 
   public playAgain() {
     return this.transition(
       new Lobby(
         this.store,
-        pick(this.game, "id", "owner", "singlePlayer", "damageScaling"),
+        pick(this.game, "id", "owner", "singlePlayer", "difficulty"),
         {},
         {
           ...this.spectators,
@@ -794,10 +732,7 @@ export class GameOver extends State<
     return new GameOver(this.store, game, users, spectators);
   }
 
-  protected onMessage(
-    userName: string,
-    message: { action: string; data?: any }
-  ): void {
+  protected onMessage(userName: string, message: ClientActions): void {
     if (userName === this.game.owner && message.action === "playAgain") {
       this.playAgain();
     }
@@ -826,6 +761,7 @@ export type ClientStateData<StateName extends AnyServerState["stateName"]> = {
 };
 
 export type ClientActions =
+  | { action: "settings"; data: { difficulty?: Difficulty } }
   | { action: "start" }
   | { action: "guess"; data: Coordinate }
   | { action: "nextRound" }

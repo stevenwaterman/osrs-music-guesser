@@ -3,6 +3,7 @@ import { convertFlatten } from "./coordinates.js";
 import type { Coordinate, Polygon } from "./coordinates.js";
 import { RoundActive } from "./states.js";
 import { mapValues } from "./util.js";
+import { getDifficultyConfig } from "./difficulty.js";
 
 function closestPoint(
   coord: Coordinate,
@@ -50,6 +51,7 @@ type RoundResult = {
 };
 
 export function calculateRoundResult(state: RoundActive): RoundResult {
+  const difficultyConfig = state.difficultyConfig;
   const song = state.game.song;
   const location = song.location;
 
@@ -113,41 +115,49 @@ export function calculateRoundResult(state: RoundActive): RoundResult {
   }
 
   // Healing starts at 20 and decreases 1 per round
-  const initialHealing = 20;
-  const healingDecreasePerRound = 1;
-  const minimumHealing = 0;
-  const healingAmount = Math.max(
-    initialHealing - healingDecreasePerRound * (state.game.round - 1),
-    minimumHealing
-  );
+  let healingAmount = 0;
+  if (difficultyConfig.healing) {
+    const initialHealing = difficultyConfig.healing.startAmount;
+    const healingDecreasePerRound = difficultyConfig.healing.decreasePerRound;
+    const minimumHealing = difficultyConfig.healing.minAmount;
+    healingAmount = Math.max(
+      initialHealing - healingDecreasePerRound * (state.game.round - 1),
+      minimumHealing
+    );
+  }
 
-  const noVenomUntilRound = 10;
-  const venomIncreasePerRound = 1;
-  const roundsOfVenom = Math.max(state.game.round - noVenomUntilRound, 0);
-  const venom = roundsOfVenom * venomIncreasePerRound;
+  let venomAmount = 0;
+  if (difficultyConfig.venom) {
+    const venomStartRound = difficultyConfig.venom.startRound;
+    const venomIncreasePerRound = 1;
+    const roundsOfVenom = Math.max(state.game.round - venomStartRound, 0);
+    venomAmount = roundsOfVenom * venomIncreasePerRound;
+  }
 
   const bestDistance = bestGuess?.distance ?? Number.MAX_SAFE_INTEGER;
-  const bestMaxHit = getMaxHit(bestDistance, state.game.damageScaling);
-  const absoluteMaxHit = Math.ceil(getMaxHit(0, state.game.damageScaling));
+  const bestMaxHit = getMaxHit(bestDistance, difficultyConfig.damageScaling);
+  const absoluteMaxHit = Math.ceil(
+    getMaxHit(0, difficultyConfig.damageScaling)
+  );
 
   const damage = mapValues(state.users, (user) => {
     const wasFirstPerfect =
       bestGuess?.userName === user.avatar.name && bestGuess.perfect;
     const healing = wasFirstPerfect ? healingAmount : 0;
+    const venom = venomAmount;
 
     const myGuess = guessResults[user.avatar.name];
     const distance = myGuess?.distance ?? Number.MAX_SAFE_INTEGER;
-    const maxHit = getMaxHit(distance, state.game.damageScaling);
+    const maxHit = getMaxHit(distance, difficultyConfig.damageScaling);
 
     const hit = Math.ceil(bestMaxHit - maxHit);
-    const wasMax = hit === absoluteMaxHit;
 
     return {
       hit,
       healing,
       venom,
       total: hit + venom - healing,
-      max: wasMax,
+      max: hit === absoluteMaxHit,
     };
   });
 

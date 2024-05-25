@@ -6,27 +6,29 @@
   import { scale } from "svelte/transition";
 
   export let state: ActiveState<"RoundActive">;
+  $: difficultyConfig = state.difficultyConfig;
 
-  $: show =
-    Object.keys(state.data.users).length > 1 && state.data.game.timerStarted;
+  $: timerLength =
+    difficultyConfig.timeLimit.type === "none"
+      ? 0
+      : difficultyConfig.timeLimit.duration;
 
+  $: tween = tweened(timerLength);
+
+  $: timerStarted = state.data.game.timerStarted !== undefined;
+  $: if (timerStarted) {
+    tween.set(0, { duration: timerLength * 1000 });
+  }
+
+  $: show = timerStarted && $tween <= 20;
   $: if (show) {
     sounds.clock.start();
   } else {
     sounds.clock.stop();
   }
-
   onDestroy(() => {
     sounds.clock.stop();
   });
-
-  let tween = tweened(state.data.game.timerDurationSecs, {
-    duration: state.data.game.timerDurationSecs * 1000,
-  });
-
-  $: if (show) {
-    tween.set(0);
-  }
 </script>
 
 {#if show}
