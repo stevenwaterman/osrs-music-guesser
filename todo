@@ -16,6 +16,5 @@ final score overall then breakdown of rounds (map, individual songs, number of p
 
 guess history in multiplayer
 mobile buttons
-public lobby
 
 broadcast diffs instead of full objects (currently n^3 scaling)
