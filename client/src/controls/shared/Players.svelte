@@ -4,7 +4,7 @@
   import type { Avatar } from "tunescape07-shared";
 
   export let me: string;
-  export let owner: string;
+  export let owner: string | null;
   export let players: Array<{ avatar: Avatar; health?: number }>;
 
   const dispatch = createEventDispatcher();

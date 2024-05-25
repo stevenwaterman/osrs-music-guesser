@@ -55,10 +55,10 @@ export class StateStore {
 type BaseGameState = {
   id: string;
   owner: string;
-  singlePlayer: boolean;
+  type: "singleplayer" | "private" | "public";
   difficulty: "tutorial" | "normal" | "hard" | "extreme";
 };
-type BasePublicGameKeys = "id" | "owner" | "singlePlayer" | "difficulty";
+type BasePublicGameKeys = "id" | "owner" | "type" | "difficulty";
 
 type BaseUserState = {
   avatar: Avatar;
@@ -88,7 +88,10 @@ abstract class State<
   private readonly unsubscribeFromWsClose: Array<() => void>;
 
   public get difficultyConfig(): DifficultyConfig {
-    return getDifficultyConfig(this.game.difficulty, this.game.singlePlayer);
+    return getDifficultyConfig(
+      this.game.difficulty,
+      this.game.type === "singleplayer"
+    );
   }
 
   constructor(
@@ -140,7 +143,7 @@ abstract class State<
       ...this.publicGameKeys,
       "id",
       "owner",
-      "singlePlayer",
+      "type",
       "difficulty",
     ];
     return pick(this.game, ...combinedKeys);
@@ -252,7 +255,9 @@ abstract class State<
     }
 
     const ownerStillPresent =
-      this.game.owner in newUsers || this.game.owner in newSpectators;
+      this.game.type === "public" ||
+      this.game.owner! in newUsers ||
+      this.game.owner! in newSpectators;
     const newOwner = ownerStillPresent
       ? this.game.owner
       : newUserCount > 0
@@ -272,7 +277,7 @@ abstract class State<
         new Lobby(
           this.store,
           {
-            ...pick(this.game, "id", "singlePlayer", "difficulty"),
+            ...pick(this.game, "id", "type", "difficulty"),
             owner: newOwner,
           },
           {},
@@ -308,6 +313,16 @@ abstract class State<
     spectators: Record<string, SpectatorState>
   ): AnyServerState;
 
+  public terminate() {
+    Object.values(this.unsubscribeFromWsMessages).forEach((cb) => cb());
+    Object.values(this.unsubscribeFromWsClose).forEach((cb) => cb());
+    Object.values(this.users).forEach((user) => user.transport.close(1000));
+    Object.values(this.spectators).forEach((spectator) =>
+      spectator.transport.close(1000)
+    );
+    this.transition(null);
+  }
+
   protected onMessage(userName: string, message: ClientActions): void {}
 }
 
@@ -317,10 +332,16 @@ export class Lobby extends State<"Lobby", {}, [], {}, [], []> {
   public publicUserKeys = [] as const;
   public privateUserKeys = [] as const;
 
-  private start() {
-    const gameSongs = sample(this.store.possibleSongs);
+  public start() {
+    const acceptableDifficulty = this.difficultyConfig.songDifficulty;
+    const possibleSongs = this.store.possibleSongs.filter(
+      (song) =>
+        song.location.length > 0 && acceptableDifficulty[song.difficulty]
+    );
+    const gameSongs = sample(possibleSongs);
     const round = 1;
     const song = gameSongs[0];
+    console.log("starting");
     return this.transition(
       new RoundActive(
         this.store,
@@ -332,12 +353,14 @@ export class Lobby extends State<"Lobby", {}, [], {}, [], []> {
           songUrl: song.audioUrl,
           songStartFraction: 0.9 * Math.random(),
         },
-        mapValues(this.spectators, (spectator) => ({
-          avatar: spectator.avatar,
-          transport: spectator.transport,
-          health: 99,
-          spectator: false,
-        })),
+        mapValues(this.spectators, (spectator) => {
+          return {
+            avatar: spectator.avatar,
+            transport: spectator.transport,
+            health: 99,
+            spectator: false,
+          };
+        }),
         {}
       )
     );
@@ -428,7 +451,7 @@ export class RoundActive extends State<
   ) {
     const difficultyConfig = getDifficultyConfig(
       game.difficulty,
-      game.singlePlayer
+      game.type === "singleplayer"
     );
     if (
       difficultyConfig.timeLimit.type === "immediately" &&
@@ -518,7 +541,7 @@ export class RoundActive extends State<
             this.game,
             "id",
             "owner",
-            "singlePlayer",
+            "type",
             "difficulty",
             "songs",
             "song",
@@ -627,8 +650,8 @@ export class RoundOver extends State<
 
     // If single player has died or only 1 person left alive in multiplayer
     if (
-      (this.game.singlePlayer && newUserCount <= 0) ||
-      (!this.game.singlePlayer && newUserCount <= 1)
+      (this.game.type === "singleplayer" && newUserCount <= 0) ||
+      (this.game.type !== "singleplayer" && newUserCount <= 1)
     ) {
       return this.transition(
         new GameOver(
@@ -637,7 +660,7 @@ export class RoundOver extends State<
             this.game,
             "id",
             "owner",
-            "singlePlayer",
+            "type",
             "difficulty",
             "songs",
             "round"
@@ -660,7 +683,7 @@ export class RoundOver extends State<
         new RoundActive(
           this.store,
           {
-            ...pick(this.game, "id", "owner", "singlePlayer", "difficulty"),
+            ...pick(this.game, "id", "owner", "type", "difficulty"),
             songs,
             round,
             song,
@@ -710,7 +733,7 @@ export class GameOver extends State<
     return this.transition(
       new Lobby(
         this.store,
-        pick(this.game, "id", "owner", "singlePlayer", "difficulty"),
+        pick(this.game, "id", "owner", "type", "difficulty"),
         {},
         {
           ...this.spectators,

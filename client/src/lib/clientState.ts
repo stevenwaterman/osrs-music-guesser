@@ -27,11 +27,19 @@ type WsMessage =
       data: StateInterface.ClientStateData<any>;
     };
 
-function connectToRemoteServer(gameId: string): Transport {
+function connectToPrivateGame(gameId: string): Transport {
   const prod = document.location.host.includes("tunescape07");
   const transport = prod
     ? new HeartbeatWebSocket(`wss://api.tunescape07.com/join?game=${gameId}`)
     : new HeartbeatWebSocket(`ws://localhost:4433/join?game=${gameId}`);
+  return transport;
+}
+
+function connectToPublicGame(): Transport {
+  const prod = document.location.host.includes("tunescape07");
+  const transport = prod
+    ? new HeartbeatWebSocket(`wss://api.tunescape07.com/public}`)
+    : new HeartbeatWebSocket(`ws://localhost:4433/public`);
   return transport;
 }
 
@@ -111,17 +119,14 @@ function connectToLocalServer(): Transport {
   };
 
   const gameId = "Single Player";
-  const possibleSongs = Object.values(songs).filter(
-    (song) => song.location.length > 0 && song.difficulty !== "extreme"
-  );
-  const store = new StateStore(gameId, possibleSongs);
+  const store = new StateStore(gameId, Object.values(songs));
   const avatar = store.avatarLibrary.take()!;
   store.state = new Lobby(
     store,
     {
       id: gameId,
       owner: avatar.name,
-      singlePlayer: true,
+      type: "singleplayer",
       difficulty: "normal",
     },
     {},
@@ -165,11 +170,12 @@ export class InactiveState {
   }
 
   publicMultiplayer() {
-    throw new Error();
+    const transport = connectToPublicGame();
+    listenToTransport(transport);
   }
 
   privateMultiplayer(gameId: string) {
-    const transport = connectToRemoteServer(gameId);
+    const transport = connectToPrivateGame(gameId);
     listenToTransport(transport);
   }
 
@@ -189,7 +195,7 @@ export class ActiveState<Name extends keyof StateInterface.ServerStates> {
   public get difficultyConfig(): DifficultyConfig {
     return getDifficultyConfig(
       this.data.game.difficulty,
-      this.data.game.singlePlayer
+      this.data.game.type === "singleplayer"
     );
   }
 

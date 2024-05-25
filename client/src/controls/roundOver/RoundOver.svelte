@@ -17,7 +17,7 @@
     (user) => user.health > 0
   ).length;
   $: gameOver =
-    (!state.data.game.singlePlayer && remainingUsers <= 1) ||
+    (state.data.game.type !== "singleplayer" && remainingUsers <= 1) ||
     remainingUsers === 0;
 
   onMount(() => {

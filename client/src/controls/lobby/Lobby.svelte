@@ -4,6 +4,7 @@
   import Button from "../shared/Button.svelte";
   import Buttons from "../shared/Buttons.svelte";
   import ConnectedPlayers from "./ConnectedPlayers.svelte";
+  import { scale } from "svelte/transition";
 
   export let state: ActiveState<"Lobby">;
 
@@ -21,7 +22,7 @@
 
 <h1>Lobby</h1>
 
-{#if !state.data.game.singlePlayer}
+{#if state.data.game.type === "private"}
   <h2 class="gameName">
     Lobby Name: {state.data.game.id}
   </h2>
@@ -30,7 +31,7 @@
 <ConnectedPlayers {state} />
 
 <Buttons column="1 / 4">
-  {#if !state.data.game.singlePlayer}
+  {#if state.data.game.type === "private"}
     {#if "share" in navigator && navigator.canShare({ url: inviteUrl })}
       <Button on:click={() => navigator.share({ url: inviteUrl })}
         >Share Invite</Button
@@ -49,16 +50,24 @@
   {#if myLobby}
     <Button
       class="start"
-      disabled={!state.data.game.singlePlayer && players <= 1}
+      disabled={state.data.game.type !== "singleplayer" && players <= 1}
       on:click={() =>
         state.send({
           action: "start",
         })}>Start Game</Button
     >
   {/if}
+
+  {#if state.data.game.type === "public"}
+    {#if players <= 1}
+      <h2>Waiting for more players</h2>
+    {:else}
+      <h2>Starting soon</h2>
+    {/if}
+  {/if}
 </Buttons>
 
-<div class="difficultyPanel">
+<div class="difficultyPanel" in:scale>
   <h2>Difficulty</h2>
   <select bind:value={difficulty} disabled={!myLobby}>
     <option value="tutorial">Tutorial</option>

@@ -31,7 +31,9 @@ export class HeartbeatWebSocket extends WebSocket {
 
     this.addEventListener("open", () => {
       this.afterReceivingData();
-      this.afterSendingData();
+      setTimeout(() => {
+        this.afterSendingData();
+      }, 1000);
     });
     this.addEventListener("close", () => this.afterDisconnecting());
     this.addEventListener("message", () => this.afterReceivingData());

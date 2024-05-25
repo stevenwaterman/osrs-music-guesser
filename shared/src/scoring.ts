@@ -103,7 +103,7 @@ export function calculateRoundResult(state: RoundActive): RoundResult {
 
   // In singleplayer games, if you don't get it perfect
   // then you lose health as if someone else did
-  if (state.game.singlePlayer && bestGuess?.perfect !== true) {
+  if (state.game.type === "singleplayer" && bestGuess?.perfect !== true) {
     bestGuess = {
       userName: "AI",
       coordinate: location[0][0],

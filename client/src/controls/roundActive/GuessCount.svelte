@@ -11,7 +11,7 @@
   ).length;
 </script>
 
-{#if !state.data.game.singlePlayer}
+{#if state.data.game.type !== "singleplayer"}
   <div class="guesses">
     Guesses: {guessed}&nbsp;/&nbsp;{total}
   </div>

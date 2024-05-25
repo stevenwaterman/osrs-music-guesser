@@ -4,16 +4,16 @@ import WebSocket, { WebSocketServer } from "ws";
 import { recordDistances } from "./scoreTracker.js";
 
 const wss = new WebSocketServer({ port: 4433 });
-const games: Record<string, StateInterface.StateStore> = {};
 
-function getGame(
+const privateGames: Record<string, StateInterface.StateStore> = {};
+
+function getPrivateGame(
   ws: WebSocket,
   searchParams: URLSearchParams
 ): StateInterface.StateStore | undefined {
   const gameId = searchParams.get("game");
 
   if (!gameId) {
-    console.log("MISSING_GAME");
     ws.send(
       JSON.stringify({
         action: "error",
@@ -27,15 +27,11 @@ function getGame(
     throw new Error("MISSING_GAME");
   }
 
-  if (!(gameId in games)) {
-    const possibleSongs = Object.values(songs).filter(
-      (song) => song.location.length > 0 && song.difficulty !== "extreme"
-    );
-
+  if (!(gameId in privateGames)) {
     const onTransition = (value: StateInterface.AnyServerState | null) => {
       if (value === null) {
         console.log("deleting game", gameId);
-        delete games[gameId];
+        delete privateGames[gameId];
       }
 
       if (value?.stateName === "RoundOver") {
@@ -45,14 +41,14 @@ function getGame(
 
     const stateStore = new StateInterface.StateStore(
       gameId,
-      possibleSongs,
+      Object.values(songs),
       onTransition
     );
-    games[gameId] = stateStore;
+    privateGames[gameId] = stateStore;
     return stateStore;
   }
 
-  return games[gameId];
+  return privateGames[gameId];
 }
 
 wss.on("connection", (ws, req) => {
@@ -60,6 +56,7 @@ wss.on("connection", (ws, req) => {
   if (url.pathname === "/join") {
     onJoin(ws, url.searchParams);
   } else if (url.pathname === "/public") {
+    onPublic(ws);
   }
 
   let kickTimeout = setTimeout(() => ws.terminate(), 30_000);
@@ -74,7 +71,7 @@ wss.on("connection", (ws, req) => {
 });
 
 function onJoin(ws: WebSocket, searchParams: URLSearchParams) {
-  const game = getGame(ws, searchParams);
+  const game = getPrivateGame(ws, searchParams);
   if (!game) {
     return;
   }
@@ -91,11 +88,83 @@ function onJoin(ws: WebSocket, searchParams: URLSearchParams) {
       id: game.gameId,
       owner: avatar.name,
       difficulty: "normal",
-      singlePlayer: false,
+      type: "private",
     },
     {},
     { [avatar.name]: { avatar, transport: ws } }
   );
+}
+
+let publicGameIdx = 0;
+const publicGames: Record<number, StateInterface.StateStore> = {};
+createPublicLobby();
+
+function createPublicLobby() {
+  publicGameIdx++;
+  const gameId = publicGameIdx.toString();
+
+  let started = false;
+  let startGameTimer: NodeJS.Timeout | null = null;
+  function start() {
+    if (startGameTimer !== null) {
+      clearTimeout(startGameTimer);
+    }
+    started = true;
+    (store.state as StateInterface.Lobby).start();
+    createPublicLobby();
+  }
+
+  const onTransition = (value: StateInterface.AnyServerState | null) => {
+    if (value?.stateName === "RoundOver") {
+      recordDistances(value);
+    }
+
+    if (value?.stateName === "Lobby") {
+      const players = Object.keys(value.spectators).length;
+
+      if (players === 0) {
+        if (startGameTimer !== null) {
+          clearTimeout(startGameTimer);
+        }
+      } else if (players >= 2 && startGameTimer === null) {
+        startGameTimer = setTimeout(() => start(), 15_000);
+      } else if (players >= 10) {
+        start();
+      }
+
+      if (started && players <= 1) {
+        value.terminate();
+      }
+    }
+
+    if (value?.stateName === "RoundActive") {
+      started = true;
+    }
+  };
+
+  const store = new StateInterface.StateStore(
+    gameId,
+    Object.values(songs),
+    onTransition
+  );
+  store.state = new StateInterface.Lobby(
+    store,
+    {
+      id: gameId,
+      owner: "TuneScape",
+      type: "public",
+      difficulty: "hard",
+    },
+    {},
+    {}
+  );
+  publicGames[publicGameIdx] = store;
+}
+
+function onPublic(ws: WebSocket) {
+  const store = publicGames[publicGameIdx];
+  const state = store.state as StateInterface.Lobby;
+  state.join(ws);
 }
 
 console.log("Running");
