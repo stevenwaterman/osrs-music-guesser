@@ -2,22 +2,15 @@ hiscores
 logo
 instructions
 
-competitive games
-
-wait for everyone to load audio before starting
 gap in audio before next round
 
 song release date
-song difficulties
 
 github and about in bottom left
 ? long tutorial in bottom right
 tutorial is text dump at first, can become longer interactive chat afterwards
-wide logo above the box
-box either brown or blurred transparent
 Varlamore
 Prevent cheating
-Play again
 bonus feature: share link to same songs; daily challenge
 shareable/screenshot results
 show score total on final score page
@@ -36,12 +29,14 @@ difficulties:
   - 50% damage
   - easy songs only
   - no time limit in singleplayer
+  - songs start at the start
 
 - normal:
 
   - 100% damage
   - easy / normal songs
   - no time limit in singleplayer
+  - songs start at the start
 
 - hard:
 
@@ -49,9 +44,11 @@ difficulties:
   - easy / normal / hard songs
   - venom
   - 60s time limit in singleplayer
+  - songs start at random points
 
 - extreme
   - 200% damage
   - all songs
   - venom
   - 20s time limit in singleplayer
+  - songs start at random points

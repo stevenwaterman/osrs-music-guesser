@@ -6,7 +6,7 @@
     "GameOver" | "Lobby" | "RoundActive" | "RoundOver"
   >;
 
-  $: players = Object.values(state.data.users).map((user) => ({
+  $: players = Object.values(state.data.spectators).map((user) => ({
     avatar: user.avatar,
   }));
 </script>

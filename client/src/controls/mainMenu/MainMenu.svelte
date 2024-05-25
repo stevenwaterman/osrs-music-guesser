@@ -6,9 +6,9 @@
 
   export let state: InactiveState;
 
-  let menu: "main" | "multiplayer" | "casual" = "main";
+  let menu: "main" | "multiplayer" | "private" = "main";
 
-  let casualGameId: string = "";
+  let privateGameId: string = "";
 </script>
 
 <Logo />
@@ -29,34 +29,34 @@
 
   {#if menu === "multiplayer"}
     <Button on:click={() => (menu = "main")}>←</Button>
-    <Button on:click={() => (menu = "casual")}>Casual</Button>
-    <Button on:click={() => state.rankedMultiplayer()}>Ranked</Button>
+    <Button on:click={() => (menu = "private")}>Private</Button>
+    <Button on:click={() => state.publicMultiplayer()}>Public</Button>
   {/if}
 
-  {#if menu === "casual"}
+  {#if menu === "private"}
     <Button
       on:click={() => {
         menu = "multiplayer";
-        casualGameId = "";
+        privateGameId = "";
       }}>←</Button
     >
 
     <Button
-      on:click={() => state.casualMultiplayer(casualGameId.trim())}
-      disabled={casualGameId.trim().length === 0}>Join Game</Button
+      on:click={() => state.privateMultiplayer(privateGameId.trim())}
+      disabled={privateGameId.trim().length === 0}>Join Game</Button
     >
   {/if}
 </Buttons>
 
-<div class="casualGameNameInputContainer" class:invisible={menu !== "casual"}>
+<div class="privateGameNameInputContainer" class:invisible={menu !== "private"}>
   <span><strong>Game Name:</strong></span>
   <input
-    class="casualGameNameInput"
+    class="privateGameNameInput"
     type="text"
-    bind:value={casualGameId}
+    bind:value={privateGameId}
     on:keypress={(ev) => {
-      if (ev.key === "Enter" && casualGameId.trim().length > 0) {
-        state.casualMultiplayer(casualGameId.trim());
+      if (ev.key === "Enter" && privateGameId.trim().length > 0) {
+        state.privateMultiplayer(privateGameId.trim());
       }
     }}
   />
@@ -67,7 +67,7 @@
     margin-bottom: 1rem;
   }
 
-  .casualGameNameInputContainer {
+  .privateGameNameInputContainer {
     grid-column: 2;
     grid-row: 4;
 

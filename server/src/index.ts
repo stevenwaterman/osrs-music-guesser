@@ -59,6 +59,7 @@ wss.on("connection", (ws, req) => {
   const url = new URL(`http://localhost${req.url!}`);
   if (url.pathname === "/join") {
     onJoin(ws, url.searchParams);
+  } else if (url.pathname === "/public") {
   }
 
   let kickTimeout = setTimeout(() => ws.terminate(), 30_000);
@@ -78,27 +79,12 @@ function onJoin(ws: WebSocket, searchParams: URLSearchParams) {
     return;
   }
 
-  if (game.state?.stateName === "Lobby") {
-    (game.state as StateInterface.Lobby).join(ws);
-    return;
-  }
-
   if (game.state) {
-    ws.send(
-      JSON.stringify({
-        action: "error",
-        data: {
-          code: "GAME_INVALID_STATE",
-          message: "could not join game",
-        },
-      })
-    );
-    ws.close(1011);
+    game.state.join(ws);
     return;
   }
 
-  const avatar = game.avatarLibrary.take();
-
+  const avatar = game.avatarLibrary.take()!;
   game.state = new StateInterface.Lobby(
     game,
     {
@@ -107,7 +93,8 @@ function onJoin(ws: WebSocket, searchParams: URLSearchParams) {
       singlePlayer: false,
       damageScaling: 1,
     },
-    { [avatar.name]: { avatar, transport: ws, health: 99 } }
+    {},
+    { [avatar.name]: { avatar, transport: ws } }
   );
 }
 

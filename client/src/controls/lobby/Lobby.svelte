@@ -7,7 +7,7 @@
   export let state: ActiveState<"Lobby">;
 
   $: myLobby = state.data.game.owner === state.data.me.avatar.name;
-  $: players = Object.keys(state.data.users).length;
+  $: players = Object.keys(state.data.spectators).length;
 
   $: inviteUrl = `?join=${encodeURIComponent(state.data.game.id)}`;
 </script>
@@ -18,9 +18,9 @@
   <h2 class="gameName">
     Lobby Name: {state.data.game.id}
   </h2>
-
-  <ConnectedPlayers {state} />
 {/if}
+
+<ConnectedPlayers {state} />
 
 <Buttons column="1 / 4">
   {#if !state.data.game.singlePlayer}
@@ -39,7 +39,7 @@
     {/if}
   {/if}
 
-  {#if state.data.game.singlePlayer || myLobby}
+  {#if myLobby}
     <Button
       class="start"
       disabled={!state.data.game.singlePlayer && players <= 1}

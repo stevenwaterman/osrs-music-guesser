@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { scale } from "svelte/transition";
   import { type ActiveState } from "../../lib/clientState";
 
   export let state: ActiveState<"RoundActive">;
@@ -12,9 +11,11 @@
   ).length;
 </script>
 
-<div class="guesses">
-  Guesses: {guessed}&nbsp;/&nbsp;{total}
-</div>
+{#if !state.data.game.singlePlayer}
+  <div class="guesses">
+    Guesses: {guessed}&nbsp;/&nbsp;{total}
+  </div>
+{/if}
 
 <style>
   .guesses {

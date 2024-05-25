@@ -6,8 +6,9 @@
   import Button from "../shared/Button.svelte";
 
   export let state: ActiveState<"RoundActive">;
-  $: confirmedGuess = state.data.me.guess;
-  $: canGuess = confirmedGuess === undefined && state.data.me.health > 0;
+
+  $: canGuess =
+    state.data.me.type === "user" && state.data.me.guess === undefined;
 
   function confirm() {
     const unconfirmedGuess = $unconfirmedGuessStore;
@@ -21,8 +22,12 @@
   });
 </script>
 
-{#if canGuess && $unconfirmedGuessStore}
-  <Buttons>
+<Buttons>
+  {#if canGuess && $unconfirmedGuessStore}
     <Button on:click={confirm}>Guess</Button>
-  </Buttons>
-{/if}
+  {/if}
+
+  {#if state.data.me.type === "spectator"}
+    <h2>Spectating</h2>
+  {/if}
+</Buttons>

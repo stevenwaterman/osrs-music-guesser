@@ -10,8 +10,15 @@
   $: owner = state.data.me.avatar.name === state.data.game.owner;
 
   let render = false;
-  let alive = state.data.me.healthBefore >= 0;
+  let alive = state.data.me.type === "user";
   let showAll: boolean = !alive;
+
+  $: remainingUsers = Object.values(state.data.users).filter(
+    (user) => user.health > 0
+  ).length;
+  $: gameOver =
+    (!state.data.game.singlePlayer && remainingUsers <= 1) ||
+    remainingUsers === 0;
 
   onMount(() => {
     const timeout = setTimeout(() => {
@@ -53,13 +60,13 @@
   {/if}
 
   {#if owner}
-    {#if state.data.me.health > 0}
+    {#if gameOver}
       <Button style="grid-column: 2; grid-row: 4;" on:click={nextRound}
-        >Next&nbsp;Round</Button
+        >Show&nbsp;Results</Button
       >
     {:else}
       <Button style="grid-column: 2; grid-row: 4;" on:click={nextRound}
-        >Show&nbsp;Results</Button
+        >Next&nbsp;Round</Button
       >
     {/if}
   {/if}

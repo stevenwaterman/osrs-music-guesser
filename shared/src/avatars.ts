@@ -58,9 +58,9 @@ export function avatarThumbnailSrc(avatar: Avatar): string {
 export class AvatarLibrary {
   private availableAvatars: string[] = shuffle(Object.keys(avatars));
 
-  public take(): Avatar {
+  public take(): Avatar | null {
     if (this.availableAvatars.length === 0) {
-      throw new Error("Ran out of avatars");
+      return null;      
     }
 
     const [avatarName] = this.availableAvatars.splice(0, 1);

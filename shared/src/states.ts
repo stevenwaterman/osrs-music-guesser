@@ -47,20 +47,31 @@ export class StateStore {
   ) {}
 }
 
+type BaseGameState = {
+  id: string;
+  owner: string;
+  singlePlayer: boolean;
+  damageScaling: number;
+};
+type BasePublicGameKeys = "id" | "owner" | "singlePlayer" | "damageScaling";
+
+type BaseUserState = {
+  avatar: Avatar;
+  transport: Transport;
+  health: number;
+};
+type BasePublicUserKeys = "avatar" | "health";
+
+type SpectatorState = {
+  avatar: Avatar;
+  transport: Transport;
+};
+
 abstract class State<
   StateName extends string,
-  GameState extends {
-    id: string;
-    owner: string;
-    singlePlayer: boolean;
-    damageScaling: number;
-  },
+  GameState extends {},
   PublicGameKeys extends Array<keyof GameState>,
-  UserState extends {
-    avatar: Avatar;
-    transport: Transport;
-    health: number;
-  },
+  UserState extends {},
   PublicUserKeys extends Array<keyof UserState>,
   PrivateUserKeys extends Array<keyof UserState>,
 > {
@@ -74,11 +85,14 @@ abstract class State<
 
   constructor(
     protected readonly store: StateStore,
-    public readonly game: GameState,
-    public readonly users: Record<string, UserState>
+    public readonly game: GameState & BaseGameState,
+    public readonly users: Record<string, UserState & BaseUserState>,
+    public readonly spectators: Record<string, SpectatorState>
   ) {
     // Listen for incoming messages
-    this.unsubscribeFromWsMessages = Object.values(users).map((user) => {
+    const clients = [...Object.values(users), ...Object.values(spectators)];
+
+    this.unsubscribeFromWsMessages = Object.values(clients).map((user) => {
       const messageHandler = (ev: TransportMessage) => {
         const message = ev.data.toString("utf8");
         if (message.startsWith("{")) {
@@ -95,7 +109,7 @@ abstract class State<
     });
 
     // Listen for transport close
-    this.unsubscribeFromWsClose = Object.values(users).map((user) => {
+    this.unsubscribeFromWsClose = Object.values(clients).map((user) => {
       const closeHandler = (ev: TransportClose) => {
         this.leave(user.avatar.name);
       };
@@ -110,40 +124,88 @@ abstract class State<
     });
   }
 
-  public getPublicGameState(): Pick<GameState, PublicGameKeys[number]> {
-    return pick(this.game, ...this.publicGameKeys);
+  public getPublicGameState(): Pick<
+    GameState & BaseGameState,
+    PublicGameKeys[number] | BasePublicGameKeys
+  > {
+    const combinedKeys: Array<PublicGameKeys[number] | BasePublicGameKeys> = [
+      ...this.publicGameKeys,
+      "id",
+      "owner",
+      "singlePlayer",
+      "damageScaling",
+    ];
+    return pick(this.game, ...combinedKeys);
   }
 
   public getPublicUserState(): Record<
     string,
-    Pick<UserState, PublicUserKeys[number]>
+    Pick<UserState & BaseUserState, PublicUserKeys[number] | BasePublicUserKeys>
   > {
-    return mapValues(this.users, (user) => pick(user, ...this.publicUserKeys));
+    const combinedKeys: Array<PublicUserKeys[number] | BasePublicUserKeys> = [
+      ...this.publicUserKeys,
+      "avatar",
+      "health",
+    ];
+    return mapValues(this.users, (user) => pick(user, ...combinedKeys));
   }
 
   public getPrivateUserState(
     userName: string
-  ): Pick<UserState, PrivateUserKeys[number]> &
-    Pick<UserState, PublicUserKeys[number]> {
-    return pick(
-      this.users[userName],
-      ...[...this.publicUserKeys, ...this.privateUserKeys]
-    );
+  ): Pick<
+    UserState & BaseUserState,
+    PrivateUserKeys[number] | PublicUserKeys[number] | BasePublicUserKeys
+  > {
+    const combinedKeys: Array<
+      PrivateUserKeys[number] | PublicUserKeys[number] | BasePublicUserKeys
+    > = [...this.privateUserKeys, ...this.publicUserKeys, "avatar", "health"];
+    return pick(this.users[userName], ...combinedKeys);
+  }
+
+  public getSpectatorState(): Record<string, Pick<SpectatorState, "avatar">> {
+    return mapValues(this.spectators, (spectator) => pick(spectator, "avatar"));
   }
 
   private broadcastState() {
     const game = this.getPublicGameState();
     const users = this.getPublicUserState();
+    const spectators = this.getSpectatorState();
+
+    const basicData = {
+      stateName: this.stateName,
+      game,
+      users,
+      spectators,
+    };
+
+    Object.values(this.spectators).forEach((spectator) => {
+      const data: ClientStateData<any> = {
+        ...basicData,
+        me: {
+          type: "spectator",
+          ...spectators[spectator.avatar.name],
+        },
+      };
+      spectator.transport.send(
+        JSON.stringify({
+          action: "state",
+          data,
+        })
+      );
+    });
+
     Object.values(this.users).forEach((user) => {
+      const data: ClientStateData<any> = {
+        ...basicData,
+        me: {
+          type: "user",
+          ...this.getPrivateUserState(user.avatar.name),
+        },
+      };
       user.transport.send(
         JSON.stringify({
           action: "state",
-          data: {
-            stateName: this.stateName,
-            game,
-            users,
-            me: this.getPrivateUserState(user.avatar.name),
-          },
+          data,
         })
       );
     });
@@ -157,29 +219,48 @@ abstract class State<
   }
 
   private leave(userName: string) {
-    const userIsPlayer = userName in this.users;
+    const userIsPlayer = userName in this.users || userName in this.spectators;
     if (!userIsPlayer) {
       console.warn(`${userName} tried to leave a game they weren't in`);
       return;
     }
 
-    this.store.avatarLibrary.release(this.users[userName].avatar);
+    const avatar = (this.users[userName] ?? this.spectators[userName]).avatar;
+    this.store.avatarLibrary.release(avatar);
 
-    const newUsers: Record<string, UserState> = omit(this.users, userName);
-    const newUserCount = Object.values(newUsers).filter(
-      (user) => user.health > 0
-    ).length;
+    const newUsers: Record<string, UserState & BaseUserState> = omit(
+      this.users,
+      userName
+    );
+    const newUserCount = Object.values(newUsers).length;
 
-    if (newUserCount === 0) {
+    const newSpectators: Record<string, SpectatorState> = omit(
+      this.spectators,
+      userName
+    );
+    const newSpectatorCount = Object.values(newSpectators).length;
+
+    if (newUserCount + newSpectatorCount === 0) {
       return this.transition(null);
     }
 
-    const ownerStillPresent = this.game.owner in newUsers;
+    const ownerStillPresent =
+      this.game.owner in newUsers || this.game.owner in newSpectators;
     const newOwner = ownerStillPresent
       ? this.game.owner
-      : Object.keys(newUsers)[0];
+      : newUserCount > 0
+        ? Object.keys(newUsers)[0]
+        : Object.keys(newSpectators)[0];
 
-    if (newUserCount === 1) {
+    if (newUserCount <= 1) {
+      const allSpectators: Record<string, SpectatorState> = {
+        ...newSpectators,
+        ...mapValues(newUsers, (user) => ({
+          avatar: user.avatar,
+          transport: user.transport,
+          spectator: true,
+        })),
+      };
       return this.transition(
         new Lobby(
           this.store,
@@ -189,17 +270,37 @@ abstract class State<
             singlePlayer: this.game.singlePlayer,
             damageScaling: this.game.damageScaling,
           },
-          newUsers
+          {},
+          allSpectators
         )
       );
     }
 
-    this.transition(this.recreate({ ...this.game, owner: newOwner }, newUsers));
+    this.transition(
+      this.recreate({ ...this.game, owner: newOwner }, newUsers, newSpectators)
+    );
+  }
+
+  public join(transport: Transport) {
+    const avatar = this.store.avatarLibrary.take();
+    if (avatar === null) {
+      // TODO better error handling
+      transport.close(1000);
+      return;
+    }
+
+    return this.transition(
+      this.recreate(this.game, this.users, {
+        ...this.spectators,
+        [avatar.name]: { avatar, transport },
+      })
+    );
   }
 
   protected abstract recreate(
-    game: GameState,
-    users: Record<string, UserState>
+    game: GameState & BaseGameState,
+    users: Record<string, UserState & BaseUserState>,
+    spectators: Record<string, SpectatorState>
   ): AnyServerState;
 
   protected onMessage(userName: string, message: ClientActions): void {}
@@ -233,16 +334,6 @@ export class Lobby extends State<
   public publicUserKeys = ["avatar", "health"] as const;
   public privateUserKeys = [] as const;
 
-  public join(transport: Transport) {
-    const avatar = this.store.avatarLibrary.take();
-    return this.transition(
-      new Lobby(this.store, this.game, {
-        ...this.users,
-        [avatar.name]: { avatar, transport, health: 99 },
-      })
-    );
-  }
-
   private start() {
     const gameSongs = sample(this.store.possibleSongs);
     const round = 1;
@@ -259,16 +350,23 @@ export class Lobby extends State<
           songStartFraction: 0.9 * Math.random(),
           timerDurationSecs: 10,
         },
-        mapValues(this.users, (user) => ({
-          ...user,
+        mapValues(this.spectators, (spectator) => ({
+          avatar: spectator.avatar,
+          transport: spectator.transport,
           health: 99,
-        }))
+          spectator: false,
+        })),
+        {}
       )
     );
   }
 
-  protected recreate(game: Lobby["game"], users: Lobby["users"]) {
-    return new Lobby(this.store, game, users);
+  protected recreate(
+    game: Lobby["game"],
+    users: Lobby["users"],
+    spectators: Lobby["spectators"]
+  ) {
+    return new Lobby(this.store, game, users, spectators);
   }
 
   protected onMessage(
@@ -357,9 +455,10 @@ export class RoundActive extends State<
   constructor(
     store: StateStore,
     game: RoundActive["game"],
-    users: RoundActive["users"]
+    users: RoundActive["users"],
+    spectators: RoundActive["spectators"]
   ) {
-    super(store, game, users);
+    super(store, game, users, spectators);
 
     const allGuessed = Object.values(this.users).every(
       (u) => u.health <= 0 || u.guess !== undefined
@@ -387,16 +486,21 @@ export class RoundActive extends State<
       };
     }
 
-    const newUserState = {
+    const newUserState: RoundActive["users"] = {
       ...this.users,
       [userName]: {
-        ...this.users[userName],
+        ...pick(this.users[userName], "avatar", "transport", "health"),
         guess,
         guessTime: now,
       },
     };
 
-    const newState = new RoundActive(this.store, newGameState, newUserState);
+    const newState = new RoundActive(
+      this.store,
+      newGameState,
+      newUserState,
+      this.spectators
+    );
     return this.transition(newState);
   }
 
@@ -404,7 +508,7 @@ export class RoundActive extends State<
     clearTimeout(this.game.timerId);
 
     const roundResult = calculateRoundResult(this);
-    const newUserState = mapValues(this.users, (user) => {
+    const newUserState: RoundOver["users"] = mapValues(this.users, (user) => {
       const result = roundResult.users[user.avatar.name];
       return {
         ...pick(user, "avatar", "transport"),
@@ -412,6 +516,7 @@ export class RoundActive extends State<
         health: Math.min(Math.max(0, user.health - result.damage.total), 99),
         guessResult: result.guessResult,
         damage: result.damage,
+        spectator: false,
       };
     });
 
@@ -434,13 +539,18 @@ export class RoundActive extends State<
           ),
           bestGuess: roundResult.bestGuess,
         },
-        newUserState
+        newUserState,
+        this.spectators
       )
     );
   }
 
-  protected recreate(game: RoundActive["game"], users: RoundActive["users"]) {
-    return new RoundActive(this.store, game, users);
+  protected recreate(
+    game: RoundActive["game"],
+    users: RoundActive["users"],
+    spectators: RoundActive["spectators"]
+  ) {
+    return new RoundActive(this.store, game, users, spectators);
   }
 
   protected onMessage(
@@ -537,23 +647,41 @@ export class RoundOver extends State<
   public privateUserKeys = [] as const;
 
   public next() {
-    const aliveUsers = Object.values(this.users).filter(
-      (user) => user.health > 0
-    ).length;
-    const totalUsers = Object.keys(this.users).length;
+    const newUsers: RoundActive["users"] = {};
+    const newSpectators: RoundActive["spectators"] = { ...this.spectators };
+    for (const userName in this.users) {
+      const user = this.users[userName];
+      if (user.health <= 0) {
+        newSpectators[userName] = {
+          avatar: user.avatar,
+          transport: user.transport,
+        };
+      } else {
+        newUsers[userName] = pick(user, "avatar", "transport", "health");
+      }
+    }
+
+    const newUserCount = Object.keys(newUsers).length;
 
     // If single player has died or only 1 person left alive in multiplayer
     if (
-      (this.game.singlePlayer && aliveUsers <= 0) ||
-      (!this.game.singlePlayer && aliveUsers <= 1)
+      (this.game.singlePlayer && newUserCount <= 0) ||
+      (!this.game.singlePlayer && newUserCount <= 1)
     ) {
       return this.transition(
         new GameOver(
           this.store,
-          omit(this.game, "songs", "song", "songStartFraction"),
-          mapValues(this.users, (user) =>
-            pick(user, "avatar", "health", "transport")
-          )
+          pick(
+            this.game,
+            "id",
+            "owner",
+            "singlePlayer",
+            "songs",
+            "round",
+            "damageScaling"
+          ),
+          newUsers,
+          newSpectators
         )
       );
     } else {
@@ -570,22 +698,35 @@ export class RoundOver extends State<
         new RoundActive(
           this.store,
           {
-            ...this.game,
+            ...pick(
+              this.game,
+              "id",
+              "owner",
+              "singlePlayer",
+              "damageScaling",
+              "timerDurationSecs"
+            ),
             songs,
             round,
             song,
             songUrl: song.audioUrl,
+            songStartFraction: 0.9 * Math.random(),
+            timerStarted: undefined,
+            timerId: undefined,
           },
-          mapValues(this.users, (user) =>
-            pick(user, "avatar", "health", "transport")
-          )
+          newUsers,
+          newSpectators
         )
       );
     }
   }
 
-  protected recreate(game: RoundOver["game"], users: RoundOver["users"]) {
-    return new RoundOver(this.store, game, users);
+  protected recreate(
+    game: RoundOver["game"],
+    users: RoundOver["users"],
+    spectators: RoundOver["spectators"]
+  ) {
+    return new RoundOver(this.store, game, users, spectators);
   }
 
   protected onMessage(
@@ -632,17 +773,25 @@ export class GameOver extends State<
       new Lobby(
         this.store,
         pick(this.game, "id", "owner", "singlePlayer", "damageScaling"),
-        mapValues(this.users, (user) => ({
-          avatar: user.avatar,
-          transport: user.transport,
-          health: 99,
-        }))
+        {},
+        {
+          ...this.spectators,
+          ...mapValues(this.users, (user) => ({
+            avatar: user.avatar,
+            transport: user.transport,
+            spectator: true,
+          })),
+        }
       )
     );
   }
 
-  protected recreate(game: GameOver["game"], users: GameOver["users"]) {
-    return new GameOver(this.store, game, users);
+  protected recreate(
+    game: GameOver["game"],
+    users: GameOver["users"],
+    spectators: GameOver["spectators"]
+  ) {
+    return new GameOver(this.store, game, users, spectators);
   }
 
   protected onMessage(
@@ -666,11 +815,18 @@ export type ClientStateData<StateName extends AnyServerState["stateName"]> = {
   stateName: StateName;
   game: ReturnType<ServerStates[StateName]["getPublicGameState"]>;
   users: ReturnType<ServerStates[StateName]["getPublicUserState"]>;
-  me: ReturnType<ServerStates[StateName]["getPrivateUserState"]>;
+  spectators: ReturnType<ServerStates[StateName]["getSpectatorState"]>;
+  me:
+    | ({ type: "user" } & ReturnType<
+        ServerStates[StateName]["getPrivateUserState"]
+      >)
+    | ({ type: "spectator" } & ReturnType<
+        ServerStates[StateName]["getSpectatorState"]
+      >[string]);
 };
 
 export type ClientActions =
-  | { action: "start"; data?: { timerDurationSecs?: number; health?: number } }
+  | { action: "start" }
   | { action: "guess"; data: Coordinate }
   | { action: "nextRound" }
   | { action: "playAgain" };

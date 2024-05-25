@@ -111,11 +111,12 @@ function connectToLocalServer(): Transport {
     (song) => song.location.length > 0 && song.difficulty !== "extreme"
   );
   const store = new StateStore(gameId, possibleSongs);
-  const avatar = store.avatarLibrary.take();
+  const avatar = store.avatarLibrary.take()!;
   store.state = new Lobby(
     store,
     { id: gameId, owner: avatar.name, singlePlayer: true, damageScaling: 0.5 },
-    { [avatar.name]: { avatar, transport: serverSide, health: 99 } }
+    {},
+    { [avatar.name]: { avatar, transport: serverSide } }
   );
 
   return clientSide;
@@ -154,11 +155,11 @@ export class InactiveState {
     listenToTransport(transport);
   }
 
-  rankedMultiplayer() {
+  publicMultiplayer() {
     throw new Error();
   }
 
-  casualMultiplayer(gameId: string) {
+  privateMultiplayer(gameId: string) {
     const transport = connectToRemoteServer(gameId);
     listenToTransport(transport);
   }

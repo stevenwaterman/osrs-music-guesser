@@ -28,7 +28,7 @@
   >
   <Button
     on:click={() => {
-      state.casualMultiplayer(id);
+      state.privateMultiplayer(id);
     }}>Join Game</Button
   >
 </Buttons>
