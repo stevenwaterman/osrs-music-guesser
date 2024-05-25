@@ -14,7 +14,9 @@ shareable/screenshot results
 show score total on final score page
 final score overall then breakdown of rounds (map, individual songs, number of points, distance, time)
 
-guess history in multiplayer
+guess history
 mobile buttons
 
 broadcast diffs instead of full objects (currently n^3 scaling)
+public game timer
+game over screen when someone leaves
