@@ -27,7 +27,7 @@
   {#if state.isAny("RoundActive", "RoundOver")}
     <Audio
       audioUrl={state.data.game.songUrl}
-      controls={state.isAny("RoundOver")}
+      controls={!state.difficultyConfig.songRandomStart || state.isAny("RoundOver")}
       startFraction={state.data.game.songStartFraction}
       loop={true}
     />

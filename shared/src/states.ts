@@ -341,7 +341,7 @@ export class Lobby extends State<"Lobby", {}, [], {}, [], []> {
     const gameSongs = sample(possibleSongs);
     const round = 1;
     const song = gameSongs[0];
-    console.log("starting");
+    const maxSongStartFraction = this.difficultyConfig.songRandomStart ? 0.9 : 0;
     return this.transition(
       new RoundActive(
         this.store,
@@ -351,7 +351,7 @@ export class Lobby extends State<"Lobby", {}, [], {}, [], []> {
           round,
           song,
           songUrl: song.audioUrl,
-          songStartFraction: 0.9 * Math.random(),
+          songStartFraction: maxSongStartFraction * Math.random(),
         },
         mapValues(this.spectators, (spectator) => {
           return {
@@ -678,6 +678,7 @@ export class RoundOver extends State<
         songs = shuffle([...songs]);
       }
       const song = songs[songIdx];
+      const maxSongStartFraction = this.difficultyConfig.songRandomStart ? 0.9 : 0;
 
       return this.transition(
         new RoundActive(
@@ -688,7 +689,7 @@ export class RoundOver extends State<
             round,
             song,
             songUrl: song.audioUrl,
-            songStartFraction: 0.9 * Math.random(),
+            songStartFraction: maxSongStartFraction * Math.random(),
             timerStarted: undefined,
             timerId: undefined,
           },
