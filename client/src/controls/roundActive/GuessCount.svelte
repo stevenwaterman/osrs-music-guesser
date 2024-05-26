@@ -4,11 +4,9 @@
   export let state: ActiveState<"RoundActive">;
 
   $: guessed = Object.values(state.data.users).filter(
-    (user) => user.guessTime !== undefined
+    (user) => user.guessTime !== null
   ).length;
-  $: total = Object.values(state.data.users).filter(
-    (user) => user.health > 0
-  ).length;
+  $: total = Object.keys(state.data.users).length;
 </script>
 
 {#if state.data.game.type !== "singleplayer"}

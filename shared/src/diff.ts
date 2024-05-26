@@ -16,10 +16,9 @@ function applyPartialDiff(base: any, diff: any, onto: any) {
     if (
       diffValue !== null &&
       typeof diffValue === "object" &&
-      "diffArray" in diffValue &&
-      diffValue.diffArray === true
+      diffValue instanceof Array
     ) {
-      onto[prop] = JSON.parse(diffValue.value);
+      onto[prop] = diffValue;
     } else if (diffValue !== null && typeof diffValue === "object") {
       onto[prop] = {};
       applyPartialDiff(baseValue ?? {}, diffValue, onto[prop]);
@@ -40,10 +39,9 @@ function applyPartialDiff(base: any, diff: any, onto: any) {
       if (
         diffValue !== null &&
         typeof diffValue === "object" &&
-        "diffArray" in diffValue &&
-        diffValue.diffArray === true
+        diffValue instanceof Array
       ) {
-        onto[prop] = JSON.parse(diffValue.value);
+        onto[prop] = diffValue;
       } else if (diffValue !== null && typeof diffValue === "object") {
         onto[prop] = {};
         applyPartialDiff({}, diffValue, onto[prop]);
@@ -66,21 +64,21 @@ function generatePartialDiff(from: any, to: any) {
   const diff: any = {};
 
   for (const prop in to) {
-    if (to[prop] !== null && to[prop] instanceof Array) {
+    const toProp = to[prop];
+    const fromProp = prop in from ? from[prop] : undefined;
+
+    if (toProp !== null && toProp instanceof Array) {
       const fromArray = JSON.stringify(from[prop]);
       const toArray = JSON.stringify(to[prop]);
       if (toArray !== fromArray) {
-        diff[prop] = {
-          diffArray: true,
-          value: toArray,
-        };
+        diff[prop] = toProp;
       }
-    } else if (to[prop] !== null && typeof to[prop] === "object") {
-      const subDiff = generatePartialDiff(from[prop] ?? {}, to[prop]);
+    } else if (toProp !== null && typeof toProp === "object") {
+      const subDiff = generatePartialDiff(fromProp ?? {}, toProp);
       if (Object.keys(subDiff).length > 0) {
         diff[prop] = subDiff;
       }
-    } else if ((prop in from && from[prop] !== to[prop]) || !(prop in from)) {
+    } else if (fromProp === undefined || fromProp !== toProp) {
       diff[prop] = to[prop];
     }
   }

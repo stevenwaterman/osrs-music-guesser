@@ -27,9 +27,7 @@
     return () => clearTimeout(timeout);
   });
 
-  let largeAvatar: string | undefined = alive
-    ? state.data.me.avatar.name
-    : undefined;
+  let largeAvatar: string | null = alive ? state.data.me.avatar.name : null;
   function clickedAvatar(ev: CustomEvent<{ name: string }>) {
     largeAvatar = ev.detail.name;
   }
@@ -38,6 +36,8 @@
     state.send({ action: "nextRound" });
   }
 </script>
+
+<h1>Round {state.data.game.round}</h1>
 
 {#if render}
   <WikiDisplay {state} />
@@ -48,7 +48,7 @@
         {state}
         user={largeAvatar}
         on:animationDone={() => {
-          largeAvatar = undefined;
+          largeAvatar = null;
           showAll = true;
         }}
       />
@@ -71,3 +71,10 @@
     {/if}
   {/if}
 {/if}
+
+<style>
+  h1 {
+    grid-row: 1;
+    grid-column: 2;
+  }
+</style>

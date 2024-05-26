@@ -16,7 +16,7 @@
   $: suffix = me ? " (Me)" : "";
 
   let health = state.data.users[user].healthBefore;
-  $: dead = health !== undefined && health <= 0;
+  $: dead = health <= 0;
 
   let show = false;
   let showHealing = false;
@@ -90,7 +90,7 @@
       transition:scale
       on:outroend={() => dispatch("animationDone")}
     >
-      {#if health !== undefined && render}
+      {#if render}
         <Health {health} />
       {/if}
       <div class="imageWrapper">

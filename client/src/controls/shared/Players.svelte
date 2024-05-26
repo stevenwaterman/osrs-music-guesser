@@ -5,7 +5,7 @@
 
   export let me: string;
   export let owner: string;
-  export let players: Array<{ avatar: Avatar; health?: number }>;
+  export let players: Array<{ avatar: Avatar; health: number | null }>;
 
   const dispatch = createEventDispatcher();
 </script>
@@ -15,8 +15,8 @@
   <!-- svelte-ignore a11y-no-static-element-interactions -->
   <div
     class="avatarContainer"
-    title={player.health === undefined
-      ? undefined
+    title={player.health === null 
+      ? null
       : `${player.avatar.name}\nRank ${idx + 1}\nHealth ${player.health} / 99`}
     on:click={() => dispatch("clickAvatar", { name: player.avatar.name })}
   >

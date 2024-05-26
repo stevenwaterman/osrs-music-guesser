@@ -23,7 +23,7 @@
 
   let loaded = false;
 
-  let show: "splash" | "max" | "hit" | "heal" | "venom" | undefined = undefined;
+  let show: "splash" | "max" | "hit" | "heal" | "venom" | null = null;
   $: if (type === "hit" && damage.hit === 0) {
     show = "splash";
     sounds.splash();

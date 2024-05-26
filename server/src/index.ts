@@ -10,7 +10,7 @@ const privateGames: Record<string, StateInterface.StateStore> = {};
 function getPrivateGame(
   ws: WebSocket,
   searchParams: URLSearchParams
-): StateInterface.StateStore | undefined {
+): StateInterface.StateStore {
   const gameId = searchParams.get("game");
 
   if (!gameId) {

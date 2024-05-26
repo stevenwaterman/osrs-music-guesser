@@ -24,9 +24,9 @@ type Monster = { name: string; url: string; thumbnail: string; image: string };
 function deduplicateMonsters(monsters: Monster[]) {
   const mapping: Record<string, Monster> = {};
   for (const monster of monsters) {
-    const existingMonster = mapping[monster.name];
+    const existingMonster = mapping[monster.name] ?? null;
     if (
-      existingMonster === undefined ||
+      existingMonster === null ||
       existingMonster.thumbnail.length > monster.thumbnail.length
     ) {
       mapping[monster.name] = monster;

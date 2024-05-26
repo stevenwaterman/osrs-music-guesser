@@ -7,8 +7,8 @@
   export let serverTime: number;
   export let timerStarted: number;
   export let timerDuration: number;
-  export let showBelow: number | undefined = undefined;
-  export let soundBelow: number | undefined = undefined;
+  export let showBelow: number | null = null;
+  export let soundBelow: number | null = null;
   export let row: string = "2";
   export let column: string = "2";
   export let alignSelf: string = "flex-start";
@@ -21,8 +21,8 @@
   $: tween = tweened(duration);
   $: tween.set(0, { duration: duration * 1000 });
 
-  $: show = showBelow === undefined || $tween <= showBelow;
-  $: sound = soundBelow === undefined || $tween <= soundBelow;
+  $: show = showBelow === null || $tween <= showBelow;
+  $: sound = soundBelow === null || $tween <= soundBelow;
   $: if (sound) {
     sounds.clock.start();
   } else {
