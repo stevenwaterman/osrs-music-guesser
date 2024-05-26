@@ -38,7 +38,7 @@ function connectToPrivateGame(gameId: string): Transport {
 function connectToPublicGame(): Transport {
   const prod = document.location.host.includes("tunescape07");
   const transport = prod
-    ? new HeartbeatWebSocket(`wss://api.tunescape07.com/public}`)
+    ? new HeartbeatWebSocket(`wss://api.tunescape07.com/public`)
     : new HeartbeatWebSocket(`ws://localhost:4433/public`);
   return transport;
 }
