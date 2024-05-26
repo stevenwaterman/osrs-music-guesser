@@ -7,6 +7,13 @@ import {
 } from "tunescape07-shared";
 import { songs } from "tunescape07-data";
 import { HeartbeatWebSocket } from "./HeartbeatWebSocket";
+import type { Transport } from "tunescape07-shared/src/states";
+
+let transportSingleton: Transport | undefined = undefined;
+function closeOldTransport() {
+  transportSingleton?.close(1000);
+  transportSingleton = undefined;
+}
 
 function connectToPrivateGame(gameId: string): StateInterface.Transport {
   const prod = document.location.host.includes("tunescape07");
@@ -140,8 +147,13 @@ function connectToLocalServer(): StateInterface.Transport {
 
 function listenToTransport(transport: StateInterface.Transport) {
   const onCloseHandler = () => {
+    // Prevent multiple WS being open at once
+    closeOldTransport();
     internalStateStore.set(new InactiveState());
   };
+
+  closeOldTransport();
+  transportSingleton = transport;
 
   const onMessageHandler = (ev: StateInterface.TransportMessage) => {
     const data = ev.data.toString("utf8");
