@@ -2,32 +2,13 @@ import { writable, type Readable, type Writable } from "svelte/store";
 import {
   getDifficultyConfig,
   type DifficultyConfig,
-  type StateInterface,
+  StateInterface,
+  applyDiff,
 } from "tunescape07-shared";
 import { songs } from "tunescape07-data";
-import {
-  Lobby,
-  StateStore,
-  type Transport,
-  type TransportClose,
-  type TransportMessage,
-} from "tunescape07-shared/src/states";
 import { HeartbeatWebSocket } from "./HeartbeatWebSocket";
 
-type WsMessage =
-  | {
-      action: "error";
-      data: {
-        code: string;
-        message: string;
-      };
-    }
-  | {
-      action: "state";
-      data: StateInterface.ClientStateData<any>;
-    };
-
-function connectToPrivateGame(gameId: string): Transport {
+function connectToPrivateGame(gameId: string): StateInterface.Transport {
   const prod = document.location.host.includes("tunescape07");
   const transport = prod
     ? new HeartbeatWebSocket(`wss://api.tunescape07.com/join?game=${gameId}`)
@@ -35,7 +16,7 @@ function connectToPrivateGame(gameId: string): Transport {
   return transport;
 }
 
-function connectToPublicGame(): Transport {
+function connectToPublicGame(): StateInterface.Transport {
   const prod = document.location.host.includes("tunescape07");
   const transport = prod
     ? new HeartbeatWebSocket(`wss://api.tunescape07.com/public`)
@@ -43,14 +24,20 @@ function connectToPublicGame(): Transport {
   return transport;
 }
 
-function connectToLocalServer(): Transport {
-  let clientMessageListeners: Array<(ev: TransportMessage) => void> = [];
-  let serverMessageListeners: Array<(ev: TransportMessage) => void> = [];
+function connectToLocalServer(): StateInterface.Transport {
+  let clientMessageListeners: Array<
+    (ev: StateInterface.TransportMessage) => void
+  > = [];
+  let serverMessageListeners: Array<
+    (ev: StateInterface.TransportMessage) => void
+  > = [];
 
-  let clientCloseListeners: Array<(ev: TransportClose) => void> = [];
-  let serverCloseListeners: Array<(ev: TransportClose) => void> = [];
+  let clientCloseListeners: Array<(ev: StateInterface.TransportClose) => void> =
+    [];
+  let serverCloseListeners: Array<(ev: StateInterface.TransportClose) => void> =
+    [];
 
-  const clientSide: Transport = {
+  const clientSide: StateInterface.Transport = {
     send: (msg: string): void => {
       serverMessageListeners.forEach((listener) => listener({ data: msg }));
     },
@@ -60,7 +47,9 @@ function connectToLocalServer(): Transport {
     },
     addEventListener: (
       type: "message" | "close",
-      cb: ((ev: TransportMessage) => void) | ((ev: TransportClose) => void)
+      cb:
+        | ((ev: StateInterface.TransportMessage) => void)
+        | ((ev: StateInterface.TransportClose) => void)
     ): void => {
       if (type === "message") {
         clientMessageListeners.push(cb as any);
@@ -70,7 +59,9 @@ function connectToLocalServer(): Transport {
     },
     removeEventListener: (
       type: "message" | "close",
-      cb: ((ev: TransportMessage) => void) | ((ev: TransportClose) => void)
+      cb:
+        | ((ev: StateInterface.TransportMessage) => void)
+        | ((ev: StateInterface.TransportClose) => void)
     ): void => {
       if (type === "message") {
         clientMessageListeners = clientMessageListeners.filter(
@@ -84,7 +75,7 @@ function connectToLocalServer(): Transport {
     },
   };
 
-  const serverSide: Transport = {
+  const serverSide: StateInterface.Transport = {
     send: (msg: string): void => {
       clientMessageListeners.forEach((listener) => listener({ data: msg }));
     },
@@ -94,7 +85,9 @@ function connectToLocalServer(): Transport {
     },
     addEventListener: (
       type: "message" | "close",
-      cb: ((ev: TransportMessage) => void) | ((ev: TransportClose) => void)
+      cb:
+        | ((ev: StateInterface.TransportMessage) => void)
+        | ((ev: StateInterface.TransportClose) => void)
     ): void => {
       if (type === "message") {
         serverMessageListeners.push(cb as any);
@@ -104,7 +97,9 @@ function connectToLocalServer(): Transport {
     },
     removeEventListener: (
       type: "message" | "close",
-      cb: ((ev: TransportMessage) => void) | ((ev: TransportClose) => void)
+      cb:
+        | ((ev: StateInterface.TransportMessage) => void)
+        | ((ev: StateInterface.TransportClose) => void)
     ): void => {
       if (type === "message") {
         serverMessageListeners = serverMessageListeners.filter(
@@ -119,19 +114,19 @@ function connectToLocalServer(): Transport {
   };
 
   const gameId = "Single Player";
-  const store = new StateStore(gameId, Object.values(songs));
+  const store = new StateInterface.StateStore(gameId, Object.values(songs));
   const avatar = store.avatarLibrary.take()!;
-  store.state = new Lobby(
+  store.state = new StateInterface.Lobby(
     store,
     {
       id: gameId,
       owner: avatar.name,
       type: "singleplayer",
       difficulty: "normal",
-      firstUserJoined: undefined,
-      timerStarted: undefined,
-      timerDuration: undefined,
-      timerId: undefined
+      firstUserJoined: null,
+      timerStarted: null,
+      timerDuration: null,
+      timerId: null,
     },
     {},
     { [avatar.name]: { avatar, transport: serverSide } }
@@ -140,20 +135,37 @@ function connectToLocalServer(): Transport {
   return clientSide;
 }
 
-function listenToTransport(transport: Transport) {
+function listenToTransport(transport: StateInterface.Transport) {
   const onCloseHandler = () => {
     internalStateStore.set(new InactiveState());
   };
 
-  const onMessageHandler = (ev: TransportMessage) => {
+  const onMessageHandler = (ev: StateInterface.TransportMessage) => {
     const data = ev.data.toString("utf8");
     if (data.startsWith("{")) {
-      const message: WsMessage = JSON.parse(data);
+      const message: StateInterface.ServerActions = JSON.parse(data);
       if (message.action === "error") {
         cleanup();
         transport.close(1011);
+      } else if (message.action === "stateDiff") {
+        internalStateStore.update((oldState) => {
+          if (oldState.isActive) {
+            const oldIdx = oldState.data.stateIndex;
+            const newIdx = message.data.stateIndex;
+            if (newIdx === oldIdx + 1) {
+              const data = applyDiff(oldState.data, message.data);
+              return new ActiveState(data, transport);
+            }
+          }
+
+          const msg: StateInterface.ClientActions = {
+            action: "getState",
+          };
+          transport.send(JSON.stringify(msg));
+          return oldState;
+        });
       } else if (message.action === "state") {
-        internalStateStore.set(new ActiveState(message.data as any, transport));
+        internalStateStore.set(new ActiveState(message.data, transport));
       }
     }
   };
@@ -193,7 +205,7 @@ export class ActiveState<Name extends keyof StateInterface.ServerStates> {
 
   constructor(
     public readonly data: StateInterface.ClientStateData<Name>,
-    private readonly transport: Transport
+    private readonly transport: StateInterface.Transport
   ) {}
 
   public get difficultyConfig(): DifficultyConfig {

@@ -9,6 +9,7 @@ import {
   DifficultyConfig,
   getDifficultyConfig,
 } from "./difficulty.js";
+import { ClientStateDiff, getBasicDiff, getMeDiff } from "./diff.js";
 
 export interface Transport {
   send(msg: string): void;
@@ -33,6 +34,10 @@ export type TransportMessage = { data: WebSocket.Data };
 export type TransportClose = { code: number };
 
 export class StateStore {
+  private stateIndex = 0;
+  private lastBasicStateData: BasicStateData | null = null;
+  private lastMeStateData: Record<string, ClientStateData["me"]> = {};
+
   private _state: AnyServerState | null = null;
   public readonly avatarLibrary = new AvatarLibrary();
 
@@ -42,6 +47,35 @@ export class StateStore {
   public set state(state: AnyServerState | null) {
     this._state = state;
     this.onTransition(state);
+
+    this.stateIndex++;
+    const basicStateData = this.getBasicStateData();
+    const basicDiff = getBasicDiff(this.lastBasicStateData, basicStateData);
+
+    const meStateData =
+      basicStateData === null || state === null
+        ? {}
+        : this.getMeStateData(state, basicStateData);
+    const meStateDiffs = mapValues(meStateData, (data) => {
+      const oldData = this.lastMeStateData[data.avatar.name];
+      return getMeDiff(oldData, data);
+    });
+
+    this.lastBasicStateData = basicStateData;
+    this.lastMeStateData = meStateData;
+
+    for (const name in meStateData) {
+      const spectator = meStateData[name].type === "spectator";
+      const user = spectator ? state!.spectators[name] : state!.users[name];
+      const msg: ServerActions = {
+        action: "stateDiff",
+        data: {
+          ...basicDiff,
+          ...meStateDiffs[name],
+        },
+      };
+      user.transport.send(JSON.stringify(msg));
+    }
   }
   constructor(
     public readonly gameId: string,
@@ -50,6 +84,61 @@ export class StateStore {
       state: AnyServerState | null
     ) => void = () => {}
   ) {}
+
+  private getBasicStateData(): BasicStateData | null {
+    if (this.state === null) {
+      return null;
+    }
+
+    const game = this.state.getPublicGameState();
+    const users = this.state.getPublicUserState();
+    const spectators = this.state.getSpectatorState();
+
+    return {
+      stateName: this.state.stateName,
+      stateIndex: this.stateIndex,
+      serverTime: new Date().getTime(),
+      game,
+      users,
+      spectators,
+    };
+  }
+
+  private getMeStateData(
+    state: AnyServerState,
+    basicStateData: BasicStateData
+  ): Record<string, ClientStateData["me"]> {
+    if (basicStateData === null || this.state === null) {
+      return {};
+    }
+
+    const meStateData: Record<string, ClientStateData["me"]> = {};
+    Object.values(basicStateData.users).forEach((user) => {
+      meStateData[user.avatar.name] = {
+        ...state.getPrivateUserState(user.avatar.name),
+        type: "user",
+      };
+    });
+    Object.values(basicStateData.spectators).forEach((spectator) => {
+      meStateData[spectator.avatar.name] = {
+        ...basicStateData.spectators[spectator.avatar.name],
+        type: "spectator",
+      };
+    });
+
+    return meStateData;
+  }
+
+  public sendFullState(name: string) {
+    const basic = this.lastBasicStateData!;
+    const me = this.lastMeStateData[name];
+    const spectator = me.type === "spectator";
+    const transport = spectator
+      ? this.state!.spectators[name].transport
+      : this.state!.users[name].transport;
+    const msg: ServerActions = { action: "state", data: { ...basic, me } };
+    transport.send(JSON.stringify(msg));
+  }
 }
 
 type BaseGameState = {
@@ -107,8 +196,12 @@ abstract class State<
       const messageHandler = (ev: TransportMessage) => {
         const message = ev.data.toString("utf8");
         if (message.startsWith("{")) {
-          const parsedMessage = JSON.parse(message);
+          const parsedMessage: ClientActions = JSON.parse(message);
           if ("action" in parsedMessage) {
+            if (parsedMessage.action === "getState") {
+              this.store.sendFullState(user.avatar.name);
+            }
+
             // TODO error handling
             this.onMessage(user.avatar.name, parsedMessage);
           }
@@ -126,12 +219,6 @@ abstract class State<
       };
       user.transport.addEventListener("close", closeHandler);
       return () => user.transport.removeEventListener("close", closeHandler);
-    });
-
-    // Notify clients about new state
-    // Done in setTimeout so that the abstract properties can all be set
-    setTimeout(() => {
-      this.broadcastState();
     });
   }
 
@@ -174,52 +261,6 @@ abstract class State<
 
   public getSpectatorState(): Record<string, Pick<SpectatorState, "avatar">> {
     return mapValues(this.spectators, (spectator) => pick(spectator, "avatar"));
-  }
-
-  private broadcastState() {
-    const game = this.getPublicGameState();
-    const users = this.getPublicUserState();
-    const spectators = this.getSpectatorState();
-
-    const basicData: Omit<ClientStateData<any>, "me"> = {
-      stateName: this.stateName,
-      game,
-      users,
-      spectators,
-      serverTime: new Date().getTime(),
-    };
-
-    Object.values(this.spectators).forEach((spectator) => {
-      const data: ClientStateData<any> = {
-        ...basicData,
-        me: {
-          type: "spectator",
-          ...spectators[spectator.avatar.name],
-        },
-      };
-      spectator.transport.send(
-        JSON.stringify({
-          action: "state",
-          data,
-        })
-      );
-    });
-
-    Object.values(this.users).forEach((user) => {
-      const data: ClientStateData<any> = {
-        ...basicData,
-        me: {
-          type: "user",
-          ...this.getPrivateUserState(user.avatar.name),
-        },
-      };
-      user.transport.send(
-        JSON.stringify({
-          action: "state",
-          data,
-        })
-      );
-    });
   }
 
   protected transition<T extends AnyServerState | null>(to: T): T {
@@ -281,10 +322,10 @@ abstract class State<
           {
             ...pick(this.game, "id", "type", "difficulty"),
             owner: newOwner,
-            firstUserJoined: undefined,
-            timerStarted: undefined,
-            timerDuration: undefined,
-            timerId: undefined,
+            firstUserJoined: null,
+            timerStarted: null,
+            timerDuration: null,
+            timerId: null,
           },
           {},
           allSpectators
@@ -335,16 +376,16 @@ abstract class State<
 export class Lobby extends State<
   "Lobby",
   | {
-      firstUserJoined: Date | undefined;
+      firstUserJoined: Date | null;
       timerStarted: number;
       timerDuration: number;
       timerId: NodeJS.Timeout;
     }
   | {
-      firstUserJoined: Date | undefined;
-      timerStarted: undefined;
-      timerDuration: undefined;
-      timerId: undefined;
+      firstUserJoined: Date | null;
+      timerStarted: null;
+      timerDuration: null;
+      timerId: null;
     },
   ["timerStarted", "timerDuration"],
   {},
@@ -364,34 +405,34 @@ export class Lobby extends State<
   ) {
     const playerCount = Object.keys(spectators).length;
 
-    if (playerCount > 0 && game.firstUserJoined === undefined) {
+    if (playerCount > 0 && game.firstUserJoined === null) {
       game = { ...game, firstUserJoined: new Date() };
     }
 
-    if (playerCount === 0 && game.firstUserJoined !== undefined) {
+    if (playerCount === 0 && game.firstUserJoined !== null) {
       game = {
         ...game,
-        firstUserJoined: undefined,
+        firstUserJoined: null,
       };
     }
 
     if (
       game.type === "public" &&
-      game.timerStarted !== undefined &&
+      game.timerStarted !== null &&
       playerCount <= 1
     ) {
       clearTimeout(game.timerId);
       game = {
         ...game,
-        timerStarted: undefined,
-        timerDuration: undefined,
-        timerId: undefined,
+        timerStarted: null,
+        timerDuration: null,
+        timerId: null,
       };
     }
 
     if (
       game.type === "public" &&
-      game.timerStarted === undefined &&
+      game.timerStarted === null &&
       playerCount > 1
     ) {
       const now = new Date();
@@ -420,7 +461,7 @@ export class Lobby extends State<
   }
 
   public start() {
-    if (this.game.timerId !== undefined) {
+    if (this.game.timerId !== null) {
       clearTimeout(this.game.timerId);
     }
 
@@ -445,9 +486,9 @@ export class Lobby extends State<
           song,
           songUrl: song.audioUrl,
           songStartFraction: maxSongStartFraction * Math.random(),
-          timerStarted: undefined,
-          timerDuration: undefined,
-          timerId: undefined,
+          timerStarted: null,
+          timerDuration: null,
+          timerId: null,
         },
         mapValues(this.spectators, (spectator) => {
           return {
@@ -455,6 +496,8 @@ export class Lobby extends State<
             transport: spectator.transport,
             health: 99,
             spectator: false,
+            guess: null,
+            guessTime: null,
           };
         }),
         {}
@@ -503,9 +546,9 @@ export class RoundActive extends State<
       songUrl: string;
       songStartFraction: number;
       round: number;
-      timerStarted: undefined;
-      timerDuration: undefined;
-      timerId: undefined;
+      timerStarted: null;
+      timerDuration: null;
+      timerId: null;
     }
   | {
       songs: Song[];
@@ -520,8 +563,8 @@ export class RoundActive extends State<
   ["songUrl", "songStartFraction", "round", "timerStarted", "timerDuration"],
   | {
       health: number;
-      guess?: undefined;
-      guessTime?: undefined;
+      guess: null;
+      guessTime: null;
     }
   | {
       health: number;
@@ -554,7 +597,7 @@ export class RoundActive extends State<
     );
     if (
       difficultyConfig.timeLimit.type === "immediately" &&
-      game.timerStarted === undefined
+      game.timerStarted === null
     ) {
       game = {
         ...game,
@@ -572,7 +615,7 @@ export class RoundActive extends State<
 
     setTimeout(() => {
       const allGuessed = Object.values(this.users).every(
-        (u) => u.guess !== undefined
+        (u) => u.guess !== null
       );
       if (allGuessed) {
         this.roundOver();
@@ -587,7 +630,7 @@ export class RoundActive extends State<
     let newGameState = { ...this.game };
     if (
       this.difficultyConfig.timeLimit.type === "afterFirstGuess" &&
-      newGameState.timerStarted === undefined
+      newGameState.timerStarted === null
     ) {
       // If first guess, set timer
       newGameState = {
@@ -621,7 +664,9 @@ export class RoundActive extends State<
   }
 
   private roundOver() {
-    clearTimeout(this.game.timerId);
+    if (this.game.timerId !== null) {
+      clearTimeout(this.game.timerId);
+    }
 
     const roundResult = calculateRoundResult(this);
     const newUserState: RoundOver["users"] = mapValues(this.users, (user) => {
@@ -671,7 +716,7 @@ export class RoundActive extends State<
   protected onMessage(userName: string, message: ClientActions): void {
     if (
       message.action === "guess" &&
-      this.users[userName].guess === undefined &&
+      this.users[userName].guess === null &&
       this.users[userName].health >= 0
     ) {
       this.guess(userName, message.data);
@@ -687,30 +732,26 @@ export class RoundOver extends State<
     songUrl: string;
     songStartFraction: number;
     round: number;
-    bestGuess:
-      | {
-          userName: string;
-          coordinate: Coordinate;
-          time: number;
-          closest: Coordinate;
-          distance: number;
-          perfect: boolean;
-        }
-      | undefined;
+    bestGuess: {
+      userName: string;
+      coordinate: Coordinate;
+      time: number;
+      closest: Coordinate;
+      distance: number;
+      perfect: boolean;
+    } | null;
   },
   ["song", "songUrl", "songStartFraction", "round", "bestGuess"],
   {
     health: number;
     healthBefore: number;
-    guessResult:
-      | {
-          coordinate: Coordinate;
-          time: number;
-          closest: Coordinate;
-          distance: number;
-          perfect: boolean;
-        }
-      | undefined;
+    guessResult: {
+      coordinate: Coordinate;
+      time: number;
+      closest: Coordinate;
+      distance: number;
+      perfect: boolean;
+    } | null;
     damage: {
       hit: number;
       healing: number;
@@ -766,7 +807,11 @@ export class RoundOver extends State<
           transport: user.transport,
         };
       } else {
-        newUsers[userName] = pick(user, "avatar", "transport", "health");
+        newUsers[userName] = {
+          ...pick(user, "avatar", "transport", "health"),
+          guess: null,
+          guessTime: null,
+        };
       }
     }
 
@@ -816,9 +861,9 @@ export class RoundOver extends State<
             song,
             songUrl: song.audioUrl,
             songStartFraction: maxSongStartFraction * Math.random(),
-            timerStarted: undefined,
-            timerDuration: undefined,
-            timerId: undefined,
+            timerStarted: null,
+            timerDuration: null,
+            timerId: null,
           },
           newUsers,
           newSpectators
@@ -880,10 +925,10 @@ export class GameOver extends State<
         this.store,
         {
           ...pick(this.game, "id", "owner", "type", "difficulty"),
-          firstUserJoined: undefined,
-          timerStarted: undefined,
-          timerDuration: undefined,
-          timerId: undefined,
+          firstUserJoined: null,
+          timerStarted: null,
+          timerDuration: null,
+          timerId: null,
         },
         {},
         {
@@ -920,9 +965,12 @@ export type ServerStates = {
   GameOver: GameOver;
 };
 export type AnyServerState = ServerStates[keyof ServerStates];
-export type ClientStateData<StateName extends AnyServerState["stateName"]> = {
+export type ClientStateData<
+  StateName extends AnyServerState["stateName"] = AnyServerState["stateName"],
+> = {
   stateName: StateName;
   serverTime: number;
+  stateIndex: number;
   game: ReturnType<ServerStates[StateName]["getPublicGameState"]>;
   users: ReturnType<ServerStates[StateName]["getPublicUserState"]>;
   spectators: ReturnType<ServerStates[StateName]["getSpectatorState"]>;
@@ -934,10 +982,31 @@ export type ClientStateData<StateName extends AnyServerState["stateName"]> = {
         ServerStates[StateName]["getSpectatorState"]
       >[string]);
 };
+export type BasicStateData<
+  StateName extends AnyServerState["stateName"] = AnyServerState["stateName"],
+> = Omit<ClientStateData<StateName>, "me">;
 
 export type ClientActions =
+  | { action: "getState" }
   | { action: "settings"; data: { difficulty?: Difficulty } }
   | { action: "start" }
   | { action: "guess"; data: Coordinate }
   | { action: "nextRound" }
   | { action: "playAgain" };
+
+export type ServerActions =
+  | {
+      action: "error";
+      data: {
+        code: string;
+        message: string;
+      };
+    }
+  | {
+      action: "state";
+      data: ClientStateData;
+    }
+  | {
+      action: "stateDiff";
+      data: ClientStateDiff;
+    };

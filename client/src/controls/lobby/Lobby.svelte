@@ -16,8 +16,12 @@
   $: inviteUrl = `?join=${encodeURIComponent(state.data.game.id)}`;
 
   let difficulty: Difficulty = state.data.game.difficulty;
-  $: if (difficulty !== difficultyConfig.name) {
-    state.send({ action: "settings", data: { difficulty } });
+  $: if (difficulty !== state.data.game.difficulty) {
+    if (myLobby) {
+      state.send({ action: "settings", data: { difficulty } });
+    } else {
+      difficulty = state.data.game.difficulty;
+    }
   }
 </script>
 

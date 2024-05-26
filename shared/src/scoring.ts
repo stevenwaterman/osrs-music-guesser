@@ -34,11 +34,11 @@ type GuessResult = {
   perfect: boolean;
 };
 type RoundResult = {
-  bestGuess: (GuessResult & { userName: string }) | undefined;
+  bestGuess: (GuessResult & { userName: string }) | null;
   users: Record<
     string,
     {
-      guessResult: GuessResult | undefined;
+      guessResult: GuessResult | null;
       damage: {
         hit: number;
         healing: number;
@@ -55,12 +55,12 @@ export function calculateRoundResult(state: RoundActive): RoundResult {
   const song = state.game.song;
   const location = song.location;
 
-  const guessResults: Record<string, GuessResult | undefined> = mapValues(
+  const guessResults: Record<string, GuessResult | null> = mapValues(
     state.users,
     (user) => {
       const guess = user.guess;
-      if (guess === undefined) {
-        return undefined;
+      if (guess === null) {
+        return null;
       }
 
       const { distance, closest } = closestPoint(guess, location);
@@ -74,14 +74,14 @@ export function calculateRoundResult(state: RoundActive): RoundResult {
     }
   );
 
-  const bestGuessTuple: [string, GuessResult | undefined] = Object.entries(
+  const bestGuessTuple: [string, GuessResult | null] = Object.entries(
     guessResults
   ).reduce((acc, elem) => {
-    if (acc[1] === undefined) {
+    if (acc[1] === null) {
       return elem;
     }
 
-    if (elem[1] === undefined) {
+    if (elem[1] === null) {
       return acc;
     }
 
@@ -96,8 +96,8 @@ export function calculateRoundResult(state: RoundActive): RoundResult {
     return acc;
   });
 
-  let bestGuess: (GuessResult & { userName: string }) | undefined = undefined;
-  if (bestGuessTuple[1] !== undefined) {
+  let bestGuess: (GuessResult & { userName: string }) | null = null;
+  if (bestGuessTuple[1] !== null) {
     bestGuess = { ...bestGuessTuple[1], userName: bestGuessTuple[0] };
   }
 
@@ -167,7 +167,7 @@ export function calculateRoundResult(state: RoundActive): RoundResult {
       // Dead users can't take damage
       if (user.health <= 0) {
         return {
-          guessResult: undefined,
+          guessResult: null,
           damage: {
             hit: 0,
             healing: 0,

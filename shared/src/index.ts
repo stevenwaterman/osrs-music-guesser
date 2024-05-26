@@ -16,3 +16,4 @@ export {
   type Difficulty,
   type DifficultyConfig,
 } from "./difficulty.js";
+export { applyDiff, type ClientStateDiff } from "./diff.js";

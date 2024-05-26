@@ -26,7 +26,7 @@
     const lines: L.Polyline[] = [];
 
     for (const user of Object.values(state.data.users)) {
-      if (user.guessResult === undefined) {
+      if (user.guessResult === null) {
         continue;
       }
 

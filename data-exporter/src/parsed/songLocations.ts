@@ -1,11 +1,6 @@
 import { Face } from "tunescape07-shared/src/coordinates.js";
 import { songPolygons } from "../raw/songPolygons.js";
-import {
-  Polygon,
-  SongName,
-  convertFlatten,
-  mapValues,
-} from "tunescape07-shared";
+import { Polygon, SongName, mapValues } from "tunescape07-shared";
 
 function removeDuplicateStartEnd(face: Face): Face {
   const [x1, y1] = face[0];
