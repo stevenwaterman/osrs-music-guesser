@@ -1,9 +1,7 @@
-import { Face } from "@flatten-js/core";
 import { convertFlatten } from "./coordinates.js";
 import type { Coordinate, Polygon } from "./coordinates.js";
 import { RoundActive } from "./states.js";
 import { mapValues } from "./util.js";
-import { getDifficultyConfig } from "./difficulty.js";
 
 function closestPoint(
   coord: Coordinate,
@@ -34,11 +32,11 @@ type GuessResult = {
   perfect: boolean;
 };
 type RoundResult = {
-  bestGuess: (GuessResult & { userName: string }) | null;
+  bestGuess: (GuessResult & { userName: string }) | undefined;
   users: Record<
     string,
     {
-      guessResult: GuessResult | null;
+      guessResult: GuessResult | undefined;
       damage: {
         hit: number;
         healing: number;
@@ -55,12 +53,12 @@ export function calculateRoundResult(state: RoundActive): RoundResult {
   const song = state.game.song;
   const location = song.location;
 
-  const guessResults: Record<string, GuessResult | null> = mapValues(
+  const guessResults: Record<string, GuessResult | undefined> = mapValues(
     state.users,
     (user) => {
       const guess = user.guess;
-      if (guess === null) {
-        return null;
+      if (guess === undefined) {
+        return undefined;
       }
 
       const { distance, closest } = closestPoint(guess, location);
@@ -74,14 +72,14 @@ export function calculateRoundResult(state: RoundActive): RoundResult {
     }
   );
 
-  const bestGuessTuple: [string, GuessResult | null] = Object.entries(
+  const bestGuessTuple: [string, GuessResult | undefined] = Object.entries(
     guessResults
   ).reduce((acc, elem) => {
-    if (acc[1] === null) {
+    if (acc[1] === undefined) {
       return elem;
     }
 
-    if (elem[1] === null) {
+    if (elem[1] === undefined) {
       return acc;
     }
 
@@ -96,8 +94,8 @@ export function calculateRoundResult(state: RoundActive): RoundResult {
     return acc;
   });
 
-  let bestGuess: (GuessResult & { userName: string }) | null = null;
-  if (bestGuessTuple[1] !== null) {
+  let bestGuess: (GuessResult & { userName: string }) | undefined = undefined;
+  if (bestGuessTuple[1] !== undefined) {
     bestGuess = { ...bestGuessTuple[1], userName: bestGuessTuple[0] };
   }
 
@@ -167,7 +165,7 @@ export function calculateRoundResult(state: RoundActive): RoundResult {
       // Dead users can't take damage
       if (user.health <= 0) {
         return {
-          guessResult: null,
+          guessResult: undefined,
           damage: {
             hit: 0,
             healing: 0,

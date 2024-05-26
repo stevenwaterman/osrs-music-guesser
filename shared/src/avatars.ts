@@ -24,9 +24,9 @@ type Monster = { name: string; url: string; thumbnail: string; image: string };
 function deduplicateMonsters(monsters: Monster[]) {
   const mapping: Record<string, Monster> = {};
   for (const monster of monsters) {
-    const existingMonster = mapping[monster.name] ?? null;
+    const existingMonster = mapping[monster.name] ?? undefined;
     if (
-      existingMonster === null ||
+      existingMonster === undefined ||
       existingMonster.thumbnail.length > monster.thumbnail.length
     ) {
       mapping[monster.name] = monster;
@@ -58,9 +58,9 @@ export function avatarThumbnailSrc(avatar: Avatar): string {
 export class AvatarLibrary {
   private availableAvatars: string[] = shuffle(Object.keys(avatars));
 
-  public take(): Avatar | null {
+  public take(): Avatar | undefined {
     if (this.availableAvatars.length === 0) {
-      return null;      
+      return undefined;      
     }
 
     const [avatarName] = this.availableAvatars.splice(0, 1);

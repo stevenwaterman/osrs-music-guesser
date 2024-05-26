@@ -3,16 +3,16 @@
   import Health from "./Health.svelte";
 
   export let avatar: Avatar;
-  export let health: number | null = null;
+  export let health: number | undefined = undefined;
   export let me: boolean = false;
   export let owner: boolean = false;
 
   $: suffix = me ? " (Me)" : "";
-  $: dead = health !== null && health <= 0;
+  $: dead = health !== undefined && health <= 0;
 </script>
 
 <div class="container" class:dead>
-  {#if health !== null}
+  {#if health !== undefined}
     <Health {health} />
   {/if}
   <!-- svelte-ignore a11y-missing-attribute -->

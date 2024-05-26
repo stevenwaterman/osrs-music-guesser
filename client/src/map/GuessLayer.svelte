@@ -10,7 +10,7 @@
   export let map: L.Map;
 
   $: confirmedGuess =
-    state.data.me.type === "spectator" ? null : state.data.me.guess;
+    state.data.me.type === "spectator" ? undefined : state.data.me.guess;
 
   let marker: L.Marker = new L.Marker(new L.LatLng(0, 0));
 
@@ -29,7 +29,7 @@
     (marker as any)._icon.style.filter = "hue-rotate(80deg)";
 
     const onClick = (click: LeafletMouseEvent) => {
-      if (confirmedGuess === null && state.data.me.type === "user") {
+      if (confirmedGuess === undefined && state.data.me.type === "user") {
         const coord = convertLeaflet.coordinate.from(click.latlng);
         unconfirmedGuessStore.set(coord);
       }

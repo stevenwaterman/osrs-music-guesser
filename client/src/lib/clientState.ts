@@ -13,6 +13,7 @@ function connectToPrivateGame(gameId: string): StateInterface.Transport {
   const transport = prod
     ? new HeartbeatWebSocket(`wss://api.tunescape07.com/join?game=${gameId}`)
     : new HeartbeatWebSocket(`ws://localhost:4433/join?game=${gameId}`);
+  listenToTransport(transport);
   return transport;
 }
 
@@ -21,6 +22,7 @@ function connectToPublicGame(): StateInterface.Transport {
   const transport = prod
     ? new HeartbeatWebSocket(`wss://api.tunescape07.com/public`)
     : new HeartbeatWebSocket(`ws://localhost:4433/public`);
+  listenToTransport(transport);
   return transport;
 }
 
@@ -74,6 +76,7 @@ function connectToLocalServer(): StateInterface.Transport {
       }
     },
   };
+  listenToTransport(clientSide);
 
   const serverSide: StateInterface.Transport = {
     send: (msg: string): void => {
@@ -123,10 +126,10 @@ function connectToLocalServer(): StateInterface.Transport {
       owner: avatar.name,
       type: "singleplayer",
       difficulty: "normal",
-      firstUserJoined: null,
-      timerStarted: null,
-      timerDuration: null,
-      timerId: null,
+      firstUserJoined: new Date(),
+      timerStarted: undefined,
+      timerDuration: undefined,
+      timerId: undefined,
     },
     {},
     { [avatar.name]: { avatar, transport: serverSide } }
@@ -147,6 +150,9 @@ function listenToTransport(transport: StateInterface.Transport) {
       if (message.action === "error") {
         cleanup();
         transport.close(1011);
+      }
+      if (message.action === "state") {
+        internalStateStore.set(new ActiveState(message.data, transport));
       } else if (message.action === "stateDiff") {
         internalStateStore.update((oldState) => {
           if (oldState.isActive) {
@@ -164,8 +170,6 @@ function listenToTransport(transport: StateInterface.Transport) {
           transport.send(JSON.stringify(msg));
           return oldState;
         });
-      } else if (message.action === "state") {
-        internalStateStore.set(new ActiveState(message.data, transport));
       }
     }
   };
@@ -181,18 +185,15 @@ export class InactiveState {
   public readonly isActive = false;
 
   singlePlayer() {
-    const transport = connectToLocalServer();
-    listenToTransport(transport);
+    connectToLocalServer();
   }
 
   publicMultiplayer() {
-    const transport = connectToPublicGame();
-    listenToTransport(transport);
+    connectToPublicGame();
   }
 
   privateMultiplayer(gameId: string) {
-    const transport = connectToPrivateGame(gameId);
-    listenToTransport(transport);
+    connectToPrivateGame(gameId);
   }
 
   public isAny(..._: string[]): false {

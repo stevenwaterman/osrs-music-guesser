@@ -64,7 +64,7 @@
   {/if}
 
   {#if state.data.game.type === "public"}
-    {#if state.data.game.timerStarted === null}
+    {#if state.data.game.timerStarted === undefined}
       <h2>Waiting for more players</h2>
     {/if}
   {/if}

@@ -27,7 +27,7 @@
     return () => clearTimeout(timeout);
   });
 
-  let largeAvatar: string | null = alive ? state.data.me.avatar.name : null;
+  let largeAvatar: string | undefined = alive ? state.data.me.avatar.name : undefined;
   function clickedAvatar(ev: CustomEvent<{ name: string }>) {
     largeAvatar = ev.detail.name;
   }
@@ -48,7 +48,7 @@
         {state}
         user={largeAvatar}
         on:animationDone={() => {
-          largeAvatar = null;
+          largeAvatar = undefined;
           showAll = true;
         }}
       />

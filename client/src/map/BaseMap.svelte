@@ -2,7 +2,7 @@
   import L from "leaflet";
   import { mapBounds, resetView } from "./map";
 
-  let mapDiv: HTMLDivElement | null;
+  let mapDiv: HTMLDivElement | undefined;
   export let map: L.Map;
   $: if (mapDiv) {
     map = L.map(mapDiv, {

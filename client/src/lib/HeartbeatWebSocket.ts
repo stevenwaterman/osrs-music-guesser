@@ -1,5 +1,5 @@
 class ReschedulableTimeout {
-  private timeout: NodeJS.Timeout | null = null;
+  private timeout: NodeJS.Timeout | undefined = undefined;
 
   constructor(public readonly intervalMs: number) {}
 
@@ -14,7 +14,7 @@ class ReschedulableTimeout {
   public stop() {
     if (this.timeout) {
       clearInterval(this.timeout);
-      this.timeout = null;
+      this.timeout = undefined;
     }
   }
 }

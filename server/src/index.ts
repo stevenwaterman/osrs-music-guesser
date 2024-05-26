@@ -29,7 +29,7 @@ function getPrivateGame(
 
   if (!(gameId in privateGames)) {
     const onTransition = (state: StateInterface.AnyServerState | null) => {
-      if (state === null) {
+      if (state === undefined) {
         delete privateGames[gameId];
       }
 
@@ -88,10 +88,10 @@ function onJoin(ws: WebSocket, searchParams: URLSearchParams) {
       owner: avatar.name,
       difficulty: "normal",
       type: "private",
-      timerStarted: null,
-      timerDuration: null,
-      timerId: null,
-      firstUserJoined: null,
+      timerStarted: undefined,
+      timerDuration: undefined,
+      timerId: undefined,
+      firstUserJoined: undefined,
     },
     {},
     { [avatar.name]: { avatar, transport: ws } }
@@ -140,10 +140,10 @@ function createPublicLobby() {
       owner: "TuneScape",
       type: "public",
       difficulty: "hard",
-      timerStarted: null,
-      timerDuration: null,
-      timerId: null,
-      firstUserJoined: null,
+      timerStarted: undefined,
+      timerDuration: undefined,
+      timerId: undefined,
+      firstUserJoined: undefined,
     },
     {},
     {}

@@ -53,11 +53,11 @@ function applyPartialDiff(base: any, diff: any, onto: any) {
 }
 
 function generatePartialDiff(from: any, to: any) {
-  if (from === null) {
+  if (from === undefined) {
     return to;
   }
 
-  if (to === null) {
+  if (to === undefined) {
     return null;
   }
 
@@ -93,17 +93,17 @@ function generatePartialDiff(from: any, to: any) {
 }
 
 export function getBasicDiff(
-  from: StateInterface.BasicStateData | null,
-  to: StateInterface.BasicStateData | null
+  from: StateInterface.BasicStateData | undefined,
+  to: StateInterface.BasicStateData | undefined
 ): Diff<StateInterface.BasicStateData> {
   return generatePartialDiff(from, to);
 }
 
 export function getMeDiff(
-  from: StateInterface.ClientStateData["me"] | undefined | null,
-  to: StateInterface.ClientStateData["me"] | undefined | null
+  from: StateInterface.ClientStateData["me"] | undefined,
+  to: StateInterface.ClientStateData["me"] | undefined
 ): { me?: Diff<StateInterface.ClientStateData["me"]> } {
-  const diff = generatePartialDiff(from ?? null, to ?? null);
+  const diff = generatePartialDiff(from ?? undefined, to ?? undefined);
   if (Object.keys(diff).length > 0) {
     return { me: diff };
   } else {
@@ -112,7 +112,7 @@ export function getMeDiff(
 }
 
 export function applyDiff(
-  base: StateInterface.ClientStateData | null,
+  base: StateInterface.ClientStateData | undefined,
   diff: Diff<StateInterface.ClientStateData>
 ): StateInterface.ClientStateData {
   const output = {} as StateInterface.ClientStateData;

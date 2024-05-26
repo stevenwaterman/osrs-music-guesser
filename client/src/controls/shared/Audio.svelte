@@ -7,7 +7,7 @@
   export let loop: boolean = false;
   export let autoplay: boolean = true;
 
-  export let audio: HTMLAudioElement | null = null;
+  export let audio: HTMLAudioElement | undefined = undefined;
 
   function seek(fraction: number) {
     if (audio) {

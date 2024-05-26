@@ -7,7 +7,7 @@
 
   export let state: ActiveState<"RoundActive">;
 
-  $: canGuess = state.data.me.type === "user" && state.data.me.guess === null;
+  $: canGuess = state.data.me.type === "user" && state.data.me.guess === undefined;
 
   function confirm() {
     const unconfirmedGuess = $unconfirmedGuessStore;
@@ -17,7 +17,7 @@
   }
 
   onDestroy(() => {
-    unconfirmedGuessStore.set(null);
+    unconfirmedGuessStore.set(undefined);
   });
 </script>
 

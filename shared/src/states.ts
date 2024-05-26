@@ -35,7 +35,7 @@ export type TransportClose = { code: number };
 
 export class StateStore {
   private stateIndex = 0;
-  private lastBasicStateData: BasicStateData | null = null;
+  private lastBasicStateData: BasicStateData | undefined = undefined;
   private lastMeStateData: Record<string, ClientStateData["me"]> = {};
 
   private _state: AnyServerState | null = null;
@@ -53,7 +53,7 @@ export class StateStore {
     const basicDiff = getBasicDiff(this.lastBasicStateData, basicStateData);
 
     const meStateData =
-      basicStateData === null || state === null
+      basicStateData === undefined || state === null
         ? {}
         : this.getMeStateData(state, basicStateData);
     const meStateDiffs = mapValues(meStateData, (data) => {
@@ -61,21 +61,35 @@ export class StateStore {
       return getMeDiff(oldData, data);
     });
 
+    for (const name in meStateData) {
+      // User just joined, send them the full state
+      if (name in this.lastMeStateData) {
+        const spectator = meStateData[name].type === "spectator";
+        const user = spectator ? state!.spectators[name] : state!.users[name];
+        const msg: ServerActions = {
+          action: "stateDiff",
+          data: {
+            ...basicDiff,
+            ...meStateDiffs[name],
+          },
+        };
+        user.transport.send(JSON.stringify(msg));
+      } else {
+        const spectator = meStateData[name].type === "spectator";
+        const user = spectator ? state!.spectators[name] : state!.users[name];
+        const msg: ServerActions = {
+          action: "state",
+          data: {
+            ...basicStateData!,
+            me: meStateData[name],
+          },
+        };
+        user.transport.send(JSON.stringify(msg));
+      }
+    }
+
     this.lastBasicStateData = basicStateData;
     this.lastMeStateData = meStateData;
-
-    for (const name in meStateData) {
-      const spectator = meStateData[name].type === "spectator";
-      const user = spectator ? state!.spectators[name] : state!.users[name];
-      const msg: ServerActions = {
-        action: "stateDiff",
-        data: {
-          ...basicDiff,
-          ...meStateDiffs[name],
-        },
-      };
-      user.transport.send(JSON.stringify(msg));
-    }
   }
   constructor(
     public readonly gameId: string,
@@ -85,9 +99,9 @@ export class StateStore {
     ) => void = () => {}
   ) {}
 
-  private getBasicStateData(): BasicStateData | null {
+  private getBasicStateData(): BasicStateData | undefined {
     if (this.state === null) {
-      return null;
+      return undefined;
     }
 
     const game = this.state.getPublicGameState();
@@ -108,7 +122,7 @@ export class StateStore {
     state: AnyServerState,
     basicStateData: BasicStateData
   ): Record<string, ClientStateData["me"]> {
-    if (basicStateData === null || this.state === null) {
+    if (basicStateData === undefined || this.state === null) {
       return {};
     }
 
@@ -322,10 +336,10 @@ abstract class State<
           {
             ...pick(this.game, "id", "type", "difficulty"),
             owner: newOwner,
-            firstUserJoined: null,
-            timerStarted: null,
-            timerDuration: null,
-            timerId: null,
+            firstUserJoined: undefined,
+            timerStarted: undefined,
+            timerDuration: undefined,
+            timerId: undefined,
           },
           {},
           allSpectators
@@ -340,7 +354,7 @@ abstract class State<
 
   public join(transport: Transport) {
     const avatar = this.store.avatarLibrary.take();
-    if (avatar === null) {
+    if (avatar === undefined) {
       // TODO better error handling
       transport.close(1000);
       return;
@@ -376,16 +390,16 @@ abstract class State<
 export class Lobby extends State<
   "Lobby",
   | {
-      firstUserJoined: Date | null;
+      firstUserJoined: Date | undefined;
       timerStarted: number;
       timerDuration: number;
       timerId: NodeJS.Timeout;
     }
   | {
-      firstUserJoined: Date | null;
-      timerStarted: null;
-      timerDuration: null;
-      timerId: null;
+      firstUserJoined: Date | undefined;
+      timerStarted: undefined;
+      timerDuration: undefined;
+      timerId: undefined;
     },
   ["timerStarted", "timerDuration"],
   {},
@@ -405,34 +419,34 @@ export class Lobby extends State<
   ) {
     const playerCount = Object.keys(spectators).length;
 
-    if (playerCount > 0 && game.firstUserJoined === null) {
+    if (playerCount > 0 && game.firstUserJoined === undefined) {
       game = { ...game, firstUserJoined: new Date() };
     }
 
-    if (playerCount === 0 && game.firstUserJoined !== null) {
+    if (playerCount === 0 && game.firstUserJoined !== undefined) {
       game = {
         ...game,
-        firstUserJoined: null,
+        firstUserJoined: undefined,
       };
     }
 
     if (
       game.type === "public" &&
-      game.timerStarted !== null &&
+      game.timerStarted !== undefined &&
       playerCount <= 1
     ) {
       clearTimeout(game.timerId);
       game = {
         ...game,
-        timerStarted: null,
-        timerDuration: null,
-        timerId: null,
+        timerStarted: undefined,
+        timerDuration: undefined,
+        timerId: undefined,
       };
     }
 
     if (
       game.type === "public" &&
-      game.timerStarted === null &&
+      game.timerStarted === undefined &&
       playerCount > 1
     ) {
       const now = new Date();
@@ -461,7 +475,7 @@ export class Lobby extends State<
   }
 
   public start() {
-    if (this.game.timerId !== null) {
+    if (this.game.timerId !== undefined) {
       clearTimeout(this.game.timerId);
     }
 
@@ -486,9 +500,9 @@ export class Lobby extends State<
           song,
           songUrl: song.audioUrl,
           songStartFraction: maxSongStartFraction * Math.random(),
-          timerStarted: null,
-          timerDuration: null,
-          timerId: null,
+          timerStarted: undefined,
+          timerDuration: undefined,
+          timerId: undefined,
         },
         mapValues(this.spectators, (spectator) => {
           return {
@@ -496,8 +510,8 @@ export class Lobby extends State<
             transport: spectator.transport,
             health: 99,
             spectator: false,
-            guess: null,
-            guessTime: null,
+            guess: undefined,
+            guessTime: undefined,
           };
         }),
         {}
@@ -546,9 +560,9 @@ export class RoundActive extends State<
       songUrl: string;
       songStartFraction: number;
       round: number;
-      timerStarted: null;
-      timerDuration: null;
-      timerId: null;
+      timerStarted: undefined;
+      timerDuration: undefined;
+      timerId: undefined;
     }
   | {
       songs: Song[];
@@ -563,8 +577,8 @@ export class RoundActive extends State<
   ["songUrl", "songStartFraction", "round", "timerStarted", "timerDuration"],
   | {
       health: number;
-      guess: null;
-      guessTime: null;
+      guess: undefined;
+      guessTime: undefined;
     }
   | {
       health: number;
@@ -597,7 +611,7 @@ export class RoundActive extends State<
     );
     if (
       difficultyConfig.timeLimit.type === "immediately" &&
-      game.timerStarted === null
+      game.timerStarted === undefined
     ) {
       game = {
         ...game,
@@ -615,7 +629,7 @@ export class RoundActive extends State<
 
     setTimeout(() => {
       const allGuessed = Object.values(this.users).every(
-        (u) => u.guess !== null
+        (u) => u.guess !== undefined
       );
       if (allGuessed) {
         this.roundOver();
@@ -630,7 +644,7 @@ export class RoundActive extends State<
     let newGameState = { ...this.game };
     if (
       this.difficultyConfig.timeLimit.type === "afterFirstGuess" &&
-      newGameState.timerStarted === null
+      newGameState.timerStarted === undefined
     ) {
       // If first guess, set timer
       newGameState = {
@@ -664,7 +678,7 @@ export class RoundActive extends State<
   }
 
   private roundOver() {
-    if (this.game.timerId !== null) {
+    if (this.game.timerId !== undefined) {
       clearTimeout(this.game.timerId);
     }
 
@@ -716,7 +730,7 @@ export class RoundActive extends State<
   protected onMessage(userName: string, message: ClientActions): void {
     if (
       message.action === "guess" &&
-      this.users[userName].guess === null &&
+      this.users[userName].guess === undefined &&
       this.users[userName].health >= 0
     ) {
       this.guess(userName, message.data);
@@ -739,7 +753,7 @@ export class RoundOver extends State<
       closest: Coordinate;
       distance: number;
       perfect: boolean;
-    } | null;
+    } | undefined;
   },
   ["song", "songUrl", "songStartFraction", "round", "bestGuess"],
   {
@@ -751,7 +765,7 @@ export class RoundOver extends State<
       closest: Coordinate;
       distance: number;
       perfect: boolean;
-    } | null;
+    } | undefined;
     damage: {
       hit: number;
       healing: number;
@@ -809,8 +823,8 @@ export class RoundOver extends State<
       } else {
         newUsers[userName] = {
           ...pick(user, "avatar", "transport", "health"),
-          guess: null,
-          guessTime: null,
+          guess: undefined,
+          guessTime: undefined,
         };
       }
     }
@@ -861,9 +875,9 @@ export class RoundOver extends State<
             song,
             songUrl: song.audioUrl,
             songStartFraction: maxSongStartFraction * Math.random(),
-            timerStarted: null,
-            timerDuration: null,
-            timerId: null,
+            timerStarted: undefined,
+            timerDuration: undefined,
+            timerId: undefined,
           },
           newUsers,
           newSpectators
@@ -925,10 +939,10 @@ export class GameOver extends State<
         this.store,
         {
           ...pick(this.game, "id", "owner", "type", "difficulty"),
-          firstUserJoined: null,
-          timerStarted: null,
-          timerDuration: null,
-          timerId: null,
+          firstUserJoined: undefined,
+          timerStarted: undefined,
+          timerDuration: undefined,
+          timerId: undefined,
         },
         {},
         {
