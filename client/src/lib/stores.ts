@@ -10,5 +10,5 @@ volumeStore.subscribe((volume) =>
   localStorage.setItem("volume", volume.toString())
 );
 
-export const unconfirmedGuessStore: Writable<Coordinate | null> =
-  writable(null);
+export const unconfirmedGuessStore: Writable<Coordinate | undefined> =
+  writable(undefined);

@@ -28,14 +28,13 @@ function getPrivateGame(
   }
 
   if (!(gameId in privateGames)) {
-    const onTransition = (value: StateInterface.AnyServerState | null) => {
-      if (value === null) {
-        console.log("deleting game", gameId);
+    const onTransition = (state: StateInterface.AnyServerState | null) => {
+      if (state === null) {
         delete privateGames[gameId];
       }
 
-      if (value?.stateName === "RoundOver") {
-        recordDistances(value);
+      if (state?.stateName === "RoundOver") {
+        recordDistances(state);
       }
     };
 
@@ -89,6 +88,10 @@ function onJoin(ws: WebSocket, searchParams: URLSearchParams) {
       owner: avatar.name,
       difficulty: "normal",
       type: "private",
+      timerStarted: undefined,
+      timerDuration: undefined,
+      timerId: undefined,
+      firstUserJoined: undefined,
     },
     {},
     { [avatar.name]: { avatar, transport: ws } }
@@ -104,41 +107,24 @@ function createPublicLobby() {
   const gameId = publicGameIdx.toString();
 
   let started = false;
-  let startGameTimer: NodeJS.Timeout | null = null;
-  function start() {
-    if (startGameTimer !== null) {
-      clearTimeout(startGameTimer);
-    }
-    started = true;
-    (store.state as StateInterface.Lobby).start();
-    createPublicLobby();
-  }
 
-  const onTransition = (value: StateInterface.AnyServerState | null) => {
-    if (value?.stateName === "RoundOver") {
-      recordDistances(value);
+  const onTransition = (state: StateInterface.AnyServerState | null) => {
+    if (state?.stateName === "RoundOver") {
+      recordDistances(state);
     }
 
-    if (value?.stateName === "Lobby") {
-      const players = Object.keys(value.spectators).length;
-
-      if (players === 0) {
-        if (startGameTimer !== null) {
-          clearTimeout(startGameTimer);
-        }
-      } else if (players >= 2 && startGameTimer === null) {
-        startGameTimer = setTimeout(() => start(), 15_000);
-      } else if (players >= 10) {
-        start();
-      }
-
-      if (started && players <= 1) {
-        value.terminate();
-      }
+    // Kick the last player
+    if (
+      started &&
+      state?.stateName === "Lobby" &&
+      Object.keys(state.spectators).length <= 1
+    ) {
+      state.terminate();
     }
 
-    if (value?.stateName === "RoundActive") {
+    if (!started && state?.stateName === "RoundActive") {
       started = true;
+      createPublicLobby();
     }
   };
 
@@ -154,6 +140,10 @@ function createPublicLobby() {
       owner: "TuneScape",
       type: "public",
       difficulty: "hard",
+      timerStarted: undefined,
+      timerDuration: undefined,
+      timerId: undefined,
+      firstUserJoined: undefined,
     },
     {},
     {}

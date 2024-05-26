@@ -5,6 +5,7 @@
   import Buttons from "../shared/Buttons.svelte";
   import ConnectedPlayers from "./ConnectedPlayers.svelte";
   import { scale } from "svelte/transition";
+  import Timer from "../shared/Timer.svelte";
 
   export let state: ActiveState<"Lobby">;
 
@@ -59,13 +60,22 @@
   {/if}
 
   {#if state.data.game.type === "public"}
-    {#if players <= 1}
+    {#if state.data.game.timerStarted === undefined}
       <h2>Waiting for more players</h2>
-    {:else}
-      <h2>Starting soon</h2>
     {/if}
   {/if}
 </Buttons>
+
+{#if state.data.game.timerStarted && state.data.game.timerDuration}
+  <Timer
+    serverTime={state.data.serverTime}
+    timerStarted={state.data.game.timerStarted}
+    timerDuration={state.data.game.timerDuration}
+    soundBelow={10}
+    row="5"
+    alignSelf="center"
+  />
+{/if}
 
 <div class="difficultyPanel" in:scale>
   <h2>Difficulty</h2>

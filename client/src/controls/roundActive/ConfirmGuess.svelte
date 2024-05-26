@@ -18,7 +18,7 @@
   }
 
   onDestroy(() => {
-    unconfirmedGuessStore.set(null);
+    unconfirmedGuessStore.set(undefined);
   });
 </script>
 

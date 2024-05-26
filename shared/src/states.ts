@@ -39,15 +39,15 @@ export class StateStore {
   public get state(): AnyServerState | null {
     return this._state;
   }
-  public set state(value: AnyServerState | null) {
-    this._state = value;
-    this.onTransition(value);
+  public set state(state: AnyServerState | null) {
+    this._state = state;
+    this.onTransition(state);
   }
   constructor(
     public readonly gameId: string,
     public readonly possibleSongs: Song[],
     private readonly onTransition: (
-      to: AnyServerState | null
+      state: AnyServerState | null
     ) => void = () => {}
   ) {}
 }
@@ -181,11 +181,12 @@ abstract class State<
     const users = this.getPublicUserState();
     const spectators = this.getSpectatorState();
 
-    const basicData = {
+    const basicData: Omit<ClientStateData<any>, "me"> = {
       stateName: this.stateName,
       game,
       users,
       spectators,
+      serverTime: new Date().getTime(),
     };
 
     Object.values(this.spectators).forEach((spectator) => {
@@ -264,7 +265,7 @@ abstract class State<
         ? Object.keys(newUsers)[0]
         : Object.keys(newSpectators)[0];
 
-    if (newUserCount <= 1) {
+    if (newUserCount <= 1 && this.stateName !== "Lobby") {
       const allSpectators: Record<string, SpectatorState> = {
         ...newSpectators,
         ...mapValues(newUsers, (user) => ({
@@ -273,12 +274,17 @@ abstract class State<
           spectator: true,
         })),
       };
+
       return this.transition(
         new Lobby(
           this.store,
           {
             ...pick(this.game, "id", "type", "difficulty"),
             owner: newOwner,
+            firstUserJoined: undefined,
+            timerStarted: undefined,
+            timerDuration: undefined,
+            timerId: undefined,
           },
           {},
           allSpectators
@@ -326,13 +332,98 @@ abstract class State<
   protected onMessage(userName: string, message: ClientActions): void {}
 }
 
-export class Lobby extends State<"Lobby", {}, [], {}, [], []> {
+export class Lobby extends State<
+  "Lobby",
+  | {
+      firstUserJoined: Date | undefined;
+      timerStarted: number;
+      timerDuration: number;
+      timerId: NodeJS.Timeout;
+    }
+  | {
+      firstUserJoined: Date | undefined;
+      timerStarted: undefined;
+      timerDuration: undefined;
+      timerId: undefined;
+    },
+  ["timerStarted", "timerDuration"],
+  {},
+  [],
+  []
+> {
   public stateName = "Lobby" as const;
-  public publicGameKeys = [] as const;
+  public publicGameKeys = ["timerStarted", "timerDuration"] as const;
   public publicUserKeys = [] as const;
   public privateUserKeys = [] as const;
 
+  constructor(
+    store: StateStore,
+    game: Lobby["game"],
+    users: Lobby["users"],
+    spectators: Lobby["spectators"]
+  ) {
+    const playerCount = Object.keys(spectators).length;
+
+    if (playerCount > 0 && game.firstUserJoined === undefined) {
+      game = { ...game, firstUserJoined: new Date() };
+    }
+
+    if (playerCount === 0 && game.firstUserJoined !== undefined) {
+      game = {
+        ...game,
+        firstUserJoined: undefined,
+      };
+    }
+
+    if (
+      game.type === "public" &&
+      game.timerStarted !== undefined &&
+      playerCount <= 1
+    ) {
+      clearTimeout(game.timerId);
+      game = {
+        ...game,
+        timerStarted: undefined,
+        timerDuration: undefined,
+        timerId: undefined,
+      };
+    }
+
+    if (
+      game.type === "public" &&
+      game.timerStarted === undefined &&
+      playerCount > 1
+    ) {
+      const now = new Date();
+      const goFastAfter = 120;
+      const goFast =
+        game.firstUserJoined &&
+        now.getTime() - game.firstUserJoined.getTime() > goFastAfter * 1000;
+      const timerDuration = goFast ? 10 : 30;
+
+      game = {
+        ...game,
+        timerStarted: now.getTime(),
+        timerDuration,
+        timerId: setTimeout(() => {
+          if (store.state?.stateName === "Lobby") {
+            store.state.start();
+          }
+        }, timerDuration * 1000),
+      };
+    }
+    super(store, game, users, spectators);
+
+    if (game.type === "public" && playerCount > 10) {
+      this.start();
+    }
+  }
+
   public start() {
+    if (this.game.timerId !== undefined) {
+      clearTimeout(this.game.timerId);
+    }
+
     const acceptableDifficulty = this.difficultyConfig.songDifficulty;
     const possibleSongs = this.store.possibleSongs.filter(
       (song) =>
@@ -341,17 +432,22 @@ export class Lobby extends State<"Lobby", {}, [], {}, [], []> {
     const gameSongs = sample(possibleSongs);
     const round = 1;
     const song = gameSongs[0];
-    const maxSongStartFraction = this.difficultyConfig.songRandomStart ? 0.9 : 0;
+    const maxSongStartFraction = this.difficultyConfig.songRandomStart
+      ? 0.9
+      : 0;
     return this.transition(
       new RoundActive(
         this.store,
         {
-          ...this.game,
+          ...pick(this.game, "id", "owner", "type", "difficulty"),
           songs: gameSongs,
           round,
           song,
           songUrl: song.audioUrl,
           songStartFraction: maxSongStartFraction * Math.random(),
+          timerStarted: undefined,
+          timerDuration: undefined,
+          timerId: undefined,
         },
         mapValues(this.spectators, (spectator) => {
           return {
@@ -407,8 +503,9 @@ export class RoundActive extends State<
       songUrl: string;
       songStartFraction: number;
       round: number;
-      timerStarted?: undefined;
-      timerId?: undefined;
+      timerStarted: undefined;
+      timerDuration: undefined;
+      timerId: undefined;
     }
   | {
       songs: Song[];
@@ -416,10 +513,11 @@ export class RoundActive extends State<
       songUrl: string;
       songStartFraction: number;
       round: number;
-      timerStarted: Date;
+      timerStarted: number;
+      timerDuration: number;
       timerId: NodeJS.Timeout;
     },
-  ["songUrl", "songStartFraction", "round", "timerStarted"],
+  ["songUrl", "songStartFraction", "round", "timerStarted", "timerDuration"],
   | {
       health: number;
       guess?: undefined;
@@ -428,7 +526,7 @@ export class RoundActive extends State<
   | {
       health: number;
       guess: Coordinate;
-      guessTime: Date;
+      guessTime: number;
     },
   ["guessTime", "health"],
   ["guess"]
@@ -439,6 +537,7 @@ export class RoundActive extends State<
     "songStartFraction",
     "round",
     "timerStarted",
+    "timerDuration",
   ] as const;
   public publicUserKeys = ["guessTime", "health"] as const;
   public privateUserKeys = ["guess"] as const;
@@ -459,7 +558,8 @@ export class RoundActive extends State<
     ) {
       game = {
         ...game,
-        timerStarted: new Date(),
+        timerStarted: new Date().getTime(),
+        timerDuration: difficultyConfig.timeLimit.duration,
         timerId: setTimeout(() => {
           if (store.state?.stateName === "RoundActive") {
             store.state.roundOver();
@@ -470,12 +570,14 @@ export class RoundActive extends State<
 
     super(store, game, users, spectators);
 
-    const allGuessed = Object.values(this.users).every(
-      (u) => u.guess !== undefined
-    );
-    if (allGuessed) {
-      this.roundOver();
-    }
+    setTimeout(() => {
+      const allGuessed = Object.values(this.users).every(
+        (u) => u.guess !== undefined
+      );
+      if (allGuessed) {
+        this.roundOver();
+      }
+    });
   }
 
   public guess(userName: string, guess: Coordinate) {
@@ -490,7 +592,8 @@ export class RoundActive extends State<
       // If first guess, set timer
       newGameState = {
         ...newGameState,
-        timerStarted: now,
+        timerStarted: now.getTime(),
+        timerDuration: this.difficultyConfig.timeLimit.duration,
         timerId: setTimeout(() => {
           if (this.store.state?.stateName === "RoundActive") {
             this.store.state.roundOver();
@@ -504,7 +607,7 @@ export class RoundActive extends State<
       [userName]: {
         ...pick(this.users[userName], "avatar", "transport", "health"),
         guess,
-        guessTime: now,
+        guessTime: now.getTime(),
       },
     };
 
@@ -584,26 +687,30 @@ export class RoundOver extends State<
     songUrl: string;
     songStartFraction: number;
     round: number;
-    bestGuess: {
-      userName: string;
-      coordinate: Coordinate;
-      time: Date;
-      closest: Coordinate;
-      distance: number;
-      perfect: boolean;
-    } | null;
+    bestGuess:
+      | {
+          userName: string;
+          coordinate: Coordinate;
+          time: number;
+          closest: Coordinate;
+          distance: number;
+          perfect: boolean;
+        }
+      | undefined;
   },
   ["song", "songUrl", "songStartFraction", "round", "bestGuess"],
   {
     health: number;
     healthBefore: number;
-    guessResult: {
-      coordinate: Coordinate;
-      time: Date;
-      closest: Coordinate;
-      distance: number;
-      perfect: boolean;
-    } | null;
+    guessResult:
+      | {
+          coordinate: Coordinate;
+          time: number;
+          closest: Coordinate;
+          distance: number;
+          perfect: boolean;
+        }
+      | undefined;
     damage: {
       hit: number;
       healing: number;
@@ -630,6 +737,23 @@ export class RoundOver extends State<
     "damage",
   ] as const;
   public privateUserKeys = [] as const;
+
+  constructor(
+    store: StateStore,
+    game: RoundOver["game"],
+    users: RoundOver["users"],
+    spectators: RoundOver["spectators"]
+  ) {
+    super(store, game, users, spectators);
+
+    if (this.game.type === "public") {
+      setTimeout(() => {
+        if (this.store.state?.stateName === "RoundOver") {
+          this.store.state.next();
+        }
+      }, 10_000);
+    }
+  }
 
   public next() {
     const newUsers: RoundActive["users"] = {};
@@ -678,7 +802,9 @@ export class RoundOver extends State<
         songs = shuffle([...songs]);
       }
       const song = songs[songIdx];
-      const maxSongStartFraction = this.difficultyConfig.songRandomStart ? 0.9 : 0;
+      const maxSongStartFraction = this.difficultyConfig.songRandomStart
+        ? 0.9
+        : 0;
 
       return this.transition(
         new RoundActive(
@@ -691,6 +817,7 @@ export class RoundOver extends State<
             songUrl: song.audioUrl,
             songStartFraction: maxSongStartFraction * Math.random(),
             timerStarted: undefined,
+            timerDuration: undefined,
             timerId: undefined,
           },
           newUsers,
@@ -730,11 +857,34 @@ export class GameOver extends State<
   public publicUserKeys = [] as const;
   public privateUserKeys = [] as const;
 
+  constructor(
+    store: StateStore,
+    game: GameOver["game"],
+    users: GameOver["users"],
+    spectators: GameOver["spectators"]
+  ) {
+    super(store, game, users, spectators);
+
+    if (this.game.type === "public") {
+      setTimeout(() => {
+        if (this.store.state?.stateName === "GameOver") {
+          this.store.state.playAgain();
+        }
+      }, 10_000);
+    }
+  }
+
   public playAgain() {
     return this.transition(
       new Lobby(
         this.store,
-        pick(this.game, "id", "owner", "type", "difficulty"),
+        {
+          ...pick(this.game, "id", "owner", "type", "difficulty"),
+          firstUserJoined: undefined,
+          timerStarted: undefined,
+          timerDuration: undefined,
+          timerId: undefined,
+        },
         {},
         {
           ...this.spectators,
@@ -772,6 +922,7 @@ export type ServerStates = {
 export type AnyServerState = ServerStates[keyof ServerStates];
 export type ClientStateData<StateName extends AnyServerState["stateName"]> = {
   stateName: StateName;
+  serverTime: number;
   game: ReturnType<ServerStates[StateName]["getPublicGameState"]>;
   users: ReturnType<ServerStates[StateName]["getPublicUserState"]>;
   spectators: ReturnType<ServerStates[StateName]["getSpectatorState"]>;

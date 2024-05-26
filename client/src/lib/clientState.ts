@@ -128,6 +128,10 @@ function connectToLocalServer(): Transport {
       owner: avatar.name,
       type: "singleplayer",
       difficulty: "normal",
+      firstUserJoined: undefined,
+      timerStarted: undefined,
+      timerDuration: undefined,
+      timerId: undefined
     },
     {},
     { [avatar.name]: { avatar, transport: serverSide } }

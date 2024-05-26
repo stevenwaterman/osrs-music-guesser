@@ -4,7 +4,7 @@
   import MainMenu from "./mainMenu/MainMenu.svelte";
   import GameOver from "./gameOver/GameOver.svelte";
   import Lobby from "./lobby/Lobby.svelte";
-  import Timer from "./roundActive/Timer.svelte";
+  import Timer from "./shared/Timer.svelte";
   import VolumeSlider from "./shared/VolumeSlider.svelte";
   import ConfirmGuess from "./roundActive/ConfirmGuess.svelte";
   import QuitGame from "./shared/QuitGame.svelte";
@@ -34,7 +34,9 @@
   {/if}
 
   {#if state.isAny("RoundActive")}
-    <Timer {state} />
+    {#if state.data.game.timerStarted && state.data.game.timerDuration}
+      <Timer serverTime={state.data.serverTime} timerStarted={state.data.game.timerStarted} timerDuration={state.data.game.timerDuration} showBelow={20} />
+    {/if}
     <ConfirmGuess {state} />
     <GuessCount {state} />
   {/if}
