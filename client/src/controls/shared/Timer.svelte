@@ -48,4 +48,10 @@
     font-size: 5rem;
     font-weight: bold;
   }
+
+  @media only screen and (max-width: 750px) {
+    .timer {
+      font-size: 3rem;
+    }
+  }
 </style>

@@ -84,8 +84,7 @@ const difficulties: Record<
     extreme: {
       name: "extreme",
       description: [
-        "Not recommended for anyone.",
-        "Everything in hard, plus:",
+        "Not recommended for anyone. Everything in hard, plus:",
         "All songs are enabled, including ridiculously obscure songs that only play once during an instanced quest cutscene",
         "Only 20s per round, and double damage",
       ],
@@ -126,7 +125,7 @@ const difficulties: Record<
       description: [
         "Recommended for relaxed games.",
         "Most songs are enabled, and you take normal damage.",
-        "After the first person guesses, everyone else has 20s to guess."
+        "After the first person guesses, everyone else has 20s to guess.",
       ],
       damageScaling: 1,
       songDifficulty: {
@@ -163,11 +162,10 @@ const difficulties: Record<
     extreme: {
       name: "extreme",
       description: [
-        "Not recommended for anyone.",
-        "Everything in hard, plus:",
+        "Not recommended for anyone. Everything in hard, plus:",
         "All songs are enabled, including ridiculously obscure songs that only play once during an instanced quest cutscene",
         "After the first person guesses, everyone else has 10s to guess",
-        "Double damage"
+        "Double damage",
       ],
       damageScaling: 1,
       songDifficulty: {

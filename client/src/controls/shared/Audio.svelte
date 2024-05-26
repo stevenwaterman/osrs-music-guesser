@@ -53,4 +53,10 @@
 
     pointer-events: initial;
   }
+
+  @media only screen and (max-width: 750px) {
+    audio {
+      grid-column: 1 / 4;
+    }
+  }
 </style>

@@ -27,7 +27,9 @@
     return () => clearTimeout(timeout);
   });
 
-  let largeAvatar: string | undefined = alive ? state.data.me.avatar.name : undefined;
+  let largeAvatar: string | undefined = alive
+    ? state.data.me.avatar.name
+    : undefined;
   function clickedAvatar(ev: CustomEvent<{ name: string }>) {
     largeAvatar = ev.detail.name;
   }
@@ -56,7 +58,12 @@
   {/if}
 
   {#if showAll}
-    <HealthLeaderboard {state} on:clickAvatar={clickedAvatar} />
+    <div
+      class:largeAvatarShowing={largeAvatar !== undefined}
+      class="leaderboardContainer"
+    >
+      <HealthLeaderboard {state} on:clickAvatar={clickedAvatar} />
+    </div>
   {/if}
 
   {#if owner}
@@ -76,5 +83,16 @@
   h1 {
     grid-row: 1;
     grid-column: 2;
+    z-index: 1;
+  }
+
+  .leaderboardContainer {
+    display: contents;
+  }
+
+  @media only screen and (max-width: 750px) {
+    .leaderboardContainer.largeAvatarShowing {
+      display: none;
+    }
   }
 </style>

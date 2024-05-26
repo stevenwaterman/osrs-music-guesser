@@ -53,4 +53,14 @@
     justify-self: flex-end;
     cursor: pointer;
   }
+
+  @media only screen and (max-width: 750px) {
+    .container {
+      grid-column: 1 / 4;
+      grid-row: 3;
+      align-self: center;
+      justify-self: center;
+      font-size: 0.7em;
+    }
+  }
 </style>

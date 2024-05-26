@@ -48,4 +48,10 @@
     background-color: var(--semi-transparent-black);
     border-radius: 0.5em;
   }
+
+  @media only screen and (max-width: 750px) {
+    .info {
+      grid-column: 1 / 4;
+    }
+  }
 </style>

@@ -306,7 +306,7 @@ abstract class State<
     );
     const newSpectatorCount = Object.values(newSpectators).length;
 
-    if (newUserCount + newSpectatorCount === 0) {
+    if (newUserCount + newSpectatorCount === 0 && this.game.type !== "public") {
       return this.transition(null);
     }
 

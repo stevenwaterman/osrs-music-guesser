@@ -43,7 +43,7 @@
       >
     {:else if "clipboard" in navigator}
       <Button
-        style="width: 8em;"
+        style="width: 8.5em;"
         on:click={() =>
           navigator.clipboard.writeText(
             `${location.protocol}//${location.host}${inviteUrl}`
@@ -82,17 +82,19 @@
 {/if}
 
 <div class="difficultyPanel" in:scale>
-  <h2>Difficulty</h2>
-  <select bind:value={difficulty} disabled={!myLobby}>
-    <option value="tutorial">Tutorial</option>
-    <option value="normal">Normal</option>
-    <option value="hard">Hard</option>
-    <option value="extreme">Extreme</option>
-  </select>
+  <div class="difficultyHeader">
+    <h2>Difficulty</h2>
+    <select bind:value={difficulty} disabled={!myLobby}>
+      <option value="tutorial">Tutorial</option>
+      <option value="normal">Normal</option>
+      <option value="hard">Hard</option>
+      <option value="extreme">Extreme</option>
+    </select>
+  </div>
 
   <div class="scroll">
     {#each difficultyConfig.description as line}
-      <p>{line}</p>
+      <div>{line}</div>
     {/each}
   </div>
 </div>
@@ -128,6 +130,7 @@
     align-self: flex-start;
     justify-self: flex-start;
 
+    min-height: 0;
     max-height: 100%;
 
     display: flex;
@@ -155,7 +158,51 @@
     overflow-y: auto;
     max-height: 100%;
     pointer-events: initial;
-    padding: 0.5rem;
-    margin: -0.5rem;
+    margin-top: 1rem;
+    padding-right: 0.5rem;
+    margin-right: -0.5rem;
+    /* padding: 0 0.5rem; */
+    /* margin: 1rem -0.5rem; */
+
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    width: 100%;
+  }
+
+  .difficultyHeader {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+  }
+
+  @media only screen and (max-width: 750px) {
+    .difficultyPanel {
+      grid-column: 1 / 4;
+      grid-row: 2;
+      align-self: flex-start;
+      justify-self: center;
+      width: 100%;
+    }
+
+    .difficultyHeader {
+      flex-direction: row;
+      justify-content: space-around;
+    }
+
+    .difficultyPanel h2 {
+      margin-bottom: 0;
+    }
+
+    .difficultyPanel .scroll {
+      margin-top: 0.5rem;
+      gap: 0.5rem;
+    }
+
+    .gameName {
+      grid-column: 1 / 4;
+    }
   }
 </style>

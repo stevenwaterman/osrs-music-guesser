@@ -46,13 +46,18 @@ function connectToLocalServer(): StateInterface.Transport {
   let serverCloseListeners: Array<(ev: StateInterface.TransportClose) => void> =
     [];
 
+  let open = true;
+
   const clientSide: StateInterface.Transport = {
     send: (msg: string): void => {
       serverMessageListeners.forEach((listener) => listener({ data: msg }));
     },
     close: (code: number) => {
-      clientCloseListeners.forEach((listener) => listener({ code }));
-      serverCloseListeners.forEach((listener) => listener({ code }));
+      if (open) {
+        open = false;
+        clientCloseListeners.forEach((listener) => listener({ code }));
+        serverCloseListeners.forEach((listener) => listener({ code }));
+      }
     },
     addEventListener: (
       type: "message" | "close",
@@ -90,8 +95,11 @@ function connectToLocalServer(): StateInterface.Transport {
       clientMessageListeners.forEach((listener) => listener({ data: msg }));
     },
     close: (code: number) => {
-      serverCloseListeners.forEach((listener) => listener({ code }));
-      clientCloseListeners.forEach((listener) => listener({ code }));
+      if (open) {
+        open = false;
+        serverCloseListeners.forEach((listener) => listener({ code }));
+        clientCloseListeners.forEach((listener) => listener({ code }));
+      }
     },
     addEventListener: (
       type: "message" | "close",

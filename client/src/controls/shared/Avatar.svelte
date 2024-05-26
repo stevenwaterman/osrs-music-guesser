@@ -23,25 +23,24 @@
 <style>
   .container {
     display: grid;
-    grid-template-rows: auto 6rem auto;
+    grid-template-rows: auto 6em auto;
     align-items: center;
     justify-items: center;
 
-    width: 6rem;
-    font-size: 0.3em;
+    width: 6em;
   }
 
   img {
     grid-row: 2;
-    height: 6rem;
-    width: 6rem;
+    height: 6em;
+    width: 6em;
     object-fit: contain;
-    margin: 0.4rem 0;
+    margin: 0.4em 0;
   }
 
   .name {
     grid-row: 3;
-    font-size: 1rem;
+    font-size: 1em;
     margin: 0;
   }
 

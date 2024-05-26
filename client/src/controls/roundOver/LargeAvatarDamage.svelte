@@ -91,7 +91,7 @@
       on:outroend={() => dispatch("animationDone")}
     >
       {#if render}
-        <Health {health} />
+        <Health {health} scale={3} />
       {/if}
       <div class="imageWrapper">
         <!-- svelte-ignore a11y-missing-attribute -->
@@ -198,11 +198,13 @@
 
   @media only screen and (max-width: 750px) {
     .name {
-      font-size: 2rem;
+      font-size: 2em;
     }
 
     .container {
       font-size: 0.5em;
+      grid-row: 3;
+      grid-column: 1 / 4;
     }
   }
 </style>

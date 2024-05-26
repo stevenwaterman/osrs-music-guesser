@@ -27,7 +27,8 @@
   {#if state.isAny("RoundActive", "RoundOver")}
     <Audio
       audioUrl={state.data.game.songUrl}
-      controls={!state.difficultyConfig.songRandomStart || state.isAny("RoundOver")}
+      controls={!state.difficultyConfig.songRandomStart ||
+        state.isAny("RoundOver")}
       startFraction={state.data.game.songStartFraction}
       loop={true}
     />
@@ -35,7 +36,12 @@
 
   {#if state.isAny("RoundActive")}
     {#if state.data.game.timerStarted && state.data.game.timerDuration}
-      <Timer serverTime={state.data.serverTime} timerStarted={state.data.game.timerStarted} timerDuration={state.data.game.timerDuration} showBelow={20} />
+      <Timer
+        serverTime={state.data.serverTime}
+        timerStarted={state.data.game.timerStarted}
+        timerDuration={state.data.game.timerDuration}
+        showBelow={20}
+      />
     {/if}
     <ConfirmGuess {state} />
     <GuessCount {state} />
@@ -64,7 +70,7 @@
 
     display: grid;
     grid-template-columns: 1fr 3fr 1fr;
-    grid-template-rows: auto 1fr 1fr auto auto;
+    grid-template-rows: auto fit-content(40vmax) 1fr auto auto;
     gap: 1rem;
 
     align-items: center;

@@ -9,6 +9,8 @@ type Diff<T> = T extends object
 export type ClientStateDiff = Diff<StateInterface.ClientStateData>;
 
 function applyPartialDiff(base: any, diff: any, onto: any) {
+  base = base ?? {};
+
   for (const prop in base) {
     const baseValue = base[prop];
     const diffValue = prop in diff ? diff[prop] : undefined;
@@ -45,11 +47,13 @@ function applyPartialDiff(base: any, diff: any, onto: any) {
       } else if (diffValue !== null && typeof diffValue === "object") {
         onto[prop] = {};
         applyPartialDiff({}, diffValue, onto[prop]);
-      } else if (diffValue !== undefined) {
+      } else if (diffValue !== null) {
         onto[prop] = diffValue;
       }
     }
   }
+
+  console.log("applied", { base, diff, onto });
 }
 
 function generatePartialDiff(from: any, to: any) {
@@ -67,19 +71,19 @@ function generatePartialDiff(from: any, to: any) {
     const toProp = to[prop];
     const fromProp = prop in from ? from[prop] : undefined;
 
-    if (toProp !== null && toProp instanceof Array) {
+    if (toProp !== undefined && toProp instanceof Array) {
       const fromArray = JSON.stringify(from[prop]);
       const toArray = JSON.stringify(to[prop]);
       if (toArray !== fromArray) {
         diff[prop] = toProp;
       }
-    } else if (toProp !== null && typeof toProp === "object") {
+    } else if (toProp !== undefined && typeof toProp === "object") {
       const subDiff = generatePartialDiff(fromProp ?? {}, toProp);
       if (Object.keys(subDiff).length > 0) {
         diff[prop] = subDiff;
       }
     } else if (fromProp === undefined || fromProp !== toProp) {
-      diff[prop] = to[prop];
+      diff[prop] = toProp ?? null;
     }
   }
 

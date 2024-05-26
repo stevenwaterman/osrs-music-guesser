@@ -15,10 +15,10 @@
 
 <div class="info">
   <h2>Rules</h2>
-  <p>Click where you think the song plays.</p>
-  <p>Closest guess wins, everyone else takes damage.</p>
-  <p>Be the first to make a perfect guess to heal some health.</p>
-  <p>Win by being the last player alive.</p>
+  <div>Click where you think the song plays.</div>
+  <div>Closest guess wins, everyone else takes damage.</div>
+  <div>Be the first to make a perfect guess to heal some health.</div>
+  <div>Win by being the last player alive.</div>
 </div>
 
 <Buttons column="1 / 4">
@@ -49,7 +49,7 @@
 </Buttons>
 
 <div class="privateGameNameInputContainer" class:invisible={menu !== "private"}>
-  <span><strong>Game Name:</strong></span>
+  <span><strong>Game&nbsp;Name:</strong></span>
   <input
     class="privateGameNameInput"
     type="text"
@@ -63,10 +63,6 @@
 </div>
 
 <style>
-  h2 {
-    margin-bottom: 1rem;
-  }
-
   .privateGameNameInputContainer {
     grid-column: 2;
     grid-row: 4;
@@ -78,6 +74,7 @@
     gap: 1rem;
     font-size: 2rem;
     pointer-events: initial;
+    max-width: 100%;
   }
 
   .info {
@@ -89,10 +86,37 @@
 
     background-color: var(--semi-transparent-black);
     border-radius: 0.5em;
+
+    max-height: 100%;
+
+    display: flex;
+    flex-direction: column;
+    gap: 0.5em;
   }
 
   .invisible {
     opacity: 0;
     pointer-events: none;
+  }
+
+  @media only screen and (max-width: 750px) {
+    .privateGameNameInputContainer {
+      grid-column: 1 / 4;
+    }
+
+    .privateGameNameInputContainer span {
+      font-size: 0.5em;
+    }
+
+    .privateGameNameInputContainer input {
+      min-width: 0;
+    }
+
+    .info {
+      grid-column: 1 / 4;
+      overflow-y: hidden;
+      gap: 0.5em;
+      padding: 1rem;
+    }
   }
 </style>

@@ -33,6 +33,7 @@
 <style>
   .avatarContainer {
     position: relative;
+    font-size: 1em;
   }
   .label {
     position: absolute;

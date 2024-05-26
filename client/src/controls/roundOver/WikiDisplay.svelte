@@ -11,7 +11,7 @@
   <div class="infoBox">
     <div class="title">
       <a target="_blank" href={song.wikiUrl}>{song.name}</a>
-      {#if song.tags.modAsh}
+      {#if true}
         <!-- svelte-ignore a11y-missing-attribute -->
         <img
           class="head"
@@ -104,6 +104,19 @@
     p {
       margin-block-start: 0.5em;
       margin-block-end: 0.5em;
+    }
+
+    .wrapper {
+      width: 100;
+      grid-column: 1 / 4;
+      grid-row: 2;
+      justify-self: center;
+    }
+
+    .head {
+      transform: translate(0);
+      top: initial;
+      bottom: 0;
     }
   }
 </style>
