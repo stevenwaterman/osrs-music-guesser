@@ -13,7 +13,7 @@ class ReschedulableTimeout {
 
   public stop() {
     if (this.timeout) {
-      clearInterval(this.timeout);
+      clearTimeout(this.timeout);
       this.timeout = undefined;
     }
   }
