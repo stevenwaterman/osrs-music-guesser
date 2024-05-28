@@ -1,7 +1,7 @@
 import WebSocket from "ws";
 import { pick, mapValues, omit, sample, shuffle } from "./util.js";
 import type { Coordinate } from "./coordinates.js";
-import { calculateRoundResult } from "./scoring.js";
+import { calculateRoundResults } from "./scoring.js";
 import { Song } from "./songTypes.js";
 import { Avatar, AvatarLibrary } from "./avatars.js";
 import {
@@ -49,13 +49,11 @@ export class StateStore {
     this.onTransition(state);
 
     this.stateIndex++;
-    const basicStateData = this.getBasicStateData();
+    const data = this.state?.getClientStates();
+    const basicStateData = this.getBasicStateData(data);
     const basicDiff = getBasicDiff(this.lastBasicStateData, basicStateData);
 
-    const meStateData =
-      basicStateData === undefined || state === null
-        ? {}
-        : this.getMeStateData(state, basicStateData);
+    const meStateData = this.getMeStateData(data);
     const meStateDiffs = mapValues(meStateData, (data) => {
       const oldData = this.lastMeStateData[data.avatar.name];
       return getMeDiff(oldData, data);
@@ -99,46 +97,35 @@ export class StateStore {
     ) => void = () => {}
   ) {}
 
-  private getBasicStateData(): BasicStateData | undefined {
-    if (this.state === null) {
+  private getBasicStateData(data: ReturnType<AnyServerState["getClientStates"]> | undefined): BasicStateData | undefined {
+    if (data === undefined) {
       return undefined;
     }
 
-    const game = this.state.getPublicGameState();
-    const users = this.state.getPublicUserState();
-    const spectators = this.state.getSpectatorState();
-
     return {
-      stateName: this.state.stateName,
+      stateName: this.state!.stateName,
       stateIndex: this.stateIndex,
       serverTime: new Date().getTime(),
-      game,
-      users,
-      spectators,
+      game: data.publicGame,
+      users: data.publicUsers,
+      spectators: data.publicSpectators
     };
   }
 
   private getMeStateData(
-    state: AnyServerState,
-    basicStateData: BasicStateData
+    data: ReturnType<AnyServerState["getClientStates"]> | undefined,
   ): Record<string, ClientStateData["me"]> {
-    if (basicStateData === undefined || this.state === null) {
+    if (data === undefined) {
       return {};
     }
 
     const meStateData: Record<string, ClientStateData["me"]> = {};
-    Object.values(basicStateData.users).forEach((user) => {
-      meStateData[user.avatar.name] = {
-        ...state.getPrivateUserState(user.avatar.name),
-        type: "user",
-      };
-    });
-    Object.values(basicStateData.spectators).forEach((spectator) => {
-      meStateData[spectator.avatar.name] = {
-        ...basicStateData.spectators[spectator.avatar.name],
-        type: "spectator",
-      };
-    });
+
+    Object.values(data.publicUsers).forEach(user => meStateData[user.avatar.name] = { ...user, type: "user"})
+    Object.keys(data.privateUsers).forEach(name => meStateData[name] = {...meStateData[name], ...data.privateUsers[name]});
+
+    Object.values(data.publicSpectators).forEach(spectator => meStateData[spectator.avatar.name] = { ...spectator, type: "user"})
+    Object.keys(data.privateSpectators).forEach(name => meStateData[name] = {...meStateData[name], ...data.privateSpectators[name]});
 
     return meStateData;
   }
@@ -155,54 +142,169 @@ export class StateStore {
   }
 }
 
+export type RoundResult =
+  | {
+      coordinate: Coordinate;
+      time: number;
+      closest: Coordinate;
+      distance: number;
+      damage: {
+        hit: number;
+        healing: number;
+        venom: number;
+        max: boolean;
+      };
+      healthBefore: number;
+      healthAfter: number;
+    }
+  | {
+      damage: {
+        hit: number;
+        healing: number;
+        venom: number;
+        max: boolean;
+      };
+      healthBefore: number;
+      healthAfter: number;
+    };
+
+type KeysFor<
+  GameState extends {},
+  UserState extends {},
+  SpectatorState extends {},
+> = {
+  publicGame: Array<keyof GameState>;
+  publicUser: Array<keyof UserState>;
+  privateUser: Array<keyof UserState>;
+  publicSpectator: Array<keyof SpectatorState>;
+  privateSpectator: Array<keyof SpectatorState>;
+};
+
+abstract class State<
+  GameState extends {},
+  UserState extends {},
+  SpectatorState extends {},
+  PublicGameKeys extends keyof GameState,
+  PublicUserKeys extends keyof UserState,
+  PrivateUserKeys extends keyof UserState,
+  PublicSpectatorKeys extends keyof SpectatorState,
+  PrivateSpectatorKeys extends keyof SpectatorState,
+> {
+  public abstract stateName: string;
+
+  constructor(
+    protected readonly store: StateStore,
+    public readonly game: GameState,
+    public readonly users: Record<string, UserState>,
+    public readonly spectators: Record<string, SpectatorState>,
+    public readonly publicGameKeys: PublicGameKeys[],
+    public readonly publicUserKeys: PublicUserKeys[],
+    public readonly privateUserKeys: PrivateUserKeys[],
+    public readonly publicSpectatorKeys: PublicSpectatorKeys[],
+    public readonly privateSpectatorKeys: PrivateSpectatorKeys[]
+  ) {}
+
+  protected transition(to: AnyServerState | null) {
+    this.store.state = to;
+  }
+
+  public getClientStates(): {
+    publicGame: Pick<GameState, PublicGameKeys>;
+    publicUsers: Record<string, Pick<UserState, PublicUserKeys>>;
+    privateUsers: Record<string, Pick<UserState, PrivateUserKeys>>;
+    publicSpectators: Record<string, Pick<SpectatorState, PublicSpectatorKeys>>;
+    privateSpectators: Record<
+      string,
+      Pick<SpectatorState, PrivateSpectatorKeys>
+    >;
+  } {
+    return {
+      publicGame: pick(this.game, ...this.publicGameKeys),
+      publicUsers: mapValues(this.users, (user) =>
+        pick(user, ...this.publicUserKeys)
+      ),
+      privateUsers: mapValues(this.users, (user) =>
+        pick(user, ...this.privateUserKeys)
+      ),
+      publicSpectators: mapValues(this.spectators, (spectator) =>
+        pick(spectator, ...this.publicSpectatorKeys)
+      ),
+      privateSpectators: mapValues(this.spectators, (spectator) =>
+        pick(spectator, ...this.privateSpectatorKeys)
+      ),
+    };
+  }
+}
+
 type BaseGameState = {
   id: string;
   owner: string;
   type: "singleplayer" | "private" | "public";
   difficulty: "tutorial" | "normal" | "hard" | "extreme";
 };
-type BasePublicGameKeys = "id" | "owner" | "type" | "difficulty";
-
 type BaseUserState = {
   avatar: Avatar;
   transport: Transport;
 };
-type BasePublicUserKeys = "avatar";
-
-type SpectatorState = {
+type BaseSpectatorState = {
   avatar: Avatar;
   transport: Transport;
 };
 
-abstract class State<
-  StateName extends string,
+abstract class BaseState<
   GameState extends {},
-  PublicGameKeys extends Array<keyof GameState>,
   UserState extends {},
-  PublicUserKeys extends Array<keyof UserState>,
-  PrivateUserKeys extends Array<keyof UserState>,
+  SpectatorState extends {},
+  PublicGameKeys extends keyof GameState,
+  PublicUserKeys extends keyof UserState,
+  PrivateUserKeys extends keyof UserState,
+  PublicSpectatorKeys extends keyof SpectatorState,
+  PrivateSpectatorKeys extends keyof SpectatorState,
+> extends State<
+  GameState & BaseGameState,
+  UserState & BaseUserState,
+  SpectatorState & BaseSpectatorState,
+  PublicGameKeys | "id" | "owner" | "type" | "difficulty",
+  PublicUserKeys | "avatar",
+  PrivateUserKeys,
+  PublicSpectatorKeys | "avatar",
+  PrivateSpectatorKeys
 > {
-  public abstract stateName: StateName;
-  public abstract publicGameKeys: Readonly<PublicGameKeys>;
-  public abstract publicUserKeys: Readonly<PublicUserKeys>;
-  public abstract privateUserKeys: Readonly<PrivateUserKeys>;
-
   private readonly unsubscribeFromWsMessages: Array<() => void>;
   private readonly unsubscribeFromWsClose: Array<() => void>;
 
-  public get difficultyConfig(): DifficultyConfig {
-    return getDifficultyConfig(
-      this.game.difficulty,
-      this.game.type === "singleplayer"
+  constructor({
+    store,
+    game,
+    users,
+    spectators,
+    publicGameKeys,
+    publicUserKeys,
+    privateUserKeys,
+    publicSpectatorKeys,
+    privateSpectatorKeys,
+  }: {
+    store: StateStore;
+    game: GameState & BaseGameState;
+    users: Record<string, UserState & BaseUserState>;
+    spectators: Record<string, SpectatorState & BaseSpectatorState>;
+    publicGameKeys: PublicGameKeys[];
+    publicUserKeys: PublicUserKeys[];
+    privateUserKeys: PrivateUserKeys[];
+    publicSpectatorKeys: PublicSpectatorKeys[];
+    privateSpectatorKeys: PrivateSpectatorKeys[];
+  }) {
+    super(
+      store,
+      game,
+      users,
+      spectators,
+      [...publicGameKeys, "id", "owner", "type", "difficulty"],
+      [...publicUserKeys, "avatar"],
+      privateUserKeys,
+      [...publicSpectatorKeys, "avatar"],
+      privateSpectatorKeys
     );
-  }
-
-  constructor(
-    protected readonly store: StateStore,
-    public readonly game: GameState & BaseGameState,
-    public readonly users: Record<string, UserState & BaseUserState>,
-    public readonly spectators: Record<string, SpectatorState>
-  ) {
     // Listen for incoming messages
     const clients = [...Object.values(users), ...Object.values(spectators)];
 
@@ -236,52 +338,17 @@ abstract class State<
     });
   }
 
-  public getPublicGameState(): Pick<
-    GameState & BaseGameState,
-    PublicGameKeys[number] | BasePublicGameKeys
-  > {
-    const combinedKeys: Array<PublicGameKeys[number] | BasePublicGameKeys> = [
-      ...this.publicGameKeys,
-      "id",
-      "owner",
-      "type",
-      "difficulty",
-    ];
-    return pick(this.game, ...combinedKeys);
+  public get difficultyConfig(): DifficultyConfig {
+    return getDifficultyConfig(
+      this.game.difficulty,
+      this.game.type === "singleplayer"
+    );
   }
 
-  public getPublicUserState(): Record<
-    string,
-    Pick<UserState & BaseUserState, PublicUserKeys[number] | BasePublicUserKeys>
-  > {
-    const combinedKeys: Array<PublicUserKeys[number] | BasePublicUserKeys> = [
-      ...this.publicUserKeys,
-      "avatar",
-    ];
-    return mapValues(this.users, (user) => pick(user, ...combinedKeys));
-  }
-
-  public getPrivateUserState(
-    userName: string
-  ): Pick<
-    UserState & BaseUserState,
-    PrivateUserKeys[number] | PublicUserKeys[number] | BasePublicUserKeys
-  > {
-    const combinedKeys: Array<
-      PrivateUserKeys[number] | PublicUserKeys[number] | BasePublicUserKeys
-    > = [...this.privateUserKeys, ...this.publicUserKeys, "avatar"];
-    return pick(this.users[userName], ...combinedKeys);
-  }
-
-  public getSpectatorState(): Record<string, Pick<SpectatorState, "avatar">> {
-    return mapValues(this.spectators, (spectator) => pick(spectator, "avatar"));
-  }
-
-  protected transition<T extends AnyServerState | null>(to: T): T {
+  protected transition(to: AnyServerState | null) {
     Object.values(this.unsubscribeFromWsMessages).forEach((cb) => cb());
     Object.values(this.unsubscribeFromWsClose).forEach((cb) => cb());
-    this.store.state = to;
-    return to;
+    super.transition(to);
   }
 
   private leave(userName: string) {
@@ -298,13 +365,11 @@ abstract class State<
       this.users,
       userName
     );
-    const newUserCount = Object.values(newUsers).length;
+    const newUserCount = Object.keys(newUsers).length;
 
-    const newSpectators: Record<string, SpectatorState> = omit(
-      this.spectators,
-      userName
-    );
-    const newSpectatorCount = Object.values(newSpectators).length;
+    const newSpectators: Record<string, SpectatorState & BaseSpectatorState> =
+      omit(this.spectators, userName);
+    const newSpectatorCount = Object.keys(newSpectators).length;
 
     if (newUserCount + newSpectatorCount === 0 && this.game.type !== "public") {
       return this.transition(null);
@@ -321,14 +386,11 @@ abstract class State<
         : Object.keys(newSpectators)[0];
 
     if (newUserCount <= 1 && this.stateName !== "Lobby") {
-      const allSpectators: Record<string, SpectatorState> = {
-        ...newSpectators,
-        ...mapValues(newUsers, (user) => ({
-          avatar: user.avatar,
-          transport: user.transport,
-          spectator: true,
-        })),
-      };
+      const allSpectators: Record<string, SpectatorState & BaseSpectatorState> =
+        {
+          ...newSpectators,
+          ...mapValues(newUsers, (user) => this.convertToSpectator(user)),
+        };
 
       return this.transition(
         new Lobby(
@@ -348,7 +410,14 @@ abstract class State<
     }
 
     this.transition(
-      this.recreate({ ...this.game, owner: newOwner }, newUsers, newSpectators)
+      this.recreate(
+        {
+          ...this.game,
+          owner: newOwner,
+        },
+        newUsers,
+        newSpectators
+      )
     );
   }
 
@@ -363,32 +432,40 @@ abstract class State<
     return this.transition(
       this.recreate(this.game, this.users, {
         ...this.spectators,
-        [avatar.name]: { avatar, transport },
+        [avatar.name]: this.createSpectator(avatar, transport),
       })
     );
   }
 
   protected abstract recreate(
-    game: GameState & BaseGameState,
-    users: Record<string, UserState & BaseUserState>,
-    spectators: Record<string, SpectatorState>
+    game: typeof this.game,
+    users: typeof this.users,
+    spectators: typeof this.spectators
   ): AnyServerState;
 
   public terminate() {
     Object.values(this.unsubscribeFromWsMessages).forEach((cb) => cb());
     Object.values(this.unsubscribeFromWsClose).forEach((cb) => cb());
-    Object.values(this.users).forEach((user) => user.transport.close(1000));
-    Object.values(this.spectators).forEach((spectator) =>
-      spectator.transport.close(1000)
+    Object.values(this.users).forEach(({ transport }) => transport.close(1000));
+    Object.values(this.spectators).forEach(({ transport }) =>
+      transport.close(1000)
     );
     this.transition(null);
   }
 
   protected onMessage(userName: string, message: ClientActions): void {}
+
+  protected abstract createSpectator(
+    avatar: Avatar,
+    transport: Transport
+  ): SpectatorState & BaseSpectatorState;
+
+  protected abstract convertToSpectator(
+    user: UserState & BaseUserState
+  ): SpectatorState & BaseSpectatorState;
 }
 
-export class Lobby extends State<
-  "Lobby",
+export class Lobby extends BaseState<
   | {
       firstUserJoined: Date | undefined;
       timerStarted: number;
@@ -401,15 +478,15 @@ export class Lobby extends State<
       timerDuration: undefined;
       timerId: undefined;
     },
-  ["timerStarted", "timerDuration"],
   {},
-  [],
-  []
+  {},
+  "timerStarted" | "timerDuration",
+  never,
+  never,
+  never,
+  never
 > {
   public stateName = "Lobby" as const;
-  public publicGameKeys = ["timerStarted", "timerDuration"] as const;
-  public publicUserKeys = [] as const;
-  public privateUserKeys = [] as const;
 
   constructor(
     store: StateStore,
@@ -467,7 +544,18 @@ export class Lobby extends State<
         }, timerDuration * 1000),
       };
     }
-    super(store, game, users, spectators);
+
+    super({
+      store,
+      game,
+      users,
+      spectators,
+      publicGameKeys: ["timerStarted", "timerDuration"],
+      publicUserKeys: [],
+      privateUserKeys: [],
+      publicSpectatorKeys: [],
+      privateSpectatorKeys: [],
+    });
 
     if (game.type === "public" && playerCount > 10) {
       this.start();
@@ -497,12 +585,13 @@ export class Lobby extends State<
           ...pick(this.game, "id", "owner", "type", "difficulty"),
           songs: gameSongs,
           round,
-          song,
           songUrl: song.audioUrl,
           songStartFraction: maxSongStartFraction * Math.random(),
+          roundStarted: new Date(),
           timerStarted: undefined,
           timerDuration: undefined,
           timerId: undefined,
+          roundHistory: {},
         },
         mapValues(this.spectators, (spectator) => {
           return {
@@ -512,6 +601,8 @@ export class Lobby extends State<
             spectator: false,
             guess: undefined,
             guessTime: undefined,
+            guessed: false,
+            roundHistory: {},
           };
         }),
         {}
@@ -525,6 +616,17 @@ export class Lobby extends State<
     spectators: Lobby["spectators"]
   ) {
     return new Lobby(this.store, game, users, spectators);
+  }
+
+  protected createSpectator(
+    avatar: Avatar,
+    transport: Transport
+  ): Lobby["spectators"][string] {
+    return { avatar, transport };
+  }
+
+  protected convertToSpectator(user: BaseUserState): BaseSpectatorState {
+    return { avatar: user.avatar, transport: user.transport };
   }
 
   protected updateSettings(settings: { difficulty?: Difficulty }) {
@@ -552,52 +654,192 @@ export class Lobby extends State<
   }
 }
 
-export class RoundActive extends State<
-  "RoundActive",
+type PostLobbyGameState = {
+  roundHistory: Record<number, Song>;
+};
+type PostLobbyUserState = {
+  roundHistory: Record<number, RoundResult>;
+};
+type PostLobbySpectatorState = {
+  roundHistory: Record<number, RoundResult>;
+};
+abstract class PostLobbyState<
+  GameState extends {},
+  UserState extends {},
+  SpectatorState extends {},
+  PublicGameKeys extends keyof GameState,
+  PublicUserKeys extends keyof UserState,
+  PrivateUserKeys extends keyof UserState,
+  PublicSpectatorKeys extends keyof SpectatorState,
+  PrivateSpectatorKeys extends keyof SpectatorState,
+> extends BaseState<
+  GameState & PostLobbyGameState,
+  UserState & PostLobbyUserState,
+  SpectatorState & PostLobbySpectatorState,
+  PublicGameKeys | "roundHistory",
+  PublicUserKeys | "roundHistory",
+  PrivateUserKeys,
+  PublicSpectatorKeys | "roundHistory",
+  PrivateSpectatorKeys
+> {
+  constructor({
+    store,
+    game,
+    users,
+    spectators,
+    publicGameKeys,
+    publicUserKeys,
+    privateUserKeys,
+    publicSpectatorKeys,
+    privateSpectatorKeys,
+  }: {
+    store: StateStore;
+    game: GameState & BaseGameState & PostLobbyGameState;
+    users: Record<string, UserState & BaseUserState & PostLobbyUserState>;
+    spectators: Record<
+      string,
+      SpectatorState & BaseSpectatorState & PostLobbySpectatorState
+    >;
+    publicGameKeys: PublicGameKeys[];
+    publicUserKeys: PublicUserKeys[];
+    privateUserKeys: PrivateUserKeys[];
+    publicSpectatorKeys: PublicSpectatorKeys[];
+    privateSpectatorKeys: PrivateSpectatorKeys[];
+  }) {
+    super({
+      store,
+      game,
+      users,
+      spectators,
+      publicGameKeys: [...publicGameKeys, "roundHistory"],
+      publicUserKeys: [...publicUserKeys, "roundHistory"],
+      privateUserKeys,
+      publicSpectatorKeys: [...publicSpectatorKeys, "roundHistory"],
+      privateSpectatorKeys,
+    });
+  }
+}
+
+type ActiveGameState = {
+  songs: Song[];
+  songUrl: string;
+  songStartFraction: number;
+  round: number;
+  roundStarted: Date;
+};
+type ActiveUserState = {
+  health: number;
+  roundHistory: Record<number, RoundResult>;
+};
+type ActiveSpectatorState = {
+  roundHistory: Record<number, RoundResult>;
+};
+abstract class ActiveState<
+  GameState extends {},
+  UserState extends {},
+  SpectatorState extends {},
+  PublicGameKeys extends keyof GameState,
+  PublicUserKeys extends keyof UserState,
+  PrivateUserKeys extends keyof UserState,
+  PublicSpectatorKeys extends keyof SpectatorState,
+  PrivateSpectatorKeys extends keyof SpectatorState,
+> extends PostLobbyState<
+  GameState & ActiveGameState,
+  UserState & ActiveUserState,
+  SpectatorState & ActiveSpectatorState,
+  PublicGameKeys | "round" | "songUrl" | "songStartFraction",
+  PublicUserKeys | "health",
+  PrivateUserKeys,
+  PublicSpectatorKeys,
+  PrivateSpectatorKeys
+> {
+  constructor({
+    store,
+    game,
+    users,
+    spectators,
+    publicGameKeys,
+    publicUserKeys,
+    privateUserKeys,
+    publicSpectatorKeys,
+    privateSpectatorKeys,
+  }: {
+    store: StateStore;
+    game: GameState & BaseGameState & PostLobbyGameState & ActiveGameState;
+    users: Record<
+      string,
+      UserState & BaseUserState & PostLobbyUserState & ActiveUserState
+    >;
+    spectators: Record<
+      string,
+      SpectatorState &
+        BaseSpectatorState &
+        PostLobbySpectatorState &
+        ActiveSpectatorState
+    >;
+    publicGameKeys: PublicGameKeys[];
+    publicUserKeys: PublicUserKeys[];
+    privateUserKeys: PrivateUserKeys[];
+    publicSpectatorKeys: PublicSpectatorKeys[];
+    privateSpectatorKeys: PrivateSpectatorKeys[];
+  }) {
+    super({
+      store,
+      game,
+      users,
+      spectators,
+      publicGameKeys: [
+        ...publicGameKeys,
+        "round",
+        "songUrl",
+        "songStartFraction",
+      ],
+      publicUserKeys: [...publicUserKeys, "health"],
+      privateUserKeys,
+      publicSpectatorKeys,
+      privateSpectatorKeys,
+    });
+  }
+
+  public get song(): Song {
+    return this.game.songs[this.game.round];
+  }
+}
+
+export class RoundActive extends ActiveState<
   | {
-      songs: Song[];
-      song: Song;
-      songUrl: string;
       songStartFraction: number;
-      round: number;
+      roundStarted: Date;
       timerStarted: undefined;
       timerDuration: undefined;
       timerId: undefined;
     }
   | {
-      songs: Song[];
-      song: Song;
-      songUrl: string;
       songStartFraction: number;
       round: number;
+      roundStarted: Date;
       timerStarted: number;
       timerDuration: number;
       timerId: NodeJS.Timeout;
     },
-  ["songUrl", "songStartFraction", "round", "timerStarted", "timerDuration"],
   | {
-      health: number;
       guess: undefined;
       guessTime: undefined;
+      guessed: false;
     }
   | {
-      health: number;
       guess: Coordinate;
-      guessTime: number;
+      guessTime: Date;
+      guessed: true;
     },
-  ["guessTime", "health"],
-  ["guess"]
+  {},
+  "songStartFraction" | "timerStarted" | "timerDuration",
+  "guessed",
+  "guess" | "guessTime",
+  never,
+  never
 > {
   public stateName = "RoundActive" as const;
-  public publicGameKeys = [
-    "songUrl",
-    "songStartFraction",
-    "round",
-    "timerStarted",
-    "timerDuration",
-  ] as const;
-  public publicUserKeys = ["guessTime", "health"] as const;
-  public privateUserKeys = ["guess"] as const;
 
   constructor(
     store: StateStore,
@@ -625,7 +867,17 @@ export class RoundActive extends State<
       };
     }
 
-    super(store, game, users, spectators);
+    super({
+      store,
+      game,
+      users,
+      spectators,
+      publicGameKeys: ["songStartFraction", "timerDuration", "timerStarted"],
+      publicUserKeys: ["guessed"],
+      privateUserKeys: ["guess", "guessTime"],
+      publicSpectatorKeys: [],
+      privateSpectatorKeys: [],
+    });
 
     setTimeout(() => {
       const allGuessed = Object.values(this.users).every(
@@ -662,9 +914,16 @@ export class RoundActive extends State<
     const newUserState: RoundActive["users"] = {
       ...this.users,
       [userName]: {
-        ...pick(this.users[userName], "avatar", "transport", "health"),
+        ...pick(
+          this.users[userName],
+          "avatar",
+          "transport",
+          "health",
+          "roundHistory"
+        ),
         guess,
-        guessTime: now.getTime(),
+        guessTime: now,
+        guessed: true,
       },
     };
 
@@ -682,16 +941,17 @@ export class RoundActive extends State<
       clearTimeout(this.game.timerId);
     }
 
-    const roundResult = calculateRoundResult(this);
+    const roundResults = calculateRoundResults(this);
     const newUserState: RoundOver["users"] = mapValues(this.users, (user) => {
-      const result = roundResult.users[user.avatar.name];
+      const result = roundResults[user.avatar.name];
       return {
-        ...pick(user, "avatar", "transport"),
-        healthBefore: user.health,
-        health: Math.min(Math.max(0, user.health - result.damage.total), 99),
-        guessResult: result.guessResult,
-        damage: result.damage,
+        ...pick(user, "avatar", "transport", "roundHistory"),
+        health: result.healthAfter,
         spectator: false,
+        roundHistory: {
+          ...user.roundHistory,
+          [this.game.round]: result,
+        },
       };
     });
 
@@ -706,12 +966,13 @@ export class RoundActive extends State<
             "type",
             "difficulty",
             "songs",
-            "song",
             "songUrl",
             "songStartFraction",
-            "round"
+            "round",
+            "roundStarted",
+            "roundHistory"
           ),
-          bestGuess: roundResult.bestGuess,
+          song: this.song
         },
         newUserState,
         this.spectators
@@ -727,6 +988,19 @@ export class RoundActive extends State<
     return new RoundActive(this.store, game, users, spectators);
   }
 
+  protected createSpectator(
+    avatar: Avatar,
+    transport: Transport
+  ): ActiveSpectatorState & BaseSpectatorState {
+    return { avatar, transport, roundHistory: {} };
+  }
+
+  protected convertToSpectator(
+    user: ActiveUserState & BaseUserState
+  ): ActiveSpectatorState & BaseSpectatorState {
+    return pick(user, "avatar", "transport", "roundHistory");
+  }
+
   protected onMessage(userName: string, message: ClientActions): void {
     if (
       message.action === "guess" &&
@@ -738,60 +1012,17 @@ export class RoundActive extends State<
   }
 }
 
-export class RoundOver extends State<
-  "RoundOver",
-  {
-    songs: Song[];
-    song: Song;
-    songUrl: string;
-    songStartFraction: number;
-    round: number;
-    bestGuess: {
-      userName: string;
-      coordinate: Coordinate;
-      time: number;
-      closest: Coordinate;
-      distance: number;
-      perfect: boolean;
-    } | undefined;
-  },
-  ["song", "songUrl", "songStartFraction", "round", "bestGuess"],
-  {
-    health: number;
-    healthBefore: number;
-    guessResult: {
-      coordinate: Coordinate;
-      time: number;
-      closest: Coordinate;
-      distance: number;
-      perfect: boolean;
-    } | undefined;
-    damage: {
-      hit: number;
-      healing: number;
-      venom: number;
-      total: number;
-      max: boolean;
-    };
-  },
-  ["health", "healthBefore", "guessResult", "damage"],
-  []
+export class RoundOver extends ActiveState<
+  {song: Song},
+  {},
+  {},
+  "song",
+  never,
+  never,
+  never,
+  never
 > {
   public stateName = "RoundOver" as const;
-  public publicGameKeys = [
-    "song",
-    "songUrl",
-    "songStartFraction",
-    "round",
-    "bestGuess",
-  ] as const;
-  public publicUserKeys = [
-    "health",
-    "healthBefore",
-    "guessResult",
-    "damage",
-  ] as const;
-  public privateUserKeys = [] as const;
 
   constructor(
     store: StateStore,
@@ -799,7 +1030,17 @@ export class RoundOver extends State<
     users: RoundOver["users"],
     spectators: RoundOver["spectators"]
   ) {
-    super(store, game, users, spectators);
+    super({
+      store,
+      game,
+      users,
+      spectators,
+      publicGameKeys: [],
+      publicUserKeys: [],
+      privateUserKeys: [],
+      publicSpectatorKeys: [],
+      privateSpectatorKeys: [],
+    });
 
     if (this.game.type === "public") {
       setTimeout(() => {
@@ -816,13 +1057,11 @@ export class RoundOver extends State<
     for (const userName in this.users) {
       const user = this.users[userName];
       if (user.health <= 0) {
-        newSpectators[userName] = {
-          avatar: user.avatar,
-          transport: user.transport,
-        };
+        newSpectators[userName] = this.convertToSpectator(user);
       } else {
         newUsers[userName] = {
-          ...pick(user, "avatar", "transport", "health"),
+          ...pick(user, "avatar", "transport", "health", "roundHistory"),
+          guessed: false,
           guess: undefined,
           guessTime: undefined,
         };
@@ -846,7 +1085,8 @@ export class RoundOver extends State<
             "type",
             "difficulty",
             "songs",
-            "round"
+            "round",
+            "roundHistory"
           ),
           newUsers,
           newSpectators
@@ -869,12 +1109,19 @@ export class RoundOver extends State<
         new RoundActive(
           this.store,
           {
-            ...pick(this.game, "id", "owner", "type", "difficulty"),
+            ...pick(
+              this.game,
+              "id",
+              "owner",
+              "type",
+              "difficulty",
+              "roundHistory"
+            ),
             songs,
             round,
-            song,
             songUrl: song.audioUrl,
             songStartFraction: maxSongStartFraction * Math.random(),
+            roundStarted: new Date(),
             timerStarted: undefined,
             timerDuration: undefined,
             timerId: undefined,
@@ -894,6 +1141,19 @@ export class RoundOver extends State<
     return new RoundOver(this.store, game, users, spectators);
   }
 
+  protected createSpectator(
+    avatar: Avatar,
+    transport: Transport
+  ): ActiveSpectatorState & BaseSpectatorState {
+    return { avatar, transport, roundHistory: {} };
+  }
+
+  protected convertToSpectator(
+    user: ActiveUserState & BaseUserState
+  ): ActiveSpectatorState & BaseSpectatorState {
+    return pick(user, "avatar", "transport", "roundHistory");
+  }
+
   protected onMessage(userName: string, message: ClientActions): void {
     if (message.action === "nextRound" && this.game.owner === userName) {
       this.next();
@@ -901,20 +1161,17 @@ export class RoundOver extends State<
   }
 }
 
-export class GameOver extends State<
-  "GameOver",
-  {
-    round: number;
-  },
-  ["round"],
+export class GameOver extends PostLobbyState<
   {},
-  [],
-  []
+  {},
+  {},
+  never,
+  never,
+  never,
+  never,
+  never
 > {
   public stateName = "GameOver" as const;
-  public publicGameKeys = ["round"] as const;
-  public publicUserKeys = [] as const;
-  public privateUserKeys = [] as const;
 
   constructor(
     store: StateStore,
@@ -922,7 +1179,17 @@ export class GameOver extends State<
     users: GameOver["users"],
     spectators: GameOver["spectators"]
   ) {
-    super(store, game, users, spectators);
+    super({
+      store,
+      game,
+      users,
+      spectators,
+      publicGameKeys: [],
+      publicUserKeys: [],
+      privateUserKeys: [],
+      publicSpectatorKeys: [],
+      privateSpectatorKeys: [],
+    });
 
     if (this.game.type === "public") {
       setTimeout(() => {
@@ -970,6 +1237,18 @@ export class GameOver extends State<
       this.playAgain();
     }
   }
+
+  protected createSpectator(
+    avatar: Avatar,
+    transport: Transport
+  ): PostLobbySpectatorState & BaseSpectatorState {
+    return { avatar, transport, roundHistory: {} };
+  }
+  protected convertToSpectator(
+    user: PostLobbyUserState & BaseUserState
+  ): PostLobbySpectatorState & BaseSpectatorState {
+    return pick(user, "avatar", "transport", "roundHistory");
+  }
 }
 
 export type ServerStates = {
@@ -985,16 +1264,12 @@ export type ClientStateData<
   stateName: StateName;
   serverTime: number;
   stateIndex: number;
-  game: ReturnType<ServerStates[StateName]["getPublicGameState"]>;
-  users: ReturnType<ServerStates[StateName]["getPublicUserState"]>;
-  spectators: ReturnType<ServerStates[StateName]["getSpectatorState"]>;
+  game: ReturnType<ServerStates[StateName]["getClientStates"]>["publicGame"];
+  users: ReturnType<ServerStates[StateName]["getClientStates"]>["publicUsers"];
+  spectators: ReturnType<ServerStates[StateName]["getClientStates"]>["publicSpectators"];
   me:
-    | ({ type: "user" } & ReturnType<
-        ServerStates[StateName]["getPrivateUserState"]
-      >)
-    | ({ type: "spectator" } & ReturnType<
-        ServerStates[StateName]["getSpectatorState"]
-      >[string]);
+    | ({ type: "user" } & ReturnType<ServerStates[StateName]["getClientStates"]>["publicUsers"][string] & ReturnType<ServerStates[StateName]["getClientStates"]>["privateUsers"][string])
+    | ({ type: "spectator" } & ReturnType<ServerStates[StateName]["getClientStates"]>["publicSpectators"][string] & ReturnType<ServerStates[StateName]["getClientStates"]>["privateSpectators"][string])
 };
 export type BasicStateData<
   StateName extends AnyServerState["stateName"] = AnyServerState["stateName"],

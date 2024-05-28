@@ -1,6 +1,6 @@
 import { convertFlatten } from "./coordinates.js";
 import type { Coordinate, Polygon } from "./coordinates.js";
-import { RoundActive } from "./states.js";
+import { RoundActive, RoundResult } from "./states.js";
 import { mapValues } from "./util.js";
 
 function closestPoint(
@@ -26,31 +26,16 @@ function closestPoint(
 
 type GuessResult = {
   coordinate: Coordinate;
-  time: number;
+  time: Date;
   closest: Coordinate;
   distance: number;
-  perfect: boolean;
-};
-type RoundResult = {
-  bestGuess: (GuessResult & { userName: string }) | undefined;
-  users: Record<
-    string,
-    {
-      guessResult: GuessResult | undefined;
-      damage: {
-        hit: number;
-        healing: number;
-        venom: number;
-        total: number;
-        max: boolean;
-      };
-    }
-  >;
 };
 
-export function calculateRoundResult(state: RoundActive): RoundResult {
+export function calculateRoundResults(
+  state: RoundActive
+): Record<string, RoundResult> {
   const difficultyConfig = state.difficultyConfig;
-  const song = state.game.song;
+  const song = state.song;
   const location = song.location;
 
   const guessResults: Record<string, GuessResult | undefined> = mapValues(
@@ -67,7 +52,6 @@ export function calculateRoundResult(state: RoundActive): RoundResult {
         time: user.guessTime,
         closest,
         distance,
-        perfect: distance === 0,
       };
     }
   );
@@ -101,14 +85,13 @@ export function calculateRoundResult(state: RoundActive): RoundResult {
 
   // In singleplayer games, if you don't get it perfect
   // then you lose health as if someone else did
-  if (state.game.type === "singleplayer" && bestGuess?.perfect !== true) {
+  if (state.game.type === "singleplayer" && bestGuess?.distance !== 0) {
     bestGuess = {
       userName: "AI",
       coordinate: location[0][0],
-      time: new Date().getTime(),
+      time: new Date(),
       closest: location[0][0],
       distance: 0,
-      perfect: true,
     };
   }
 
@@ -138,9 +121,9 @@ export function calculateRoundResult(state: RoundActive): RoundResult {
     getMaxHit(0, difficultyConfig.damageScaling)
   );
 
-  const damage = mapValues(state.users, (user) => {
+  const damages = mapValues(state.users, (user) => {
     const wasFirstPerfect =
-      bestGuess?.userName === user.avatar.name && bestGuess.perfect;
+      bestGuess?.userName === user.avatar.name && bestGuess.distance === 0;
     const healing = wasFirstPerfect ? healingAmount : 0;
     const venom = venomAmount;
 
@@ -154,34 +137,39 @@ export function calculateRoundResult(state: RoundActive): RoundResult {
       hit,
       healing,
       venom,
-      total: hit + venom - healing,
       max: hit === absoluteMaxHit,
     };
   });
 
-  return {
-    bestGuess,
-    users: mapValues(state.users, (user) => {
-      // Dead users can't take damage
-      if (user.health <= 0) {
-        return {
-          guessResult: undefined,
-          damage: {
-            hit: 0,
-            healing: 0,
-            venom: 0,
-            total: 0,
-            max: false,
-          },
-        };
-      }
+  return mapValues(state.users, (user) => {
+    const guessResult = guessResults[user.avatar.name];
+    const damage = damages[user.avatar.name];
+    const healthBefore = user.health;
+    const healthAfter = Math.min(
+      Math.max(0, healthBefore + damage.healing - damage.hit - damage.venom),
+      99
+    );
 
+    if (guessResult === undefined) {
       return {
-        guessResult: guessResults[user.avatar.name],
-        damage: damage[user.avatar.name],
+        damage,
+        healthBefore,
+        healthAfter,
       };
-    }),
-  };
+    }
+
+    const { coordinate, closest, distance } = guessResult;
+    const time = guessResult.time.getTime() - state.game.roundStarted.getTime();
+    return {
+      coordinate,
+      time,
+      closest,
+      distance,
+      damage,
+      healthBefore,
+      healthAfter,
+    };
+  });
 }
 
 function getMaxHit(distance: number, scaling: number) {

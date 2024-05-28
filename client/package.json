@@ -24,7 +24,6 @@
     "flatten-js": "^0.6.9",
     "howler": "^2.2.4",
     "leaflet": "^1.9.4",
-    "tunescape07-data": "1.0.0",
     "tunescape07-shared": "1.0.0"
   }
 }
