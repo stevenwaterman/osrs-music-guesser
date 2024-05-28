@@ -20,11 +20,9 @@ class ReschedulableTimeout {
 }
 
 export class HeartbeatWebSocket extends WebSocket {
-  private readonly intervalMs = 10_000;
-
-  private clientSendingDataTimer = new ReschedulableTimeout(this.intervalMs);
-  private clientReceivingDataTimer = new ReschedulableTimeout(this.intervalMs);
-  private heartbeatTimeoutTimer = new ReschedulableTimeout(this.intervalMs);
+  private clientSendingDataTimer = new ReschedulableTimeout(25_000);
+  private clientReceivingDataTimer = new ReschedulableTimeout(10_000);
+  private heartbeatTimeoutTimer = new ReschedulableTimeout(5_000);
 
   constructor(url: string) {
     super(url);
