@@ -1,4 +1,4 @@
-import { Song } from "./songTypes.js";
+import { Song } from "../songTypes.js";
 
 export type Difficulty = "tutorial" | "normal" | "hard" | "extreme";
 type TimeLimit =

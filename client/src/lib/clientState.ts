@@ -3,13 +3,11 @@ import {
   getDifficultyConfig,
   type DifficultyConfig,
   StateInterface,
-  applyDiff,
 } from "tunescape07-shared";
 import { songs } from "tunescape07-data";
 import { HeartbeatWebSocket } from "./HeartbeatWebSocket";
-import type { Transport } from "tunescape07-shared/src/states";
 
-let transportSingleton: Transport | undefined = undefined;
+let transportSingleton: StateInterface.Transport | undefined = undefined;
 function closeOldTransport() {
   transportSingleton?.close(1000);
   transportSingleton = undefined;
@@ -179,7 +177,7 @@ function listenToTransport(transport: StateInterface.Transport) {
             const oldIdx = oldState.data.stateIndex;
             const newIdx = message.data.stateIndex;
             if (newIdx === oldIdx + 1) {
-              const data = applyDiff(oldState.data, message.data);
+              const data = StateInterface.applyDiff(oldState.data, message.data);
               return new ActiveState(data, transport);
             }
           }

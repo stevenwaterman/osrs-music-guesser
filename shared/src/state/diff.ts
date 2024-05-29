@@ -1,14 +1,10 @@
-import { StateInterface } from "./index.js";
-
-type Diff<T> = T extends object
+export type Diff<T> = T extends object
   ? {
       [P in keyof T]?: Diff<T[P]> | null;
     }
   : T;
 
-export type ClientStateDiff = Diff<StateInterface.ClientStateData>;
-
-function applyPartialDiff(base: any, diff: any, onto: any) {
+export function applyPartialDiff(base: any, diff: any, onto: any) {
   base = base ?? {};
 
   for (const prop in base) {
@@ -54,7 +50,7 @@ function applyPartialDiff(base: any, diff: any, onto: any) {
   }
 }
 
-function generatePartialDiff(from: any, to: any) {
+export function generatePartialDiff(from: any, to: any) {
   if (from === undefined) {
     return to;
   }
@@ -92,32 +88,4 @@ function generatePartialDiff(from: any, to: any) {
   }
 
   return diff;
-}
-
-export function getBasicDiff(
-  from: StateInterface.BasicStateData | undefined,
-  to: StateInterface.BasicStateData | undefined
-): Diff<StateInterface.BasicStateData> {
-  return generatePartialDiff(from, to);
-}
-
-export function getMeDiff(
-  from: StateInterface.ClientStateData["me"] | undefined,
-  to: StateInterface.ClientStateData["me"] | undefined
-): { me?: Diff<StateInterface.ClientStateData["me"]> } {
-  const diff = generatePartialDiff(from ?? undefined, to ?? undefined);
-  if (Object.keys(diff).length > 0) {
-    return { me: diff };
-  } else {
-    return {};
-  }
-}
-
-export function applyDiff(
-  base: StateInterface.ClientStateData | undefined,
-  diff: Diff<StateInterface.ClientStateData>
-): StateInterface.ClientStateData {
-  const output = {} as StateInterface.ClientStateData;
-  applyPartialDiff(base, diff, output);
-  return output;
 }
