@@ -1,69 +1,56 @@
 import { mapValues, pick } from "../../util.js";
+import { AnyConfig, ConstructorData } from "../config.js";
 import { StateStore } from "../store.js";
-import { AnyServerState, Elem, Spectator, User } from "../types.js";
+import { AnyServerState, AnyState, Elem, Spectator, User } from "../types.js";
 
 type SimpleClientState<
   State extends {},
-  Keys extends Array<keyof State>,
+  Keys extends Readonly<Array<keyof State>>,
 > = Pick<State, Elem<Keys>>;
 type RecordClientState<
   State extends {},
-  Keys extends Array<keyof State>,
+  Keys extends Readonly<Array<keyof State>>,
 > = Record<string, Pick<State, Elem<Keys>>>;
-type ClientStates<T extends State<any, any, any, any, any, any, any, any>> = {
+type ClientStates<T extends AnyState> = {
   publicGame: SimpleClientState<T["game"], T["publicGameKeys"]>;
   publicUsers: RecordClientState<User<T>, T["publicUserKeys"]>;
   privateUsers: RecordClientState<User<T>, T["privateUserKeys"]>;
-  publicSpectators: RecordClientState<
-    Spectator<T>,
-    T["publicSpectatorKeys"]
-  >;
-  privateSpectators: RecordClientState<
-    Spectator<T>,
-    T["privateSpectatorKeys"]
-  >;
+  publicSpectators: RecordClientState<Spectator<T>, T["publicSpectatorKeys"]>;
+  privateSpectators: RecordClientState<Spectator<T>, T["privateSpectatorKeys"]>;
 };
 
-export abstract class State<
-  GameState extends {},
-  UserState extends {},
-  SpectatorState extends {},
-  PublicGameKeys extends Array<keyof GameState>,
-  PublicUserKeys extends Array<keyof UserState>,
-  PrivateUserKeys extends Array<keyof UserState>,
-  PublicSpectatorKeys extends Array<keyof SpectatorState>,
-  PrivateSpectatorKeys extends Array<keyof SpectatorState>,
-> {
+export abstract class State<Config extends AnyConfig> {
   public abstract stateName: string;
 
+  public readonly game: Config["structs"]["game"];
+  public readonly users: Record<string, Config["structs"]["user"]>;
+  public readonly spectators: Record<string, Config["structs"]["spectator"]>;
+  public readonly publicGameKeys: Config["visibility"]["publicGameKeys"];
+  public readonly publicUserKeys: Config["visibility"]["publicUserKeys"];
+  public readonly privateUserKeys: Config["visibility"]["privateUserKeys"];
+  public readonly publicSpectatorKeys: Config["visibility"]["publicSpectatorKeys"];
+  public readonly privateSpectatorKeys: Config["visibility"]["privateSpectatorKeys"];
+
   constructor(
-    protected readonly store: StateStore,
-    public readonly game: GameState,
-    public readonly users: Record<string, UserState>,
-    public readonly spectators: Record<string, SpectatorState>,
-    public readonly publicGameKeys: PublicGameKeys,
-    public readonly publicUserKeys: PublicUserKeys,
-    public readonly privateUserKeys: PrivateUserKeys,
-    public readonly publicSpectatorKeys: PublicSpectatorKeys,
-    public readonly privateSpectatorKeys: PrivateSpectatorKeys
-  ) {}
+    public readonly store: StateStore,
+    data: ConstructorData<Config>,
+    keys: Config["visibility"]
+  ) {
+    this.game = data.game;
+    this.users = data.users;
+    this.spectators = data.spectators;
+    this.publicGameKeys = keys.publicGameKeys;
+    this.publicUserKeys = keys.publicUserKeys;
+    this.privateUserKeys = keys.privateUserKeys;
+    this.publicSpectatorKeys = keys.publicSpectatorKeys;
+    this.privateSpectatorKeys = keys.privateSpectatorKeys;
+  }
 
   protected transition(to: AnyServerState | null) {
     this.store.state = to;
   }
 
-  public getClientStates(): ClientStates<
-    State<
-      GameState,
-      UserState,
-      SpectatorState,
-      PublicGameKeys,
-      PublicUserKeys,
-      PrivateUserKeys,
-      PublicSpectatorKeys,
-      PrivateSpectatorKeys
-    >
-  > {
+  public getClientStates(): ClientStates<State<Config>> {
     return {
       publicGame: pick(this.game, ...this.publicGameKeys),
       publicUsers: mapValues(this.users, (user) =>

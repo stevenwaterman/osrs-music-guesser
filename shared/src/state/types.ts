@@ -4,6 +4,7 @@ import { GameOver } from "./concrete/gameOver.js";
 import { Lobby } from "./concrete/lobby.js";
 import { RoundActive } from "./concrete/roundActive.js";
 import { RoundOver } from "./concrete/roundOver.js";
+import { AnyConfig } from "./config.js";
 
 export type ServerStates = {
   Lobby: Lobby;
@@ -74,6 +75,6 @@ export type Elem<T extends any[] | Record<string, any>> = T extends any[]
   : T extends Record<string, any>
     ? T[string]
     : never;
-type AnyState = State<any, any, any, any, any, any, any, any>;
+export type AnyState = State<AnyConfig>;
 export type User<S extends AnyState> = Elem<S["users"]>;
 export type Spectator<S extends AnyState> = Elem<S["spectators"]>;

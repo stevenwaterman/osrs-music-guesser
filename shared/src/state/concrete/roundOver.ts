@@ -2,41 +2,37 @@ import { Avatar } from "../../avatars.js";
 import { Song } from "../../songTypes.js";
 import { pick, shuffle } from "../../util.js";
 import { ActiveState } from "../abstract/activeState.js";
+import { Config } from "../config.js";
 import { StateStore } from "../store.js";
 import { ClientActions, Transport } from "../transport.js";
 import { Spectator, User } from "../types.js";
 import { GameOver } from "./gameOver.js";
 import { RoundActive } from "./roundActive.js";
 
-export class RoundOver extends ActiveState<
-  { song: Song },
-  {},
-  {},
-  ["song"],
-  [],
-  [],
-  [],
-  []
-> {
+const extraKeys = {
+  publicGameKeys: ["song"],
+  publicUserKeys: [],
+  privateUserKeys: [],
+  publicSpectatorKeys: [],
+  privateSpectatorKeys: [],
+} as const;
+
+type RoundOverConfig = Config<
+  {
+    game: { song: Song };
+    user: {};
+    spectator: {};
+  },
+  typeof extraKeys
+>;
+export class RoundOver extends ActiveState<RoundOverConfig> {
   public stateName = "RoundOver" as const;
 
   constructor(
     store: StateStore,
-    game: RoundOver["game"],
-    users: RoundOver["users"],
-    spectators: RoundOver["spectators"]
+    data: Pick<RoundOver, "game" | "users" | "spectators">
   ) {
-    super({
-      store,
-      game,
-      users,
-      spectators,
-      publicGameKeys: ["song"],
-      publicUserKeys: [],
-      privateUserKeys: [],
-      publicSpectatorKeys: [],
-      privateSpectatorKeys: [],
-    });
+    super(store, data, extraKeys);
 
     if (this.game.type === "public") {
       setTimeout(() => {
@@ -72,9 +68,8 @@ export class RoundOver extends ActiveState<
       (this.game.type !== "singleplayer" && newUserCount <= 1)
     ) {
       return this.transition(
-        new GameOver(
-          this.store,
-          pick(
+        new GameOver(this.store, {
+          game: pick(
             this.game,
             "id",
             "owner",
@@ -84,9 +79,9 @@ export class RoundOver extends ActiveState<
             "round",
             "roundHistory"
           ),
-          newUsers,
-          newSpectators
-        )
+          users: newUsers,
+          spectators: newSpectators,
+        })
       );
     } else {
       // Handle shuffling songs if you manage to play like 600 rounds
@@ -102,9 +97,8 @@ export class RoundOver extends ActiveState<
         : 0;
 
       return this.transition(
-        new RoundActive(
-          this.store,
-          {
+        new RoundActive(this.store, {
+          game: {
             ...pick(
               this.game,
               "id",
@@ -122,9 +116,9 @@ export class RoundOver extends ActiveState<
             timerDuration: undefined,
             timerId: undefined,
           },
-          newUsers,
-          newSpectators
-        )
+          users: newUsers,
+          spectators: newSpectators,
+        })
       );
     }
   }
@@ -134,7 +128,7 @@ export class RoundOver extends ActiveState<
     users: RoundOver["users"],
     spectators: RoundOver["spectators"]
   ) {
-    return new RoundOver(this.store, game, users, spectators);
+    return new RoundOver(this.store, { game, users, spectators });
   }
 
   protected createSpectator(
@@ -144,9 +138,7 @@ export class RoundOver extends ActiveState<
     return { avatar, transport, roundHistory: {} };
   }
 
-  protected convertToSpectator(
-    user: User<RoundOver>
-  ): Spectator<RoundOver> {
+  protected convertToSpectator(user: User<RoundOver>): Spectator<RoundOver> {
     return pick(user, "avatar", "transport", "roundHistory");
   }
 

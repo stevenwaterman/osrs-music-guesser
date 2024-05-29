@@ -1,6 +1,7 @@
 import { Avatar } from "../../avatars.js";
 import { mapValues, omit, pick } from "../../util.js";
 import { Lobby } from "../concrete/lobby.js";
+import { AnyConfig, Config, MergedConfig, mergeVisibility } from "../config.js";
 import { DifficultyConfig, getDifficultyConfig } from "../difficulty.js";
 import { StateStore } from "../store.js";
 import {
@@ -12,104 +13,51 @@ import {
 import { AnyServerState, Spectator, User } from "../types.js";
 import { State } from "./state.js";
 
-type BaseGameState = {
-  id: string;
-  owner: string;
-  type: "singleplayer" | "private" | "public";
-  difficulty: "tutorial" | "normal" | "hard" | "extreme";
-};
-type BaseUserState = {
-  avatar: Avatar;
-  transport: Transport;
-};
-type BaseSpectatorState = {
-  avatar: Avatar;
-  transport: Transport;
-};
+const extraKeys = {
+  publicGameKeys: ["id", "owner", "type", "difficulty"],
+  publicUserKeys: ["avatar"],
+  privateUserKeys: [],
+  publicSpectatorKeys: ["avatar"],
+  privateSpectatorKeys: [],
+} as const;
+type BaseConfig = Config<
+  {
+    game: {
+      id: string;
+      owner: string;
+      type: "singleplayer" | "private" | "public";
+      difficulty: "tutorial" | "normal" | "hard" | "extreme";
+    };
+    user: {
+      avatar: Avatar;
+      transport: Transport;
+    };
+    spectator: {
+      avatar: Avatar;
+      transport: Transport;
+    };
+  },
+  typeof extraKeys
+>;
 
-export abstract class BaseState<
-  GameState extends {},
-  UserState extends {},
-  SpectatorState extends {},
-  PublicGameKeys extends Array<keyof GameState>,
-  PublicUserKeys extends Array<keyof UserState>,
-  PrivateUserKeys extends Array<keyof UserState>,
-  PublicSpectatorKeys extends Array<keyof SpectatorState>,
-  PrivateSpectatorKeys extends Array<keyof SpectatorState>,
-> extends State<
-  GameState & BaseGameState,
-  UserState & BaseUserState,
-  SpectatorState & BaseSpectatorState,
-  [...PublicGameKeys, "id", "owner", "type", "difficulty"],
-  [...PublicUserKeys, "avatar"],
-  PrivateUserKeys,
-  [...PublicSpectatorKeys, "avatar"],
-  PrivateSpectatorKeys
+export abstract class BaseState<Config extends AnyConfig> extends State<
+  MergedConfig<Config, BaseConfig>
 > {
   private readonly unsubscribeFromWsMessages: Array<() => void>;
   private readonly unsubscribeFromWsClose: Array<() => void>;
 
-  constructor({
-    store,
-    game,
-    users,
-    spectators,
-    publicGameKeys,
-    publicUserKeys,
-    privateUserKeys,
-    publicSpectatorKeys,
-    privateSpectatorKeys,
-  }: {
-    store: StateStore;
-    game: BaseState<
-      GameState,
-      UserState,
-      SpectatorState,
-      PublicGameKeys,
-      PublicUserKeys,
-      PrivateUserKeys,
-      PublicSpectatorKeys,
-      PrivateSpectatorKeys
-    >["game"];
-    users: BaseState<
-      GameState,
-      UserState,
-      SpectatorState,
-      PublicGameKeys,
-      PublicUserKeys,
-      PrivateUserKeys,
-      PublicSpectatorKeys,
-      PrivateSpectatorKeys
-    >["users"];
-    spectators: BaseState<
-      GameState,
-      UserState,
-      SpectatorState,
-      PublicGameKeys,
-      PublicUserKeys,
-      PrivateUserKeys,
-      PublicSpectatorKeys,
-      PrivateSpectatorKeys
-    >["spectators"];
-    publicGameKeys: PublicGameKeys;
-    publicUserKeys: PublicUserKeys;
-    privateUserKeys: PrivateUserKeys;
-    publicSpectatorKeys: PublicSpectatorKeys;
-    privateSpectatorKeys: PrivateSpectatorKeys;
-  }) {
-    super(
-      store,
-      game,
-      users,
-      spectators,
-      [...publicGameKeys, "id", "owner", "type", "difficulty"],
-      [...publicUserKeys, "avatar"],
-      privateUserKeys,
-      [...publicSpectatorKeys, "avatar"],
-      privateSpectatorKeys
-    );
+  constructor(
+    store: StateStore,
+    data: Pick<BaseState<Config>, "game" | "users" | "spectators">,
+    keys: Config["visibility"]
+  ) {
+    super(store, data, mergeVisibility<Config, BaseConfig>(keys, extraKeys));
+
     // Listen for incoming messages
-    const clients = [...Object.values(users), ...Object.values(spectators)];
+    const clients = [
+      ...Object.values(data.users),
+      ...Object.values(data.spectators),
+    ];
 
     this.unsubscribeFromWsMessages = Object.values(clients).map((user) => {
       const messageHandler = (ev: TransportMessage) => {
@@ -164,28 +112,13 @@ export abstract class BaseState<
     const avatar = (this.users[userName] ?? this.spectators[userName]).avatar;
     this.store.avatarLibrary.release(avatar);
 
-    const newUsers: BaseState<
-      GameState,
-      UserState,
-      SpectatorState,
-      PublicGameKeys,
-      PublicUserKeys,
-      PrivateUserKeys,
-      PublicSpectatorKeys,
-      PrivateSpectatorKeys
-    >["users"] = omit(this.users, userName);
+    const newUsers: BaseState<Config>["users"] = omit(this.users, userName);
     const newUserCount = Object.keys(newUsers).length;
 
-    const newSpectators: BaseState<
-      GameState,
-      UserState,
-      SpectatorState,
-      PublicGameKeys,
-      PublicUserKeys,
-      PrivateUserKeys,
-      PublicSpectatorKeys,
-      PrivateSpectatorKeys
-    >["spectators"] = omit(this.spectators, userName);
+    const newSpectators: BaseState<Config>["spectators"] = omit(
+      this.spectators,
+      userName
+    );
     const newSpectatorCount = Object.keys(newSpectators).length;
 
     if (newUserCount + newSpectatorCount === 0 && this.game.type !== "public") {
@@ -209,9 +142,8 @@ export abstract class BaseState<
       };
 
       return this.transition(
-        new Lobby(
-          this.store,
-          {
+        new Lobby(this.store, {
+          game: {
             ...pick(this.game, "id", "type", "difficulty"),
             owner: newOwner,
             firstUserJoined: undefined,
@@ -219,9 +151,9 @@ export abstract class BaseState<
             timerDuration: undefined,
             timerId: undefined,
           },
-          {},
-          allSpectators
-        )
+          users: {},
+          spectators: allSpectators,
+        })
       );
     }
 
@@ -274,42 +206,9 @@ export abstract class BaseState<
   protected abstract createSpectator(
     avatar: Avatar,
     transport: Transport
-  ): Spectator<
-    BaseState<
-      GameState,
-      UserState,
-      SpectatorState,
-      PublicGameKeys,
-      PublicUserKeys,
-      PrivateUserKeys,
-      PublicSpectatorKeys,
-      PrivateSpectatorKeys
-    >
-  >;
+  ): Spectator<BaseState<Config>>;
 
   protected abstract convertToSpectator(
-    user: User<
-      BaseState<
-        GameState,
-        UserState,
-        SpectatorState,
-        PublicGameKeys,
-        PublicUserKeys,
-        PrivateUserKeys,
-        PublicSpectatorKeys,
-        PrivateSpectatorKeys
-      >
-    >
-  ): Spectator<
-    BaseState<
-      GameState,
-      UserState,
-      SpectatorState,
-      PublicGameKeys,
-      PublicUserKeys,
-      PrivateUserKeys,
-      PublicSpectatorKeys,
-      PrivateSpectatorKeys
-    >
-  >;
+    user: User<BaseState<Config>>
+  ): Spectator<BaseState<Config>>;
 }

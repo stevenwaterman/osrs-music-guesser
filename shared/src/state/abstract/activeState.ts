@@ -1,76 +1,50 @@
 import { Song } from "../../songTypes.js";
+import {
+  AnyConfig,
+  Config,
+  MergedConfig,
+  mergeVisibility,
+} from "../config.js";
 import { StateStore } from "../store.js";
 import { PostLobbyState } from "./postLobbyState.js";
 
-type ActiveGameState = {
-  songs: Song[];
-  songUrl: string;
-  songStartFraction: number;
-  round: number;
-  roundStarted: Date;
-};
-type ActiveUserState = {
-  health: number;
-};
-type ActiveSpectatorState = {
-};
+const extraKeys = {
+  publicGameKeys: ["round", "songUrl", "songStartFraction"],
+  publicUserKeys: ["health"],
+  privateUserKeys: [],
+  publicSpectatorKeys: [],
+  privateSpectatorKeys: [],
+} as const;
+type ActiveConfig = Config<
+  {
+    game: {
+      songs: Song[];
+      songUrl: string;
+      songStartFraction: number;
+      round: number;
+      roundStarted: Date;
+    };
+    user: {
+      health: number;
+    };
+    spectator: {};
+  },
+  typeof extraKeys
+>;
 
 export abstract class ActiveState<
-  GameState extends {},
-  UserState extends {},
-  SpectatorState extends {},
-  PublicGameKeys extends Array<keyof GameState>,
-  PublicUserKeys extends Array<keyof UserState>,
-  PrivateUserKeys extends Array<keyof UserState>,
-  PublicSpectatorKeys extends Array<keyof SpectatorState>,
-  PrivateSpectatorKeys extends Array<keyof SpectatorState>,
-> extends PostLobbyState<
-  GameState & ActiveGameState,
-  UserState & ActiveUserState,
-  SpectatorState & ActiveSpectatorState,
-  [...PublicGameKeys, "round", "songUrl", "songStartFraction"],
-  [...PublicUserKeys, "health"],
-  PrivateUserKeys,
-  PublicSpectatorKeys,
-  PrivateSpectatorKeys
-> {
-  constructor({
-    store,
-    game,
-    users,
-    spectators,
-    publicGameKeys,
-    publicUserKeys,
-    privateUserKeys,
-    publicSpectatorKeys,
-    privateSpectatorKeys,
-  }: {
-    store: StateStore;
-    game: ActiveState<GameState, UserState, SpectatorState, PublicGameKeys, PublicUserKeys, PrivateUserKeys, PublicSpectatorKeys, PrivateSpectatorKeys>["game"];
-    users: ActiveState<GameState, UserState, SpectatorState, PublicGameKeys, PublicUserKeys, PrivateUserKeys, PublicSpectatorKeys, PrivateSpectatorKeys>["users"];
-    spectators: ActiveState<GameState, UserState, SpectatorState, PublicGameKeys, PublicUserKeys, PrivateUserKeys, PublicSpectatorKeys, PrivateSpectatorKeys>["spectators"];
-    publicGameKeys: PublicGameKeys;
-    publicUserKeys: PublicUserKeys;
-    privateUserKeys: PrivateUserKeys;
-    publicSpectatorKeys: PublicSpectatorKeys;
-    privateSpectatorKeys: PrivateSpectatorKeys;
-  }) {
-    super({
+  Config extends AnyConfig,
+> extends PostLobbyState<MergedConfig<Config, ActiveConfig>> {
+  constructor(
+    store: StateStore,
+    data: Pick<ActiveState<Config>, "game" | "users" | "spectators">,
+    keys: Config["visibility"]
+  ) {
+    super(
       store,
-      game,
-      users,
-      spectators,
-      publicGameKeys: [
-        ...publicGameKeys,
-        "round",
-        "songUrl",
-        "songStartFraction",
-      ],
-      publicUserKeys: [...publicUserKeys, "health"],
-      privateUserKeys,
-      publicSpectatorKeys,
-      privateSpectatorKeys,
-    });
+      data,
+      mergeVisibility<Config, ActiveConfig>(keys, extraKeys)
+    );
   }
 
   public get song(): Song {

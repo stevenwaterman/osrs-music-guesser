@@ -132,9 +132,8 @@ function connectToLocalServer(): StateInterface.Transport {
   const gameId = "Single Player";
   const store = new StateInterface.StateStore(gameId, Object.values(songs));
   const avatar = store.avatarLibrary.take()!;
-  store.state = new StateInterface.Lobby(
-    store,
-    {
+  store.state = new StateInterface.Lobby(store, {
+    game: {
       id: gameId,
       owner: avatar.name,
       type: "singleplayer",
@@ -144,9 +143,9 @@ function connectToLocalServer(): StateInterface.Transport {
       timerDuration: undefined,
       timerId: undefined,
     },
-    {},
-    { [avatar.name]: { avatar, transport: serverSide } }
-  );
+    users: {},
+    spectators: { [avatar.name]: { avatar, transport: serverSide } },
+  });
 
   return clientSide;
 }
@@ -177,7 +176,10 @@ function listenToTransport(transport: StateInterface.Transport) {
             const oldIdx = oldState.data.stateIndex;
             const newIdx = message.data.stateIndex;
             if (newIdx === oldIdx + 1) {
-              const data = StateInterface.applyDiff(oldState.data, message.data);
+              const data = StateInterface.applyDiff(
+                oldState.data,
+                message.data
+              );
               return new ActiveState(data, transport);
             }
           }

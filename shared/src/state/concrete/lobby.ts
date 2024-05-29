@@ -1,105 +1,113 @@
 import { Avatar } from "../../avatars.js";
 import { mapValues, pick, sample } from "../../util.js";
 import { BaseState } from "../abstract/baseState.js";
+import { Config, emptyVisibility, mergeVisibility } from "../config.js";
 import { Difficulty } from "../difficulty.js";
 import { StateStore } from "../store.js";
 import { ClientActions, Transport } from "../transport.js";
 import { Spectator, User } from "../types.js";
 import { RoundActive } from "./roundActive.js";
 
-export class Lobby extends BaseState<
-  | {
-      firstUserJoined: Date | undefined;
-      timerStarted: number;
-      timerDuration: number;
-      timerId: NodeJS.Timeout;
-    }
-  | {
-      firstUserJoined: Date | undefined;
-      timerStarted: undefined;
-      timerDuration: undefined;
-      timerId: undefined;
-    },
-  {},
-  {},
-  ["timerStarted", "timerDuration"],
-  [],
-  [],
-  [],
-  []
-> {
+const extraKeys = {
+  publicGameKeys: ["timerStarted", "timerDuration"],
+  publicUserKeys: [],
+  privateUserKeys: [],
+  publicSpectatorKeys: [],
+  privateSpectatorKeys: [],
+} as const;
+
+type LobbyConfig = Config<
+  {
+    game:
+      | {
+          firstUserJoined: Date | undefined;
+          timerStarted: number;
+          timerDuration: number;
+          timerId: NodeJS.Timeout;
+        }
+      | {
+          firstUserJoined: Date | undefined;
+          timerStarted: undefined;
+          timerDuration: undefined;
+          timerId: undefined;
+        };
+    user: {};
+    spectator: {};
+  },
+  typeof extraKeys
+>;
+
+export class Lobby extends BaseState<LobbyConfig> {
   public stateName = "Lobby" as const;
 
   constructor(
     store: StateStore,
-    game: Lobby["game"],
-    users: Lobby["users"],
-    spectators: Lobby["spectators"]
+    data: Pick<Lobby, "game" | "users" | "spectators">
   ) {
-    const playerCount = Object.keys(spectators).length;
+    const playerCount = Object.keys(data.spectators).length;
 
-    if (playerCount > 0 && game.firstUserJoined === undefined) {
-      game = { ...game, firstUserJoined: new Date() };
+    if (playerCount > 0 && data.game.firstUserJoined === undefined) {
+      data = { ...data, game: { ...data.game, firstUserJoined: new Date() } };
     }
 
-    if (playerCount === 0 && game.firstUserJoined !== undefined) {
-      game = {
-        ...game,
-        firstUserJoined: undefined,
+    if (playerCount === 0 && data.game.firstUserJoined !== undefined) {
+      data = {
+        ...data,
+        game: {
+          ...data.game,
+          firstUserJoined: undefined,
+        },
       };
     }
 
     if (
-      game.type === "public" &&
-      game.timerStarted !== undefined &&
+      data.game.type === "public" &&
+      data.game.timerStarted !== undefined &&
       playerCount <= 1
     ) {
-      clearTimeout(game.timerId);
-      game = {
-        ...game,
-        timerStarted: undefined,
-        timerDuration: undefined,
-        timerId: undefined,
+      clearTimeout(data.game.timerId);
+      data = {
+        ...data,
+        game: {
+          ...data.game,
+          timerStarted: undefined,
+          timerDuration: undefined,
+          timerId: undefined,
+        },
       };
     }
 
     if (
-      game.type === "public" &&
-      game.timerStarted === undefined &&
+      data.game.type === "public" &&
+      data.game.timerStarted === undefined &&
       playerCount > 1
     ) {
       const now = new Date();
       const goFastAfter = 120;
       const goFast =
-        game.firstUserJoined &&
-        now.getTime() - game.firstUserJoined.getTime() > goFastAfter * 1000;
+        data.game.firstUserJoined &&
+        now.getTime() - data.game.firstUserJoined.getTime() >
+          goFastAfter * 1000;
       const timerDuration = goFast ? 10 : 30;
 
-      game = {
-        ...game,
-        timerStarted: now.getTime(),
-        timerDuration,
-        timerId: setTimeout(() => {
-          if (store.state?.stateName === "Lobby") {
-            store.state.start();
-          }
-        }, timerDuration * 1000),
+      data = {
+        ...data,
+        game: {
+          ...data.game,
+          timerStarted: now.getTime(),
+          timerDuration,
+          timerId: setTimeout(() => {
+            if (store.state?.stateName === "Lobby") {
+              store.state.start();
+            }
+          }, timerDuration * 1000),
+        },
       };
     }
 
-    super({
-      store,
-      game,
-      users,
-      spectators,
-      publicGameKeys: ["timerStarted", "timerDuration"],
-      publicUserKeys: [],
-      privateUserKeys: [],
-      publicSpectatorKeys: [],
-      privateSpectatorKeys: [],
-    });
+    super(store, data, extraKeys);
 
-    if (game.type === "public" && playerCount > 10) {
+    if (data.game.type === "public" && playerCount > 10) {
       this.start();
     }
   }
@@ -121,9 +129,8 @@ export class Lobby extends BaseState<
       ? 0.9
       : 0;
     return this.transition(
-      new RoundActive(
-        this.store,
-        {
+      new RoundActive(this.store, {
+        game: {
           ...pick(this.game, "id", "owner", "type", "difficulty"),
           songs: gameSongs,
           round,
@@ -135,7 +142,7 @@ export class Lobby extends BaseState<
           timerId: undefined,
           roundHistory: {},
         },
-        mapValues(this.spectators, (spectator) => {
+        users: mapValues(this.spectators, (spectator) => {
           return {
             avatar: spectator.avatar,
             transport: spectator.transport,
@@ -147,8 +154,8 @@ export class Lobby extends BaseState<
             roundHistory: {},
           };
         }),
-        {}
-      )
+        spectators: {},
+      })
     );
   }
 
@@ -157,7 +164,7 @@ export class Lobby extends BaseState<
     users: Lobby["users"],
     spectators: Lobby["spectators"]
   ) {
-    return new Lobby(this.store, game, users, spectators);
+    return new Lobby(this.store, { game, users, spectators });
   }
 
   protected createSpectator(
