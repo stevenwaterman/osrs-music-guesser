@@ -1,14 +1,11 @@
 <script lang="ts">
   import { onMount } from "svelte";
-  import Audio from "../shared/Audio.svelte";
   import { sounds } from "../../lib/sounds";
-  // TODO don't show text until hitsplat image has loaded
   export let type: "hit" | "venom" | "healing";
   export let damage: {
     hit: number;
     healing: number;
     venom: number;
-    total: number;
     max: boolean;
   };
 

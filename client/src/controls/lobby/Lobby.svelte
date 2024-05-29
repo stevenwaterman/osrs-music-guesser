@@ -161,8 +161,6 @@
     margin-top: 1rem;
     padding-right: 0.5rem;
     margin-right: -0.5rem;
-    /* padding: 0 0.5rem; */
-    /* margin: 1rem -0.5rem; */
 
     display: flex;
     flex-direction: column;

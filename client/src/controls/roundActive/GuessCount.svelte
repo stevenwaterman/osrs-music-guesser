@@ -4,7 +4,7 @@
   export let state: ActiveState<"RoundActive">;
 
   $: guessed = Object.values(state.data.users).filter(
-    (user) => user.guessTime !== undefined
+    (user) => user.guessed
   ).length;
   $: total = Object.keys(state.data.users).length;
 </script>

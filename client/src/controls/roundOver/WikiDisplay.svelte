@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { scale, slide } from "svelte/transition";
+  import { scale } from "svelte/transition";
   import type { ActiveState } from "../../lib/clientState";
 
   export let state: ActiveState<"RoundOver">;
@@ -11,7 +11,7 @@
   <div class="infoBox">
     <div class="title">
       <a target="_blank" href={song.wikiUrl}>{song.name}</a>
-      {#if true}
+      {#if song.tags.modAsh}
         <!-- svelte-ignore a11y-missing-attribute -->
         <img
           class="head"

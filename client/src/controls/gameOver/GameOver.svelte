@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { scale } from "svelte/transition";
   import { type ActiveState } from "../../lib/clientState";
   import Button from "../shared/Button.svelte";
 
@@ -12,7 +11,6 @@
 
 <div class="container">
   <p class="title">Game Over</p>
-  <p class="title">Survived {state.data.game.round - 1} rounds</p>
   <!-- TODO starting health, scores, guess times -->
   {#if state.data.game.owner === state.data.me.avatar.name}
     <Button on:click={() => playAgain()}>Play Again</Button>

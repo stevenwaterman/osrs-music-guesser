@@ -11,27 +11,29 @@
   export let user: string;
 
   $: data = state.data.users[user];
+  $: roundResult = data.roundHistory[state.data.game.round];
+
   $: me = data.avatar.name === state.data.me.avatar.name;
   $: owner = data.avatar.name === state.data.game.owner;
   $: suffix = me ? " (Me)" : "";
 
-  let health = state.data.users[user].healthBefore;
+  $: health = roundResult.healthBefore;
   $: dead = health <= 0;
 
   let show = false;
   let showHealing = false;
   let showHit = false;
   let showVenom = false;
-  $: multipleSplats = data.damage.healing || data.damage.venom;
+  $: multipleSplats = roundResult.damage.healing || roundResult.damage.venom;
 
   const dispatch = createEventDispatcher();
 
   onMount(() => {
     show = true;
 
-    let heal = data.damage.healing > 0;
+    let heal = roundResult.damage.healing > 0;
     let hit = true;
-    let venom = data.damage.venom > 0;
+    let venom = roundResult.damage.venom > 0;
 
     let startTime = 600;
     let healTime = startTime + (heal ? 600 : 0);
@@ -45,7 +47,7 @@
       timeouts.push(
         setTimeout(() => {
           showHealing = true;
-          health += data.damage.healing;
+          health += roundResult.damage.healing;
         }, healTime)
       );
     }
@@ -54,7 +56,7 @@
       timeouts.push(
         setTimeout(() => {
           showHit = true;
-          health -= data.damage.hit;
+          health -= roundResult.damage.hit;
         }, hitTime)
       );
     }
@@ -63,7 +65,7 @@
       timeouts.push(
         setTimeout(() => {
           showVenom = true;
-          health -= data.damage.venom;
+          health -= roundResult.damage.venom;
         }, venomTime)
       );
     }
@@ -96,23 +98,23 @@
       <div class="imageWrapper">
         <!-- svelte-ignore a11y-missing-attribute -->
         <img src={avatarImageSrc(data.avatar)} class:dead on:load={loaded} />
-        {#if showVenom && data.damage.venom > 0}
+        {#if showVenom && roundResult.damage.venom > 0}
           <div
             class="hitContainer"
             style="top: calc(50% - 3rem); left: calc(50% + 3rem);"
             class:multipleSplats
           >
-            <Hitsplat type="venom" damage={data.damage} />
+            <Hitsplat type="venom" damage={roundResult.damage} />
           </div>
         {/if}
 
-        {#if showHealing && data.damage.healing > 0}
+        {#if showHealing && roundResult.damage.healing > 0}
           <div
             class="hitContainer"
             style="top: calc(50% + 3rem); left: calc(50% + 3rem);"
             class:multipleSplats
           >
-            <Hitsplat type="healing" damage={data.damage} />
+            <Hitsplat type="healing" damage={roundResult.damage} />
           </div>
         {/if}
 
@@ -122,7 +124,7 @@
             style="top: 50%; left: 50%;"
             class:multipleSplats
           >
-            <Hitsplat type="hit" damage={data.damage} />
+            <Hitsplat type="hit" damage={roundResult.damage} />
           </div>
         {/if}
       </div>

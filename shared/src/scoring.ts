@@ -152,6 +152,7 @@ export function calculateRoundResults(
 
     if (guessResult === undefined) {
       return {
+        guessed: false,
         damage,
         healthBefore,
         healthAfter,
@@ -161,6 +162,7 @@ export function calculateRoundResults(
     const { coordinate, closest, distance } = guessResult;
     const time = guessResult.time.getTime() - state.game.roundStarted.getTime();
     return {
+      guessed: true,
       coordinate,
       time,
       closest,

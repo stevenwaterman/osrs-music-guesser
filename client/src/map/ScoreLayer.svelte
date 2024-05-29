@@ -1,9 +1,8 @@
 <script lang="ts">
-  import L, { LatLngBounds } from "leaflet";
+  import L from "leaflet";
   import type { ActiveState } from "../lib/clientState";
   import { onMount } from "svelte";
   import { convertLeaflet } from "../lib/convertLeaflet";
-  import type { StateInterface } from "tunescape07-shared";
 
   export let state: ActiveState<"RoundOver">;
   export let map: L.Map;
@@ -26,11 +25,13 @@
     const lines: L.Polyline[] = [];
 
     for (const user of Object.values(state.data.users)) {
-      if (user.guessResult === undefined) {
+      const roundResult = user.roundHistory[state.data.game.round];
+
+      if (!roundResult.guessed) {
         continue;
       }
 
-      const { coordinate, closest } = user.guessResult;
+      const { coordinate, closest } = roundResult;
       const leafletCoordinate = convertLeaflet.coordinate.to(coordinate);
       const leafletClosest = convertLeaflet.coordinate.to(closest);
 

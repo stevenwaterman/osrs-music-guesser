@@ -6,7 +6,6 @@
   export let state: ActiveState<"RoundOver">;
 
   $: players = Object.values(state.data.users)
-    .filter((user) => user.healthBefore > 0)
     .toSorted((a, b) => b.health - a.health)
     .map((user) => ({ avatar: user.avatar, health: user.health }));
 </script>

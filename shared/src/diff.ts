@@ -52,8 +52,6 @@ function applyPartialDiff(base: any, diff: any, onto: any) {
       }
     }
   }
-
-  console.log("applied", { base, diff, onto });
 }
 
 function generatePartialDiff(from: any, to: any) {
@@ -79,7 +77,7 @@ function generatePartialDiff(from: any, to: any) {
       }
     } else if (toProp !== undefined && typeof toProp === "object") {
       const subDiff = generatePartialDiff(fromProp ?? {}, toProp);
-      if (Object.keys(subDiff).length > 0) {
+      if (fromProp === undefined || Object.keys(subDiff).length > 0) {
         diff[prop] = subDiff;
       }
     } else if (fromProp === undefined || fromProp !== toProp) {

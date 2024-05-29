@@ -11,6 +11,33 @@ import {
 } from "./difficulty.js";
 import { ClientStateDiff, getBasicDiff, getMeDiff } from "./diff.js";
 
+type Elem<T extends any[] | Record<string, any>> = T extends any[]
+  ? T[number]
+  : T extends Record<string, any>
+    ? T[string]
+    : never;
+type SimpleClientState<
+  State extends {},
+  Keys extends Array<keyof State>,
+> = Pick<State, Elem<Keys>>;
+type RecordClientState<
+  State extends {},
+  Keys extends Array<keyof State>,
+> = Record<string, Pick<State, Elem<Keys>>>;
+type ClientStates<T extends State<any, any, any, any, any, any, any, any>> = {
+  publicGame: SimpleClientState<T["game"], T["publicGameKeys"]>;
+  publicUsers: RecordClientState<Elem<T["users"]>, T["publicUserKeys"]>;
+  privateUsers: RecordClientState<Elem<T["users"]>, T["privateUserKeys"]>;
+  publicSpectators: RecordClientState<
+    Elem<T["spectators"]>,
+    T["publicSpectatorKeys"]
+  >;
+  privateSpectators: RecordClientState<
+    Elem<T["spectators"]>,
+    T["privateSpectatorKeys"]
+  >;
+};
+
 export interface Transport {
   send(msg: string): void;
   close: (code: number) => void;
@@ -97,7 +124,9 @@ export class StateStore {
     ) => void = () => {}
   ) {}
 
-  private getBasicStateData(data: ReturnType<AnyServerState["getClientStates"]> | undefined): BasicStateData | undefined {
+  private getBasicStateData(
+    data: ReturnType<AnyServerState["getClientStates"]> | undefined
+  ): BasicStateData | undefined {
     if (data === undefined) {
       return undefined;
     }
@@ -108,12 +137,12 @@ export class StateStore {
       serverTime: new Date().getTime(),
       game: data.publicGame,
       users: data.publicUsers,
-      spectators: data.publicSpectators
+      spectators: data.publicSpectators,
     };
   }
 
   private getMeStateData(
-    data: ReturnType<AnyServerState["getClientStates"]> | undefined,
+    data: ReturnType<AnyServerState["getClientStates"]> | undefined
   ): Record<string, ClientStateData["me"]> {
     if (data === undefined) {
       return {};
@@ -121,11 +150,31 @@ export class StateStore {
 
     const meStateData: Record<string, ClientStateData["me"]> = {};
 
-    Object.values(data.publicUsers).forEach(user => meStateData[user.avatar.name] = { ...user, type: "user"})
-    Object.keys(data.privateUsers).forEach(name => meStateData[name] = {...meStateData[name], ...data.privateUsers[name]});
+    Object.values(data.publicUsers).forEach(
+      (user) => (meStateData[user.avatar.name] = { ...user, type: "user" })
+    );
+    Object.keys(data.privateUsers).forEach(
+      (name) =>
+        (meStateData[name] = {
+          ...meStateData[name],
+          ...data.privateUsers[name],
+        })
+    );
 
-    Object.values(data.publicSpectators).forEach(spectator => meStateData[spectator.avatar.name] = { ...spectator, type: "user"})
-    Object.keys(data.privateSpectators).forEach(name => meStateData[name] = {...meStateData[name], ...data.privateSpectators[name]});
+    Object.values(data.publicSpectators).forEach(
+      (spectator) =>
+        (meStateData[spectator.avatar.name] = {
+          ...spectator,
+          type: "spectator",
+        })
+    );
+    Object.keys(data.privateSpectators).forEach(
+      (name) =>
+        (meStateData[name] = {
+          ...meStateData[name],
+          ...data.privateSpectators[name],
+        })
+    );
 
     return meStateData;
   }
@@ -142,53 +191,15 @@ export class StateStore {
   }
 }
 
-export type RoundResult =
-  | {
-      coordinate: Coordinate;
-      time: number;
-      closest: Coordinate;
-      distance: number;
-      damage: {
-        hit: number;
-        healing: number;
-        venom: number;
-        max: boolean;
-      };
-      healthBefore: number;
-      healthAfter: number;
-    }
-  | {
-      damage: {
-        hit: number;
-        healing: number;
-        venom: number;
-        max: boolean;
-      };
-      healthBefore: number;
-      healthAfter: number;
-    };
-
-type KeysFor<
-  GameState extends {},
-  UserState extends {},
-  SpectatorState extends {},
-> = {
-  publicGame: Array<keyof GameState>;
-  publicUser: Array<keyof UserState>;
-  privateUser: Array<keyof UserState>;
-  publicSpectator: Array<keyof SpectatorState>;
-  privateSpectator: Array<keyof SpectatorState>;
-};
-
 abstract class State<
   GameState extends {},
   UserState extends {},
   SpectatorState extends {},
-  PublicGameKeys extends keyof GameState,
-  PublicUserKeys extends keyof UserState,
-  PrivateUserKeys extends keyof UserState,
-  PublicSpectatorKeys extends keyof SpectatorState,
-  PrivateSpectatorKeys extends keyof SpectatorState,
+  PublicGameKeys extends Array<keyof GameState>,
+  PublicUserKeys extends Array<keyof UserState>,
+  PrivateUserKeys extends Array<keyof UserState>,
+  PublicSpectatorKeys extends Array<keyof SpectatorState>,
+  PrivateSpectatorKeys extends Array<keyof SpectatorState>,
 > {
   public abstract stateName: string;
 
@@ -197,27 +208,29 @@ abstract class State<
     public readonly game: GameState,
     public readonly users: Record<string, UserState>,
     public readonly spectators: Record<string, SpectatorState>,
-    public readonly publicGameKeys: PublicGameKeys[],
-    public readonly publicUserKeys: PublicUserKeys[],
-    public readonly privateUserKeys: PrivateUserKeys[],
-    public readonly publicSpectatorKeys: PublicSpectatorKeys[],
-    public readonly privateSpectatorKeys: PrivateSpectatorKeys[]
+    public readonly publicGameKeys: PublicGameKeys,
+    public readonly publicUserKeys: PublicUserKeys,
+    public readonly privateUserKeys: PrivateUserKeys,
+    public readonly publicSpectatorKeys: PublicSpectatorKeys,
+    public readonly privateSpectatorKeys: PrivateSpectatorKeys
   ) {}
 
   protected transition(to: AnyServerState | null) {
     this.store.state = to;
   }
 
-  public getClientStates(): {
-    publicGame: Pick<GameState, PublicGameKeys>;
-    publicUsers: Record<string, Pick<UserState, PublicUserKeys>>;
-    privateUsers: Record<string, Pick<UserState, PrivateUserKeys>>;
-    publicSpectators: Record<string, Pick<SpectatorState, PublicSpectatorKeys>>;
-    privateSpectators: Record<
-      string,
-      Pick<SpectatorState, PrivateSpectatorKeys>
-    >;
-  } {
+  public getClientStates(): ClientStates<
+    State<
+      GameState,
+      UserState,
+      SpectatorState,
+      PublicGameKeys,
+      PublicUserKeys,
+      PrivateUserKeys,
+      PublicSpectatorKeys,
+      PrivateSpectatorKeys
+    >
+  > {
     return {
       publicGame: pick(this.game, ...this.publicGameKeys),
       publicUsers: mapValues(this.users, (user) =>
@@ -255,19 +268,19 @@ abstract class BaseState<
   GameState extends {},
   UserState extends {},
   SpectatorState extends {},
-  PublicGameKeys extends keyof GameState,
-  PublicUserKeys extends keyof UserState,
-  PrivateUserKeys extends keyof UserState,
-  PublicSpectatorKeys extends keyof SpectatorState,
-  PrivateSpectatorKeys extends keyof SpectatorState,
+  PublicGameKeys extends Array<keyof GameState>,
+  PublicUserKeys extends Array<keyof UserState>,
+  PrivateUserKeys extends Array<keyof UserState>,
+  PublicSpectatorKeys extends Array<keyof SpectatorState>,
+  PrivateSpectatorKeys extends Array<keyof SpectatorState>,
 > extends State<
   GameState & BaseGameState,
   UserState & BaseUserState,
   SpectatorState & BaseSpectatorState,
-  PublicGameKeys | "id" | "owner" | "type" | "difficulty",
-  PublicUserKeys | "avatar",
+  [...PublicGameKeys, "id", "owner", "type", "difficulty"],
+  [...PublicUserKeys, "avatar"],
   PrivateUserKeys,
-  PublicSpectatorKeys | "avatar",
+  [...PublicSpectatorKeys, "avatar"],
   PrivateSpectatorKeys
 > {
   private readonly unsubscribeFromWsMessages: Array<() => void>;
@@ -288,11 +301,11 @@ abstract class BaseState<
     game: GameState & BaseGameState;
     users: Record<string, UserState & BaseUserState>;
     spectators: Record<string, SpectatorState & BaseSpectatorState>;
-    publicGameKeys: PublicGameKeys[];
-    publicUserKeys: PublicUserKeys[];
-    privateUserKeys: PrivateUserKeys[];
-    publicSpectatorKeys: PublicSpectatorKeys[];
-    privateSpectatorKeys: PrivateSpectatorKeys[];
+    publicGameKeys: PublicGameKeys;
+    publicUserKeys: PublicUserKeys;
+    privateUserKeys: PrivateUserKeys;
+    publicSpectatorKeys: PublicSpectatorKeys;
+    privateSpectatorKeys: PrivateSpectatorKeys;
   }) {
     super(
       store,
@@ -480,11 +493,11 @@ export class Lobby extends BaseState<
     },
   {},
   {},
-  "timerStarted" | "timerDuration",
-  never,
-  never,
-  never,
-  never
+  ["timerStarted", "timerDuration"],
+  [],
+  [],
+  [],
+  []
 > {
   public stateName = "Lobby" as const;
 
@@ -654,6 +667,33 @@ export class Lobby extends BaseState<
   }
 }
 
+export type RoundResult =
+  | {
+      guessed: true;
+      coordinate: Coordinate;
+      time: number;
+      closest: Coordinate;
+      distance: number;
+      damage: {
+        hit: number;
+        healing: number;
+        venom: number;
+        max: boolean;
+      };
+      healthBefore: number;
+      healthAfter: number;
+    }
+  | {
+      guessed: false;
+      damage: {
+        hit: number;
+        healing: number;
+        venom: number;
+        max: boolean;
+      };
+      healthBefore: number;
+      healthAfter: number;
+    };
 type PostLobbyGameState = {
   roundHistory: Record<number, Song>;
 };
@@ -667,19 +707,19 @@ abstract class PostLobbyState<
   GameState extends {},
   UserState extends {},
   SpectatorState extends {},
-  PublicGameKeys extends keyof GameState,
-  PublicUserKeys extends keyof UserState,
-  PrivateUserKeys extends keyof UserState,
-  PublicSpectatorKeys extends keyof SpectatorState,
-  PrivateSpectatorKeys extends keyof SpectatorState,
+  PublicGameKeys extends Array<keyof GameState>,
+  PublicUserKeys extends Array<keyof UserState>,
+  PrivateUserKeys extends Array<keyof UserState>,
+  PublicSpectatorKeys extends Array<keyof SpectatorState>,
+  PrivateSpectatorKeys extends Array<keyof SpectatorState>,
 > extends BaseState<
   GameState & PostLobbyGameState,
   UserState & PostLobbyUserState,
   SpectatorState & PostLobbySpectatorState,
-  PublicGameKeys | "roundHistory",
-  PublicUserKeys | "roundHistory",
+  [...PublicGameKeys, "roundHistory"],
+  [...PublicUserKeys, "roundHistory"],
   PrivateUserKeys,
-  PublicSpectatorKeys | "roundHistory",
+  [...PublicSpectatorKeys, "roundHistory"],
   PrivateSpectatorKeys
 > {
   constructor({
@@ -700,11 +740,11 @@ abstract class PostLobbyState<
       string,
       SpectatorState & BaseSpectatorState & PostLobbySpectatorState
     >;
-    publicGameKeys: PublicGameKeys[];
-    publicUserKeys: PublicUserKeys[];
-    privateUserKeys: PrivateUserKeys[];
-    publicSpectatorKeys: PublicSpectatorKeys[];
-    privateSpectatorKeys: PrivateSpectatorKeys[];
+    publicGameKeys: PublicGameKeys;
+    publicUserKeys: PublicUserKeys;
+    privateUserKeys: PrivateUserKeys;
+    publicSpectatorKeys: PublicSpectatorKeys;
+    privateSpectatorKeys: PrivateSpectatorKeys;
   }) {
     super({
       store,
@@ -738,17 +778,17 @@ abstract class ActiveState<
   GameState extends {},
   UserState extends {},
   SpectatorState extends {},
-  PublicGameKeys extends keyof GameState,
-  PublicUserKeys extends keyof UserState,
-  PrivateUserKeys extends keyof UserState,
-  PublicSpectatorKeys extends keyof SpectatorState,
-  PrivateSpectatorKeys extends keyof SpectatorState,
+  PublicGameKeys extends Array<keyof GameState>,
+  PublicUserKeys extends Array<keyof UserState>,
+  PrivateUserKeys extends Array<keyof UserState>,
+  PublicSpectatorKeys extends Array<keyof SpectatorState>,
+  PrivateSpectatorKeys extends Array<keyof SpectatorState>,
 > extends PostLobbyState<
   GameState & ActiveGameState,
   UserState & ActiveUserState,
   SpectatorState & ActiveSpectatorState,
-  PublicGameKeys | "round" | "songUrl" | "songStartFraction",
-  PublicUserKeys | "health",
+  [...PublicGameKeys, "round", "songUrl", "songStartFraction"],
+  [...PublicUserKeys, "health"],
   PrivateUserKeys,
   PublicSpectatorKeys,
   PrivateSpectatorKeys
@@ -777,11 +817,11 @@ abstract class ActiveState<
         PostLobbySpectatorState &
         ActiveSpectatorState
     >;
-    publicGameKeys: PublicGameKeys[];
-    publicUserKeys: PublicUserKeys[];
-    privateUserKeys: PrivateUserKeys[];
-    publicSpectatorKeys: PublicSpectatorKeys[];
-    privateSpectatorKeys: PrivateSpectatorKeys[];
+    publicGameKeys: PublicGameKeys;
+    publicUserKeys: PublicUserKeys;
+    privateUserKeys: PrivateUserKeys;
+    publicSpectatorKeys: PublicSpectatorKeys;
+    privateSpectatorKeys: PrivateSpectatorKeys;
   }) {
     super({
       store,
@@ -802,7 +842,8 @@ abstract class ActiveState<
   }
 
   public get song(): Song {
-    return this.game.songs[this.game.round];
+    const songIdx = (this.game.round - 1) % this.game.songs.length;
+    return this.game.songs[songIdx];
   }
 }
 
@@ -833,11 +874,11 @@ export class RoundActive extends ActiveState<
       guessed: true;
     },
   {},
-  "songStartFraction" | "timerStarted" | "timerDuration",
-  "guessed",
-  "guess" | "guessTime",
-  never,
-  never
+  ["songStartFraction", "timerStarted", "timerDuration"],
+  ["guessed"],
+  ["guess", "guessTime"],
+  [],
+  []
 > {
   public stateName = "RoundActive" as const;
 
@@ -872,7 +913,7 @@ export class RoundActive extends ActiveState<
       game,
       users,
       spectators,
-      publicGameKeys: ["songStartFraction", "timerDuration", "timerStarted"],
+      publicGameKeys: ["songStartFraction", "timerStarted", "timerDuration"],
       publicUserKeys: ["guessed"],
       privateUserKeys: ["guess", "guessTime"],
       publicSpectatorKeys: [],
@@ -972,7 +1013,7 @@ export class RoundActive extends ActiveState<
             "roundStarted",
             "roundHistory"
           ),
-          song: this.song
+          song: this.song,
         },
         newUserState,
         this.spectators
@@ -1013,14 +1054,14 @@ export class RoundActive extends ActiveState<
 }
 
 export class RoundOver extends ActiveState<
-  {song: Song},
+  { song: Song },
   {},
   {},
-  "song",
-  never,
-  never,
-  never,
-  never
+  ["song"],
+  [],
+  [],
+  [],
+  []
 > {
   public stateName = "RoundOver" as const;
 
@@ -1035,7 +1076,7 @@ export class RoundOver extends ActiveState<
       game,
       users,
       spectators,
-      publicGameKeys: [],
+      publicGameKeys: ["song"],
       publicUserKeys: [],
       privateUserKeys: [],
       publicSpectatorKeys: [],
@@ -1161,16 +1202,7 @@ export class RoundOver extends ActiveState<
   }
 }
 
-export class GameOver extends PostLobbyState<
-  {},
-  {},
-  {},
-  never,
-  never,
-  never,
-  never,
-  never
-> {
+export class GameOver extends PostLobbyState<{}, {}, {}, [], [], [], [], []> {
   public stateName = "GameOver" as const;
 
   constructor(
@@ -1266,10 +1298,22 @@ export type ClientStateData<
   stateIndex: number;
   game: ReturnType<ServerStates[StateName]["getClientStates"]>["publicGame"];
   users: ReturnType<ServerStates[StateName]["getClientStates"]>["publicUsers"];
-  spectators: ReturnType<ServerStates[StateName]["getClientStates"]>["publicSpectators"];
+  spectators: ReturnType<
+    ServerStates[StateName]["getClientStates"]
+  >["publicSpectators"];
   me:
-    | ({ type: "user" } & ReturnType<ServerStates[StateName]["getClientStates"]>["publicUsers"][string] & ReturnType<ServerStates[StateName]["getClientStates"]>["privateUsers"][string])
-    | ({ type: "spectator" } & ReturnType<ServerStates[StateName]["getClientStates"]>["publicSpectators"][string] & ReturnType<ServerStates[StateName]["getClientStates"]>["privateSpectators"][string])
+    | ({ type: "user" } & ReturnType<
+        ServerStates[StateName]["getClientStates"]
+      >["publicUsers"][string] &
+        ReturnType<
+          ServerStates[StateName]["getClientStates"]
+        >["privateUsers"][string])
+    | ({ type: "spectator" } & ReturnType<
+        ServerStates[StateName]["getClientStates"]
+      >["publicSpectators"][string] &
+        ReturnType<
+          ServerStates[StateName]["getClientStates"]
+        >["privateSpectators"][string]);
 };
 export type BasicStateData<
   StateName extends AnyServerState["stateName"] = AnyServerState["stateName"],
