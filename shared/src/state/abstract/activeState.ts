@@ -27,7 +27,6 @@ type ActiveConfig = Config<
     user: {
       health: number;
     };
-    spectator: {};
   },
   typeof extraKeys
 >;

@@ -13,31 +13,21 @@ export type ServerStates = {
   GameOver: GameOver;
 };
 export type AnyServerState = ServerStates[keyof ServerStates];
+
 export type ClientStateData<
   StateName extends AnyServerState["stateName"] = AnyServerState["stateName"],
 > = {
   stateName: StateName;
   serverTime: number;
   stateIndex: number;
-  game: ReturnType<ServerStates[StateName]["getClientStates"]>["publicGame"];
-  users: ReturnType<ServerStates[StateName]["getClientStates"]>["publicUsers"];
-  spectators: ReturnType<
-    ServerStates[StateName]["getClientStates"]
-  >["publicSpectators"];
+  game: ServerStates[StateName]["publicGame"];
+  users: ServerStates[StateName]["publicUsers"];
+  spectators: ServerStates[StateName]["publicSpectators"];
   me:
-    | ({ type: "user" } & ReturnType<
-        ServerStates[StateName]["getClientStates"]
-      >["publicUsers"][string] &
-        ReturnType<
-          ServerStates[StateName]["getClientStates"]
-        >["privateUsers"][string])
-    | ({ type: "spectator" } & ReturnType<
-        ServerStates[StateName]["getClientStates"]
-      >["publicSpectators"][string] &
-        ReturnType<
-          ServerStates[StateName]["getClientStates"]
-        >["privateSpectators"][string]);
+    | ({ type: "user" } & Elem<ServerStates[StateName]["publicUsers"]> & Elem<ServerStates[StateName]["privateUsers"]>)
+    | ({ type: "spectator" } & Elem<ServerStates[StateName]["publicSpectators"]> & Elem<ServerStates[StateName]["privateSpectators"]>)
 };
+
 export type BasicStateData<
   StateName extends AnyServerState["stateName"] = AnyServerState["stateName"],
 > = Omit<ClientStateData<StateName>, "me">;
@@ -76,5 +66,5 @@ export type Elem<T extends any[] | Record<string, any>> = T extends any[]
     ? T[string]
     : never;
 export type AnyState = State<AnyConfig>;
-export type User<S extends AnyState> = Elem<S["users"]>;
-export type Spectator<S extends AnyState> = Elem<S["spectators"]>;
+export type User<S extends AnyState> = Elem<NonNullable<S["users"]>>;
+export type Spectator<S extends AnyState> = Elem<NonNullable<S["spectators"]>>;

@@ -20,8 +20,6 @@ const extraKeys = {
 type RoundOverConfig = Config<
   {
     game: { song: Song };
-    user: {};
-    spectator: {};
   },
   typeof extraKeys
 >;

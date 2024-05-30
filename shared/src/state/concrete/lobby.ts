@@ -1,7 +1,7 @@
 import { Avatar } from "../../avatars.js";
 import { mapValues, pick, sample } from "../../util.js";
 import { BaseState } from "../abstract/baseState.js";
-import { Config, emptyVisibility, mergeVisibility } from "../config.js";
+import { Config } from "../config.js";
 import { Difficulty } from "../difficulty.js";
 import { StateStore } from "../store.js";
 import { ClientActions, Transport } from "../transport.js";
@@ -31,8 +31,6 @@ type LobbyConfig = Config<
           timerDuration: undefined;
           timerId: undefined;
         };
-    user: {};
-    spectator: {};
   },
   typeof extraKeys
 >;

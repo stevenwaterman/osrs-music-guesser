@@ -1,20 +1,32 @@
 import { Avatar } from "../../avatars.js";
 import { mapValues, pick } from "../../util.js";
 import { PostLobbyState } from "../abstract/postLobbyState.js";
-import { EmptyConfig, emptyVisibility } from "../config.js";
+import { Config } from "../config.js";
 import { StateStore } from "../store.js";
 import { ClientActions, Transport } from "../transport.js";
 import { Spectator, User } from "../types.js";
 import { Lobby } from "./lobby.js";
 
-export class GameOver extends PostLobbyState<EmptyConfig> {
+export class GameOver extends PostLobbyState<Config<{}, {
+  publicGameKeys: [],
+  publicUserKeys: [],
+  privateUserKeys: [],
+  publicSpectatorKeys: [],
+  privateSpectatorKeys: []
+}>> {
   public stateName = "GameOver" as const;
 
   constructor(
     store: StateStore,
-    data: Pick<GameOver, "game" | "users" | "spectators">
+    data: GameOver["data"]
   ) {
-    super(store, data, emptyVisibility);
+    super(store, data, {
+      publicGameKeys: [],
+  publicUserKeys: [],
+  privateUserKeys: [],
+  publicSpectatorKeys: [],
+  privateSpectatorKeys: []
+    });
 
     if (this.game.type === "public") {
       setTimeout(() => {

@@ -51,11 +51,10 @@ export class StateStore {
     this.onTransition(state);
 
     this.stateIndex++;
-    const data = this.state?.getClientStates();
-    const basicStateData = this.getBasicStateData(data);
+    const basicStateData = this.getBasicStateData(state);
     const basicDiff = getBasicDiff(this.lastBasicStateData, basicStateData);
 
-    const meStateData = this.getMeStateData(data);
+    const meStateData = this.getMeStateData(state);
     const meStateDiffs = mapValues(meStateData, (data) => {
       const oldData = this.lastMeStateData[data.avatar.name];
       return getMeDiff(oldData, data);
@@ -100,9 +99,9 @@ export class StateStore {
   ) {}
 
   private getBasicStateData(
-    data: ReturnType<AnyServerState["getClientStates"]> | undefined
+    state: AnyServerState | null
   ): BasicStateData | undefined {
-    if (data === undefined) {
+    if (state === null) {
       return undefined;
     }
 
@@ -110,44 +109,44 @@ export class StateStore {
       stateName: this.state!.stateName,
       stateIndex: this.stateIndex,
       serverTime: new Date().getTime(),
-      game: data.publicGame,
-      users: data.publicUsers,
-      spectators: data.publicSpectators,
+      game: state.publicGame,
+      users: state.publicUsers,
+      spectators: state.publicSpectators,
     };
   }
 
   private getMeStateData(
-    data: ReturnType<AnyServerState["getClientStates"]> | undefined
+    state: AnyServerState | null
   ): Record<string, ClientStateData["me"]> {
-    if (data === undefined) {
+    if (state === null) {
       return {};
     }
 
     const meStateData: Record<string, ClientStateData["me"]> = {};
 
-    Object.values(data.publicUsers).forEach(
+    Object.values(state.publicUsers).forEach(
       (user) => (meStateData[user.avatar.name] = { ...user, type: "user" })
     );
-    Object.keys(data.privateUsers).forEach(
+    Object.keys(state.privateUsers).forEach(
       (name) =>
         (meStateData[name] = {
           ...meStateData[name],
-          ...data.privateUsers[name],
+          ...state.privateUsers[name],
         })
     );
 
-    Object.values(data.publicSpectators).forEach(
+    Object.values(state.publicSpectators).forEach(
       (spectator) =>
         (meStateData[spectator.avatar.name] = {
           ...spectator,
           type: "spectator",
         })
     );
-    Object.keys(data.privateSpectators).forEach(
+    Object.keys(state.privateSpectators).forEach(
       (name) =>
         (meStateData[name] = {
           ...meStateData[name],
-          ...data.privateSpectators[name],
+          ...state.privateSpectators[name],
         })
     );
 

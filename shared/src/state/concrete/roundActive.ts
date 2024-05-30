@@ -45,7 +45,6 @@ type RoundActiveConfig = Config<
           guessTime: Date;
           guessed: true;
         };
-    spectator: {};
   },
   typeof extraKeys
 >;

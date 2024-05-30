@@ -1,50 +1,48 @@
-import { AnyState } from "./types.js";
+type Get<T, Key extends keyof T> = NonNullable<T>[Key];
 
-type Structs = {
-  game: {};
-  user: {};
-  spectator: {};
+type PropValue = string | number | boolean | object | undefined;
+type EmptyStructs = {
+  game?: {};
+  user?: {};
+  spectator?: {};
 };
 type AnyStructs = {
-  game: Record<string, any>;
-  user: Record<string, any>;
-  spectator: Record<string, any>;
+  game?: Record<string, PropValue>;
+  user?: Record<string, PropValue>;
+  spectator?: Record<string, PropValue>;
+}
+
+type EmptyVisibility = {
+  readonly publicGameKeys: readonly [];
+  readonly publicUserKeys: readonly [];
+  readonly privateUserKeys: readonly [];
+  readonly publicSpectatorKeys: readonly [];
+  readonly privateSpectatorKeys: readonly [];
+};
+type AnyVisibility<S extends AnyStructs> = {
+  readonly publicGameKeys: Readonly<Array<keyof NonNullable<S["game"]>>>;
+  readonly publicUserKeys: Readonly<Array<keyof NonNullable<S["user"]>>>;
+  readonly privateUserKeys: Readonly<Array<keyof NonNullable<S["user"]>>>;
+  readonly publicSpectatorKeys: Readonly<Array<keyof NonNullable<S["spectator"]>>>;
+  readonly privateSpectatorKeys: Readonly<Array<keyof NonNullable<S["spectator"]>>>;
 };
 
-type Visibility<S extends Structs> = {
-  readonly publicGameKeys: Readonly<Array<keyof S["game"]>>;
-  readonly publicUserKeys: Readonly<Array<keyof S["user"]>>;
-  readonly privateUserKeys: Readonly<Array<keyof S["user"]>>;
-  readonly publicSpectatorKeys: Readonly<Array<keyof S["spectator"]>>;
-  readonly privateSpectatorKeys: Readonly<Array<keyof S["spectator"]>>;
-};
-type AnyVisibility = Visibility<AnyStructs>;
-export const emptyVisibility = {
-  publicGameKeys: [],
-  publicUserKeys: [],
-  privateUserKeys: [],
-  publicSpectatorKeys: [],
-  privateSpectatorKeys: []
-} as const;
-type EmptyVisibility = typeof emptyVisibility;
 
-export type Config<S extends Structs, V extends Visibility<S>> = {
+export type Config<S extends AnyStructs, V extends AnyVisibility<S>> = {
   structs: S;
   visibility: V;
 };
-export type AnyConfig = Config<AnyStructs, AnyVisibility>;
-export type EmptyConfig = Config<Structs, EmptyVisibility>;
+export type AnyConfig = Config<AnyStructs, AnyVisibility<AnyStructs>>;
 
-
-type MergedStructs<Base extends AnyConfig, Patch extends AnyConfig> = {
-  game: Base["structs"]["game"] & Patch["structs"]["game"];
-  user: Base["structs"]["user"] & Patch["structs"]["user"];
-  spectator: Base["structs"]["spectator"] & Patch["structs"]["spectator"];
+type MergedStructs<Base extends AnyStructs, Patch extends AnyStructs> = {
+  game: NonNullable<Base>["game"] & NonNullable<Patch>["game"];
+  user: NonNullable<Base>["user"] & NonNullable<Patch>["user"];
+  spectator: NonNullable<Base>["spectator"] & NonNullable<Patch>["spectator"];
 };
 
 type MergedVisibility<
-  Base extends AnyVisibility,
-  Patch extends AnyVisibility,
+  Base extends AnyVisibility<AnyStructs>,
+  Patch extends AnyVisibility<AnyStructs>,
 > = {
   publicGameKeys: [...Base["publicGameKeys"], ...Patch["publicGameKeys"]];
   publicUserKeys: [...Base["publicUserKeys"], ...Patch["publicUserKeys"]];
@@ -62,14 +60,14 @@ export type MergedConfig<
   Base extends AnyConfig,
   Patch extends AnyConfig,
 > = Config<
-  MergedStructs<Base, Patch>,
+  MergedStructs<Base["structs"], Patch["structs"]>,
   MergedVisibility<Base["visibility"], Patch["visibility"]>
 >;
 
 export type ConstructorData<C extends AnyConfig> = {
-  game: C["structs"]["game"];
-  users: Record<string, C["structs"]["user"]>;
-  spectators: Record<string, C["structs"]["spectator"]>;
+  game: NonNullable<C["structs"]["game"]>;
+  users: Record<string, NonNullable<C["structs"]["user"]>>;
+  spectators: Record<string, NonNullable<C["structs"]["spectator"]>>;
 };
 
 export function mergeVisibility<
