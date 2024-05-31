@@ -133,7 +133,7 @@ function connectToLocalServer(): StateInterface.Transport {
   const store = new StateInterface.StateStore(gameId, Object.values(songs));
   store.state = new StateInterface.Lobby(
     store,
-    {
+    {game: {
       id: gameId,
       owner: "None",
       type: "singleplayer",
@@ -143,9 +143,9 @@ function connectToLocalServer(): StateInterface.Transport {
       timerDuration: undefined,
       timerId: undefined,
     },
-    {},
-    {}
-  );
+    users: {},
+    spectators: {}
+});
   store.join(serverSide);
 
   return clientSide;

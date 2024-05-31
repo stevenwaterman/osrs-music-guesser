@@ -33,7 +33,7 @@ function getPrivateGame(
         delete privateGames[gameId];
       }
 
-      if (state?.stateName === "RoundOver") {
+      if (state?.name === "RoundOver") {
         recordDistances(state);
       }
     };
@@ -81,7 +81,7 @@ function onJoin(ws: WebSocket, searchParams: URLSearchParams) {
   }
 
   const avatar = store.avatarLibrary.take()!;
-  store.state = new StateInterface.Lobby(store, {
+  store.state = new StateInterface.Lobby(store, {game:{
       id: store.gameId,
       owner: avatar.name,
       difficulty: "normal",
@@ -91,8 +91,9 @@ function onJoin(ws: WebSocket, searchParams: URLSearchParams) {
       timerId: undefined,
       firstUserJoined: undefined,
     },
-    {},
-    { [avatar.name]: { avatar, transport: ws } },
+    users:{},
+    spectators:{ [avatar.name]: { avatar, transport: ws } },
+  }
   );
 }
 
@@ -107,20 +108,20 @@ function createPublicLobby() {
   let started = false;
 
   const onTransition = (state: StateInterface.AnyServerState | null) => {
-    if (state?.stateName === "RoundOver") {
+    if (state?.name === "RoundOver") {
       recordDistances(state);
     }
 
     // Kick the last player
     if (
       started &&
-      state?.stateName === "Lobby" &&
+      state?.name === "Lobby" &&
       Object.keys(state.spectators).length <= 1
     ) {
       store.terminate();
     }
 
-    if (!started && state?.stateName === "RoundActive") {
+    if (!started && state?.name === "RoundActive") {
       started = true;
       createPublicLobby();
     }
@@ -132,7 +133,7 @@ function createPublicLobby() {
     onTransition
   );
   store.state = new StateInterface.Lobby(
-    store,
+    store,{game:
     {
       id: gameId,
       owner: "TuneScape",
@@ -143,9 +144,9 @@ function createPublicLobby() {
       timerId: undefined,
       firstUserJoined: undefined,
     },
-    {},
-    {}
-  );
+    users:{},
+    spectators:{}
+});
   publicGames[publicGameIdx] = store;
 }
 

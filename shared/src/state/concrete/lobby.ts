@@ -1,99 +1,81 @@
 import { Avatar } from "../../avatars.js";
 import { mapValues, pick, sample } from "../../util.js";
-import { pickVisibleState } from "../visibleState.js";
 import { Difficulty, getDifficultyConfig } from "../difficulty.js";
 import { StateStore } from "../store.js";
 import { ClientActions, Transport } from "../transport.js";
 import { RoundActive } from "./roundActive.js";
+import { BaseState } from "../baseState.js";
 
-type GameState =
-  | {
-      id: string;
-      owner: string;
-      type: "singleplayer" | "private" | "public";
-      difficulty: "tutorial" | "normal" | "hard" | "extreme";
-      firstUserJoined: Date | undefined;
-      timerStarted: number;
-      timerDuration: number;
-      timerId: NodeJS.Timeout;
-    }
-  | {
-      id: string;
-      owner: string;
-      type: "singleplayer" | "private" | "public";
-      difficulty: "tutorial" | "normal" | "hard" | "extreme";
-      firstUserJoined: Date | undefined;
-      timerStarted: undefined;
-      timerDuration: undefined;
-      timerId: undefined;
-    };
-const publicGameKeys = [
-  "id",
-  "owner",
-  "type",
-  "difficulty",
-  "timerStarted",
-  "timerDuration",
-] as const;
-
-type UserState = {
-  avatar: Avatar;
-  transport: Transport;
+type Cfg = {
+  game:
+    | {
+        id: string;
+        owner: string;
+        type: "singleplayer" | "private" | "public";
+        difficulty: "tutorial" | "normal" | "hard" | "extreme";
+        firstUserJoined: Date | undefined;
+        timerStarted: number;
+        timerDuration: number;
+        timerId: NodeJS.Timeout;
+      }
+    | {
+        id: string;
+        owner: string;
+        type: "singleplayer" | "private" | "public";
+        difficulty: "tutorial" | "normal" | "hard" | "extreme";
+        firstUserJoined: Date | undefined;
+        timerStarted: undefined;
+        timerDuration: undefined;
+        timerId: undefined;
+      };
+  user: {
+    avatar: Avatar;
+    transport: Transport;
+  };
+  spectator: {
+    avatar: Avatar;
+    transport: Transport;
+  };
 };
-const publicUserKeys = ["avatar"] as const;
-const privateUserKeys = [...publicUserKeys] as const;
+const keys = {
+  publicGame: [
+    "id",
+    "owner",
+    "type",
+    "difficulty",
+    "timerStarted",
+    "timerDuration",
+  ],
+  publicUsers: ["avatar"],
+  privateUsers: [],
+  publicSpectators: ["avatar"],
+  privateSpectators: [],
+} as const;
 
-type SpectatorState = {
-  avatar: Avatar;
-  transport: Transport;
-};
-const publicSpectatorKeys = ["avatar"] as const;
-const privateSpectatorKeys = [...publicSpectatorKeys] as const;
+export class Lobby extends BaseState<Lobby, "Lobby", Cfg, typeof keys> {
+  constructor(store: StateStore, data: Lobby["data"]) {
+    const playerCount = Object.keys(data.spectators).length;
 
-export class Lobby {
-  public readonly stateName = "Lobby" as const;
-  public get visibleState() {
-    return pickVisibleState({
-      game: this.game,
-      publicGameKeys,
-      users: this.users,
-      publicUserKeys,
-      privateUserKeys,
-      spectators: this.spectators,
-      publicSpectatorKeys,
-      privateSpectatorKeys,
-    });
-  }
-
-  public readonly game: GameState;
-
-  constructor(
-    public readonly store: StateStore,
-    game: GameState,
-    public readonly users: Record<string, UserState>,
-    public readonly spectators: Record<string, SpectatorState>
-  ) {
-    const playerCount = Object.keys(spectators).length;
-
-    if (playerCount > 0 && game.firstUserJoined === undefined) {
-      game = { ...game, firstUserJoined: new Date() };
+    if (playerCount > 0 && data.game.firstUserJoined === undefined) {
+      data.game = { ...data.game, firstUserJoined: new Date() };
     }
 
-    if (playerCount === 0 && game.firstUserJoined !== undefined) {
-      game = {
-        ...game,
+    if (playerCount === 0 && data.game.firstUserJoined !== undefined) {
+      data.game = {
+        ...data.game,
         firstUserJoined: undefined,
       };
     }
 
     if (
-      game.type === "public" &&
-      game.timerStarted !== undefined &&
+      data.game.type === "public" &&
+      data.game.timerStarted !== undefined &&
       playerCount <= 1
     ) {
-      clearTimeout(game.timerId);
-      game = {
-        ...game,
+      clearTimeout(data.game.timerId);
+      console.log(data);
+      data.game = {
+        ...data.game,
         timerStarted: undefined,
         timerDuration: undefined,
         timerId: undefined,
@@ -101,32 +83,38 @@ export class Lobby {
     }
 
     if (
-      game.type === "public" &&
-      game.timerStarted === undefined &&
+      data.game.type === "public" &&
+      data.game.timerStarted === undefined &&
       playerCount > 1
     ) {
       const now = new Date();
       const goFastAfter = 120;
       const goFast =
-        game.firstUserJoined &&
-        now.getTime() - game.firstUserJoined.getTime() > goFastAfter * 1000;
+        data.game.firstUserJoined &&
+        now.getTime() - data.game.firstUserJoined.getTime() >
+          goFastAfter * 1000;
       const timerDuration = goFast ? 10 : 30;
 
-      game = {
-        ...game,
+      data.game = {
+        ...data.game,
         timerStarted: now.getTime(),
         timerDuration,
         timerId: setTimeout(() => {
-          if (store.state?.stateName === "Lobby") {
+          if (store.state?.name === "Lobby") {
             store.state.start();
           }
         }, timerDuration * 1000),
       };
     }
 
-    this.game = game;
+    super({
+      name: "Lobby",
+      store,
+      data,
+      keys,
+    });
 
-    if (game.type === "public" && playerCount > 10) {
+    if (data.game.type === "public" && playerCount > 10) {
       this.start();
     }
   }
@@ -149,9 +137,8 @@ export class Lobby {
     const round = 1;
     const song = gameSongs[0];
     const maxSongStartFraction = difficultyConfig.songRandomStart ? 0.9 : 0;
-    this.store.state = new RoundActive(
-      this.store,
-      {
+    this.store.state = new RoundActive(this.store, {
+      game: {
         ...pick(this.game, "id", "owner", "type", "difficulty"),
         songs: gameSongs,
         round,
@@ -163,7 +150,7 @@ export class Lobby {
         timerId: undefined,
         roundHistory: {},
       },
-      mapValues(this.spectators, (spectator) => {
+      users: mapValues(this.spectators, (spectator) => {
         return {
           avatar: spectator.avatar,
           transport: spectator.transport,
@@ -175,36 +162,19 @@ export class Lobby {
           roundHistory: {},
         };
       }),
-      {}
-    );
-  }
-
-  public recreate(
-    game: Lobby["game"],
-    users: Lobby["users"],
-    spectators: Lobby["spectators"]
-  ) {
-    return new Lobby(this.store, game, users, spectators);
-  }
-
-  public createSpectator(avatar: Avatar, transport: Transport): SpectatorState {
-    return { avatar, transport };
-  }
-
-  public convertToSpectator(user: UserState): SpectatorState {
-    return { avatar: user.avatar, transport: user.transport };
+      spectators: {},
+    });
   }
 
   public updateSettings(settings: { difficulty?: Difficulty }) {
-    this.store.state = new Lobby(
-      this.store,
-      {
+    this.store.state = new Lobby(this.store, {
+      game: {
         ...this.game,
         difficulty: settings.difficulty ?? this.game.difficulty,
       },
-      this.users,
-      this.spectators
-    );
+      users: this.users,
+      spectators: this.spectators,
+    });
   }
 
   public onMessage(userName: string, message: ClientActions): void {
@@ -216,5 +186,17 @@ export class Lobby {
     if (owner && message.action === "settings") {
       this.updateSettings(message.data);
     }
+  }
+
+  public recreate(data: Lobby["data"]) {
+    return new Lobby(this.store, data);
+  }
+
+  public createSpectator(avatar: Avatar, transport: Transport) {
+    return { avatar, transport };
+  }
+
+  public convertUserToSpectator(user: Lobby["users"][string]) {
+    return pick(user, "avatar", "transport");
   }
 }

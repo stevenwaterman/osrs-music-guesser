@@ -79,33 +79,33 @@ export class StateStore {
 
   private sendStateDiff(state: AnyServerState | null) {
     this.stateIndex++;
-    const visibleState = state?.visibleState;
+    const visibleData = state?.visibleData;
     const basicStateData =
-      visibleState === undefined
+    visibleData === undefined
         ? undefined
         : {
-            stateName: this.state!.stateName,
+            stateName: this.state!.name,
             stateIndex: this.stateIndex,
             serverTime: new Date().getTime(),
-            game: visibleState.publicGame,
-            users: visibleState.publicUsers,
-            spectators: visibleState.publicSpectators,
+            game: visibleData.publicGame,
+            users: visibleData.publicUsers,
+            spectators: visibleData.publicSpectators,
           };
     const basicDiff = getBasicDiff(this.lastBasicStateData, basicStateData);
 
     const meStateData: Record<string, ClientStateData["me"]> = {};
-    if (visibleState) {
-      Object.keys(visibleState.privateUsers).forEach(
+    if (visibleData) {
+      Object.keys(visibleData.privateUsers).forEach(
         (name) =>
           (meStateData[name] = {
-            ...visibleState.privateUsers[name],
+            ...visibleData.privateUsers[name],
             type: "user",
           })
       );
-      Object.keys(visibleState.privateSpectators).forEach(
+      Object.keys(visibleData.privateSpectators).forEach(
         (name) =>
           (meStateData[name] = {
-            ...visibleState.privateSpectators[name],
+            ...visibleData.privateSpectators[name],
             type: "spectator",
           })
       );
@@ -183,16 +183,16 @@ export class StateStore {
     const newOwner =
       this.state.game.owner === "None" ? avatar.name : this.state.game.owner;
     this.state = this.state.recreate(
-      {
+      {game: {
         ...this.state.game,
         owner: newOwner,
       } as any,
-      this.state.users as any,
-      {
+      users: this.state.users as any,
+      spectators: {
         ...this.state.spectators,
         [avatar.name]: this.state.createSpectator(avatar, transport),
       } as any
-    );
+  });
   }
 
   public leave(name: string) {
@@ -233,7 +233,7 @@ export class StateStore {
         ? Object.keys(newUsers)[0]
         : Object.keys(newSpectators)[0];
 
-    if (newUserCount <= 1 && this.state.stateName !== "Lobby") {
+    if (newUserCount <= 1 && this.state.name !== "Lobby") {
       const allSpectators: Lobby["spectators"] = {
         ...newSpectators,
         ...mapValues(newUsers, (user) => pick(user, "avatar", "transport")),
@@ -241,7 +241,7 @@ export class StateStore {
 
       this.state = new Lobby(
         this,
-        {
+        {game: {
           ...pick(this.state.game, "id", "type", "difficulty"),
           owner: newOwner,
           firstUserJoined: undefined,
@@ -249,21 +249,21 @@ export class StateStore {
           timerDuration: undefined,
           timerId: undefined,
         },
-        {},
-        allSpectators
-      );
+        users: {},
+        spectators: allSpectators
+    });
       return;
     }
 
     // TODO
-    this.state = this.state.recreate(
-      {
+    this.state = this.state.recreate({
+      game: {
         ...this.state.game,
         owner: newOwner,
       } as any,
-      newUsers as any,
-      newSpectators as any
-    );
+      users:newUsers as any,
+      spectators: newSpectators as any
+  });
   }
 
   public terminate() {

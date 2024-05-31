@@ -13,25 +13,25 @@ export type ServerStates = {
 export type AnyServerState = ServerStates[keyof ServerStates];
 
 export type ClientStateData<
-  StateName extends AnyServerState["stateName"] = AnyServerState["stateName"],
+  StateName extends AnyServerState["name"] = AnyServerState["name"],
 > = {
   stateName: StateName;
   serverTime: number;
   stateIndex: number;
-  game: ServerStates[StateName]["visibleState"]["publicGame"];
-  users: ServerStates[StateName]["visibleState"]["publicUsers"];
-  spectators: ServerStates[StateName]["visibleState"]["publicSpectators"];
+  game: ServerStates[StateName]["visibleData"]["publicGame"];
+  users: ServerStates[StateName]["visibleData"]["publicUsers"];
+  spectators: ServerStates[StateName]["visibleData"]["publicSpectators"];
   me:
     | ({
         type: "user";
-      } & ServerStates[StateName]["visibleState"]["privateUsers"][string])
+      } & ServerStates[StateName]["visibleData"]["privateUsers"][string])
     | ({
         type: "spectator";
-      } & ServerStates[StateName]["visibleState"]["privateSpectators"][string]);
+      } & ServerStates[StateName]["visibleData"]["privateSpectators"][string]);
 };
 
 export type BasicStateData<
-  StateName extends AnyServerState["stateName"] = AnyServerState["stateName"],
+  StateName extends AnyServerState["name"] = AnyServerState["name"],
 > = Omit<ClientStateData<StateName>, "me">;
 
 export type RoundResult =

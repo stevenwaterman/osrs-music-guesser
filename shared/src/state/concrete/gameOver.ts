@@ -1,101 +1,81 @@
 import { Avatar } from "../../avatars.js";
 import { Song } from "../../songTypes.js";
 import { mapValues, pick } from "../../util.js";
-import { pickVisibleState } from "../visibleState.js";
 import { StateStore } from "../store.js";
 import { ClientActions, Transport } from "../transport.js";
 import { RoundResult } from "../types.js";
 import { Lobby } from "./lobby.js";
+import { BaseState } from "../baseState.js";
 
-type GameState = {
-  id: string;
-  owner: string;
-  type: "singleplayer" | "private" | "public";
-  difficulty: "tutorial" | "normal" | "hard" | "extreme";
-  roundHistory: Record<number, Song>;
+type Cfg = {
+  game: {
+    id: string;
+    owner: string;
+    type: "singleplayer" | "private" | "public";
+    difficulty: "tutorial" | "normal" | "hard" | "extreme";
+    roundHistory: Record<number, Song>;
+  };
+  user: {
+    avatar: Avatar;
+    transport: Transport;
+    roundHistory: Record<number, RoundResult>;
+  };
+  spectator: {
+    avatar: Avatar;
+    transport: Transport;
+    roundHistory: Record<number, RoundResult>;
+  };
 };
-const publicGameKeys = [
-  "id",
-  "owner",
-  "type",
-  "difficulty",
-  "roundHistory",
-] as const;
+const keys = {
+  publicGame: ["id", "owner", "type", "difficulty", "roundHistory"],
+  publicUsers: ["avatar", "roundHistory"],
+  privateUsers: [],
+  publicSpectators: ["avatar", "roundHistory"],
+  privateSpectators: [],
+} as const;
 
-type UserState = {
-  avatar: Avatar;
-  transport: Transport;
-  roundHistory: Record<number, RoundResult>;
-};
-const publicUserKeys = ["avatar", "roundHistory"] as const;
-const privateUserKeys = [...publicUserKeys] as const;
-
-type SpectatorState = {
-  avatar: Avatar;
-  transport: Transport;
-  roundHistory: Record<number, RoundResult>;
-};
-const publicSpectatorKeys = ["avatar", "roundHistory"] as const;
-const privateSpectatorKeys = [...publicSpectatorKeys] as const;
-
-export class GameOver {
-  public readonly stateName = "GameOver" as const;
-  public get visibleState() {
-    return pickVisibleState({
-      game: this.game,
-      publicGameKeys,
-      users: this.users,
-      publicUserKeys,
-      privateUserKeys,
-      spectators: this.spectators,
-      publicSpectatorKeys,
-      privateSpectatorKeys,
-    });
-  }
-
-  constructor(
-    public readonly store: StateStore,
-    public readonly game: GameState,
-    public readonly users: Record<string, UserState>,
-    public readonly spectators: Record<string, SpectatorState>
-  ) {
-    if (this.game.type === "public") {
+export class GameOver extends BaseState<
+  GameOver,
+  "GameOver",
+  Cfg,
+  typeof keys
+> {
+  constructor(store: StateStore, data: GameOver["data"]) {
+    if (data.game.type === "public") {
       setTimeout(() => {
-        if (this.store.state?.stateName === "GameOver") {
-          this.store.state.playAgain();
+        if (store.state?.name === "GameOver") {
+          store.state.playAgain();
         }
       }, 10_000);
     }
+
+    super({
+      name: "GameOver",
+      store,
+      data,
+      keys,
+    });
   }
 
   public playAgain() {
-    this.store.state = new Lobby(
-      this.store,
-      {
+    this.store.state = new Lobby(this.store, {
+      game: {
         ...pick(this.game, "id", "owner", "type", "difficulty"),
         firstUserJoined: undefined,
         timerStarted: undefined,
         timerDuration: undefined,
         timerId: undefined,
       },
-      {},
-      {
+      users: {},
+      spectators: {
         ...this.spectators,
         ...mapValues(this.users, (user) => ({
           avatar: user.avatar,
           transport: user.transport,
           spectator: true,
         })),
-      }
-    );
-  }
-
-  public recreate(
-    game: GameState,
-    users: Record<string, UserState>,
-    spectators: Record<string, SpectatorState>
-  ): GameOver {
-    return new GameOver(this.store, game, users, spectators);
+      },
+    });
   }
 
   public onMessage(userName: string, message: ClientActions): void {
@@ -104,11 +84,20 @@ export class GameOver {
     }
   }
 
-  public createSpectator(avatar: Avatar, transport: Transport): SpectatorState {
+  public recreate(data: GameOver["data"]) {
+    return new GameOver(this.store, data);
+  }
+
+  public createSpectator(
+    avatar: Avatar,
+    transport: Transport
+  ): GameOver["spectators"][string] {
     return { avatar, transport, roundHistory: {} };
   }
 
-  public convertToSpectator(user: UserState): SpectatorState {
+  public convertUserToSpectator(
+    user: GameOver["users"][string]
+  ): GameOver["spectators"][string] {
     return pick(user, "avatar", "transport", "roundHistory");
   }
 }

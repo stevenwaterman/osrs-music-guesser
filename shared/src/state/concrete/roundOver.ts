@@ -1,80 +1,76 @@
 import { Avatar } from "../../avatars.js";
 import { Song } from "../../songTypes.js";
 import { pick, shuffle } from "../../util.js";
-import { pickVisibleState } from "../visibleState.js";
+import { pickVisibleState } from "../visibleData.js";
 import { getDifficultyConfig } from "../difficulty.js";
 import { StateStore } from "../store.js";
 import { ClientActions, Transport } from "../transport.js";
 import { RoundResult } from "../types.js";
 import { GameOver } from "./gameOver.js";
 import { RoundActive } from "./roundActive.js";
+import { BaseState } from "../baseState.js";
 
-type GameState = {
-  id: string;
-  owner: string;
-  type: "singleplayer" | "private" | "public";
-  difficulty: "tutorial" | "normal" | "hard" | "extreme";
-  roundHistory: Record<number, Song>;
-  songs: Song[];
-  songUrl: string;
-  songStartFraction: number;
-  round: number;
-  roundStarted: Date;
-  song: Song;
+type Cfg = {
+  game: {
+    id: string;
+    owner: string;
+    type: "singleplayer" | "private" | "public";
+    difficulty: "tutorial" | "normal" | "hard" | "extreme";
+    roundHistory: Record<number, Song>;
+    songs: Song[];
+    songUrl: string;
+    songStartFraction: number;
+    round: number;
+    roundStarted: Date;
+    song: Song;
+  };
+  user: {
+    avatar: Avatar;
+    transport: Transport;
+    roundHistory: Record<number, RoundResult>;
+    health: number;
+  };
+  spectator: {
+    avatar: Avatar;
+    transport: Transport;
+    roundHistory: Record<number, RoundResult>;
+  };
 };
-const publicGameKeys = [
-  "id",
-  "owner",
-  "type",
-  "difficulty",
-  "roundHistory",
-  "round",
-  "songUrl",
-  "songStartFraction",
-  "song",
-] as const;
+const keys = {
+  publicGame: [
+    "id",
+    "owner",
+    "type",
+    "difficulty",
+    "roundHistory",
+    "round",
+    "songUrl",
+    "songStartFraction",
+    "song",
+  ],
+  publicUsers: ["avatar", "roundHistory", "health"],
+  privateUsers: [],
+  publicSpectators: ["avatar", "roundHistory"],
+  privateSpectators: [],
+} as const;
 
-type UserState = {
-  avatar: Avatar;
-  transport: Transport;
-  roundHistory: Record<number, RoundResult>;
-  health: number;
-};
-const publicUserKeys = ["avatar", "roundHistory", "health"] as const;
-const privateUserKeys = [...publicUserKeys] as const;
-
-type SpectatorState = {
-  avatar: Avatar;
-  transport: Transport;
-  roundHistory: Record<number, RoundResult>;
-};
-const publicSpectatorKeys = ["avatar", "roundHistory"] as const;
-const privateSpectatorKeys = [...publicSpectatorKeys] as const;
-
-export class RoundOver {
-  public readonly stateName = "RoundOver" as const;
-  public get visibleState() {
-    return pickVisibleState({
-      game: this.game,
-      publicGameKeys,
-      users: this.users,
-      publicUserKeys,
-      privateUserKeys,
-      spectators: this.spectators,
-      publicSpectatorKeys,
-      privateSpectatorKeys,
+export class RoundOver extends BaseState<
+  RoundOver,
+  "RoundOver",
+  Cfg,
+  typeof keys
+> {
+  constructor(store: StateStore, data: RoundOver["data"]) {
+    super({
+      name: "RoundOver",
+      store,
+      data,
+      keys,
     });
-  }
 
-  constructor(
-    public readonly store: StateStore,
-    public readonly game: GameState,
-    public readonly users: Record<string, UserState>,
-    public readonly spectators: Record<string, SpectatorState>
-  ) {
-    if (this.game.type === "public") {
+    if (data.game.type === "public") {
       setTimeout(() => {
-        if (this.store.state?.stateName === "RoundOver") {
+        if (this.store.state?.name === "RoundOver") {
           this.store.state.next();
         }
       }, 10_000);
@@ -87,7 +83,7 @@ export class RoundOver {
     for (const userName in this.users) {
       const user = this.users[userName];
       if (user.health <= 0) {
-        newSpectators[userName] = this.convertToSpectator(user);
+        newSpectators[userName] = this.convertUserToSpectator(user);
       } else {
         newUsers[userName] = {
           ...pick(user, "avatar", "transport", "health", "roundHistory"),
@@ -105,9 +101,8 @@ export class RoundOver {
       (this.game.type === "singleplayer" && newUserCount <= 0) ||
       (this.game.type !== "singleplayer" && newUserCount <= 1)
     ) {
-      this.store.state = new GameOver(
-        this.store,
-        pick(
+      this.store.state = new GameOver(this.store, {
+        game: pick(
           this.game,
           "id",
           "owner",
@@ -117,9 +112,9 @@ export class RoundOver {
           "round",
           "roundHistory"
         ),
-        newUsers,
-        newSpectators
-      );
+        users: newUsers,
+        spectators: newSpectators,
+      });
     } else {
       // Handle shuffling songs if you manage to play like 600 rounds
       const round = this.game.round + 1;
@@ -135,9 +130,8 @@ export class RoundOver {
       );
       const maxSongStartFraction = difficultyConfig.songRandomStart ? 0.9 : 0;
 
-      this.store.state = new RoundActive(
-        this.store,
-        {
+      this.store.state = new RoundActive(this.store, {
+        game: {
           ...pick(
             this.game,
             "id",
@@ -155,34 +149,27 @@ export class RoundOver {
           timerDuration: undefined,
           timerId: undefined,
         },
-        newUsers,
-        newSpectators
-      );
+        users: newUsers,
+        spectators: newSpectators,
+      });
     }
-  }
-
-  public recreate(
-    game: RoundOver["game"],
-    users: RoundOver["users"],
-    spectators: RoundOver["spectators"]
-  ) {
-    return new RoundOver(this.store, game, users, spectators);
-  }
-
-  public createSpectator(
-    avatar: Avatar,
-    transport: Transport
-  ): SpectatorState {
-    return { avatar, transport, roundHistory: {} };
-  }
-
-  public convertToSpectator(user: UserState): SpectatorState {
-    return pick(user, "avatar", "transport", "roundHistory");
   }
 
   public onMessage(userName: string, message: ClientActions): void {
     if (message.action === "nextRound" && this.game.owner === userName) {
       this.next();
     }
+  }
+
+  public recreate(data: RoundOver["data"]) {
+    return new RoundOver(this.store, data);
+  }
+
+  public createSpectator(avatar: Avatar, transport: Transport) {
+    return { avatar, transport, roundHistory: {} };
+  }
+
+  public convertUserToSpectator(user: RoundOver["users"][string]) {
+    return pick(user, "avatar", "transport", "roundHistory");
   }
 }
