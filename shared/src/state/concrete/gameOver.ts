@@ -1,33 +1,64 @@
 import { Avatar } from "../../avatars.js";
+import { Song } from "../../songTypes.js";
 import { mapValues, pick } from "../../util.js";
-import { PostLobbyState } from "../abstract/postLobbyState.js";
-import { Config } from "../config.js";
+import { pickVisibleState } from "../visibleState.js";
 import { StateStore } from "../store.js";
 import { ClientActions, Transport } from "../transport.js";
-import { Spectator, User } from "../types.js";
+import { RoundResult } from "../types.js";
 import { Lobby } from "./lobby.js";
 
-export class GameOver extends PostLobbyState<Config<{}, {
-  publicGameKeys: [],
-  publicUserKeys: [],
-  privateUserKeys: [],
-  publicSpectatorKeys: [],
-  privateSpectatorKeys: []
-}>> {
-  public stateName = "GameOver" as const;
+type GameState = {
+  id: string;
+  owner: string;
+  type: "singleplayer" | "private" | "public";
+  difficulty: "tutorial" | "normal" | "hard" | "extreme";
+  roundHistory: Record<number, Song>;
+};
+const publicGameKeys = [
+  "id",
+  "owner",
+  "type",
+  "difficulty",
+  "roundHistory",
+] as const;
+
+type UserState = {
+  avatar: Avatar;
+  transport: Transport;
+  roundHistory: Record<number, RoundResult>;
+};
+const publicUserKeys = ["avatar", "roundHistory"] as const;
+const privateUserKeys = [...publicUserKeys] as const;
+
+type SpectatorState = {
+  avatar: Avatar;
+  transport: Transport;
+  roundHistory: Record<number, RoundResult>;
+};
+const publicSpectatorKeys = ["avatar", "roundHistory"] as const;
+const privateSpectatorKeys = [...publicSpectatorKeys] as const;
+
+export class GameOver {
+  public readonly stateName = "GameOver" as const;
+  public get visibleState() {
+    return pickVisibleState({
+      game: this.game,
+      publicGameKeys,
+      users: this.users,
+      publicUserKeys,
+      privateUserKeys,
+      spectators: this.spectators,
+      publicSpectatorKeys,
+      privateSpectatorKeys,
+    });
+  }
 
   constructor(
-    store: StateStore,
-    data: GameOver["data"]
+    public readonly store: StateStore,
+    public readonly game: GameState,
+    public readonly users: Record<string, UserState>,
+    public readonly spectators: Record<string, SpectatorState>
   ) {
-    super(store, data, {
-      publicGameKeys: [],
-  publicUserKeys: [],
-  privateUserKeys: [],
-  publicSpectatorKeys: [],
-  privateSpectatorKeys: []
-    });
-
     if (this.game.type === "public") {
       setTimeout(() => {
         if (this.store.state?.stateName === "GameOver") {
@@ -38,49 +69,46 @@ export class GameOver extends PostLobbyState<Config<{}, {
   }
 
   public playAgain() {
-    return this.transition(
-      new Lobby(this.store, {
-        game: {
-          ...pick(this.game, "id", "owner", "type", "difficulty"),
-          firstUserJoined: undefined,
-          timerStarted: undefined,
-          timerDuration: undefined,
-          timerId: undefined,
-        },
-        users: {},
-        spectators: {
-          ...this.spectators,
-          ...mapValues(this.users, (user) => ({
-            avatar: user.avatar,
-            transport: user.transport,
-            spectator: true,
-          })),
-        },
-      })
+    this.store.state = new Lobby(
+      this.store,
+      {
+        ...pick(this.game, "id", "owner", "type", "difficulty"),
+        firstUserJoined: undefined,
+        timerStarted: undefined,
+        timerDuration: undefined,
+        timerId: undefined,
+      },
+      {},
+      {
+        ...this.spectators,
+        ...mapValues(this.users, (user) => ({
+          avatar: user.avatar,
+          transport: user.transport,
+          spectator: true,
+        })),
+      }
     );
   }
 
-  protected recreate(
-    game: GameOver["game"],
-    users: GameOver["users"],
-    spectators: GameOver["spectators"]
+  public recreate(
+    game: GameState,
+    users: Record<string, UserState>,
+    spectators: Record<string, SpectatorState>
   ): GameOver {
-    return new GameOver(this.store, { game, users, spectators });
+    return new GameOver(this.store, game, users, spectators);
   }
 
-  protected onMessage(userName: string, message: ClientActions): void {
+  public onMessage(userName: string, message: ClientActions): void {
     if (userName === this.game.owner && message.action === "playAgain") {
       this.playAgain();
     }
   }
 
-  protected createSpectator(
-    avatar: Avatar,
-    transport: Transport
-  ): Spectator<GameOver> {
+  public createSpectator(avatar: Avatar, transport: Transport): SpectatorState {
     return { avatar, transport, roundHistory: {} };
   }
-  protected convertToSpectator(user: User<GameOver>): Spectator<GameOver> {
+
+  public convertToSpectator(user: UserState): SpectatorState {
     return pick(user, "avatar", "transport", "roundHistory");
   }
 }

@@ -1,37 +1,77 @@
 import { Avatar } from "../../avatars.js";
 import { Song } from "../../songTypes.js";
 import { pick, shuffle } from "../../util.js";
-import { ActiveState } from "../abstract/activeState.js";
-import { Config } from "../config.js";
+import { pickVisibleState } from "../visibleState.js";
+import { getDifficultyConfig } from "../difficulty.js";
 import { StateStore } from "../store.js";
 import { ClientActions, Transport } from "../transport.js";
-import { Spectator, User } from "../types.js";
+import { RoundResult } from "../types.js";
 import { GameOver } from "./gameOver.js";
 import { RoundActive } from "./roundActive.js";
 
-const extraKeys = {
-  publicGameKeys: ["song"],
-  publicUserKeys: [],
-  privateUserKeys: [],
-  publicSpectatorKeys: [],
-  privateSpectatorKeys: [],
-} as const;
+type GameState = {
+  id: string;
+  owner: string;
+  type: "singleplayer" | "private" | "public";
+  difficulty: "tutorial" | "normal" | "hard" | "extreme";
+  roundHistory: Record<number, Song>;
+  songs: Song[];
+  songUrl: string;
+  songStartFraction: number;
+  round: number;
+  roundStarted: Date;
+  song: Song;
+};
+const publicGameKeys = [
+  "id",
+  "owner",
+  "type",
+  "difficulty",
+  "roundHistory",
+  "round",
+  "songUrl",
+  "songStartFraction",
+  "song",
+] as const;
 
-type RoundOverConfig = Config<
-  {
-    game: { song: Song };
-  },
-  typeof extraKeys
->;
-export class RoundOver extends ActiveState<RoundOverConfig> {
-  public stateName = "RoundOver" as const;
+type UserState = {
+  avatar: Avatar;
+  transport: Transport;
+  roundHistory: Record<number, RoundResult>;
+  health: number;
+};
+const publicUserKeys = ["avatar", "roundHistory", "health"] as const;
+const privateUserKeys = [...publicUserKeys] as const;
+
+type SpectatorState = {
+  avatar: Avatar;
+  transport: Transport;
+  roundHistory: Record<number, RoundResult>;
+};
+const publicSpectatorKeys = ["avatar", "roundHistory"] as const;
+const privateSpectatorKeys = [...publicSpectatorKeys] as const;
+
+export class RoundOver {
+  public readonly stateName = "RoundOver" as const;
+  public get visibleState() {
+    return pickVisibleState({
+      game: this.game,
+      publicGameKeys,
+      users: this.users,
+      publicUserKeys,
+      privateUserKeys,
+      spectators: this.spectators,
+      publicSpectatorKeys,
+      privateSpectatorKeys,
+    });
+  }
 
   constructor(
-    store: StateStore,
-    data: Pick<RoundOver, "game" | "users" | "spectators">
+    public readonly store: StateStore,
+    public readonly game: GameState,
+    public readonly users: Record<string, UserState>,
+    public readonly spectators: Record<string, SpectatorState>
   ) {
-    super(store, data, extraKeys);
-
     if (this.game.type === "public") {
       setTimeout(() => {
         if (this.store.state?.stateName === "RoundOver") {
@@ -65,21 +105,20 @@ export class RoundOver extends ActiveState<RoundOverConfig> {
       (this.game.type === "singleplayer" && newUserCount <= 0) ||
       (this.game.type !== "singleplayer" && newUserCount <= 1)
     ) {
-      return this.transition(
-        new GameOver(this.store, {
-          game: pick(
-            this.game,
-            "id",
-            "owner",
-            "type",
-            "difficulty",
-            "songs",
-            "round",
-            "roundHistory"
-          ),
-          users: newUsers,
-          spectators: newSpectators,
-        })
+      this.store.state = new GameOver(
+        this.store,
+        pick(
+          this.game,
+          "id",
+          "owner",
+          "type",
+          "difficulty",
+          "songs",
+          "round",
+          "roundHistory"
+        ),
+        newUsers,
+        newSpectators
       );
     } else {
       // Handle shuffling songs if you manage to play like 600 rounds
@@ -90,57 +129,58 @@ export class RoundOver extends ActiveState<RoundOverConfig> {
         songs = shuffle([...songs]);
       }
       const song = songs[songIdx];
-      const maxSongStartFraction = this.difficultyConfig.songRandomStart
-        ? 0.9
-        : 0;
+      const difficultyConfig = getDifficultyConfig(
+        this.game.difficulty,
+        this.game.type === "singleplayer"
+      );
+      const maxSongStartFraction = difficultyConfig.songRandomStart ? 0.9 : 0;
 
-      return this.transition(
-        new RoundActive(this.store, {
-          game: {
-            ...pick(
-              this.game,
-              "id",
-              "owner",
-              "type",
-              "difficulty",
-              "roundHistory"
-            ),
-            songs,
-            round,
-            songUrl: song.audioUrl,
-            songStartFraction: maxSongStartFraction * Math.random(),
-            roundStarted: new Date(),
-            timerStarted: undefined,
-            timerDuration: undefined,
-            timerId: undefined,
-          },
-          users: newUsers,
-          spectators: newSpectators,
-        })
+      this.store.state = new RoundActive(
+        this.store,
+        {
+          ...pick(
+            this.game,
+            "id",
+            "owner",
+            "type",
+            "difficulty",
+            "roundHistory"
+          ),
+          songs,
+          round,
+          songUrl: song.audioUrl,
+          songStartFraction: maxSongStartFraction * Math.random(),
+          roundStarted: new Date(),
+          timerStarted: undefined,
+          timerDuration: undefined,
+          timerId: undefined,
+        },
+        newUsers,
+        newSpectators
       );
     }
   }
 
-  protected recreate(
+  public recreate(
     game: RoundOver["game"],
     users: RoundOver["users"],
     spectators: RoundOver["spectators"]
   ) {
-    return new RoundOver(this.store, { game, users, spectators });
+    return new RoundOver(this.store, game, users, spectators);
   }
 
-  protected createSpectator(
+  public createSpectator(
     avatar: Avatar,
     transport: Transport
-  ): Spectator<RoundOver> {
+  ): SpectatorState {
     return { avatar, transport, roundHistory: {} };
   }
 
-  protected convertToSpectator(user: User<RoundOver>): Spectator<RoundOver> {
+  public convertToSpectator(user: UserState): SpectatorState {
     return pick(user, "avatar", "transport", "roundHistory");
   }
 
-  protected onMessage(userName: string, message: ClientActions): void {
+  public onMessage(userName: string, message: ClientActions): void {
     if (message.action === "nextRound" && this.game.owner === userName) {
       this.next();
     }

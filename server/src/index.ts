@@ -76,13 +76,12 @@ function onJoin(ws: WebSocket, searchParams: URLSearchParams) {
   }
 
   if (store.state) {
-    store.state.join(ws);
+    store.join(ws);
     return;
   }
 
   const avatar = store.avatarLibrary.take()!;
   store.state = new StateInterface.Lobby(store, {
-    game: {
       id: store.gameId,
       owner: avatar.name,
       difficulty: "normal",
@@ -92,9 +91,9 @@ function onJoin(ws: WebSocket, searchParams: URLSearchParams) {
       timerId: undefined,
       firstUserJoined: undefined,
     },
-    users: {},
-    spectators: { [avatar.name]: { avatar, transport: ws } },
-  });
+    {},
+    { [avatar.name]: { avatar, transport: ws } },
+  );
 }
 
 let publicGameIdx = 0;
@@ -118,7 +117,7 @@ function createPublicLobby() {
       state?.stateName === "Lobby" &&
       Object.keys(state.spectators).length <= 1
     ) {
-      state.terminate();
+      store.terminate();
     }
 
     if (!started && state?.stateName === "RoundActive") {
@@ -132,8 +131,9 @@ function createPublicLobby() {
     Object.values(songs),
     onTransition
   );
-  store.state = new StateInterface.Lobby(store, {
-    game: {
+  store.state = new StateInterface.Lobby(
+    store,
+    {
       id: gameId,
       owner: "TuneScape",
       type: "public",
@@ -143,16 +143,14 @@ function createPublicLobby() {
       timerId: undefined,
       firstUserJoined: undefined,
     },
-    users: {},
-    spectators: {},
-  });
+    {},
+    {}
+  );
   publicGames[publicGameIdx] = store;
 }
 
 function onPublic(ws: WebSocket) {
-  const store = publicGames[publicGameIdx];
-  const state = store.state as StateInterface.Lobby;
-  state.join(ws);
+  publicGames[publicGameIdx].join(ws);
 }
 
 console.log("Running");

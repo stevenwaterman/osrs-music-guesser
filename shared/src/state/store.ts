@@ -1,8 +1,14 @@
-import { AvatarLibrary } from "../avatars.js";
+import { Avatar, AvatarLibrary } from "../avatars.js";
 import { Song } from "../songTypes.js";
-import { mapValues } from "../util.js";
+import { mapValues, omit, pick } from "../util.js";
+import { Lobby } from "./concrete/lobby.js";
 import { Diff, generatePartialDiff, applyPartialDiff } from "./diff.js";
-import { ServerActions } from "./transport.js";
+import {
+  ClientActions,
+  ServerActions,
+  Transport,
+  TransportMessage,
+} from "./transport.js";
 import { AnyServerState, BasicStateData, ClientStateData } from "./types.js";
 
 export type ClientStateDiff = Diff<ClientStateData>;
@@ -49,12 +55,61 @@ export class StateStore {
   public set state(state: AnyServerState | null) {
     this._state = state;
     this.onTransition(state);
+    this.sendStateDiff(state);
+  }
 
+  constructor(
+    public readonly gameId: string,
+    public readonly possibleSongs: Song[],
+    private readonly onTransition: (
+      state: AnyServerState | null
+    ) => void = () => {}
+  ) {}
+
+  public sendFullState(name: string) {
+    const basic = this.lastBasicStateData!;
+    const me = this.lastMeStateData[name];
+    const spectator = me.type === "spectator";
+    const transport = spectator
+      ? this.state!.spectators[name].transport
+      : this.state!.users[name].transport;
+    const msg: ServerActions = { action: "state", data: { ...basic, me } };
+    transport.send(JSON.stringify(msg));
+  }
+
+  private sendStateDiff(state: AnyServerState | null) {
     this.stateIndex++;
-    const basicStateData = this.getBasicStateData(state);
+    const visibleState = state?.visibleState;
+    const basicStateData =
+      visibleState === undefined
+        ? undefined
+        : {
+            stateName: this.state!.stateName,
+            stateIndex: this.stateIndex,
+            serverTime: new Date().getTime(),
+            game: visibleState.publicGame,
+            users: visibleState.publicUsers,
+            spectators: visibleState.publicSpectators,
+          };
     const basicDiff = getBasicDiff(this.lastBasicStateData, basicStateData);
 
-    const meStateData = this.getMeStateData(state);
+    const meStateData: Record<string, ClientStateData["me"]> = {};
+    if (visibleState) {
+      Object.keys(visibleState.privateUsers).forEach(
+        (name) =>
+          (meStateData[name] = {
+            ...visibleState.privateUsers[name],
+            type: "user",
+          })
+      );
+      Object.keys(visibleState.privateSpectators).forEach(
+        (name) =>
+          (meStateData[name] = {
+            ...visibleState.privateSpectators[name],
+            type: "spectator",
+          })
+      );
+    }
     const meStateDiffs = mapValues(meStateData, (data) => {
       const oldData = this.lastMeStateData[data.avatar.name];
       return getMeDiff(oldData, data);
@@ -90,77 +145,136 @@ export class StateStore {
     this.lastBasicStateData = basicStateData;
     this.lastMeStateData = meStateData;
   }
-  constructor(
-    public readonly gameId: string,
-    public readonly possibleSongs: Song[],
-    private readonly onTransition: (
-      state: AnyServerState | null
-    ) => void = () => {}
-  ) {}
 
-  private getBasicStateData(
-    state: AnyServerState | null
-  ): BasicStateData | undefined {
-    if (state === null) {
-      return undefined;
+  public join(transport: Transport) {
+    const avatar = this.avatarLibrary.take();
+    if (avatar === undefined) {
+      // TODO
+      transport.close(1000);
+      return;
     }
 
-    return {
-      stateName: this.state!.stateName,
-      stateIndex: this.stateIndex,
-      serverTime: new Date().getTime(),
-      game: state.publicGame,
-      users: state.publicUsers,
-      spectators: state.publicSpectators,
-    };
-  }
-
-  private getMeStateData(
-    state: AnyServerState | null
-  ): Record<string, ClientStateData["me"]> {
-    if (state === null) {
-      return {};
+    if (this.state === null) {
+      // TODO
+      transport.close(1000);
+      return;
     }
 
-    const meStateData: Record<string, ClientStateData["me"]> = {};
+    transport.addEventListener("message", (ev: TransportMessage) => {
+      const message = ev.data.toString("utf8");
+      if (message.startsWith("{")) {
+        const parsedMessage: ClientActions = JSON.parse(message);
+        if ("action" in parsedMessage) {
+          if (parsedMessage.action === "getState") {
+            this.sendFullState(avatar.name);
+          }
 
-    Object.values(state.publicUsers).forEach(
-      (user) => (meStateData[user.avatar.name] = { ...user, type: "user" })
-    );
-    Object.keys(state.privateUsers).forEach(
-      (name) =>
-        (meStateData[name] = {
-          ...meStateData[name],
-          ...state.privateUsers[name],
-        })
-    );
+          // TODO error handling
+          this.state?.onMessage(avatar.name, parsedMessage);
+        }
+      }
+    });
 
-    Object.values(state.publicSpectators).forEach(
-      (spectator) =>
-        (meStateData[spectator.avatar.name] = {
-          ...spectator,
-          type: "spectator",
-        })
-    );
-    Object.keys(state.privateSpectators).forEach(
-      (name) =>
-        (meStateData[name] = {
-          ...meStateData[name],
-          ...state.privateSpectators[name],
-        })
-    );
+    transport.addEventListener("close", () => {
+      this.leave(avatar.name);
+    });
 
-    return meStateData;
+    // TODO
+    const newOwner =
+      this.state.game.owner === "None" ? avatar.name : this.state.game.owner;
+    this.state = this.state.recreate(
+      {
+        ...this.state.game,
+        owner: newOwner,
+      } as any,
+      this.state.users as any,
+      {
+        ...this.state.spectators,
+        [avatar.name]: this.state.createSpectator(avatar, transport),
+      } as any
+    );
   }
 
-  public sendFullState(name: string) {
-    const basic = this.lastBasicStateData!;
-    const me = this.lastMeStateData[name];
-    const spectator = me.type === "spectator";
-    const transport = spectator
-      ? this.state!.spectators[name].transport
-      : this.state!.users[name].transport;
-    const msg: ServerActions = { action: "state", data: { ...basic, me } };
-    transport.send(JSON.stringify(msg));
+  public leave(name: string) {
+    if (this.state === null) return;
+
+    const userIsPlayer =
+      name in this.state.users || name in this.state.spectators;
+    if (!userIsPlayer) {
+      console.warn(`${name} tried to leave a game they weren't in`);
+      return;
+    }
+
+    const avatar = (this.state.users[name] ?? this.state.spectators[name])
+      .avatar;
+    this.avatarLibrary.release(avatar);
+
+    const newUsers: AnyServerState["users"] = omit(this.state.users, name);
+    const newUserCount = Object.keys(newUsers).length;
+
+    const newSpectators = omit(this.state.spectators, name);
+    const newSpectatorCount = Object.keys(newSpectators).length;
+
+    if (
+      newUserCount + newSpectatorCount === 0 &&
+      this.state.game.type !== "public"
+    ) {
+      this.state = null;
+      return;
+    }
+
+    const ownerStillPresent =
+      this.state.game.type === "public" ||
+      this.state.game.owner! in newUsers ||
+      this.state.game.owner! in newSpectators;
+    const newOwner = ownerStillPresent
+      ? this.state.game.owner
+      : newUserCount > 0
+        ? Object.keys(newUsers)[0]
+        : Object.keys(newSpectators)[0];
+
+    if (newUserCount <= 1 && this.state.stateName !== "Lobby") {
+      const allSpectators: Lobby["spectators"] = {
+        ...newSpectators,
+        ...mapValues(newUsers, (user) => pick(user, "avatar", "transport")),
+      };
+
+      this.state = new Lobby(
+        this,
+        {
+          ...pick(this.state.game, "id", "type", "difficulty"),
+          owner: newOwner,
+          firstUserJoined: undefined,
+          timerStarted: undefined,
+          timerDuration: undefined,
+          timerId: undefined,
+        },
+        {},
+        allSpectators
+      );
+      return;
+    }
+
+    // TODO
+    this.state = this.state.recreate(
+      {
+        ...this.state.game,
+        owner: newOwner,
+      } as any,
+      newUsers as any,
+      newSpectators as any
+    );
+  }
+
+  public terminate() {
+    if (this.state) {
+      Object.values(this.state.users).forEach(({ transport }) =>
+        transport.close(1000)
+      );
+      Object.values(this.state.spectators).forEach(({ transport }) =>
+        transport.close(1000)
+      );
+    }
+    this.state = null;
   }
 }

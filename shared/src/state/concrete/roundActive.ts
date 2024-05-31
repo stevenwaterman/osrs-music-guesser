@@ -1,84 +1,132 @@
 import { Avatar } from "../../avatars.js";
 import { Coordinate, Polygon, convertFlatten } from "../../coordinates.js";
+import { Song } from "../../songTypes.js";
 import { mapValues, pick } from "../../util.js";
-import { ActiveState } from "../abstract/activeState.js";
-import { Config } from "../config.js";
+import { pickVisibleState } from "../visibleState.js";
 import { getDifficultyConfig } from "../difficulty.js";
 import { StateStore } from "../store.js";
 import { ClientActions, Transport } from "../transport.js";
-import { RoundResult, Spectator, User } from "../types.js";
+import { RoundResult } from "../types.js";
 import { RoundOver } from "./roundOver.js";
 
-const extraKeys = {
-  publicGameKeys: ["songStartFraction", "timerStarted", "timerDuration"],
-  publicUserKeys: ["guessed"],
-  privateUserKeys: ["guess", "guessTime"],
-  publicSpectatorKeys: [],
-  privateSpectatorKeys: [],
-} as const;
-type RoundActiveConfig = Config<
-  {
-    game:
-      | {
-          songStartFraction: number;
-          roundStarted: Date;
-          timerStarted: undefined;
-          timerDuration: undefined;
-          timerId: undefined;
-        }
-      | {
-          songStartFraction: number;
-          round: number;
-          roundStarted: Date;
-          timerStarted: number;
-          timerDuration: number;
-          timerId: NodeJS.Timeout;
-        };
-    user:
-      | {
-          guess: undefined;
-          guessTime: undefined;
-          guessed: false;
-        }
-      | {
-          guess: Coordinate;
-          guessTime: Date;
-          guessed: true;
-        };
-  },
-  typeof extraKeys
->;
-export class RoundActive extends ActiveState<RoundActiveConfig> {
-  public stateName = "RoundActive" as const;
+type GameState =
+  | {
+      id: string;
+      owner: string;
+      type: "singleplayer" | "private" | "public";
+      difficulty: "tutorial" | "normal" | "hard" | "extreme";
+      roundHistory: Record<number, Song>;
+      songs: Song[];
+      songUrl: string;
+      songStartFraction: number;
+      round: number;
+      roundStarted: Date;
+      timerStarted: undefined;
+      timerDuration: undefined;
+      timerId: undefined;
+    }
+  | {
+      id: string;
+      owner: string;
+      type: "singleplayer" | "private" | "public";
+      difficulty: "tutorial" | "normal" | "hard" | "extreme";
+      roundHistory: Record<number, Song>;
+      songs: Song[];
+      songUrl: string;
+      songStartFraction: number;
+      round: number;
+      roundStarted: Date;
+      timerStarted: number;
+      timerDuration: number;
+      timerId: NodeJS.Timeout;
+    };
+const publicGameKeys = [
+  "id",
+  "owner",
+  "type",
+  "difficulty",
+  "roundHistory",
+  "round",
+  "songUrl",
+  "songStartFraction",
+  "timerStarted",
+  "timerDuration",
+] as const;
+
+type UserState =
+  | {
+      avatar: Avatar;
+      transport: Transport;
+      roundHistory: Record<number, RoundResult>;
+      health: number;
+      guess: undefined;
+      guessTime: undefined;
+      guessed: false;
+    }
+  | {
+      avatar: Avatar;
+      transport: Transport;
+      roundHistory: Record<number, RoundResult>;
+      health: number;
+      guess: Coordinate;
+      guessTime: Date;
+      guessed: true;
+    };
+const publicUserKeys = ["avatar", "roundHistory", "health", "guessed"] as const;
+const privateUserKeys = [...publicUserKeys, "guess", "guessTime"] as const;
+
+type SpectatorState = {
+  avatar: Avatar;
+  transport: Transport;
+  roundHistory: Record<number, RoundResult>;
+};
+const publicSpectatorKeys = ["avatar", "roundHistory"] as const;
+const privateSpectatorKeys = [...publicSpectatorKeys] as const;
+
+export class RoundActive {
+  public readonly stateName = "RoundActive" as const;
+  public get visibleState() {
+    return pickVisibleState({
+      game: this.game,
+      publicGameKeys,
+      users: this.users,
+      publicUserKeys,
+      privateUserKeys,
+      spectators: this.spectators,
+      publicSpectatorKeys,
+      privateSpectatorKeys,
+    });
+  }
+
+  public readonly game: GameState;
 
   constructor(
-    store: StateStore,
-    data: Pick<RoundActive, "game" | "users" | "spectators">
+    public readonly store: StateStore,
+    game: GameState,
+    public readonly users: Record<string, UserState>,
+    public readonly spectators: Record<string, SpectatorState>
   ) {
     const difficultyConfig = getDifficultyConfig(
-      data.game.difficulty,
-      data.game.type === "singleplayer"
+      game.difficulty,
+      game.type === "singleplayer"
     );
     if (
       difficultyConfig.timeLimit.type === "immediately" &&
-      data.game.timerStarted === undefined
+      game.timerStarted === undefined
     ) {
-      data = {
-        ...data,
-        game: {
-          ...data.game,
-          timerStarted: new Date().getTime(),
-          timerDuration: difficultyConfig.timeLimit.duration,
-          timerId: setTimeout(() => {
-            if (store.state?.stateName === "RoundActive") {
-              store.state.roundOver();
-            }
-          }, difficultyConfig.timeLimit.duration * 1000),
-        },
+      game = {
+        ...game,
+        timerStarted: new Date().getTime(),
+        timerDuration: difficultyConfig.timeLimit.duration,
+        timerId: setTimeout(() => {
+          if (store.state?.stateName === "RoundActive") {
+            store.state.roundOver();
+          }
+        }, difficultyConfig.timeLimit.duration * 1000),
       };
     }
 
-    super(store, data, extraKeys);
+    this.game = game;
 
     setTimeout(() => {
       const allGuessed = Object.values(this.users).every(
@@ -93,22 +141,26 @@ export class RoundActive extends ActiveState<RoundActiveConfig> {
   public guess(userName: string, guess: Coordinate) {
     // TODO check they haven't already guessed
     const now = new Date();
+    const difficultyConfig = getDifficultyConfig(
+      this.game.difficulty,
+      this.game.type === "singleplayer"
+    );
 
     let newGameState = { ...this.game };
     if (
-      this.difficultyConfig.timeLimit.type === "afterFirstGuess" &&
+      difficultyConfig.timeLimit.type === "afterFirstGuess" &&
       newGameState.timerStarted === undefined
     ) {
       // If first guess, set timer
       newGameState = {
         ...newGameState,
         timerStarted: now.getTime(),
-        timerDuration: this.difficultyConfig.timeLimit.duration,
+        timerDuration: difficultyConfig.timeLimit.duration,
         timerId: setTimeout(() => {
           if (this.store.state?.stateName === "RoundActive") {
             this.store.state.roundOver();
           }
-        }, this.difficultyConfig.timeLimit.duration * 1000),
+        }, difficultyConfig.timeLimit.duration * 1000),
       };
     }
 
@@ -128,15 +180,20 @@ export class RoundActive extends ActiveState<RoundActiveConfig> {
       },
     };
 
-    const newState = new RoundActive(this.store, {
-      game: newGameState,
-      users: newUserState,
-      spectators: this.spectators,
-    });
-    return this.transition(newState);
+    this.store.state = new RoundActive(
+      this.store,
+      newGameState,
+      newUserState,
+      this.spectators
+    );
   }
 
-  private roundOver() {
+  public get song(): Song {
+    const songIdx = (this.game.round - 1) % this.game.songs.length;
+    return this.game.songs[songIdx];
+  }
+
+  public roundOver() {
     if (this.game.timerId !== undefined) {
       clearTimeout(this.game.timerId);
     }
@@ -155,52 +212,49 @@ export class RoundActive extends ActiveState<RoundActiveConfig> {
       };
     });
 
-    return this.transition(
-      new RoundOver(this.store, {
-        game: {
-          ...pick(
-            this.game,
-            "id",
-            "owner",
-            "type",
-            "difficulty",
-            "songs",
-            "songUrl",
-            "songStartFraction",
-            "round",
-            "roundStarted",
-            "roundHistory"
-          ),
-          song: this.song,
-        },
-        users: newUserState,
-        spectators: this.spectators,
-      })
+    this.store.state = new RoundOver(
+      this.store,
+      {
+        ...pick(
+          this.game,
+          "id",
+          "owner",
+          "type",
+          "difficulty",
+          "songs",
+          "songUrl",
+          "songStartFraction",
+          "round",
+          "roundStarted",
+          "roundHistory"
+        ),
+        song: this.song,
+      },
+      newUserState,
+      this.spectators
     );
   }
 
-  protected recreate(
+  public recreate(
     game: RoundActive["game"],
     users: RoundActive["users"],
     spectators: RoundActive["spectators"]
   ) {
-    return new RoundActive(this.store, { game, users, spectators });
+    return new RoundActive(this.store, game, users, spectators);
   }
 
-  protected createSpectator(
+  public createSpectator(
     avatar: Avatar,
     transport: Transport
-  ): Spectator<RoundActive> {
+  ): SpectatorState {
     return { avatar, transport, roundHistory: {} };
   }
 
-  protected convertToSpectator(
-    user: User<RoundActive>
-  ): Spectator<RoundActive> {
+  public convertToSpectator(user: UserState): SpectatorState {
     return pick(user, "avatar", "transport", "roundHistory");
   }
 
-  protected onMessage(userName: string, message: ClientActions): void {
+  public onMessage(userName: string, message: ClientActions): void {
     if (
       message.action === "guess" &&
       this.users[userName].guess === undefined &&
@@ -242,9 +296,11 @@ type GuessResult = {
 export function calculateRoundResults(
   state: RoundActive
 ): Record<string, RoundResult> {
-  const difficultyConfig = state.difficultyConfig;
-  const song = state.song;
-  const location = song.location;
+  const difficultyConfig = getDifficultyConfig(
+    state.game.difficulty,
+    state.game.type === "singleplayer"
+  );
+  const location = state.song.location;
 
   const guessResults: Record<string, GuessResult | undefined> = mapValues(
     state.users,

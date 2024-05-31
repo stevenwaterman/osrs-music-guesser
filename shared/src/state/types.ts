@@ -1,10 +1,8 @@
 import { Coordinate } from "../coordinates.js";
-import { State } from "./abstract/state.js";
 import { GameOver } from "./concrete/gameOver.js";
 import { Lobby } from "./concrete/lobby.js";
 import { RoundActive } from "./concrete/roundActive.js";
 import { RoundOver } from "./concrete/roundOver.js";
-import { AnyConfig } from "./config.js";
 
 export type ServerStates = {
   Lobby: Lobby;
@@ -20,12 +18,16 @@ export type ClientStateData<
   stateName: StateName;
   serverTime: number;
   stateIndex: number;
-  game: ServerStates[StateName]["publicGame"];
-  users: ServerStates[StateName]["publicUsers"];
-  spectators: ServerStates[StateName]["publicSpectators"];
+  game: ServerStates[StateName]["visibleState"]["publicGame"];
+  users: ServerStates[StateName]["visibleState"]["publicUsers"];
+  spectators: ServerStates[StateName]["visibleState"]["publicSpectators"];
   me:
-    | ({ type: "user" } & Elem<ServerStates[StateName]["publicUsers"]> & Elem<ServerStates[StateName]["privateUsers"]>)
-    | ({ type: "spectator" } & Elem<ServerStates[StateName]["publicSpectators"]> & Elem<ServerStates[StateName]["privateSpectators"]>)
+    | ({
+        type: "user";
+      } & ServerStates[StateName]["visibleState"]["privateUsers"][string])
+    | ({
+        type: "spectator";
+      } & ServerStates[StateName]["visibleState"]["privateSpectators"][string]);
 };
 
 export type BasicStateData<
@@ -65,6 +67,3 @@ export type Elem<T extends any[] | Record<string, any>> = T extends any[]
   : T extends Record<string, any>
     ? T[string]
     : never;
-export type AnyState = State<AnyConfig>;
-export type User<S extends AnyState> = Elem<NonNullable<S["users"]>>;
-export type Spectator<S extends AnyState> = Elem<NonNullable<S["spectators"]>>;
