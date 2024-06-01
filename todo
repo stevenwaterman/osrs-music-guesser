@@ -4,6 +4,7 @@ Volume slider overrunning container
 Track difficulty in localstorage
 Muted / Low volume warning
 Dynamic imports to reduce chunk size
+make round history a game property instead of a player property so that it doesn't matter when people leave before the end
 
 How to play
 GitHub link

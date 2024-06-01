@@ -11,3 +11,4 @@ export type {
   ClientStateData
 } from "./store/transport.js";
 export { applyDiff, StateStore, type AnyServerState, type ServerStates } from "./store/store.js";
+export { type RoundResult } from "./config.js";
