@@ -1,6 +1,7 @@
 import { Avatar } from "../avatars.js";
 import { mapValues, omit, pick } from "../util.js";
 import { AbstractCfg } from "./config.js";
+import { getDifficultyConfig } from "./difficulty.js";
 import { StateStore } from "./store/store.js";
 import { ClientActions, Transport } from "./store/transport.js";
 
@@ -98,6 +99,10 @@ export abstract class BaseState<
 
   public get spectators() {
     return this.data.spectators;
+  }
+
+  public get difficultyConfig() {
+    return getDifficultyConfig(this.game.difficulty, this.game.type === "singleplayer");
   }
 
   constructor(cfg: {

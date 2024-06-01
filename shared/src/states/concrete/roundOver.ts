@@ -1,7 +1,6 @@
 import { Avatar } from "../../avatars.js";
 import { Song } from "../../songTypes.js";
 import { pick, shuffle } from "../../util.js";
-import { getDifficultyConfig } from "../difficulty.js";
 import { StateStore } from "../store/store.js";
 import { ClientActions, Transport } from "../store/transport.js";
 import { GameOver } from "./gameOver.js";
@@ -91,11 +90,7 @@ export class RoundOver extends BaseState<
         songs = shuffle([...songs]);
       }
       const song = songs[songIdx];
-      const difficultyConfig = getDifficultyConfig(
-        this.game.difficulty,
-        this.game.type === "singleplayer"
-      );
-      const maxSongStartFraction = difficultyConfig.songRandomStart ? 0.9 : 0;
+      const maxSongStartFraction = this.difficultyConfig.songRandomStart ? 0.9 : 0;
 
       this.store.state = new RoundActive(this.store, {
         game: {

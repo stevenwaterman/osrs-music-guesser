@@ -89,26 +89,22 @@ export class RoundActive extends BaseState<
   public guess(userName: string, guess: Coordinate) {
     // TODO check they haven't already guessed
     const now = new Date();
-    const difficultyConfig = getDifficultyConfig(
-      this.game.difficulty,
-      this.game.type === "singleplayer"
-    );
 
     let newGameState = { ...this.game };
     if (
-      difficultyConfig.timeLimit.type === "afterFirstGuess" &&
+      this.difficultyConfig.timeLimit.type === "afterFirstGuess" &&
       newGameState.timerStarted === undefined
     ) {
       // If first guess, set timer
       newGameState = {
         ...newGameState,
         timerStarted: now.getTime(),
-        timerDuration: difficultyConfig.timeLimit.duration,
+        timerDuration: this.difficultyConfig.timeLimit.duration,
         timerId: setTimeout(() => {
           if (this.store.state?.name === "RoundActive") {
             this.store.state.roundOver();
           }
-        }, difficultyConfig.timeLimit.duration * 1000),
+        }, this.difficultyConfig.timeLimit.duration * 1000),
       };
     }
 
@@ -231,10 +227,7 @@ type GuessResult = {
 export function calculateRoundResults(
   state: RoundActive
 ): Record<string, RoundResult> {
-  const difficultyConfig = getDifficultyConfig(
-    state.game.difficulty,
-    state.game.type === "singleplayer"
-  );
+  const difficultyConfig = state.difficultyConfig;
   const location = state.song.location;
 
   const guessResults: Record<string, GuessResult | undefined> = mapValues(

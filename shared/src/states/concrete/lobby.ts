@@ -1,6 +1,6 @@
 import { Avatar } from "../../avatars.js";
 import { mapValues, pick, sample } from "../../util.js";
-import { Difficulty, getDifficultyConfig } from "../difficulty.js";
+import { Difficulty } from "../difficulty.js";
 import { StateStore } from "../store/store.js";
 import { ClientActions, Transport } from "../store/transport.js";
 import { RoundActive } from "./roundActive.js";
@@ -101,11 +101,7 @@ export class Lobby extends BaseState<Lobby, "Lobby", Cfg, typeof keys> {
       clearTimeout(this.game.timerId);
     }
 
-    const difficultyConfig = getDifficultyConfig(
-      this.game.difficulty,
-      this.game.type === "singleplayer"
-    );
-    const acceptableDifficulty = difficultyConfig.songDifficulty;
+    const acceptableDifficulty = this.difficultyConfig.songDifficulty;
     const possibleSongs = this.store.possibleSongs.filter(
       (song) =>
         song.location.length > 0 && acceptableDifficulty[song.difficulty]
@@ -113,7 +109,7 @@ export class Lobby extends BaseState<Lobby, "Lobby", Cfg, typeof keys> {
     const gameSongs = sample(possibleSongs);
     const round = 1;
     const song = gameSongs[0];
-    const maxSongStartFraction = difficultyConfig.songRandomStart ? 0.9 : 0;
+    const maxSongStartFraction = this.difficultyConfig.songRandomStart ? 0.9 : 0;
     this.store.state = new RoundActive(this.store, {
       game: {
         ...pick(this.game, "id", "owner", "type", "difficulty"),
