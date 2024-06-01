@@ -40,9 +40,8 @@ function mergeOneKeys<
 }
 
 type MergedKeys<
-  Cfg extends DataConfig,
-  A extends KeysFor<Cfg>,
-  B extends Partial<KeysFor<Cfg>>,
+  A extends KeysFor<any>,
+  B extends Partial<KeysFor<any>>,
 > = {
   publicGame: MergeOneKeys<A, B, "publicGame">;
   publicUsers: MergeOneKeys<A, B, "publicUsers">;
@@ -51,28 +50,23 @@ type MergedKeys<
   privateSpectators: MergeOneKeys<A, B, "privateSpectators">;
   secretSpectators: MergeOneKeys<A, B, "secretSpectators">;
 };
-function mergeKeys<Cfg extends DataConfig>(): <
-  A extends KeysFor<Cfg>,
-  B extends Partial<KeysFor<Cfg>>,
+function mergeKeys<
+  A extends KeysFor<any>,
+  B extends Partial<KeysFor<any>>,
 >(
   a: A,
   b: B
-) => RecursiveIdentity<MergedKeys<Cfg, A, B>> {
-  return <A extends KeysFor<Cfg>, B extends Partial<KeysFor<Cfg>>>(
-    a: A,
-    b: B
-  ) => {
-    const merged: MergedKeys<Cfg, A, B> = {
-      publicGame: mergeOneKeys(a, b, "publicGame"),
-      publicUsers: mergeOneKeys(a, b, "publicUsers"),
-      privateUsers: mergeOneKeys(a, b, "privateUsers"),
-      publicSpectators: mergeOneKeys(a, b, "publicSpectators"),
-      privateSpectators: mergeOneKeys(a, b, "privateSpectators"),
-      secretSpectators: mergeOneKeys(a, b, "secretSpectators"),
-    } as const;
+): RecursiveIdentity<MergedKeys<A, B>> {
+  const merged: MergedKeys<A, B> = {
+    publicGame: mergeOneKeys(a, b, "publicGame"),
+    publicUsers: mergeOneKeys(a, b, "publicUsers"),
+    privateUsers: mergeOneKeys(a, b, "privateUsers"),
+    publicSpectators: mergeOneKeys(a, b, "publicSpectators"),
+    privateSpectators: mergeOneKeys(a, b, "privateSpectators"),
+    secretSpectators: mergeOneKeys(a, b, "secretSpectators"),
+  } as const;
 
-    return merged as RecursiveIdentity<MergedKeys<Cfg, A, B>>;
-  };
+  return merged as RecursiveIdentity<MergedKeys<A, B>>;
 }
 
 type CfgFromPartial<
@@ -84,17 +78,13 @@ export type MergeCfg<A extends DataConfig, B extends Partial<DataConfig>> = {
   user: Identity<A["user"] & CfgFromPartial<B, "user">>;
 };
 
-function getAbstractMerger<ICfg extends DataConfig>() {
-  return <IKeys extends KeysFor<ICfg>>(iKeys: IKeys) => {
-    return {
-      ...iKeys,
-      plus: <Cfg extends ICfg>() => {
-        return <Keys extends Partial<KeysFor<Cfg>>>(keys: Keys) => {
-          return mergeKeys<Cfg>()(iKeys, keys);
-        };
-      },
-    };
-  };
+function getAbstractMerger<Ikeys extends KeysFor<any>>(iKeys: Ikeys) {
+  return {
+    ...iKeys,
+    plus: <Keys extends Partial<KeysFor<any>>>(keys: Keys) => {
+      return mergeKeys(iKeys, keys);
+    }
+  }
 }
 
 // -------
@@ -158,7 +148,7 @@ type PostLobbyCfg = MergeCfg<
     };
   }
 >;
-const postLobbyKeys = mergeKeys<PostLobbyCfg>()(baseKeys, {
+const postLobbyKeys = mergeKeys(baseKeys, {
   publicGame: ["roundHistory"],
   publicUsers: ["roundHistory"],
   publicSpectators: ["roundHistory"],
@@ -180,7 +170,7 @@ type ActiveCfg = MergeCfg<
     };
   }
 >;
-const activeKeys = mergeKeys<ActiveCfg>()(postLobbyKeys, {
+const activeKeys = mergeKeys(postLobbyKeys, {
   publicGame: ["songUrl", "songStartFraction", "round"],
   publicUsers: ["health"],
 } as const);
@@ -198,7 +188,7 @@ export type AbstractCfg<
 >;
 
 export const abstractKeys = {
-  base: getAbstractMerger<BaseCfg>()(baseKeys),
-  postLobby: getAbstractMerger<PostLobbyCfg>()(postLobbyKeys),
-  active: getAbstractMerger<ActiveCfg>()(activeKeys),
+  base: getAbstractMerger(baseKeys),
+  postLobby: getAbstractMerger(postLobbyKeys),
+  active: getAbstractMerger(activeKeys),
 };

@@ -5,10 +5,9 @@ import { mapValues, pick } from "../../util.js";
 import { getDifficultyConfig } from "../difficulty.js";
 import { StateStore } from "../store/store.js";
 import { ClientActions, Transport } from "../store/transport.js";
-import { RoundResult } from "../types.js";
 import { RoundOver } from "./roundOver.js";
 import { BaseState } from "./baseState.js";
-import { AbstractCfg, abstractKeys } from "./config.js";
+import { AbstractCfg, RoundResult, abstractKeys } from "./config.js";
 
 type Cfg = AbstractCfg<
   "active",
@@ -37,7 +36,7 @@ type Cfg = AbstractCfg<
         };
   }
 >;
-const keys = abstractKeys.active.plus<Cfg>()({
+const keys = abstractKeys.active.plus({
   publicGame: ["timerStarted", "timerDuration"],
   publicUsers: ["guessed"],
   privateUsers: ["guess", "guessTime"],

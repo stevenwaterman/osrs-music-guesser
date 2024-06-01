@@ -17,7 +17,7 @@ type Cfg = AbstractCfg<
     };
   }
 >;
-const keys = abstractKeys.active.plus<Cfg>()({
+const keys = abstractKeys.active.plus({
   publicGame: ["song"],
 } as const);
 
