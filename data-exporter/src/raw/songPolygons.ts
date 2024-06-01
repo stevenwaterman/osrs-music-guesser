@@ -1,6 +1,4 @@
-import type { Coordinate, Polygon } from "tunescape07-shared";
-import { SongName } from "tunescape07-shared";
-import { Face } from "tunescape07-shared/src/coordinates.js";
+import type { Coordinate, Polygon, SongName, Face } from "tunescape07-shared";
 
 function rectangle(
   left: number,

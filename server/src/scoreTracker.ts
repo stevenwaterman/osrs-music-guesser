@@ -1,18 +1,20 @@
 import fs from "fs/promises";
 import fsSync from "fs";
-import { RoundOver } from "tunescape07-shared/src/states.js";
-import { Coordinate } from "tunescape07-shared";
+import { Coordinate, StateInterface } from "tunescape07-shared";
 
 let batch: Array<{ song: string; distance?: number; guess?: Coordinate }> = [];
 
 const dir = "./distances";
 
-export function recordDistances(state: RoundOver) {
+export function recordDistances(state: StateInterface.RoundOver) {
   const song = state.game.song.name;
-  const guesses = Object.values(state.users).map((user) => ({
-    distance: user.guessResult?.distance,
-    guess: user.guessResult?.coordinate,
-  }));
+  const guesses = Object.values(state.users).map((user) => {
+    const result = user.roundHistory[state.game.round];
+    return {
+      distance: result.guessed ? result.distance : undefined,
+      guess: result.guessed ? result.coordinate : undefined,
+    };
+  });
 
   const entries = guesses.map(({ distance, guess }) => ({
     song,

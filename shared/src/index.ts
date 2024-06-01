@@ -1,4 +1,4 @@
-export { type Coordinate, type Polygon } from "./coordinates.js";
+export { type Coordinate, type Polygon, type Face } from "./coordinates.js";
 export { convertFlatten } from "./coordinates.js";
 export { type Song } from "./songTypes.js";
 export * from "./util.js";

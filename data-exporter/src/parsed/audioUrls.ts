@@ -1,6 +1,5 @@
-import { SongName, toMap } from "tunescape07-shared";
+import { SongName, songNames, toMap } from "tunescape07-shared";
 import { wikiAudioFileConflicts } from "../raw/wikiAudioFileConflicts.js";
-import { songNames } from "tunescape07-shared";
 
 export const audioUrls: Record<SongName, string> = toMap(
   songNames.map((song) => {

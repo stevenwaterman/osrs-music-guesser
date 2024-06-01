@@ -3,6 +3,7 @@ GameOver screen should show results, screenshot/share option
 Volume slider overrunning container
 Track difficulty in localstorage
 Muted / Low volume warning
+Dynamic imports to reduce chunk size
 
 How to play
 GitHub link

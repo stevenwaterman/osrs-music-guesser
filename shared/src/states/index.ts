@@ -8,5 +8,6 @@ export type {
   TransportClose,
   ClientActions,
   ServerActions,
+  ClientStateData
 } from "./store/transport.js";
-export { applyDiff, StateStore } from "./store/store.js";
+export { applyDiff, StateStore, type AnyServerState, type ServerStates } from "./store/store.js";

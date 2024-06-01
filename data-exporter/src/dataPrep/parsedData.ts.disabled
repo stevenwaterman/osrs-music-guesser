@@ -1,4 +1,4 @@
-import { RLCONF } from "./mapData.js";
+import { RLCONF } from "./mapData.ts.disabled";
 
 type ExtractedData = {
   title: string;
