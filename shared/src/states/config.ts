@@ -73,7 +73,7 @@ export type MergeCfg<A extends DataConfig, B extends Partial<DataConfig>> = {
 };
 
 function getAbstractMerger<Ikeys extends KeysFor<any>>(iKeys: Ikeys) {
-  return <Keys extends Partial<KeysFor<any>>>(keys: Keys) => mergeKeys(iKeys, keys);
+  return <Keys extends Partial<KeysFor<any>>>(keys?: Keys) => mergeKeys(iKeys, keys ?? {});
 }
 
 // -------

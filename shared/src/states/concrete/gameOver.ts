@@ -7,7 +7,7 @@ import { BaseState } from "../baseState.js";
 import { AbstractCfg, abstractKeys } from "../config.js";
 
 type Cfg = AbstractCfg<"postLobby">;
-const keys = abstractKeys.postLobby({});
+const keys = abstractKeys.postLobby();
 
 export class GameOver extends BaseState<
   GameOver,
