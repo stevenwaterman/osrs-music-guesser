@@ -67,8 +67,8 @@ export class AvatarLibrary {
     return avatars[avatarName];
   }
 
-  public release(avatar: Avatar) {
-    this.availableAvatars.push(avatar.name);
+  public release(name: string) {
+    this.availableAvatars.push(name);
   }
 }
 

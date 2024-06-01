@@ -1,0 +1,204 @@
+import { Avatar } from "../../avatars.js";
+import { Song } from "../../songTypes.js";
+import { DataConfig, KeysFor } from "./baseState.js";
+import { Transport } from "../store/transport.js";
+import { Coordinate } from "../../coordinates.js";
+
+type Identity<T> = T extends object
+  ? {} & {
+      [P in keyof T]: T[P];
+    }
+  : T;
+type RecursiveIdentity<T> = T extends object
+  ? {
+      [P in keyof T]: RecursiveIdentity<T[P]>;
+    }
+  : T;
+
+type KeysFromPartial<
+  Keys extends Partial<KeysFor<any>>,
+  Key extends keyof KeysFor<any>,
+> = Keys extends Record<Key, Readonly<Array<any>>> ? Keys[Key] : readonly [];
+function keysFromPartial<
+  Keys extends Partial<KeysFor<any>>,
+  Key extends keyof KeysFor<any>,
+>(keys: Keys, key: Key): KeysFromPartial<Keys, Key> {
+  return (keys[key] ?? []) as KeysFromPartial<Keys, Key>;
+}
+
+type MergeOneKeys<
+  A extends KeysFor<any>,
+  B extends Partial<KeysFor<any>>,
+  Key extends keyof KeysFor<any>,
+> = Readonly<[...A[Key], ...KeysFromPartial<B, Key>]>;
+function mergeOneKeys<
+  A extends KeysFor<any>,
+  B extends Partial<KeysFor<any>>,
+  Key extends keyof KeysFor<any>,
+>(a: A, b: B, key: Key): MergeOneKeys<A, B, Key> {
+  return [...a[key], ...keysFromPartial(b, key)];
+}
+
+type MergedKeys<
+  Cfg extends DataConfig,
+  A extends KeysFor<Cfg>,
+  B extends Partial<KeysFor<Cfg>>,
+> = {
+  publicGame: MergeOneKeys<A, B, "publicGame">;
+  publicUsers: MergeOneKeys<A, B, "publicUsers">;
+  privateUsers: MergeOneKeys<A, B, "privateUsers">;
+  publicSpectators: MergeOneKeys<A, B, "publicSpectators">;
+  privateSpectators: MergeOneKeys<A, B, "privateSpectators">;
+  secretSpectators: MergeOneKeys<A, B, "secretSpectators">;
+};
+function mergeKeys<Cfg extends DataConfig>(): <
+  A extends KeysFor<Cfg>,
+  B extends Partial<KeysFor<Cfg>>,
+>(
+  a: A,
+  b: B
+) => RecursiveIdentity<MergedKeys<Cfg, A, B>> {
+  return <A extends KeysFor<Cfg>, B extends Partial<KeysFor<Cfg>>>(
+    a: A,
+    b: B
+  ) => {
+    const merged: MergedKeys<Cfg, A, B> = {
+      publicGame: mergeOneKeys(a, b, "publicGame"),
+      publicUsers: mergeOneKeys(a, b, "publicUsers"),
+      privateUsers: mergeOneKeys(a, b, "privateUsers"),
+      publicSpectators: mergeOneKeys(a, b, "publicSpectators"),
+      privateSpectators: mergeOneKeys(a, b, "privateSpectators"),
+      secretSpectators: mergeOneKeys(a, b, "secretSpectators"),
+    } as const;
+
+    return merged as RecursiveIdentity<MergedKeys<Cfg, A, B>>;
+  };
+}
+
+type CfgFromPartial<
+  Cfg extends Partial<DataConfig>,
+  Key extends keyof DataConfig,
+> = Cfg extends Record<Key, {}> ? Cfg[Key] : {};
+export type MergeCfg<A extends DataConfig, B extends Partial<DataConfig>> = {
+  game: Identity<A["game"] & CfgFromPartial<B, "game">>;
+  user: Identity<A["user"] & CfgFromPartial<B, "user">>;
+};
+
+function getAbstractMerger<ICfg extends DataConfig>() {
+  return <IKeys extends KeysFor<ICfg>>(iKeys: IKeys) => {
+    return {
+      ...iKeys,
+      plus: <Cfg extends ICfg>() => {
+        return <Keys extends Partial<KeysFor<Cfg>>>(keys: Keys) => {
+          return mergeKeys<Cfg>()(iKeys, keys);
+        };
+      },
+    };
+  };
+}
+
+// -------
+
+type BaseCfg = {
+  game: {
+    id: string;
+    owner: string;
+    type: "singleplayer" | "private" | "public";
+    difficulty: "tutorial" | "normal" | "hard" | "extreme";
+  };
+  user: {
+    avatar: Avatar;
+    transport: Transport;
+  };
+};
+const baseKeys = {
+  publicGame: ["id", "owner", "type", "difficulty"],
+  publicUsers: ["avatar"],
+  privateUsers: [],
+  publicSpectators: ["avatar"],
+  privateSpectators: [],
+  secretSpectators: ["transport"],
+} as const;
+
+export type RoundResult =
+  | {
+      guessed: true;
+      coordinate: Coordinate;
+      time: number;
+      closest: Coordinate;
+      distance: number;
+      damage: {
+        hit: number;
+        healing: number;
+        venom: number;
+        max: boolean;
+      };
+      healthBefore: number;
+      healthAfter: number;
+    }
+  | {
+      guessed: false;
+      damage: {
+        hit: number;
+        healing: number;
+        venom: number;
+        max: boolean;
+      };
+      healthBefore: number;
+      healthAfter: number;
+    };
+type PostLobbyCfg = MergeCfg<
+  BaseCfg,
+  {
+    game: {
+      roundHistory: Record<string, Song>;
+    };
+    user: {
+      roundHistory: Record<string, RoundResult>;
+    };
+  }
+>;
+const postLobbyKeys = mergeKeys<PostLobbyCfg>()(baseKeys, {
+  publicGame: ["roundHistory"],
+  publicUsers: ["roundHistory"],
+  publicSpectators: ["roundHistory"],
+} as const);
+
+
+type ActiveCfg = MergeCfg<
+  PostLobbyCfg,
+  {
+    game: {
+      songs: Song[];
+      songUrl: string;
+      songStartFraction: number;
+      round: number;
+      roundStarted: Date;
+    };
+    user: {
+      health: number;
+    };
+  }
+>;
+const activeKeys = mergeKeys<ActiveCfg>()(postLobbyKeys, {
+  publicGame: ["songUrl", "songStartFraction", "round"],
+  publicUsers: ["health"],
+} as const);
+
+export type AbstractCfg<
+  Key extends "base" | "postLobby" | "active",
+  Plus extends Partial<DataConfig> = {},
+> = MergeCfg<
+  {
+    base: BaseCfg;
+    postLobby: PostLobbyCfg;
+    active: ActiveCfg;
+  }[Key],
+  Plus
+>;
+
+export const abstractKeys = {
+  base: getAbstractMerger<BaseCfg>()(baseKeys),
+  postLobby: getAbstractMerger<PostLobbyCfg>()(postLobbyKeys),
+  active: getAbstractMerger<ActiveCfg>()(activeKeys),
+};

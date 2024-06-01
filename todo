@@ -1,7 +1,7 @@
 GameOver screen when someone leaves multiplayer game
 GameOver screen should show results, screenshot/share option
 Volume slider overrunning container
-Try putting keys in one object again in states file
+Track difficulty in localstorage
 Muted / Low volume warning
 
 How to play
@@ -11,3 +11,4 @@ Prevent cheating
 song release date
 Singleplayer highscores
 Share link to same songs
+Way to report bugs / song issues

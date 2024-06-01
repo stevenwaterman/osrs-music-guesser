@@ -1,7 +1,7 @@
-import { Coordinate } from "../coordinates.js";
-import { Difficulty } from "./difficulty.js";
-import { ClientStateDiff } from "./store.js";
-import { ClientStateData } from "./types.js";
+import { Coordinate } from "../../coordinates.js";
+import { Difficulty } from "../difficulty.js";
+import { Diff } from "./diff.js";
+import { AnyServerStateName, ServerStates } from "./store.js";
 import WebSocket from "ws";
 
 export interface Transport {
@@ -25,6 +25,26 @@ export interface Transport {
 }
 export type TransportMessage = { data: WebSocket.Data };
 export type TransportClose = { code: number };
+
+export type ClientStateData<
+  Name extends AnyServerStateName = AnyServerStateName,
+> = {
+  stateName: Name;
+  serverTime: number;
+  stateIndex: number;
+  game: ServerStates[Name]["visibleData"]["publicGame"];
+  users: ServerStates[Name]["visibleData"]["publicUsers"];
+  spectators: ServerStates[Name]["visibleData"]["publicSpectators"];
+  me:
+    | ({
+        type: "user";
+      } & ServerStates[Name]["visibleData"]["privateUsers"][string])
+    | ({
+        type: "spectator";
+      } & ServerStates[Name]["visibleData"]["privateSpectators"][string]);
+};
+
+export type ClientStateDiff = Diff<ClientStateData>;
 
 export type ClientActions =
   | { action: "getState" }

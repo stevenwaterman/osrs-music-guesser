@@ -1,58 +1,25 @@
 import { Avatar } from "../../avatars.js";
 import { Song } from "../../songTypes.js";
 import { pick, shuffle } from "../../util.js";
-import { pickVisibleState } from "../visibleData.js";
 import { getDifficultyConfig } from "../difficulty.js";
-import { StateStore } from "../store.js";
-import { ClientActions, Transport } from "../transport.js";
-import { RoundResult } from "../types.js";
+import { StateStore } from "../store/store.js";
+import { ClientActions, Transport } from "../store/transport.js";
 import { GameOver } from "./gameOver.js";
 import { RoundActive } from "./roundActive.js";
-import { BaseState } from "../baseState.js";
+import { BaseState } from "./baseState.js";
+import { AbstractCfg, abstractKeys } from "./config.js";
 
-type Cfg = {
-  game: {
-    id: string;
-    owner: string;
-    type: "singleplayer" | "private" | "public";
-    difficulty: "tutorial" | "normal" | "hard" | "extreme";
-    roundHistory: Record<number, Song>;
-    songs: Song[];
-    songUrl: string;
-    songStartFraction: number;
-    round: number;
-    roundStarted: Date;
-    song: Song;
-  };
-  user: {
-    avatar: Avatar;
-    transport: Transport;
-    roundHistory: Record<number, RoundResult>;
-    health: number;
-  };
-  spectator: {
-    avatar: Avatar;
-    transport: Transport;
-    roundHistory: Record<number, RoundResult>;
-  };
-};
-const keys = {
-  publicGame: [
-    "id",
-    "owner",
-    "type",
-    "difficulty",
-    "roundHistory",
-    "round",
-    "songUrl",
-    "songStartFraction",
-    "song",
-  ],
-  publicUsers: ["avatar", "roundHistory", "health"],
-  privateUsers: [],
-  publicSpectators: ["avatar", "roundHistory"],
-  privateSpectators: [],
-} as const;
+type Cfg = AbstractCfg<
+  "active",
+  {
+    game: {
+      song: Song;
+    };
+  }
+>;
+const keys = abstractKeys.active.plus<Cfg>()({
+  publicGame: ["song"],
+} as const);
 
 export class RoundOver extends BaseState<
   RoundOver,
@@ -167,9 +134,5 @@ export class RoundOver extends BaseState<
 
   public createSpectator(avatar: Avatar, transport: Transport) {
     return { avatar, transport, roundHistory: {} };
-  }
-
-  public convertUserToSpectator(user: RoundOver["users"][string]) {
-    return pick(user, "avatar", "transport", "roundHistory");
   }
 }

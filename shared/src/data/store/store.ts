@@ -1,17 +1,29 @@
-import { Avatar, AvatarLibrary } from "../avatars.js";
-import { Song } from "../songTypes.js";
-import { mapValues, omit, pick } from "../util.js";
-import { Lobby } from "./concrete/lobby.js";
+import { AvatarLibrary } from "../../avatars.js";
+import { Song } from "../../songTypes.js";
+import { mapValues, pick } from "../../util.js";
+import { GameOver, RoundActive, RoundOver } from "../index.js";
+import { Lobby } from "../states/lobby.js";
 import { Diff, generatePartialDiff, applyPartialDiff } from "./diff.js";
 import {
   ClientActions,
+  ClientStateData,
   ServerActions,
   Transport,
   TransportMessage,
 } from "./transport.js";
-import { AnyServerState, BasicStateData, ClientStateData } from "./types.js";
 
-export type ClientStateDiff = Diff<ClientStateData>;
+export type ServerStates = {
+  Lobby: Lobby;
+  RoundActive: RoundActive;
+  RoundOver: RoundOver;
+  GameOver: GameOver;
+};
+export type AnyServerStateName = keyof ServerStates;
+export type AnyServerState = ServerStates[AnyServerStateName];
+
+type BasicStateData<
+  Name extends AnyServerStateName = AnyServerStateName,
+> = Omit<ClientStateData<Name>, "me">;
 
 function getBasicDiff(
   from: BasicStateData | undefined,
@@ -81,7 +93,7 @@ export class StateStore {
     this.stateIndex++;
     const visibleData = state?.visibleData;
     const basicStateData =
-    visibleData === undefined
+      visibleData === undefined
         ? undefined
         : {
             stateName: this.state!.name,
@@ -149,13 +161,13 @@ export class StateStore {
   public join(transport: Transport) {
     const avatar = this.avatarLibrary.take();
     if (avatar === undefined) {
-      // TODO
+      // TODO error handling
       transport.close(1000);
       return;
     }
 
     if (this.state === null) {
-      // TODO
+      // TODO error handling
       transport.close(1000);
       return;
     }
@@ -179,20 +191,7 @@ export class StateStore {
       this.leave(avatar.name);
     });
 
-    // TODO
-    const newOwner =
-      this.state.game.owner === "None" ? avatar.name : this.state.game.owner;
-    this.state = this.state.recreate(
-      {game: {
-        ...this.state.game,
-        owner: newOwner,
-      } as any,
-      users: this.state.users as any,
-      spectators: {
-        ...this.state.spectators,
-        [avatar.name]: this.state.createSpectator(avatar, transport),
-      } as any
-  });
+    this.state = this.state.withAddedSpectator(avatar, transport);
   }
 
   public leave(name: string) {
@@ -205,65 +204,50 @@ export class StateStore {
       return;
     }
 
-    const avatar = (this.state.users[name] ?? this.state.spectators[name])
-      .avatar;
-    this.avatarLibrary.release(avatar);
+    this.avatarLibrary.release(name);
 
-    const newUsers: AnyServerState["users"] = omit(this.state.users, name);
-    const newUserCount = Object.keys(newUsers).length;
+    const playerCount =
+      Object.keys(this.state.users).length +
+      Object.keys(this.state.spectators).length;
 
-    const newSpectators = omit(this.state.spectators, name);
-    const newSpectatorCount = Object.keys(newSpectators).length;
-
-    if (
-      newUserCount + newSpectatorCount === 0 &&
-      this.state.game.type !== "public"
-    ) {
+    if (playerCount === 1 && this.state.game.type !== "public") {
+      // Last player left
       this.state = null;
       return;
     }
 
-    const ownerStillPresent =
-      this.state.game.type === "public" ||
-      this.state.game.owner! in newUsers ||
-      this.state.game.owner! in newSpectators;
-    const newOwner = ownerStillPresent
-      ? this.state.game.owner
-      : newUserCount > 0
-        ? Object.keys(newUsers)[0]
-        : Object.keys(newSpectators)[0];
-
-    if (newUserCount <= 1 && this.state.name !== "Lobby") {
-      const allSpectators: Lobby["spectators"] = {
-        ...newSpectators,
-        ...mapValues(newUsers, (user) => pick(user, "avatar", "transport")),
-      };
-
-      this.state = new Lobby(
-        this,
-        {game: {
+    if (playerCount <= 2 && this.state.name !== "Lobby") {
+      // Only 1 player left, go to lobby
+      const remainingPlayer = [
+        ...Object.values(this.state.users),
+        ...Object.values(this.state.spectators),
+      ].filter((client) => client.avatar.name !== name)[0];
+      const owner =
+        this.state.game.type === "public"
+          ? this.state.game.owner
+          : remainingPlayer.avatar.name;
+      this.state = new Lobby(this, {
+        game: {
           ...pick(this.state.game, "id", "type", "difficulty"),
-          owner: newOwner,
+          owner,
           firstUserJoined: undefined,
           timerStarted: undefined,
           timerDuration: undefined,
           timerId: undefined,
         },
         users: {},
-        spectators: allSpectators
-    });
+        spectators: {
+          [remainingPlayer.avatar.name]: pick(
+            remainingPlayer,
+            "avatar",
+            "transport"
+          ),
+        },
+      });
       return;
     }
 
-    // TODO
-    this.state = this.state.recreate({
-      game: {
-        ...this.state.game,
-        owner: newOwner,
-      } as any,
-      users:newUsers as any,
-      spectators: newSpectators as any
-  });
+    this.state = this.state.withPlayerRemoved(name);
   }
 
   public terminate() {

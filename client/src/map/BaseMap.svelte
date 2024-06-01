@@ -10,8 +10,7 @@
       renderer: L.canvas(),
       maxBounds: mapBounds,
       zoomControl: false,
-      // todo make zooming nicer but i need to fix labels first
-      // zoomSnap: 0
+      zoomSnap: 0,
     });
   }
 

@@ -1,38 +1,13 @@
 import { Avatar } from "../../avatars.js";
-import { Song } from "../../songTypes.js";
 import { mapValues, pick } from "../../util.js";
-import { StateStore } from "../store.js";
-import { ClientActions, Transport } from "../transport.js";
-import { RoundResult } from "../types.js";
+import { StateStore } from "../store/store.js";
+import { ClientActions, Transport } from "../store/transport.js";
 import { Lobby } from "./lobby.js";
-import { BaseState } from "../baseState.js";
+import { BaseState } from "./baseState.js";
+import { AbstractCfg, abstractKeys } from "./config.js";
 
-type Cfg = {
-  game: {
-    id: string;
-    owner: string;
-    type: "singleplayer" | "private" | "public";
-    difficulty: "tutorial" | "normal" | "hard" | "extreme";
-    roundHistory: Record<number, Song>;
-  };
-  user: {
-    avatar: Avatar;
-    transport: Transport;
-    roundHistory: Record<number, RoundResult>;
-  };
-  spectator: {
-    avatar: Avatar;
-    transport: Transport;
-    roundHistory: Record<number, RoundResult>;
-  };
-};
-const keys = {
-  publicGame: ["id", "owner", "type", "difficulty", "roundHistory"],
-  publicUsers: ["avatar", "roundHistory"],
-  privateUsers: [],
-  publicSpectators: ["avatar", "roundHistory"],
-  privateSpectators: [],
-} as const;
+type Cfg = AbstractCfg<"postLobby">;
+const keys = abstractKeys.postLobby;
 
 export class GameOver extends BaseState<
   GameOver,
@@ -93,11 +68,5 @@ export class GameOver extends BaseState<
     transport: Transport
   ): GameOver["spectators"][string] {
     return { avatar, transport, roundHistory: {} };
-  }
-
-  public convertUserToSpectator(
-    user: GameOver["users"][string]
-  ): GameOver["spectators"][string] {
-    return pick(user, "avatar", "transport", "roundHistory");
   }
 }

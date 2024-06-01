@@ -14,5 +14,5 @@ export {
   getDifficultyConfig,
   type Difficulty,
   type DifficultyConfig,
-} from "./state/difficulty.js";
-export * as StateInterface from "./state/index.js";
+} from "./data/difficulty.js";
+export * as StateInterface from "./data/index.js";

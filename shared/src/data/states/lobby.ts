@@ -1,56 +1,33 @@
 import { Avatar } from "../../avatars.js";
 import { mapValues, pick, sample } from "../../util.js";
 import { Difficulty, getDifficultyConfig } from "../difficulty.js";
-import { StateStore } from "../store.js";
-import { ClientActions, Transport } from "../transport.js";
+import { StateStore } from "../store/store.js";
+import { ClientActions, Transport } from "../store/transport.js";
 import { RoundActive } from "./roundActive.js";
-import { BaseState } from "../baseState.js";
+import { BaseState } from "./baseState.js";
+import { AbstractCfg, abstractKeys } from "./config.js";
 
-type Cfg = {
-  game:
-    | {
-        id: string;
-        owner: string;
-        type: "singleplayer" | "private" | "public";
-        difficulty: "tutorial" | "normal" | "hard" | "extreme";
-        firstUserJoined: Date | undefined;
-        timerStarted: number;
-        timerDuration: number;
-        timerId: NodeJS.Timeout;
-      }
-    | {
-        id: string;
-        owner: string;
-        type: "singleplayer" | "private" | "public";
-        difficulty: "tutorial" | "normal" | "hard" | "extreme";
-        firstUserJoined: Date | undefined;
-        timerStarted: undefined;
-        timerDuration: undefined;
-        timerId: undefined;
-      };
-  user: {
-    avatar: Avatar;
-    transport: Transport;
-  };
-  spectator: {
-    avatar: Avatar;
-    transport: Transport;
-  };
-};
-const keys = {
-  publicGame: [
-    "id",
-    "owner",
-    "type",
-    "difficulty",
-    "timerStarted",
-    "timerDuration",
-  ],
-  publicUsers: ["avatar"],
-  privateUsers: [],
-  publicSpectators: ["avatar"],
-  privateSpectators: [],
-} as const;
+type Cfg = AbstractCfg<
+  "base",
+  {
+    game:
+      | {
+          firstUserJoined: Date | undefined;
+          timerStarted: number;
+          timerDuration: number;
+          timerId: NodeJS.Timeout;
+        }
+      | {
+          firstUserJoined: Date | undefined;
+          timerStarted: undefined;
+          timerDuration: undefined;
+          timerId: undefined;
+        };
+  }
+>;
+const keys = abstractKeys.base.plus<Cfg>()({
+  publicGame: ["timerStarted", "timerDuration"],
+} as const);
 
 export class Lobby extends BaseState<Lobby, "Lobby", Cfg, typeof keys> {
   constructor(store: StateStore, data: Lobby["data"]) {
@@ -194,9 +171,5 @@ export class Lobby extends BaseState<Lobby, "Lobby", Cfg, typeof keys> {
 
   public createSpectator(avatar: Avatar, transport: Transport) {
     return { avatar, transport };
-  }
-
-  public convertUserToSpectator(user: Lobby["users"][string]) {
-    return pick(user, "avatar", "transport");
   }
 }

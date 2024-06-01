@@ -2,89 +2,46 @@ import { Avatar } from "../../avatars.js";
 import { Coordinate, Polygon, convertFlatten } from "../../coordinates.js";
 import { Song } from "../../songTypes.js";
 import { mapValues, pick } from "../../util.js";
-import { pickVisibleState } from "../visibleData.js";
 import { getDifficultyConfig } from "../difficulty.js";
-import { StateStore } from "../store.js";
-import { ClientActions, Transport } from "../transport.js";
+import { StateStore } from "../store/store.js";
+import { ClientActions, Transport } from "../store/transport.js";
 import { RoundResult } from "../types.js";
 import { RoundOver } from "./roundOver.js";
-import { BaseState } from "../baseState.js";
+import { BaseState } from "./baseState.js";
+import { AbstractCfg, abstractKeys } from "./config.js";
 
-type Cfg = {
-  game:
-    | {
-        id: string;
-        owner: string;
-        type: "singleplayer" | "private" | "public";
-        difficulty: "tutorial" | "normal" | "hard" | "extreme";
-        roundHistory: Record<number, Song>;
-        songs: Song[];
-        songUrl: string;
-        songStartFraction: number;
-        round: number;
-        roundStarted: Date;
-        timerStarted: undefined;
-        timerDuration: undefined;
-        timerId: undefined;
-      }
-    | {
-        id: string;
-        owner: string;
-        type: "singleplayer" | "private" | "public";
-        difficulty: "tutorial" | "normal" | "hard" | "extreme";
-        roundHistory: Record<number, Song>;
-        songs: Song[];
-        songUrl: string;
-        songStartFraction: number;
-        round: number;
-        roundStarted: Date;
-        timerStarted: number;
-        timerDuration: number;
-        timerId: NodeJS.Timeout;
-      };
-  user:
-    | {
-        avatar: Avatar;
-        transport: Transport;
-        roundHistory: Record<number, RoundResult>;
-        health: number;
-        guess: undefined;
-        guessTime: undefined;
-        guessed: false;
-      }
-    | {
-        avatar: Avatar;
-        transport: Transport;
-        roundHistory: Record<number, RoundResult>;
-        health: number;
-        guess: Coordinate;
-        guessTime: Date;
-        guessed: true;
-      };
-  spectator: {
-    avatar: Avatar;
-    transport: Transport;
-    roundHistory: Record<number, RoundResult>;
-  };
-};
-const keys = {
-  publicGame: [
-    "id",
-    "owner",
-    "type",
-    "difficulty",
-    "roundHistory",
-    "round",
-    "songUrl",
-    "songStartFraction",
-    "timerStarted",
-    "timerDuration",
-  ],
-  publicUsers: ["avatar", "roundHistory", "health", "guessed"],
+type Cfg = AbstractCfg<
+  "active",
+  {
+    game:
+      | {
+          timerStarted: undefined;
+          timerDuration: undefined;
+          timerId: undefined;
+        }
+      | {
+          timerStarted: number;
+          timerDuration: number;
+          timerId: NodeJS.Timeout;
+        };
+    user:
+      | {
+          guess: undefined;
+          guessTime: undefined;
+          guessed: false;
+        }
+      | {
+          guess: Coordinate;
+          guessTime: Date;
+          guessed: true;
+        };
+  }
+>;
+const keys = abstractKeys.active.plus<Cfg>()({
+  publicGame: ["timerStarted", "timerDuration"],
+  publicUsers: ["guessed"],
   privateUsers: ["guess", "guessTime"],
-  publicSpectators: ["avatar", "roundHistory"],
-  privateSpectators: [],
-} as const;
+} as const);
 
 export class RoundActive extends BaseState<
   RoundActive,
@@ -241,10 +198,6 @@ export class RoundActive extends BaseState<
 
   public createSpectator(avatar: Avatar, transport: Transport) {
     return { avatar, transport, roundHistory: {} };
-  }
-
-  public convertUserToSpectator(user: RoundActive["users"][string]) {
-    return pick(user, "avatar", "transport", "roundHistory");
   }
 }
 

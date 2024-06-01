@@ -1690,7 +1690,6 @@ export const songPolygons: Record<SongName, Polygon> = {
     ],
   ],
   "The Desolate Isle": [
-    // todo one of these should be a cutout
     [
       [2496, 3712],
       [2496, 3776],
@@ -5950,7 +5949,6 @@ export const songPolygons: Record<SongName, Polygon> = {
       [3594, 3314],
       [3606, 3314],
     ],
-    // TODO this should be a cutout
     [
       [3615, 3365],
       [3615, 3359],
