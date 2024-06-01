@@ -1,8 +1,8 @@
-import { Avatar } from "../../avatars.js";
-import { Song } from "../../songTypes.js";
+import { Avatar } from "../avatars.js";
+import { Song } from "../songTypes.js";
 import { DataConfig, KeysFor } from "./baseState.js";
-import { Transport } from "../store/transport.js";
-import { Coordinate } from "../../coordinates.js";
+import { Transport } from "./store/transport.js";
+import { Coordinate } from "../coordinates.js";
 
 type Identity<T> = T extends object
   ? {} & {
@@ -39,10 +39,7 @@ function mergeOneKeys<
   return [...a[key], ...keysFromPartial(b, key)];
 }
 
-type MergedKeys<
-  A extends KeysFor<any>,
-  B extends Partial<KeysFor<any>>,
-> = {
+type MergedKeys<A extends KeysFor<any>, B extends Partial<KeysFor<any>>> = {
   publicGame: MergeOneKeys<A, B, "publicGame">;
   publicUsers: MergeOneKeys<A, B, "publicUsers">;
   privateUsers: MergeOneKeys<A, B, "privateUsers">;
@@ -50,10 +47,7 @@ type MergedKeys<
   privateSpectators: MergeOneKeys<A, B, "privateSpectators">;
   secretSpectators: MergeOneKeys<A, B, "secretSpectators">;
 };
-function mergeKeys<
-  A extends KeysFor<any>,
-  B extends Partial<KeysFor<any>>,
->(
+function mergeKeys<A extends KeysFor<any>, B extends Partial<KeysFor<any>>>(
   a: A,
   b: B
 ): RecursiveIdentity<MergedKeys<A, B>> {
@@ -83,8 +77,8 @@ function getAbstractMerger<Ikeys extends KeysFor<any>>(iKeys: Ikeys) {
     ...iKeys,
     plus: <Keys extends Partial<KeysFor<any>>>(keys: Keys) => {
       return mergeKeys(iKeys, keys);
-    }
-  }
+    },
+  };
 }
 
 // -------
@@ -153,7 +147,6 @@ const postLobbyKeys = mergeKeys(baseKeys, {
   publicUsers: ["roundHistory"],
   publicSpectators: ["roundHistory"],
 } as const);
-
 
 type ActiveCfg = MergeCfg<
   PostLobbyCfg,

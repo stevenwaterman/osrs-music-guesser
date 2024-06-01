@@ -2,7 +2,7 @@ import { AvatarLibrary } from "../../avatars.js";
 import { Song } from "../../songTypes.js";
 import { mapValues, pick } from "../../util.js";
 import { GameOver, RoundActive, RoundOver } from "../index.js";
-import { Lobby } from "../states/lobby.js";
+import { Lobby } from "../concrete/lobby.js";
 import { Diff, generatePartialDiff, applyPartialDiff } from "./diff.js";
 import {
   ClientActions,
@@ -21,9 +21,8 @@ export type ServerStates = {
 export type AnyServerStateName = keyof ServerStates;
 export type AnyServerState = ServerStates[AnyServerStateName];
 
-type BasicStateData<
-  Name extends AnyServerStateName = AnyServerStateName,
-> = Omit<ClientStateData<Name>, "me">;
+type BasicStateData<Name extends AnyServerStateName = AnyServerStateName> =
+  Omit<ClientStateData<Name>, "me">;
 
 function getBasicDiff(
   from: BasicStateData | undefined,

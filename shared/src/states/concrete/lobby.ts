@@ -4,8 +4,8 @@ import { Difficulty, getDifficultyConfig } from "../difficulty.js";
 import { StateStore } from "../store/store.js";
 import { ClientActions, Transport } from "../store/transport.js";
 import { RoundActive } from "./roundActive.js";
-import { BaseState } from "./baseState.js";
-import { AbstractCfg, abstractKeys } from "./config.js";
+import { BaseState } from "../baseState.js";
+import { AbstractCfg, abstractKeys } from "../config.js";
 
 type Cfg = AbstractCfg<
   "base",

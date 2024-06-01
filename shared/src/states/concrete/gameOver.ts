@@ -3,8 +3,8 @@ import { mapValues, pick } from "../../util.js";
 import { StateStore } from "../store/store.js";
 import { ClientActions, Transport } from "../store/transport.js";
 import { Lobby } from "./lobby.js";
-import { BaseState } from "./baseState.js";
-import { AbstractCfg, abstractKeys } from "./config.js";
+import { BaseState } from "../baseState.js";
+import { AbstractCfg, abstractKeys } from "../config.js";
 
 type Cfg = AbstractCfg<"postLobby">;
 const keys = abstractKeys.postLobby;

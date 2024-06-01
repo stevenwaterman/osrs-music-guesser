@@ -1,8 +1,8 @@
-import { Avatar } from "../../avatars.js";
-import { mapValues, omit, pick } from "../../util.js";
+import { Avatar } from "../avatars.js";
+import { mapValues, omit, pick } from "../util.js";
 import { AbstractCfg } from "./config.js";
-import { StateStore } from "../store/store.js";
-import { ClientActions, Transport } from "../store/transport.js";
+import { StateStore } from "./store/store.js";
+import { ClientActions, Transport } from "./store/transport.js";
 
 type VisibleData<Cfg extends DataConfig, Keys extends KeysFor<Cfg>> = {
   publicGame: Pick<Cfg["game"], Keys["publicGame"][number]>;
