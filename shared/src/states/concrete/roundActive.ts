@@ -62,7 +62,7 @@ export class RoundActive extends BaseState<
         timerStarted: new Date().getTime(),
         timerDuration: difficultyConfig.timeLimit.duration,
         timerId: setTimeout(() => {
-          if (store.state?.name === "RoundActive") {
+          if (store.state instanceof RoundActive) {
             store.state.roundOver();
           }
         }, difficultyConfig.timeLimit.duration * 1000),
@@ -86,7 +86,7 @@ export class RoundActive extends BaseState<
     });
   }
 
-  public guess(userName: string, guess: Coordinate) {
+  private guess(userName: string, guess: Coordinate) {
     // TODO check they haven't already guessed
     const now = new Date();
 
@@ -101,7 +101,7 @@ export class RoundActive extends BaseState<
         timerStarted: now.getTime(),
         timerDuration: this.difficultyConfig.timeLimit.duration,
         timerId: setTimeout(() => {
-          if (this.store.state?.name === "RoundActive") {
+          if (this.store.state instanceof RoundActive) {
             this.store.state.roundOver();
           }
         }, this.difficultyConfig.timeLimit.duration * 1000),
@@ -136,7 +136,7 @@ export class RoundActive extends BaseState<
     return this.game.songs[songIdx];
   }
 
-  public roundOver() {
+  private roundOver() {
     if (this.game.timerId !== undefined) {
       clearTimeout(this.game.timerId);
     }

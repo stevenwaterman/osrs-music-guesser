@@ -77,7 +77,7 @@ export class Lobby extends BaseState<Lobby, "Lobby", Cfg, typeof keys> {
         timerStarted: now.getTime(),
         timerDuration,
         timerId: setTimeout(() => {
-          if (store.state?.name === "Lobby") {
+          if (store.state instanceof Lobby) {
             store.state.start();
           }
         }, timerDuration * 1000),
@@ -96,7 +96,7 @@ export class Lobby extends BaseState<Lobby, "Lobby", Cfg, typeof keys> {
     }
   }
 
-  public start() {
+  private start() {
     if (this.game.timerId !== undefined) {
       clearTimeout(this.game.timerId);
     }
@@ -139,7 +139,7 @@ export class Lobby extends BaseState<Lobby, "Lobby", Cfg, typeof keys> {
     });
   }
 
-  public updateSettings(settings: { difficulty?: Difficulty }) {
+  private updateSettings(settings: { difficulty?: Difficulty }) {
     this.store.state = new Lobby(this.store, {
       game: {
         ...this.game,

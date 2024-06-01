@@ -18,7 +18,7 @@ export class GameOver extends BaseState<
   constructor(store: StateStore, data: GameOver["data"]) {
     if (data.game.type === "public") {
       setTimeout(() => {
-        if (store.state?.name === "GameOver") {
+        if (store.state instanceof GameOver) {
           store.state.playAgain();
         }
       }, 10_000);
@@ -32,7 +32,7 @@ export class GameOver extends BaseState<
     });
   }
 
-  public playAgain() {
+  private playAgain() {
     this.store.state = new Lobby(this.store, {
       game: {
         ...pick(this.game, "id", "owner", "type", "difficulty"),

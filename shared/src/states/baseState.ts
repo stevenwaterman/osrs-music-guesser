@@ -83,11 +83,11 @@ export abstract class BaseState<
   Cfg extends AbstractCfg<"base">,
   Keys extends KeysFor<Cfg>,
 > {
-  public readonly store: StateStore;
+  protected readonly store: StateStore;
   public readonly name: Name;
   public readonly data: Data<Cfg, Keys>;
-  public readonly keys: Keys;
   public readonly visibleData: VisibleData<Cfg, Keys>;
+  private readonly keys: Keys;
 
   public get game() {
     return this.data.game;
@@ -114,8 +114,8 @@ export abstract class BaseState<
     this.store = cfg.store;
     this.name = cfg.name;
     this.data = cfg.data;
-    this.keys = cfg.keys;
     this.visibleData = pickVisibleState(cfg.data, cfg.keys);
+    this.keys = cfg.keys;
   }
 
   public abstract onMessage(userName: string, message: ClientActions): void;

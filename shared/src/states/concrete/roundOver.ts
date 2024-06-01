@@ -36,14 +36,14 @@ export class RoundOver extends BaseState<
 
     if (data.game.type === "public") {
       setTimeout(() => {
-        if (this.store.state?.name === "RoundOver") {
+        if (this.store.state instanceof RoundOver) {
           this.store.state.next();
         }
       }, 10_000);
     }
   }
 
-  public next() {
+  private next() {
     const newUsers: RoundActive["users"] = {};
     const newSpectators: RoundActive["spectators"] = { ...this.spectators };
     for (const userName in this.users) {

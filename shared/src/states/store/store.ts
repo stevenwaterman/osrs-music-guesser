@@ -77,7 +77,7 @@ export class StateStore {
     ) => void = () => {}
   ) {}
 
-  public sendFullState(name: string) {
+  private sendFullState(name: string) {
     const basic = this.lastBasicStateData!;
     const me = this.lastMeStateData[name];
     const spectator = me.type === "spectator";
@@ -193,7 +193,7 @@ export class StateStore {
     this.state = this.state.withAddedSpectator(avatar, transport);
   }
 
-  public leave(name: string) {
+  private leave(name: string) {
     if (this.state === null) return;
 
     const userIsPlayer =
