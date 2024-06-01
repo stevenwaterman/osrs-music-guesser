@@ -25,7 +25,7 @@ type Cfg = AbstractCfg<
         };
   }
 >;
-const keys = abstractKeys.base.plus({
+const keys = abstractKeys.base({
   publicGame: ["timerStarted", "timerDuration"],
 } as const);
 

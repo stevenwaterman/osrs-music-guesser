@@ -14,5 +14,7 @@
   "dependencies": {
     "tunescape07-shared": "1.0.0",
     "prettier": "^3.2.5"
-  }
+  },
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts"
 }

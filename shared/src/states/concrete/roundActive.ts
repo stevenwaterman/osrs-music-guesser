@@ -36,7 +36,7 @@ type Cfg = AbstractCfg<
         };
   }
 >;
-const keys = abstractKeys.active.plus({
+const keys = abstractKeys.active({
   publicGame: ["timerStarted", "timerDuration"],
   publicUsers: ["guessed"],
   privateUsers: ["guess", "guessTime"],
