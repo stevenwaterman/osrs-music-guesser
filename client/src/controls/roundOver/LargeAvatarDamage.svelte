@@ -10,11 +10,11 @@
   export let state: ActiveState<"RoundOver">;
   export let user: string;
 
-  $: data = state.data.users[user];
-  $: roundResult = data.roundHistory[state.data.game.round];
+  $: avatar = state.users[user]?.avatar ?? state.spectators[user].avatar;
+  $: roundResult = state.game.roundHistory[state.game.round].players[user];
 
-  $: me = data.avatar.name === state.data.me.avatar.name;
-  $: owner = data.avatar.name === state.data.game.owner;
+  $: me = user === state.myName;
+  $: owner = user === state.game.owner;
   $: suffix = me ? " (Me)" : "";
 
   $: health = roundResult.healthBefore;
@@ -97,7 +97,7 @@
       {/if}
       <div class="imageWrapper">
         <!-- svelte-ignore a11y-missing-attribute -->
-        <img src={avatarImageSrc(data.avatar)} class:dead on:load={loaded} />
+        <img src={avatarImageSrc(avatar)} class:dead on:load={loaded} />
         {#if showVenom && roundResult.damage.venom > 0}
           <div
             class="hitContainer"
@@ -129,7 +129,7 @@
         {/if}
       </div>
       {#if render}
-        <p class="name" class:owner>{data.avatar.name}{suffix}</p>
+        <p class="name" class:owner>{user}{suffix}</p>
       {/if}
     </div>
 

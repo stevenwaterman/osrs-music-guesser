@@ -26,20 +26,20 @@
 
   {#if state.isAny("RoundActive", "RoundOver")}
     <Audio
-      audioUrl={state.data.game.songUrl}
+      audioUrl={state.game.songUrl}
       controls={!state.difficultyConfig.songRandomStart ||
         state.isAny("RoundOver")}
-      startFraction={state.data.game.songStartFraction}
+      startFraction={state.game.songStartFraction}
       loop={true}
     />
   {/if}
 
   {#if state.isAny("RoundActive")}
-    {#if state.data.game.timerStarted && state.data.game.timerDuration}
+    {#if state.game.timerStarted && state.game.timerDuration}
       <Timer
-        serverTime={state.data.serverTime}
-        timerStarted={state.data.game.timerStarted}
-        timerDuration={state.data.game.timerDuration}
+        serverTime={state.serverTime}
+        timerStarted={state.game.timerStarted}
+        timerDuration={state.game.timerDuration}
         showBelow={20}
       />
     {/if}

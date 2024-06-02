@@ -50,7 +50,7 @@ type MergedKeys<A extends KeysFor<any>, B extends Partial<KeysFor<any>>> = {
 function mergeKeys<A extends KeysFor<any>, B extends Partial<KeysFor<any>>>(
   a: A,
   b: B
-): RecursiveIdentity<MergedKeys<A, B>> {
+): MergedKeys<A, B> {
   const merged: MergedKeys<A, B> = {
     publicGame: mergeOneKeys(a, b, "publicGame"),
     publicUsers: mergeOneKeys(a, b, "publicUsers"),
@@ -59,8 +59,7 @@ function mergeKeys<A extends KeysFor<any>, B extends Partial<KeysFor<any>>>(
     privateSpectators: mergeOneKeys(a, b, "privateSpectators"),
     secretSpectators: mergeOneKeys(a, b, "secretSpectators"),
   } as const;
-
-  return merged as RecursiveIdentity<MergedKeys<A, B>>;
+  return merged;
 }
 
 type CfgFromPartial<
@@ -72,11 +71,27 @@ export type MergeCfg<A extends DataConfig, B extends Partial<DataConfig>> = {
   user: Identity<A["user"] & CfgFromPartial<B, "user">>;
 };
 
-function getAbstractMerger<Ikeys extends KeysFor<any>>(iKeys: Ikeys) {
-  return <Keys extends Partial<KeysFor<any>>>(keys?: Keys) => mergeKeys(iKeys, keys ?? {});
+function getAbstractMerger<Ikeys extends KeysFor<any>>(
+  iKeys: Ikeys
+): <Keys extends Partial<KeysFor<any>>>(
+  keys?: Keys | undefined
+) => RecursiveIdentity<MergedKeys<Ikeys, Keys>> {
+  return <Keys extends Partial<KeysFor<any>>>(keys?: Keys) => {
+    const merged: MergedKeys<Ikeys, Keys> = mergeKeys(iKeys, keys ?? {});
+    return merged as RecursiveIdentity<MergedKeys<Ikeys, Keys>>;
+  };
 }
 
 // -------
+
+const noKeys = {
+  publicGame: [],
+  publicUsers: [],
+  privateUsers: [],
+  publicSpectators: [],
+  privateSpectators: [],
+  secretSpectators: [],
+} as const;
 
 type BaseCfg = {
   game: {
@@ -90,14 +105,12 @@ type BaseCfg = {
     transport: Transport;
   };
 };
-const baseKeys = {
+const baseKeys = mergeKeys(noKeys, {
   publicGame: ["id", "owner", "type", "difficulty"],
   publicUsers: ["avatar"],
-  privateUsers: [],
   publicSpectators: ["avatar"],
-  privateSpectators: [],
   secretSpectators: ["transport"],
-} as const;
+} as const);
 
 export type RoundResult =
   | {
@@ -130,17 +143,18 @@ type PostLobbyCfg = MergeCfg<
   BaseCfg,
   {
     game: {
-      roundHistory: Record<string, Song>;
-    };
-    user: {
-      roundHistory: Record<string, RoundResult>;
+      roundHistory: Record<
+        string,
+        {
+          song: Song;
+          players: Record<string, RoundResult>;
+        }
+      >;
     };
   }
 >;
 const postLobbyKeys = mergeKeys(baseKeys, {
   publicGame: ["roundHistory"],
-  publicUsers: ["roundHistory"],
-  publicSpectators: ["roundHistory"],
 } as const);
 
 type ActiveCfg = MergeCfg<

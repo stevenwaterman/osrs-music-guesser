@@ -4,7 +4,7 @@
 
   export let state: ActiveState<"RoundOver">;
 
-  $: song = state.data.game.song;
+  $: song = state.game.song;
 </script>
 
 <div class="wrapper" in:scale>

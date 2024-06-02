@@ -7,17 +7,17 @@
   import Button from "../shared/Button.svelte";
 
   export let state: ActiveState<"RoundOver">;
-  $: owner = state.data.me.avatar.name === state.data.game.owner;
+  $: owner = state.myName === state.game.owner;
 
   let render = false;
-  let alive = state.data.me.type === "user";
+  let alive = state.me.type === "user";
   let showAll: boolean = !alive;
 
-  $: remainingUsers = Object.values(state.data.users).filter(
+  $: remainingUsers = Object.values(state.users).filter(
     (user) => user.health > 0
   ).length;
   $: gameOver =
-    (state.data.game.type !== "singleplayer" && remainingUsers <= 1) ||
+    (state.game.type !== "singleplayer" && remainingUsers <= 1) ||
     remainingUsers === 0;
 
   onMount(() => {
@@ -27,9 +27,7 @@
     return () => clearTimeout(timeout);
   });
 
-  let largeAvatar: string | undefined = alive
-    ? state.data.me.avatar.name
-    : undefined;
+  let largeAvatar: string | undefined = alive ? state.myName : undefined;
   function clickedAvatar(ev: CustomEvent<{ name: string }>) {
     largeAvatar = ev.detail.name;
   }
@@ -39,7 +37,7 @@
   }
 </script>
 
-<h1>Round {state.data.game.round}</h1>
+<h1>Round {state.game.round + 1}</h1>
 
 {#if render}
   <WikiDisplay {state} />

@@ -7,7 +7,7 @@
 
   export let state: ActiveState<"RoundActive">;
 
-  $: canGuess = state.data.me.type === "user" && state.data.me.guess === undefined;
+  $: canGuess = state.me.type === "user" && state.me.guess === undefined;
 
   function confirm() {
     const unconfirmedGuess = $unconfirmedGuessStore;
@@ -26,7 +26,7 @@
     <Button on:click={confirm}>Guess</Button>
   {/if}
 
-  {#if state.data.me.type === "spectator"}
+  {#if state.me.type === "spectator"}
     <h2>Spectating</h2>
   {/if}
 </Buttons>

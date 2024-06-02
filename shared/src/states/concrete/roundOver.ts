@@ -1,6 +1,6 @@
 import { Avatar } from "../../avatars.js";
 import { Song } from "../../songTypes.js";
-import { pick, shuffle } from "../../util.js";
+import { mapValues, pick, shuffle } from "../../util.js";
 import { StateStore } from "../store/store.js";
 import { ClientActions, Transport } from "../store/transport.js";
 import { GameOver } from "./gameOver.js";
@@ -52,7 +52,7 @@ export class RoundOver extends BaseState<
         newSpectators[userName] = this.convertUserToSpectator(user);
       } else {
         newUsers[userName] = {
-          ...pick(user, "avatar", "transport", "health", "roundHistory"),
+          ...pick(user, "avatar", "transport", "health"),
           guessed: false,
           guess: undefined,
           guessTime: undefined,
@@ -78,13 +78,13 @@ export class RoundOver extends BaseState<
           "round",
           "roundHistory"
         ),
-        users: newUsers,
+        users: mapValues(newUsers, user => pick(user, "avatar", "transport")),
         spectators: newSpectators,
       });
     } else {
       // Handle shuffling songs if you manage to play like 600 rounds
       const round = this.game.round + 1;
-      const songIdx = (round - 1) % this.game.songs.length;
+      const songIdx = round % this.game.songs.length;
       let songs = this.game.songs;
       if (songIdx === 0) {
         songs = shuffle([...songs]);

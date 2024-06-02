@@ -85,20 +85,20 @@ export class HeartbeatWebSocket extends WebSocket {
     options?: boolean | AddEventListenerOptions | undefined
   ): void;
   public addEventListener(
-    type: unknown,
-    listener: unknown,
-    options?: unknown
+    type: any,
+    listener: any,
+    options?: any
   ): void {
     super.addEventListener(
-      type as any,
+      type,
       (...args: any[]) => {
         if (this.terminated) {
           return;
         } else {
-          return (listener as any)(...args);
+          return listener(...args);
         }
       },
-      options as any
+      options
     );
   }
 }

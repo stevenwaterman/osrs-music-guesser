@@ -8,8 +8,7 @@ const dir = "./distances";
 
 export function recordDistances(state: StateInterface.RoundOver) {
   const song = state.game.song.name;
-  const guesses = Object.values(state.users).map((user) => {
-    const result = user.roundHistory[state.game.round];
+  const guesses = Object.values(state.game.roundHistory[state.game.round].players).map((result) => {
     return {
       distance: result.guessed ? result.distance : undefined,
       guess: result.guessed ? result.coordinate : undefined,

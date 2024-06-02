@@ -9,34 +9,34 @@
 
   export let state: ActiveState<"Lobby">;
 
-  $: myLobby = state.data.game.owner === state.data.me.avatar.name;
-  $: players = Object.keys(state.data.spectators).length;
+  $: myLobby = state.game.owner === state.myName;
+  $: players = Object.keys(state.spectators).length;
   $: difficultyConfig = state.difficultyConfig;
 
-  $: inviteUrl = `?join=${encodeURIComponent(state.data.game.id)}`;
+  $: inviteUrl = `?join=${encodeURIComponent(state.game.id)}`;
 
-  let difficulty: Difficulty = state.data.game.difficulty;
-  $: if (difficulty !== state.data.game.difficulty) {
+  let difficulty: Difficulty = state.game.difficulty;
+  $: if (difficulty !== state.game.difficulty) {
     if (myLobby) {
       state.send({ action: "settings", data: { difficulty } });
     } else {
-      difficulty = state.data.game.difficulty;
+      difficulty = state.game.difficulty;
     }
   }
 </script>
 
 <h1>Lobby</h1>
 
-{#if state.data.game.type === "private"}
+{#if state.game.type === "private"}
   <h2 class="gameName">
-    Lobby Name: {state.data.game.id}
+    Lobby Name: {state.game.id}
   </h2>
 {/if}
 
 <ConnectedPlayers {state} />
 
 <Buttons column="1 / 4">
-  {#if state.data.game.type === "private"}
+  {#if state.game.type === "private"}
     {#if "share" in navigator && navigator.canShare({ url: inviteUrl })}
       <Button on:click={() => navigator.share({ url: inviteUrl })}
         >Share Invite</Button
@@ -55,7 +55,7 @@
   {#if myLobby}
     <Button
       class="start"
-      disabled={state.data.game.type !== "singleplayer" && players <= 1}
+      disabled={state.game.type !== "singleplayer" && players <= 1}
       on:click={() =>
         state.send({
           action: "start",
@@ -63,18 +63,18 @@
     >
   {/if}
 
-  {#if state.data.game.type === "public"}
-    {#if state.data.game.timerStarted === undefined}
+  {#if state.game.type === "public"}
+    {#if state.game.timerStarted === undefined}
       <h2>Waiting for more players</h2>
     {/if}
   {/if}
 </Buttons>
 
-{#if state.data.game.timerStarted && state.data.game.timerDuration}
+{#if state.game.timerStarted && state.game.timerDuration}
   <Timer
-    serverTime={state.data.serverTime}
-    timerStarted={state.data.game.timerStarted}
-    timerDuration={state.data.game.timerDuration}
+    serverTime={state.serverTime}
+    timerStarted={state.game.timerStarted}
+    timerDuration={state.game.timerDuration}
     soundBelow={10}
     row="5"
     alignSelf="center"
@@ -140,18 +140,6 @@
 
   .difficultyPanel h2 {
     margin-bottom: 1rem;
-  }
-
-  .difficultyPanel select {
-    pointer-events: initial;
-    background-color: rgba(255, 255, 255, 0.1);
-    outline: none;
-    border: none;
-
-    border-radius: 0.5em;
-    padding: 0.5rem;
-    padding-left: 1rem;
-    border-right: 0.5rem solid transparent;
   }
 
   .difficultyPanel .scroll {

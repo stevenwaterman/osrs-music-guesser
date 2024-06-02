@@ -107,9 +107,11 @@ export class Lobby extends BaseState<Lobby, "Lobby", Cfg, typeof keys> {
         song.location.length > 0 && acceptableDifficulty[song.difficulty]
     );
     const gameSongs = sample(possibleSongs);
-    const round = 1;
+    const round = 0;
     const song = gameSongs[0];
-    const maxSongStartFraction = this.difficultyConfig.songRandomStart ? 0.9 : 0;
+    const maxSongStartFraction = this.difficultyConfig.songRandomStart
+      ? 0.9
+      : 0;
     this.store.state = new RoundActive(this.store, {
       game: {
         ...pick(this.game, "id", "owner", "type", "difficulty"),

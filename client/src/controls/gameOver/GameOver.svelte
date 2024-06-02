@@ -1,35 +1,52 @@
 <script lang="ts">
   import { type ActiveState } from "../../lib/clientState";
   import Button from "../shared/Button.svelte";
+  import Superlatives from "./Superlatives.svelte";
+  import { summariseGame } from "./summarise";
 
   export let state: ActiveState<"GameOver">;
+  $: summary = summariseGame(state);
+
+  let round: number = 0;
 
   function playAgain() {
     state.send({ action: "playAgain" });
   }
+
+  function formatRank(rank: number) {
+    const lastDigit = rank % 10;
+    if (lastDigit === 1) return rank + `${rank}st`;
+    if (lastDigit === 2) return rank + `${rank}nd`;
+    return `${rank}rd`;
+  }
 </script>
 
-<div class="container">
-  <p class="title">Game Over</p>
-  <!-- TODO starting health, scores, guess times -->
-  {#if state.data.game.owner === state.data.me.avatar.name}
-    <Button on:click={() => playAgain()}>Play Again</Button>
+<h1>Game Over</h1>
+
+{#if summary.played}
+  <h2>{formatRank(summary.myRank)}</h2>
+{/if}
+
+<div>
+  <h2>Rounds</h2>
+
+  <select bind:value={round}>
+    {#each summary.songs as song, idx}
+      <option value={idx}>{idx + 1}: {song.name}</option>
+    {/each}
+  </select>
+
+  {#if summary.played}
+    <Superlatives bind:round {summary}/>
   {/if}
-  <Button on:click={() => state.disconnect()}>Main Menu</Button>
 </div>
 
+{#if state.game.owner === state.myName}
+  <Button on:click={() => playAgain()}>Play Again</Button>
+{/if}
+
 <style>
-  .container {
-    grid-column-start: 1;
-    grid-column-end: 4;
-    grid-row-start: 1;
-    grid-row-end: 4;
-    font-size: 2rem;
-    background-color: var(--semi-transparent-black);
-    justify-self: center;
-    align-self: center;
-    padding: 2rem;
-    border-radius: 0.5em;
+  select {
     pointer-events: initial;
   }
 </style>

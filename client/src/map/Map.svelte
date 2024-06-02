@@ -25,7 +25,7 @@
   {/if}
 
   {#if state.isAny("RoundOver")}
-    {#key state.data.game.song.name}
+    {#key state.game.song.name}
       <ScoreLayer {map} {state} />
     {/key}
   {/if}

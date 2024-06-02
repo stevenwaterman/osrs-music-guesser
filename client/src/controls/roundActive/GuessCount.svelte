@@ -3,13 +3,11 @@
 
   export let state: ActiveState<"RoundActive">;
 
-  $: guessed = Object.values(state.data.users).filter(
-    (user) => user.guessed
-  ).length;
-  $: total = Object.keys(state.data.users).length;
+  $: guessed = Object.values(state.users).filter((user) => user.guessed).length;
+  $: total = Object.keys(state.users).length;
 </script>
 
-{#if state.data.game.type !== "singleplayer"}
+{#if state.game.type !== "singleplayer"}
   <div class="guesses">
     Guesses: {guessed}&nbsp;/&nbsp;{total}
   </div>

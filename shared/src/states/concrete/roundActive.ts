@@ -116,7 +116,6 @@ export class RoundActive extends BaseState<
           "avatar",
           "transport",
           "health",
-          "roundHistory"
         ),
         guess,
         guessTime: now,
@@ -132,7 +131,7 @@ export class RoundActive extends BaseState<
   }
 
   public get song(): Song {
-    const songIdx = (this.game.round - 1) % this.game.songs.length;
+    const songIdx = this.game.round % this.game.songs.length;
     return this.game.songs[songIdx];
   }
 
@@ -145,13 +144,8 @@ export class RoundActive extends BaseState<
     const newUserState: RoundOver["users"] = mapValues(this.users, (user) => {
       const result = roundResults[user.avatar.name];
       return {
-        ...pick(user, "avatar", "transport", "roundHistory"),
-        health: result.healthAfter,
-        spectator: false,
-        roundHistory: {
-          ...user.roundHistory,
-          [this.game.round]: result,
-        },
+        ...pick(user, "avatar", "transport"),
+        health: Math.max(0, Math.min(result.healthAfter, 99))
       };
     });
 
@@ -168,9 +162,15 @@ export class RoundActive extends BaseState<
           "songStartFraction",
           "round",
           "roundStarted",
-          "roundHistory"
         ),
         song: this.song,
+        roundHistory: {
+          ...this.game.roundHistory,
+          [this.game.round]: {
+            song: this.song,
+            players: roundResults
+          }
+        }
       },
       users: newUserState,
       spectators: this.spectators,
@@ -294,7 +294,7 @@ export function calculateRoundResults(
     const healingDecreasePerRound = difficultyConfig.healing.decreasePerRound;
     const minimumHealing = difficultyConfig.healing.minAmount;
     healingAmount = Math.max(
-      initialHealing - healingDecreasePerRound * (state.game.round - 1),
+      initialHealing - healingDecreasePerRound * (state.game.round),
       minimumHealing
     );
   }
@@ -337,10 +337,7 @@ export function calculateRoundResults(
     const guessResult = guessResults[user.avatar.name];
     const damage = damages[user.avatar.name];
     const healthBefore = user.health;
-    const healthAfter = Math.min(
-      Math.max(0, healthBefore + damage.healing - damage.hit - damage.venom),
-      99
-    );
+    const healthAfter = healthBefore + damage.healing - damage.hit - damage.venom;
 
     if (guessResult === undefined) {
       return {

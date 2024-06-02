@@ -24,7 +24,7 @@ export function mapValues<InValue, OutValue>(
   map: Record<string, InValue>,
   mapper: (value: InValue) => OutValue
 ): Record<string, OutValue> {
-  const output: Record<string, OutValue> = {} as any;
+  const output: Record<string, OutValue> = {};
   const entries: Array<[string, InValue]> = Object.entries(map);
   entries.forEach(([key, value]) => {
     const newValue = mapper(value);

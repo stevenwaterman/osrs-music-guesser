@@ -63,6 +63,26 @@ h4 {
   width: 100%;
 }
 
+select {
+  pointer-events: initial;
+  background-color: var(--semi-transparent-black);
+  outline: none;
+  border: none;
+  width: fit-content;
+
+  border-radius: 0.5em;
+  padding: 0.5em;
+  padding-left: 1em;
+  border-right: 0.5em solid transparent;
+
+  transition-property: border-color, background-color;
+  transition-duration: 0.25s;
+}
+
+select:not(:disabled):hover {
+  cursor: pointer;
+}
+
 button {
   background-color: var(--semi-transparent-black);
   font-size: 1.5rem;

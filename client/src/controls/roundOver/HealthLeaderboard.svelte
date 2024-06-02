@@ -5,7 +5,7 @@
 
   export let state: ActiveState<"RoundOver">;
 
-  $: players = Object.values(state.data.users)
+  $: players = Object.values(state.users)
     .toSorted((a, b) => b.health - a.health)
     .map((user) => ({ avatar: user.avatar, health: user.health }));
 </script>
@@ -13,8 +13,8 @@
 <div class="container" in:scale>
   <Players
     {players}
-    me={state.data.me.avatar.name}
-    owner={state.data.game.owner}
+    me={state.myName}
+    owner={state.game.owner}
     on:clickAvatar
   />
 </div>

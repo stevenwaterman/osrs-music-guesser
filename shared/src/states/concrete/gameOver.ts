@@ -67,6 +67,6 @@ export class GameOver extends BaseState<
     avatar: Avatar,
     transport: Transport
   ): GameOver["spectators"][string] {
-    return { avatar, transport, roundHistory: {} };
+    return { avatar, transport };
   }
 }

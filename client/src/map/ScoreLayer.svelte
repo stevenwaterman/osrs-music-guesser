@@ -8,7 +8,7 @@
   export let map: L.Map;
 
   onMount(() => {
-    const song = state.data.game.song;
+    const { song, players } = state.game.roundHistory[state.game.round];
 
     const layer = new L.LayerGroup();
     layer.addTo(map);
@@ -24,26 +24,24 @@
       .addTo(layer);
     const lines: L.Polyline[] = [];
 
-    for (const user of Object.values(state.data.users)) {
-      const roundResult = user.roundHistory[state.data.game.round];
-
-      if (!roundResult.guessed) {
+    for (const [name, result] of Object.entries(players)) {
+      if (!result.guessed) {
         continue;
       }
 
-      const { coordinate, closest } = roundResult;
+      const { coordinate, closest } = result;
       const leafletCoordinate = convertLeaflet.coordinate.to(coordinate);
       const leafletClosest = convertLeaflet.coordinate.to(closest);
 
       const marker = new L.Marker(leafletCoordinate, {
-        title: user.avatar.name,
+        title: name,
       }).addTo(layer);
       const line = new L.Polyline([leafletCoordinate, leafletClosest]).addTo(
         layer
       );
       lines.push(line);
 
-      const me = user.avatar.name === state.data.me.avatar.name;
+      const me = name === state.myName;
       if (me) {
         (marker as any)._icon.style.filter = "hue-rotate(80deg)";
         line.setStyle({ color: "#bd55cc" });

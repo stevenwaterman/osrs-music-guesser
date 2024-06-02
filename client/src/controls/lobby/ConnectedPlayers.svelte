@@ -6,18 +6,14 @@
     "GameOver" | "Lobby" | "RoundActive" | "RoundOver"
   >;
 
-  $: players = Object.values(state.data.spectators).map((user) => ({
+  $: players = Object.values(state.spectators).map((user) => ({
     avatar: user.avatar,
   }));
 </script>
 
 <div class="wrapper">
   <div class="container">
-    <Players
-      {players}
-      me={state.data.me.avatar.name}
-      owner={state.data.game.owner}
-    />
+    <Players {players} me={state.myName} owner={state.game.owner} />
   </div>
   <h2>Players</h2>
 </div>

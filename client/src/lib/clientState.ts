@@ -131,9 +131,8 @@ function connectToLocalServer(): StateInterface.Transport {
 
   const gameId = "Single Player";
   const store = new StateInterface.StateStore(gameId, Object.values(songs));
-  store.state = new StateInterface.Lobby(
-    store,
-    {game: {
+  store.state = new StateInterface.Lobby(store, {
+    game: {
       id: gameId,
       owner: "None",
       type: "singleplayer",
@@ -144,8 +143,8 @@ function connectToLocalServer(): StateInterface.Transport {
       timerId: undefined,
     },
     users: {},
-    spectators: {}
-});
+    spectators: {},
+  });
   store.join(serverSide);
 
   return clientSide;
@@ -174,7 +173,7 @@ function listenToTransport(transport: StateInterface.Transport) {
       } else if (message.action === "stateDiff") {
         internalStateStore.update((oldState) => {
           if (oldState.isActive) {
-            const oldIdx = oldState.data.stateIndex;
+            const oldIdx = oldState.stateIndex;
             const newIdx = message.data.stateIndex;
             if (newIdx === oldIdx + 1) {
               const data = StateInterface.applyDiff(
@@ -225,6 +224,38 @@ export class InactiveState {
 export class ActiveState<Name extends keyof StateInterface.ServerStates> {
   public readonly isActive = true;
 
+  public get stateName() {
+    return this.data.stateName;
+  }
+
+  public get stateIndex() {
+    return this.data.stateIndex;
+  }
+
+  public get serverTime() {
+    return this.data.serverTime;
+  }
+
+  public get game() {
+    return this.data.game;
+  }
+
+  public get users() {
+    return this.data.users;
+  }
+
+  public get spectators() {
+    return this.data.spectators;
+  }
+
+  public get me() {
+    return this.data.me;
+  }
+
+  public get myName() {
+    return this.me.avatar.name;
+  }
+
   constructor(
     public readonly data: StateInterface.ClientStateData<Name>,
     private readonly transport: StateInterface.Transport
@@ -232,8 +263,8 @@ export class ActiveState<Name extends keyof StateInterface.ServerStates> {
 
   public get difficultyConfig(): DifficultyConfig {
     return getDifficultyConfig(
-      this.data.game.difficulty,
-      this.data.game.type === "singleplayer"
+      this.game.difficulty,
+      this.game.type === "singleplayer"
     );
   }
 
@@ -248,7 +279,7 @@ export class ActiveState<Name extends keyof StateInterface.ServerStates> {
   public isAny<Names extends keyof StateInterface.ServerStates>(
     ...names: Names[]
   ): this is ActiveState<Names> {
-    return (names as string[]).includes(this.data.stateName);
+    return (names as string[]).includes(this.stateName);
   }
 }
 
