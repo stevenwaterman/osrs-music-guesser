@@ -1,4 +1,5 @@
 <script lang="ts">
+  import Button from "../shared/Button.svelte";
   import type { PlayedGameSummary } from "./summarise";
 
   export let round: number;
@@ -33,35 +34,27 @@
 </script>
 
 {#if summary.bestGuess}
-  <button on:click={() => (round = bestRound)}>
-    Best: {bestDistance} tiles</button
+  <Button on:click={() => (round = bestRound)}>
+    Best: {bestDistance} tiles</Button
   >
 {/if}
 
 {#if summary.worstGuess && worstRound !== bestRound}
-  <button on:click={() => (round = worstRound)}>
-    Worst: {worstDistance} tiles</button
-  >
-{/if}
-
-{#if summary.worstGuess && summary.worstGuess.round !== summary.bestGuess?.round}
-  <button
-    on:click={() => (round = worstRound)}
-    >Worst: {summary.worstGuess.result.guessed &&
-      Math.round(summary.worstGuess.result.distance)} tiles</button
+  <Button on:click={() => (round = worstRound)}>
+    Worst: {worstDistance} tiles</Button
   >
 {/if}
 
 {#if summary.fastestGuess}
-  <button
+  <Button
     on:click={() => (round = fastestRound)}
-    >Fastest: {formattedFastestTime}</button
+    >Fastest: {formattedFastestTime}</Button
   >
 {/if}
 
 {#if summary.slowestGuess && summary.slowestGuess.round !== summary.fastestGuess?.round}
-  <button
+  <Button
     on:click={() => (round = slowestRound)}
-    >Slowest: {formattedSlowestTime}</button
+    >Slowest: {formattedSlowestTime}</Button
   >
 {/if}

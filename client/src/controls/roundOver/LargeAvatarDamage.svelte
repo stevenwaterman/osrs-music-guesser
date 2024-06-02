@@ -6,6 +6,7 @@
   import Health from "../shared/Health.svelte";
   import { avatarImageSrc } from "tunescape07-shared";
   import { scale } from "svelte/transition";
+  import { sounds } from "../../lib/sounds";
 
   export let state: ActiveState<"RoundOver">;
   export let user: string;
@@ -19,6 +20,9 @@
 
   $: health = roundResult.healthBefore;
   $: dead = health <= 0;
+  $: if (dead) {
+    sounds.dead();
+  }
 
   let show = false;
   let showHealing = false;
@@ -132,10 +136,6 @@
         <p class="name" class:owner>{user}{suffix}</p>
       {/if}
     </div>
-
-    {#if dead}
-      <Audio audioUrl="/dead.ogg" />
-    {/if}
   {/if}
 {/key}
 

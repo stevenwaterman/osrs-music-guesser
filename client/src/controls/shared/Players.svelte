@@ -3,8 +3,8 @@
   import AvatarDisplay from "./Avatar.svelte";
   import type { Avatar } from "tunescape07-shared";
 
-  export let me: string;
-  export let owner: string;
+  export let me: string | undefined = undefined;
+  export let owner: string | undefined = undefined;
   export let players: Array<{ avatar: Avatar; health?: number }>;
 
   const dispatch = createEventDispatcher();

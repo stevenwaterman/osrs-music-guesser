@@ -12,3 +12,5 @@ volumeStore.subscribe((volume) =>
 
 export const unconfirmedGuessStore: Writable<Coordinate | undefined> =
   writable(undefined);
+
+export const gameOverRoundIndexStore: Writable<number> = writable(0);

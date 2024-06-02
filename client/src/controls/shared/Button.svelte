@@ -1,6 +1,8 @@
 <script lang="ts">
   import { scale } from "svelte/transition";
   import { sounds } from "../../lib/sounds";
+
+  export let noPadding: boolean = false;
 </script>
 
 <button
@@ -9,11 +11,16 @@
   on:click={() => {
     sounds.click();
   }}
-  on:click><slot /></button
+  on:click
+  class:noPadding><slot /></button
 >
 
 <style>
   button {
     pointer-events: initial;
+  }
+
+  .noPadding {
+    padding: 0;
   }
 </style>

@@ -1,5 +1,6 @@
 <script lang="ts">
   import { stateStore } from "../lib/clientState";
+  import { gameOverRoundIndexStore } from "../lib/stores";
   import BaseMap from "./BaseMap.svelte";
   import GuessLayer from "./GuessLayer.svelte";
   import ScoreLayer from "./ScoreLayer.svelte";
@@ -26,7 +27,11 @@
 
   {#if state.isAny("RoundOver")}
     {#key state.game.song.name}
-      <ScoreLayer {map} {state} />
+      <ScoreLayer {map} {state} roundIdx={state.game.round} />
     {/key}
+  {/if}
+
+  {#if state.isAny("GameOver")}
+    <ScoreLayer {map} {state} roundIdx={$gameOverRoundIndexStore} />
   {/if}
 {/if}

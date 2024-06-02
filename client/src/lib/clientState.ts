@@ -284,7 +284,293 @@ export class ActiveState<Name extends keyof StateInterface.ServerStates> {
 }
 
 type ClientState = InactiveState | ActiveState<any>;
-const internalStateStore: Writable<ClientState> = writable(new InactiveState());
+// const internalStateStore: Writable<ClientState> = writable(new InactiveState());
+const internalStateStore: Writable<ClientState> = writable(new ActiveState({
+  "stateName": "GameOver",
+  "stateIndex": 15,
+  "serverTime": 1717325815050,
+  "game": {
+    "id": "Single Player",
+    "owner": "Hobgoblin Champion",
+    "type": "singleplayer",
+    "difficulty": "normal",
+    "roundHistory": {
+      "0": {
+        "song": {
+          "name": "Trawler Minor",
+          "audioUrl": "https://oldschool.runescape.wiki/images/Trawler_Minor.ogg",
+          "wikiUrl": "https://oldschool.runescape.wiki/w/Trawler%20Minor",
+          "description": [
+            "Plays while playing Fishing Trawler, upon the Trawler sinking. It can sometimes unlock when the boat is only partially flooded. It is the minor key variant of Trawler."
+          ],
+          "duration": 168,
+          "location": [
+            [
+              [
+                2666,
+                3165
+              ],
+              [
+                2666,
+                3161
+              ],
+              [
+                2670,
+                3161
+              ],
+              [
+                2670,
+                3165
+              ]
+            ]
+          ],
+          "tags": {
+            "modAsh": false,
+            "modEd": false
+          },
+          "difficulty": "normal"
+        },
+        "players": {
+          "Hobgoblin Champion": {
+            "guessed": true,
+            "coordinate": [
+              2590.3674194231635,
+              3094
+            ],
+            "time": 883,
+            "closest": [
+              2666,
+              3161
+            ],
+            "distance": 101.04101763497668,
+            "damage": {
+              "hit": 10,
+              "healing": 0,
+              "venom": 0,
+              "max": false
+            },
+            "healthBefore": 99,
+            "healthAfter": 89
+          }
+        }
+      },
+      "1": {
+        "song": {
+          "name": "The Galleon",
+          "audioUrl": "https://oldschool.runescape.wiki/images/The_Galleon.ogg",
+          "wikiUrl": "https://oldschool.runescape.wiki/w/The%20Galleon",
+          "description": [
+            "Plays at the Pirates' Cove.",
+            "This piece has an upbeat tempo and tune, prominently featuring a trading off melody between a brass choir and a flute solo. The Galleon also contains a snare drum heard throughout. This selection has a very different, adventurous tune in relation to the somber and mysterious tracks played in the rest of the Lunar Isle area."
+          ],
+          "duration": 232,
+          "location": [
+            [
+              [
+                2176,
+                3840
+              ],
+              [
+                2240,
+                3840
+              ],
+              [
+                2240,
+                3776
+              ],
+              [
+                2176,
+                3776
+              ]
+            ]
+          ],
+          "tags": {
+            "modAsh": false,
+            "modEd": false
+          },
+          "difficulty": "normal"
+        },
+        "players": {
+          "Hobgoblin Champion": {
+            "guessed": true,
+            "coordinate": [
+              2560.3534667868407,
+              3238
+            ],
+            "time": 782,
+            "closest": [
+              2240,
+              3776
+            ],
+            "distance": 626.1552073426743,
+            "damage": {
+              "hit": 32,
+              "healing": 0,
+              "venom": 0,
+              "max": false
+            },
+            "healthBefore": 89,
+            "healthAfter": 57
+          }
+        }
+      },
+      "2": {
+        "song": {
+          "name": "Down Below",
+          "audioUrl": "https://oldschool.runescape.wiki/images/Down_Below.ogg",
+          "wikiUrl": "https://oldschool.runescape.wiki/w/Down%20Below",
+          "description": [
+            "Plays in the Draynor Sewers."
+          ],
+          "duration": 180,
+          "location": [
+            [
+              [
+                3082,
+                3274
+              ],
+              [
+                3082,
+                3270
+              ],
+              [
+                3086,
+                3270
+              ],
+              [
+                3086,
+                3274
+              ]
+            ],
+            [
+              [
+                3116,
+                3246
+              ],
+              [
+                3116,
+                3242
+              ],
+              [
+                3120,
+                3242
+              ],
+              [
+                3120,
+                3246
+              ]
+            ]
+          ],
+          "tags": {
+            "modAsh": false,
+            "modEd": false
+          },
+          "difficulty": "normal"
+        },
+        "players": {
+          "Hobgoblin Champion": {
+            "guessed": true,
+            "coordinate": [
+              2172.173012690401,
+              3384
+            ],
+            "time": 955,
+            "closest": [
+              3082,
+              3274
+            ],
+            "distance": 916.4524793118635,
+            "damage": {
+              "hit": 36,
+              "healing": 0,
+              "venom": 0,
+              "max": false
+            },
+            "healthBefore": 57,
+            "healthAfter": 21
+          }
+        }
+      },
+      "3": {
+        "song": {
+          "name": "Desert Heat",
+          "audioUrl": "https://oldschool.runescape.wiki/images/Desert_Heat.ogg",
+          "wikiUrl": "https://oldschool.runescape.wiki/w/Desert_Heat_(music_track)",
+          "description": [
+            "Plays in the Uzer Oasis, the Ancient Vault, and to the west of these areas."
+          ],
+          "duration": 264,
+          "location": [
+            [
+              [
+                3392,
+                2944
+              ],
+              [
+                3392,
+                3072
+              ],
+              [
+                3520,
+                3072
+              ],
+              [
+                3520,
+                2944
+              ]
+            ]
+          ],
+          "tags": {
+            "modAsh": false,
+            "modEd": false
+          },
+          "difficulty": "normal"
+        },
+        "players": {
+          "Hobgoblin Champion": {
+            "guessed": true,
+            "coordinate": [
+              2582.363698720144,
+              3528
+            ],
+            "time": 958,
+            "closest": [
+              3392,
+              3072
+            ],
+            "distance": 929.2184567420762,
+            "damage": {
+              "hit": 36,
+              "healing": 0,
+              "venom": 0,
+              "max": false
+            },
+            "healthBefore": 21,
+            "healthAfter": -15
+          }
+        }
+      }
+    }
+  },
+  "users": {},
+  "spectators": {
+    "Hobgoblin Champion": {
+      "avatar": {
+        "name": "Hobgoblin Champion",
+        "url": "Hobgoblin_Champion",
+        "img": "Hobgoblin_Champion.png"
+      }
+    }
+  },
+  "me": {
+    "avatar": {
+      "name": "Hobgoblin Champion",
+      "url": "Hobgoblin_Champion",
+      "img": "Hobgoblin_Champion.png"
+    },
+    "type": "spectator"
+  }
+}, null as any))
 export const stateStore: Readable<ClientState> = {
   subscribe: internalStateStore.subscribe,
 };

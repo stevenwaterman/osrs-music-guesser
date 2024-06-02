@@ -12,38 +12,35 @@ type Placement = {
   healthAfter: number;
 };
 
-export type UnplayedGameSummary = {
-
-    played: false;
-    songs: Song[];
-    ranking: Placement[];
-
-};
-export type PlayedGameSummary = {
-  played: true;
+type BaseGameSummary = {
   songs: Song[];
   ranking: Placement[];
+}
+export type UnplayedGameSummary = BaseGameSummary & {
+  played: false;
+};
+export type PlayedGameSummary = BaseGameSummary & {
+  played: true;
   myRank: number;
-
   survivedRounds: number;
-  guessedRounds: number;
+  missedRounds: number;
   perfectRounds: number;
 
   bestGuess: RoundSuperlative | undefined;
   worstGuess: RoundSuperlative | undefined;
   fastestGuess: RoundSuperlative | undefined;
   slowestGuess: RoundSuperlative | undefined;
-}
+};
 export type GameSummary = UnplayedGameSummary | PlayedGameSummary;
 
 export function summariseGame(state: ActiveState<"GameOver">): GameSummary {
   const songs = summariseSongs(state);
   const ranking = summariseRanking(state);
-  const myRank = ranking.findIndex(
-    (placement) => placement.avatar.name === state.myName
-  );
+  const myRank =
+    ranking.findIndex((placement) => placement.avatar.name === state.myName) +
+    1;
 
-  if (myRank === -1)
+  if (myRank === 0)
     return {
       played: false,
       songs,
@@ -66,11 +63,11 @@ function summariseSongs(state: ActiveState<"GameOver">): Song[] {
 
 function summariseRoundCounts(state: ActiveState<"GameOver">): {
   survivedRounds: number;
-  guessedRounds: number;
+  missedRounds: number;
   perfectRounds: number;
 } {
   let survivedRounds: number = 0;
-  let guessedRounds: number = 0;
+  let missedRounds: number = 0;
   let perfectRounds: number = 0;
 
   for (let i = 0; i in state.game.roundHistory; i++) {
@@ -78,13 +75,14 @@ function summariseRoundCounts(state: ActiveState<"GameOver">): {
     if (myResult !== undefined) {
       survivedRounds++;
       if (myResult.guessed) {
-        guessedRounds++;
         if (myResult.distance === 0) perfectRounds++;
+      } else {
+        missedRounds++;
       }
     }
   }
 
-  return { survivedRounds, guessedRounds, perfectRounds };
+  return { survivedRounds, missedRounds, perfectRounds };
 }
 
 function summariseSuperlatives(state: ActiveState<"GameOver">): {

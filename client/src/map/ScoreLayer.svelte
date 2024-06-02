@@ -1,16 +1,25 @@
 <script lang="ts">
   import L from "leaflet";
   import type { ActiveState } from "../lib/clientState";
-  import { onMount } from "svelte";
+  import { onDestroy, onMount } from "svelte";
   import { convertLeaflet } from "../lib/convertLeaflet";
+  import { gameOverRoundIndexStore } from "../lib/stores";
 
-  export let state: ActiveState<"RoundOver">;
+  export let state: ActiveState<"RoundOver" | "GameOver">;
+  export let roundIdx: number;
   export let map: L.Map;
 
-  onMount(() => {
-    const { song, players } = state.game.roundHistory[state.game.round];
+  $: recreateAnnotations(roundIdx);
 
-    const layer = new L.LayerGroup();
+  let layer: L.LayerGroup | undefined = undefined;
+  function recreateAnnotations(round: number) {
+    if (layer) {
+      layer.remove();
+    }
+
+    const { song, players } = state.game.roundHistory[round];
+
+    layer = new L.LayerGroup();
     layer.addTo(map);
 
     const answer = convertLeaflet.polygon
@@ -57,9 +66,10 @@
       duration: 0.6,
       padding: [50, 50],
     });
+  }
 
-    return () => {
-      layer.remove();
-    };
+  onDestroy(() => {
+    layer?.remove();
+    gameOverRoundIndexStore.set(0);
   });
 </script>

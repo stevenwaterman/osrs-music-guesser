@@ -4,7 +4,7 @@
   export let audioUrl: string;
   export let controls: boolean = false;
   export let startFraction: number = 0;
-  export let loop: boolean = false;
+  export let loop: boolean = true;
   export let autoplay: boolean = true;
 
   export let audio: HTMLAudioElement | undefined = undefined;
