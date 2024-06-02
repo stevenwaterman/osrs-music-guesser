@@ -8,5 +8,6 @@ RUN apk add --no-cache certbot python3 python3-dev py3-pip build-base libressl-d
 COPY nginx.conf /etc/nginx/nginx.conf
 RUN mkdir /var/www && mkdir /var/www/html && mkdir /var/www/html/web && touch /var/www/html/web/index.html
 COPY ws.conf /etc/nginx/conf.d/default.conf
+RUN certbot -q renew --nginx
 RUN echo '0 */12 * * * root certbot -q renew --nginx' > /etc/crontabs/root
 CMD [ "sh", "-c", "crond -l 2 && nginx -g 'daemon off;'" ]
