@@ -62,7 +62,7 @@
     margin-right: -1em;
     pointer-events: initial;
 
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
   }
 
@@ -70,5 +70,6 @@
     flex-direction: row;
     flex-wrap: wrap;
     align-items: flex-start;
+    justify-content: center;
   }
 </style>

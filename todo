@@ -1,14 +1,10 @@
-GameOver screen when someone leaves multiplayer game
-GameOver screen should show results, screenshot/share option
-Volume slider overrunning container
 Track difficulty in localstorage
 Muted / Low volume warning
 Dynamic imports to reduce chunk size
-make round history a game property instead of a player property so that it doesn't matter when people leave before the end
 Let players choose to spectate instead
-top corner of wiki display is showing background
-style health leaderboard and ranking like the gameover round summary
 don't crash the entire server when there's an error
+Show wiki display somewhere in game over
+Check mobile design again
 
 How to play
 GitHub link

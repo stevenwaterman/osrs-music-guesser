@@ -13,7 +13,7 @@
 
 <div class="container" in:scale>
   <h2>Ranking</h2>
-  <Players {players} me={myName} />
+  <Players disabled {players} me={myName} />
 </div>
 
 <style>
