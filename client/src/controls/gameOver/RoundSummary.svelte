@@ -72,7 +72,7 @@
 <Button
   noPadding
   small
-  active={roundIdx === $gameOverRoundIndexStore}
+  selected={roundIdx === $gameOverRoundIndexStore}
   on:mousedown={() => gameOverRoundIndexStore.set(roundIdx)}
 >
   <div class="container" class:selected={$gameOverRoundIndexStore === roundIdx}>

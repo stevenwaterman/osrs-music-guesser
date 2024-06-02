@@ -52,7 +52,7 @@
 </Buttons>
 
 <div class="privateGameNameInputContainer" class:invisible={menu !== "private"}>
-  <span><strong>Game&nbsp;Name:</strong></span>
+  <h2>Game&nbsp;Name:</h2>
   <input
     on:mousedown|stopPropagation
     class="privateGameNameInput"
@@ -76,7 +76,6 @@
     justify-content: center;
     align-items: center;
     gap: 1em;
-    font-size: 2em;
     pointer-events: initial;
     max-width: 100%;
   }
@@ -119,10 +118,6 @@
   @media only screen and (max-width: 750px) {
     .privateGameNameInputContainer {
       grid-column: 1 / 4;
-    }
-
-    .privateGameNameInputContainer span {
-      font-size: 0.5em;
     }
 
     .privateGameNameInputContainer input {

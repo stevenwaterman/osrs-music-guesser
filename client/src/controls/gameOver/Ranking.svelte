@@ -17,10 +17,6 @@
 </div>
 
 <style>
-  h2 {
-    margin-right: 1em;
-  }
-
   .container {
     grid-column: 3;
     grid-row: 2 / 6;

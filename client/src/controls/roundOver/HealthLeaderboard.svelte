@@ -21,10 +21,6 @@
 </div>
 
 <style>
-  h2 {
-    margin-right: 1em;
-  }
-
   .container {
     grid-column: 3;
     grid-row: 2 / 6;
@@ -39,8 +35,6 @@
     flex-direction: column;
     row-gap: 0.5em;
     column-gap: 0.5em;
-
-    overflow-y: auto;
 
     min-width: 0;
 

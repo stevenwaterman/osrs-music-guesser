@@ -215,37 +215,6 @@ export class StateStore {
       return;
     }
 
-    if (playerCount <= 2 && this.state.name !== "Lobby") {
-      // Only 1 player left, go to lobby
-      const remainingPlayer = [
-        ...Object.values(this.state.users),
-        ...Object.values(this.state.spectators),
-      ].filter((client) => client.avatar.name !== name)[0];
-      const owner =
-        this.state.game.type === "public"
-          ? this.state.game.owner
-          : remainingPlayer.avatar.name;
-      this.state = new Lobby(this, {
-        game: {
-          ...pick(this.state.game, "id", "type", "difficulty"),
-          owner,
-          firstUserJoined: undefined,
-          timerStarted: undefined,
-          timerDuration: undefined,
-          timerId: undefined,
-        },
-        users: {},
-        spectators: {
-          [remainingPlayer.avatar.name]: pick(
-            remainingPlayer,
-            "avatar",
-            "transport"
-          ),
-        },
-      });
-      return;
-    }
-
     this.state = this.state.withPlayerRemoved(name);
   }
 

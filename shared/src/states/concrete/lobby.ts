@@ -50,7 +50,6 @@ export class Lobby extends BaseState<Lobby, "Lobby", Cfg, typeof keys> {
       playerCount <= 1
     ) {
       clearTimeout(data.game.timerId);
-      console.log(data);
       data.game = {
         ...data.game,
         timerStarted: undefined,

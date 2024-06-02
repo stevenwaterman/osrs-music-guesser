@@ -64,7 +64,6 @@
     flex-direction: column;
 
     border-radius: 0.5em;
-    overflow: hidden;
   }
 
   .info {
@@ -85,6 +84,9 @@
     color: yellow;
     position: relative;
     z-index: 0;
+
+    border-top-left-radius: 0.25em;
+    border-top-right-radius: 0.25em;
   }
 
   .title a {

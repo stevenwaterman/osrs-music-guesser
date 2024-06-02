@@ -13,7 +13,7 @@
   const dispatch = createEventDispatcher();
 </script>
 
-<div class="scroll" class:row on:wheel|stopPropagation={console.log}>
+<div class="scroll" class:row on:wheel|stopPropagation>
   {#each players as player, idx (player.avatar.name)}
     <Button
       noPadding

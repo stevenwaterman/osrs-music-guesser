@@ -6,7 +6,7 @@
   export let noPadding: boolean = false;
   export let mode: "enabled" | "disabled" | "clickThrough" = "enabled";
   export let small: boolean = false;
-  export let active: boolean = false;
+  export let selected: boolean = false;
   const dispatch = createEventDispatcher();
 </script>
 
@@ -19,7 +19,7 @@
     }
   }}
   on:mousedown={(ev) => {
-    if (mode === "enabled") {
+    if (mode === "enabled" && !selected) {
       sounds.click();
       dispatch("mousedown", ev);
     }
@@ -35,7 +35,7 @@
   }}
   class:noPadding
   class:small
-  class:active
+  class:selected
   class:disabled={mode !== "enabled"}><slot /></button
 >
 
@@ -69,15 +69,15 @@
     background-color: var(--darker-semi-transparent-black);
   }
 
-  button:not(.disabled):hover {
+  button:not(.disabled, .selected):hover {
     cursor: pointer;
   }
 
-  button:not(.disabled, :active, .active):hover {
+  button:not(.disabled, :active, .selected):hover {
     border-color: yellow;
   }
 
-  button:not(.disabled):active {
+  button:not(.disabled, .selected):active {
     background-color: var(--lighter-semi-transparent-black);
     border-color: red;
     transition-duration: 0s;
@@ -88,7 +88,7 @@
     outline: 4px auto -webkit-focus-ring-color;
   }
 
-  button.active {
+  button.selected {
     border-color: red;
   }
 
