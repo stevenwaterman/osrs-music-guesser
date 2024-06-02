@@ -154,7 +154,7 @@ function summariseRanking(state: ActiveState<"GameOver">): Placement[] {
     const placements = players
       .filter(([_, result]) => finalRound || result.healthAfter <= 0)
       .map(([name, result]) => ({
-        avatar: state.spectators[name].avatar,
+        avatar: state.users[name]?.avatar ?? state.spectators[name].avatar,
         healthAfter: result.healthAfter,
         round: i,
       }));

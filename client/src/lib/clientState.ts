@@ -284,7 +284,8 @@ export class ActiveState<Name extends keyof StateInterface.ServerStates> {
 }
 
 type ClientState = InactiveState | ActiveState<any>;
-// const internalStateStore: Writable<ClientState> = writable(new InactiveState());
+const internalStateStore: Writable<ClientState> = writable(new InactiveState());
+/*
 const internalStateStore: Writable<ClientState> = writable(new ActiveState({
   "stateName": "GameOver",
   "stateIndex": 15,
@@ -571,6 +572,7 @@ const internalStateStore: Writable<ClientState> = writable(new ActiveState({
     "type": "spectator"
   }
 }, null as any))
+*/
 export const stateStore: Readable<ClientState> = {
   subscribe: internalStateStore.subscribe,
 };

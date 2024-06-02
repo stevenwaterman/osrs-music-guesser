@@ -60,7 +60,7 @@ wss.on("connection", (ws, req) => {
 
   let kickTimeout = setTimeout(() => ws.terminate(), 30_000);
   ws.addEventListener("message", ({ data }) => {
-    clearInterval(kickTimeout);
+    clearTimeout(kickTimeout);
     kickTimeout = setTimeout(() => ws.terminate(), 30_000);
 
     if (data.toString("utf8") === "ping") {
@@ -75,26 +75,24 @@ function onJoin(ws: WebSocket, searchParams: URLSearchParams) {
     return;
   }
 
-  if (store.state) {
-    store.join(ws);
-    return;
+  if (store.state === null) {
+    store.state = new StateInterface.Lobby(store, {
+      game: {
+        id: store.gameId,
+        owner: "None",
+        difficulty: "normal",
+        type: "private",
+        timerStarted: undefined,
+        timerDuration: undefined,
+        timerId: undefined,
+        firstUserJoined: undefined,
+      },
+      users: {},
+      spectators: {},
+    });
   }
 
-  const avatar = store.avatarLibrary.take()!;
-  store.state = new StateInterface.Lobby(store, {game:{
-      id: store.gameId,
-      owner: avatar.name,
-      difficulty: "normal",
-      type: "private",
-      timerStarted: undefined,
-      timerDuration: undefined,
-      timerId: undefined,
-      firstUserJoined: undefined,
-    },
-    users:{},
-    spectators:{ [avatar.name]: { avatar, transport: ws } },
-  }
-  );
+  store.join(ws);
 }
 
 let publicGameIdx = 0;
@@ -132,9 +130,8 @@ function createPublicLobby() {
     Object.values(songs),
     onTransition
   );
-  store.state = new StateInterface.Lobby(
-    store,{game:
-    {
+  store.state = new StateInterface.Lobby(store, {
+    game: {
       id: gameId,
       owner: "TuneScape",
       type: "public",
@@ -144,9 +141,9 @@ function createPublicLobby() {
       timerId: undefined,
       firstUserJoined: undefined,
     },
-    users:{},
-    spectators:{}
-});
+    users: {},
+    spectators: {},
+  });
   publicGames[publicGameIdx] = store;
 }
 
