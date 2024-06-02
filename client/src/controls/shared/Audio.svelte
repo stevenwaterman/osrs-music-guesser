@@ -47,8 +47,8 @@
     grid-row: 5;
 
     width: 100%;
-    max-width: 40rem;
-    max-height: 3rem;
+    max-width: 40em;
+    max-height: 3em;
     border-radius: 5em;
 
     pointer-events: initial;

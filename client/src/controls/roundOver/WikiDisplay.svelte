@@ -64,6 +64,7 @@
     flex-direction: column;
 
     border-radius: 0.5em;
+    overflow: hidden;
   }
 
   .info {
@@ -72,14 +73,13 @@
     overflow-y: auto;
     max-height: 100%;
     flex-shrink: 1;
-    font-size: 1rem;
   }
 
   .title {
-    background-color: rgba(255, 255, 255, 0.1);
+    background-color: var(--semi-transparent-white);
     text-align: center;
     display: block;
-    font-size: 2rem;
+    font-size: 2em;
     font-weight: bold;
     padding: 0.2em 0.4em;
     color: yellow;
@@ -94,11 +94,11 @@
 
   @media only screen and (max-width: 750px) {
     .title {
-      font-size: 1.2rem;
+      font-size: 1.2em;
     }
 
     .info {
-      font-size: 0.8rem;
+      font-size: 0.8em;
     }
 
     p {

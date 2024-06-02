@@ -22,12 +22,12 @@
 
 <Buttons>
   <Button
-    on:click={() => {
+    on:mousedown={() => {
       dispatch("back");
     }}>←</Button
   >
   <Button
-    on:click={() => {
+    on:mousedown={() => {
       state.privateMultiplayer(id);
     }}>Join Game</Button
   >
@@ -35,15 +35,15 @@
 
 <style>
   h2 {
-    margin-bottom: 1rem;
+    margin-bottom: 1em;
   }
 
   .info {
     grid-row: 2 / 4;
     grid-column: 2;
 
-    padding: 2rem;
-    padding-top: 1rem;
+    padding: 2em;
+    padding-top: 1em;
 
     background-color: var(--semi-transparent-black);
     border-radius: 0.5em;

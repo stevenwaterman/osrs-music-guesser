@@ -45,13 +45,13 @@
 
 <style>
   .timer {
-    font-size: 5rem;
+    font-size: 5em;
     font-weight: bold;
   }
 
   @media only screen and (max-width: 750px) {
     .timer {
-      font-size: 3rem;
+      font-size: 3em;
     }
   }
 </style>

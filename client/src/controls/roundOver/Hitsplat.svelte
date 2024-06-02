@@ -79,9 +79,9 @@
 <style>
   .splat {
     position: relative;
-    height: 5rem;
-    width: 5rem;
-    margin: 1rem;
+    height: 5em;
+    width: 5em;
+    margin: 1em;
   }
 
   img {
@@ -99,7 +99,7 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    font-size: 2.5rem;
+    font-size: 2.5em;
     opacity: 0;
   }
 

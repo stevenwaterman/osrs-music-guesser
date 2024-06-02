@@ -38,13 +38,13 @@
 <Buttons column="1 / 4">
   {#if state.game.type === "private"}
     {#if "share" in navigator && navigator.canShare({ url: inviteUrl })}
-      <Button on:click={() => navigator.share({ url: inviteUrl })}
+      <Button on:mousedown={() => navigator.share({ url: inviteUrl })}
         >Share Invite</Button
       >
     {:else if "clipboard" in navigator}
       <Button
         style="width: 8.5em;"
-        on:click={() =>
+        on:mousedown={() =>
           navigator.clipboard.writeText(
             `${location.protocol}//${location.host}${inviteUrl}`
           )}><span class="copy"></span></Button
@@ -55,8 +55,10 @@
   {#if myLobby}
     <Button
       class="start"
-      disabled={state.game.type !== "singleplayer" && players <= 1}
-      on:click={() =>
+      mode={state.game.type === "singleplayer" || players > 1
+        ? "enabled"
+        : "disabled"}
+      on:mousedown={() =>
         state.send({
           action: "start",
         })}>Start Game</Button
@@ -84,7 +86,11 @@
 <div class="difficultyPanel" in:scale>
   <div class="difficultyHeader">
     <h2>Difficulty</h2>
-    <select bind:value={difficulty} disabled={!myLobby}>
+    <select
+      on:mousedown|stopPropagation
+      bind:value={difficulty}
+      disabled={!myLobby}
+    >
       <option value="tutorial">Tutorial</option>
       <option value="normal">Normal</option>
       <option value="hard">Hard</option>
@@ -92,7 +98,7 @@
     </select>
   </div>
 
-  <div class="scroll">
+  <div class="scroll" on:wheel|stopPropagation>
     {#each difficultyConfig.description as line}
       <div>{line}</div>
     {/each}
@@ -139,21 +145,21 @@
   }
 
   .difficultyPanel h2 {
-    margin-bottom: 1rem;
+    margin-bottom: 0.5em;
   }
 
   .difficultyPanel .scroll {
     overflow-y: auto;
     max-height: 100%;
-    pointer-events: initial;
-    margin-top: 1rem;
-    padding-right: 0.5rem;
-    margin-right: -0.5rem;
+    margin-top: 1em;
+    padding-right: 1em;
+    margin-right: -1em;
 
     display: flex;
     flex-direction: column;
-    gap: 1rem;
+    gap: 1em;
     width: 100%;
+    pointer-events: initial;
   }
 
   .difficultyHeader {
@@ -183,8 +189,8 @@
     }
 
     .difficultyPanel .scroll {
-      margin-top: 0.5rem;
-      gap: 0.5rem;
+      margin-top: 0.5em;
+      gap: 0.5em;
     }
 
     .gameName {

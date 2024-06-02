@@ -18,7 +18,7 @@
     grid-column: 2;
     grid-row: 1;
 
-    padding: 0.6rem 1.2rem;
+    padding: 0.6em 1.2em;
     font-weight: bold;
     background: var(--semi-transparent-black);
     border-radius: 0.5em;

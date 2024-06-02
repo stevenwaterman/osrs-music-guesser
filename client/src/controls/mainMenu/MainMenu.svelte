@@ -15,35 +15,38 @@
 
 <div class="info">
   <h2>Rules</h2>
-  <div>Click where you think the song plays.</div>
-  <div>Closest guess wins, everyone else takes damage.</div>
-  <div>Be the first to make a perfect guess to heal some health.</div>
-  <div>Win by being the last player alive.</div>
+  <div class="scroll" on:wheel|stopPropagation>
+    <p>Click where you think the song plays.</p>
+    <p>Closest guess wins, everyone else takes damage.</p>
+    <p>Be the first to make a perfect guess to heal some health.</p>
+    <p>Win by being the last player alive.</p>
+  </div>
 </div>
 
 <Buttons column="1 / 4">
   {#if menu === "main"}
-    <Button on:click={() => state.singlePlayer()}>Single Player</Button>
-    <Button on:click={() => (menu = "multiplayer")}>Multiplayer</Button>
+    <Button on:mousedown={() => state.singlePlayer()}>Single Player</Button>
+    <Button on:mousedown={() => (menu = "multiplayer")}>Multiplayer</Button>
   {/if}
 
   {#if menu === "multiplayer"}
-    <Button on:click={() => (menu = "main")}>←</Button>
-    <Button on:click={() => (menu = "private")}>Private</Button>
-    <Button on:click={() => state.publicMultiplayer()}>Public</Button>
+    <Button on:mousedown={() => (menu = "main")}>←</Button>
+    <Button on:mousedown={() => (menu = "private")}>Private</Button>
+    <Button on:mousedown={() => state.publicMultiplayer()}>Public</Button>
   {/if}
 
   {#if menu === "private"}
     <Button
-      on:click={() => {
+      on:mousedown={() => {
         menu = "multiplayer";
         privateGameId = "";
       }}>←</Button
     >
 
     <Button
-      on:click={() => state.privateMultiplayer(privateGameId.trim())}
-      disabled={privateGameId.trim().length === 0}>Join Game</Button
+      on:mousedown={() => state.privateMultiplayer(privateGameId.trim())}
+      mode={privateGameId.trim().length > 0 ? "enabled" : "disabled"}
+      >Join Game</Button
     >
   {/if}
 </Buttons>
@@ -51,6 +54,7 @@
 <div class="privateGameNameInputContainer" class:invisible={menu !== "private"}>
   <span><strong>Game&nbsp;Name:</strong></span>
   <input
+    on:mousedown|stopPropagation
     class="privateGameNameInput"
     type="text"
     bind:value={privateGameId}
@@ -71,8 +75,8 @@
     flex-direction: row;
     justify-content: center;
     align-items: center;
-    gap: 1rem;
-    font-size: 2rem;
+    gap: 1em;
+    font-size: 2em;
     pointer-events: initial;
     max-width: 100%;
   }
@@ -80,9 +84,6 @@
   .info {
     grid-row: 2 / 4;
     grid-column: 2;
-
-    padding: 2rem;
-    padding-top: 1rem;
 
     background-color: var(--semi-transparent-black);
     border-radius: 0.5em;
@@ -92,6 +93,22 @@
     display: flex;
     flex-direction: column;
     gap: 0.5em;
+
+    padding-top: 1em;
+    padding-right: 0.5em;
+    padding-bottom: 1em;
+    padding-left: 1.5em;
+  }
+
+  .scroll {
+    overflow-y: auto;
+    pointer-events: initial;
+    padding-right: 1em;
+  }
+
+  .scroll p {
+    margin: 0;
+    margin-block-end: 0.5em;
   }
 
   .invisible {
@@ -114,9 +131,8 @@
 
     .info {
       grid-column: 1 / 4;
-      overflow-y: hidden;
       gap: 0.5em;
-      padding: 1rem;
+      padding: 1em;
     }
   }
 </style>

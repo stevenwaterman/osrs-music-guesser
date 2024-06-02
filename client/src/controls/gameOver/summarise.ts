@@ -15,7 +15,7 @@ type Placement = {
 type BaseGameSummary = {
   songs: Song[];
   ranking: Placement[];
-}
+};
 export type UnplayedGameSummary = BaseGameSummary & {
   played: false;
 };
@@ -25,11 +25,6 @@ export type PlayedGameSummary = BaseGameSummary & {
   survivedRounds: number;
   missedRounds: number;
   perfectRounds: number;
-
-  bestGuess: RoundSuperlative | undefined;
-  worstGuess: RoundSuperlative | undefined;
-  fastestGuess: RoundSuperlative | undefined;
-  slowestGuess: RoundSuperlative | undefined;
 };
 export type GameSummary = UnplayedGameSummary | PlayedGameSummary;
 
@@ -53,7 +48,6 @@ export function summariseGame(state: ActiveState<"GameOver">): GameSummary {
     ranking,
     myRank,
     ...summariseRoundCounts(state),
-    ...summariseSuperlatives(state),
   };
 }
 
@@ -83,65 +77,6 @@ function summariseRoundCounts(state: ActiveState<"GameOver">): {
   }
 
   return { survivedRounds, missedRounds, perfectRounds };
-}
-
-function summariseSuperlatives(state: ActiveState<"GameOver">): {
-  bestGuess: RoundSuperlative | undefined;
-  worstGuess: RoundSuperlative | undefined;
-  fastestGuess: RoundSuperlative | undefined;
-  slowestGuess: RoundSuperlative | undefined;
-} {
-  let bestGuess: RoundSuperlative | undefined = undefined;
-  let worstGuess: RoundSuperlative | undefined = undefined;
-  let fastestGuess: RoundSuperlative | undefined = undefined;
-  let slowestGuess: RoundSuperlative | undefined = undefined;
-
-  for (let i = 0; i in state.game.roundHistory; i++) {
-    const myResult = state.game.roundHistory[i].players[state.myName];
-    if (myResult?.guessed) {
-      if (
-        bestGuess?.result.guessed !== true ||
-        bestGuess.result.distance > myResult.distance
-      ) {
-        bestGuess = {
-          round: i,
-          result: myResult,
-        };
-      }
-
-      if (
-        worstGuess?.result.guessed !== true ||
-        worstGuess.result.distance < myResult.distance
-      ) {
-        worstGuess = {
-          round: i,
-          result: myResult,
-        };
-      }
-
-      if (
-        fastestGuess?.result.guessed !== true ||
-        fastestGuess.result.time > myResult.time
-      ) {
-        fastestGuess = {
-          round: i,
-          result: myResult,
-        };
-      }
-
-      if (
-        slowestGuess?.result.guessed !== true ||
-        slowestGuess.result.time < myResult.time
-      ) {
-        slowestGuess = {
-          round: i,
-          result: myResult,
-        };
-      }
-    }
-  }
-
-  return { bestGuess, worstGuess, fastestGuess, slowestGuess };
 }
 
 function summariseRanking(state: ActiveState<"GameOver">): Placement[] {

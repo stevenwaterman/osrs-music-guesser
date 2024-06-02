@@ -16,7 +16,7 @@
     <Health {health} />
   {/if}
   <!-- svelte-ignore a11y-missing-attribute -->
-  <img src={avatarThumbnailSrc(avatar)} />
+  <img on:dragstart|preventDefault src={avatarThumbnailSrc(avatar)} />
   <p class="name" class:owner>{avatar.name}{suffix}</p>
 </div>
 
@@ -40,7 +40,6 @@
 
   .name {
     grid-row: 3;
-    font-size: 1em;
     margin: 0;
   }
 

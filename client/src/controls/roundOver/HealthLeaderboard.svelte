@@ -11,6 +11,7 @@
 </script>
 
 <div class="container" in:scale>
+  <h2>Ranking</h2>
   <Players
     {players}
     me={state.myName}
@@ -20,37 +21,31 @@
 </div>
 
 <style>
+  h2 {
+    margin-right: 1em;
+  }
+
   .container {
     grid-column: 3;
     grid-row: 2 / 6;
-    border-radius: 0.5em;
-    background-color: var(--semi-transparent-black);
-
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    row-gap: 1rem;
-    column-gap: 1rem;
+    align-self: flex-start;
+    justify-self: flex-end;
 
     min-height: 0;
     max-height: 100%;
+    border-radius: 0.5em;
 
-    min-width: 0;
-    max-width: 100%;
-
-    min-width: 0;
-    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    row-gap: 0.5em;
+    column-gap: 0.5em;
 
     overflow-y: auto;
-    overflow-x: hidden;
-    pointer-events: initial;
 
-    justify-content: center;
-    align-items: flex-start;
+    min-width: 0;
 
-    align-self: flex-start;
-    justify-self: flex-end;
-    cursor: pointer;
+    justify-content: flex-start;
+    align-items: center;
   }
 
   @media only screen and (max-width: 750px) {
@@ -59,7 +54,6 @@
       grid-row: 3;
       align-self: center;
       justify-self: center;
-      font-size: 0.7em;
     }
   }
 </style>

@@ -30,22 +30,23 @@
 <svelte:window on:popstate={() => (search = location.search)} />
 
 <main class="container zoom{zoom}">
-  <Map bind:zoom />
-  <ControlOverlay>
-    {#if !state.isActive}
-      {#if joining}
-        <JoinGame
-          {state}
-          id={joining}
-          on:back={() => {
-            clearJoining();
-          }}
-        />
-      {:else if !state.isActive}
-        <MainMenu {state} />
+  <Map bind:zoom>
+    <ControlOverlay>
+      {#if !state.isActive}
+        {#if joining}
+          <JoinGame
+            {state}
+            id={joining}
+            on:back={() => {
+              clearJoining();
+            }}
+          />
+        {:else if !state.isActive}
+          <MainMenu {state} />
+        {/if}
       {/if}
-    {/if}
-  </ControlOverlay>
+    </ControlOverlay>
+  </Map>
 </main>
 
 <style>

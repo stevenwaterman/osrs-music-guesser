@@ -105,7 +105,7 @@
         {#if showVenom && roundResult.damage.venom > 0}
           <div
             class="hitContainer"
-            style="top: calc(50% - 3rem); left: calc(50% + 3rem);"
+            style="top: calc(50% - 3em); left: calc(50% + 3em);"
             class:multipleSplats
           >
             <Hitsplat type="venom" damage={roundResult.damage} />
@@ -115,7 +115,7 @@
         {#if showHealing && roundResult.damage.healing > 0}
           <div
             class="hitContainer"
-            style="top: calc(50% + 3rem); left: calc(50% + 3rem);"
+            style="top: calc(50% + 3em); left: calc(50% + 3em);"
             class:multipleSplats
           >
             <Hitsplat type="healing" damage={roundResult.damage} />
@@ -160,7 +160,7 @@
   }
 
   .name {
-    font-size: 3rem;
+    font-size: 3em;
     margin: 0;
   }
 
@@ -191,7 +191,7 @@
   }
 
   .multipleSplats {
-    padding-right: 3rem;
+    padding-right: 3em;
   }
 
   .owner {

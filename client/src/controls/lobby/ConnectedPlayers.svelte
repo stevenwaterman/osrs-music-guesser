@@ -12,9 +12,7 @@
 </script>
 
 <div class="wrapper">
-  <div class="container">
-    <Players {players} me={state.myName} owner={state.game.owner} />
-  </div>
+  <Players row disabled {players} me={state.myName} owner={state.game.owner} />
   <h2>Players</h2>
 </div>
 
@@ -32,46 +30,19 @@
     grid-row: 2 / 4;
 
     display: flex;
-    max-height: 100%;
-    border-radius: 0.5em;
-    background-color: var(--semi-transparent-black);
-
-    margin-top: 0.8rem;
-  }
-
-  .container {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    row-gap: 1em;
-    column-gap: 1em;
-
     min-height: 0;
     max-height: 100%;
+    max-width: 100%;
+    border-radius: 0.5em;
 
-    min-width: 0;
-    padding: 1em;
-    padding-top: 1.2rem;
-
-    overflow-y: auto;
-    pointer-events: initial;
-
-    justify-content: center;
-    align-items: flex-start;
-
-    font-size: 1em;
+    margin-top: 0.8em;
+    padding-top: 0.8em;
   }
 
   @media only screen and (max-width: 750px) {
     .wrapper {
       grid-column: 1 / 4;
       grid-row: 3;
-    }
-
-    @media only screen and (max-width: 750px) {
-      .container {
-        font-size: 0.7em;
-      }
     }
   }
 </style>

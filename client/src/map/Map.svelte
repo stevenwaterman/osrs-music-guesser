@@ -17,7 +17,7 @@
   });
 </script>
 
-<BaseMap bind:map />
+<BaseMap bind:map ><slot/></BaseMap>
 {#if map}
   <TileLayer {map} />
 

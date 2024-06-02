@@ -8,6 +8,7 @@ make round history a game property instead of a player property so that it doesn
 Let players choose to spectate instead
 top corner of wiki display is showing background
 style health leaderboard and ranking like the gameover round summary
+don't crash the entire server when there's an error
 
 How to play
 GitHub link

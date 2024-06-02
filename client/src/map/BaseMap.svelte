@@ -15,11 +15,9 @@
   }
 
   $: resetView(map);
-
-  window.addEventListener("resize", () => map.invalidateSize());
 </script>
 
-<div class="map" bind:this={mapDiv}></div>
+<div class="map" bind:this={mapDiv}><slot /></div>
 
 <style>
   .map {

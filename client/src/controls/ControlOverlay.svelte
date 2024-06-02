@@ -60,18 +60,19 @@
 
 <style>
   .grid {
-    position: absolute;
-    padding: 1rem;
-
+    position: fixed;
     top: 0;
     right: 0;
     bottom: 0;
     left: 0;
+    z-index: 1000;
+
+    padding: 1em;
 
     display: grid;
     grid-template-columns: 1fr 3fr 1fr;
     grid-template-rows: auto fit-content(40vmax) 1fr auto auto;
-    gap: 1rem;
+    gap: 1em;
 
     align-items: center;
     justify-items: center;
@@ -80,8 +81,8 @@
 
   @media only screen and (max-width: 750px) {
     .grid {
-      padding: 0.5rem;
-      gap: 0.5rem;
+      padding: 0.5em;
+      gap: 0.5em;
     }
   }
 </style>

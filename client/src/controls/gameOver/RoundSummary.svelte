@@ -69,7 +69,12 @@
   }
 </script>
 
-<Button noPadding on:click={() => gameOverRoundIndexStore.set(roundIdx)}>
+<Button
+  noPadding
+  small
+  active={roundIdx === $gameOverRoundIndexStore}
+  on:mousedown={() => gameOverRoundIndexStore.set(roundIdx)}
+>
   <div class="container" class:selected={$gameOverRoundIndexStore === roundIdx}>
     <h3>{song.name}</h3>
 
@@ -109,7 +114,6 @@
 
 <style>
   .container {
-    font-size: 1rem;
     font-weight: normal;
     padding: 0.5em;
     min-height: fit-content;
