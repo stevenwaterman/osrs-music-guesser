@@ -37,7 +37,7 @@
           .findIndex((entry) => entry[0] === name);
 
   function formatTime(time: number): string {
-    if (time < 2000) {
+    if (time < 1000) {
       return `${time}ms`;
     }
 
