@@ -45,5 +45,9 @@
       align-self: flex-start;
       justify-self: center;
     }
+
+    .container h2 {
+      display: none;
+    }
   }
 </style>
