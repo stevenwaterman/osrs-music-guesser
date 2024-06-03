@@ -42,7 +42,7 @@
     .container {
       grid-column: 1 / 4;
       grid-row: 3;
-      align-self: center;
+      align-self: flex-start;
       justify-self: center;
     }
   }
