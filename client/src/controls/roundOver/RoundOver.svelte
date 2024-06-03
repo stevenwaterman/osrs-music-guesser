@@ -46,7 +46,7 @@
     {#key largeAvatar}
       <LargeAvatarDamage
         {state}
-        user={largeAvatar}
+        name={largeAvatar}
         on:animationDone={() => {
           largeAvatar = undefined;
           showAll = true;
@@ -66,11 +66,11 @@
 
   {#if owner}
     {#if gameOver}
-      <Button style="grid-column: 2; grid-row: 4;" on:mousedown={nextRound}
+      <Button style="grid-column: 2; grid-row: 4;" on:clicked={nextRound}
         >Show&nbsp;Results</Button
       >
     {:else}
-      <Button style="grid-column: 2; grid-row: 4;" on:mousedown={nextRound}
+      <Button style="grid-column: 2; grid-row: 4;" on:clicked={nextRound}
         >Next&nbsp;Round</Button
       >
     {/if}

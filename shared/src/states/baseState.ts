@@ -1,4 +1,3 @@
-import { Avatar } from "../avatars.js";
 import { mapValues, omit, pick } from "../util.js";
 import { AbstractCfg } from "./config.js";
 import { getDifficultyConfig } from "./difficulty.js";
@@ -121,7 +120,7 @@ export abstract class BaseState<
   public abstract onMessage(userName: string, message: ClientActions): void;
   public abstract recreate(data: Self["data"]): Self;
   public abstract createSpectator(
-    avatar: Avatar,
+    name: string,
     transport: Transport
   ): Self["spectators"][string];
   public convertUserToSpectator(
@@ -137,8 +136,8 @@ export abstract class BaseState<
     return spectator as Spectator;
   }
 
-  withAddedSpectator(avatar: Avatar, transport: Transport): Self {
-    const newOwner = this.game.owner === "None" ? avatar.name : this.game.owner;
+  withAddedSpectator(name: string, transport: Transport): Self {
+    const newOwner = this.game.owner === "None" ? name : this.game.owner;
     const newData: Self["data"] = {
       ...this.data,
       game: {
@@ -148,7 +147,7 @@ export abstract class BaseState<
       users: this.users,
       spectators: {
         ...this.spectators,
-        [avatar.name]: this.createSpectator(avatar, transport),
+        [name]: this.createSpectator(name, transport),
       },
     };
     return this.recreate(newData);

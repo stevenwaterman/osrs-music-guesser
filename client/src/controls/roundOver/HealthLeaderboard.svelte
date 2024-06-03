@@ -7,7 +7,7 @@
 
   $: players = Object.values(state.users)
     .toSorted((a, b) => b.health - a.health)
-    .map((user) => ({ avatar: user.avatar, health: user.health }));
+    .map((user) => ({ name: user.name, health: user.health }));
 </script>
 
 <div class="container" in:scale>
@@ -29,6 +29,8 @@
 
     min-height: 0;
     max-height: 100%;
+    min-width: 0;
+    max-width: 100%;
     border-radius: 0.5em;
 
     display: flex;
@@ -36,17 +38,19 @@
     row-gap: 0.5em;
     column-gap: 0.5em;
 
-    min-width: 0;
-
     justify-content: flex-start;
     align-items: center;
   }
 
   @media only screen and (max-width: 750px) {
+    h2 {
+      display: none;
+    }
+    
     .container {
       grid-column: 1 / 4;
       grid-row: 3;
-      align-self: center;
+      align-self: flex-start;
       justify-self: center;
     }
   }

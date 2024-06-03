@@ -4,7 +4,6 @@
   import { stateStore } from "./lib/clientState";
   import MainMenu from "./controls/mainMenu/MainMenu.svelte";
   import JoinGame from "./controls/joinGame/JoinGame.svelte";
-  let zoom: number;
 
   let search = location.search;
   $: params = new URLSearchParams(search);
@@ -29,8 +28,8 @@
 
 <svelte:window on:popstate={() => (search = location.search)} />
 
-<main class="container zoom{zoom}">
-  <Map bind:zoom>
+<main class="container">
+  <Map>
     <ControlOverlay>
       {#if !state.isActive}
         {#if joining}

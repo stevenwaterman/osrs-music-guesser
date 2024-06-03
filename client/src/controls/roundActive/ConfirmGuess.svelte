@@ -23,7 +23,7 @@
 
 <Buttons row="4">
   {#if canGuess && $unconfirmedGuessStore}
-    <Button on:mousedown={confirm}>Guess</Button>
+    <Button on:clicked={confirm}>Guess</Button>
   {/if}
 
   {#if state.me.type === "spectator"}

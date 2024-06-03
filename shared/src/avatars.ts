@@ -1,5 +1,6 @@
 // https://oldschool.runescape.wiki/w/Calculator:Bestiary
 
+import { AnyServerState } from "./states/index.js";
 import { shuffle } from "./util.js";
 
 function convertToJson() {
@@ -43,32 +44,34 @@ export type Avatar = {
   img: string;
 };
 
-export function avatarUrl(avatar: Avatar): string {
-  return `https://oldschool.runescape.wiki/w/${avatar.url}`;
+export function avatarUrl(name: string): string {
+  return `https://oldschool.runescape.wiki/w/${avatars[name].url}`;
 }
 
-export function avatarImageSrc(avatar: Avatar): string {
-  return `https://oldschool.runescape.wiki/images/${avatar.img}`;
+export function avatarImageSrc(name: string): string {
+  return `https://oldschool.runescape.wiki/images/${avatars[name].img}`;
 }
 
-export function avatarThumbnailSrc(avatar: Avatar): string {
-  return `https://oldschool.runescape.wiki/images/thumb/${avatar.img}/128px-${avatar.img}`;
+export function avatarThumbnailSrc(name: string): string {
+  return `https://oldschool.runescape.wiki/images/thumb/${avatars[name].img}/128px-${avatars[name].img}`;
 }
 
 export class AvatarLibrary {
-  private availableAvatars: string[] = shuffle(Object.keys(avatars));
+  private availableAvatars: string[] = shuffle([...allAvatars]);
 
-  public take(): Avatar | undefined {
+  public take(): string | undefined {
     if (this.availableAvatars.length === 0) {
       return undefined;      
     }
 
     const [avatarName] = this.availableAvatars.splice(0, 1);
-    return avatars[avatarName];
+    return avatarName;
   }
 
-  public release(name: string) {
-    this.availableAvatars.push(name);
+  public releaseUnused(state: AnyServerState) {
+    const taken: Set<string> = new Set<string>([...Object.keys(state.users), ...Object.keys(state.spectators)]);
+    const available: string[] = allAvatars.filter(avatar => !taken.has(avatar));
+    this.availableAvatars = shuffle(available);
   }
 }
 
@@ -5599,3 +5602,4 @@ const avatars: Record<string, Avatar> = {
     img: "Zygomite_%28level_74%29.png",
   },
 };
+const allAvatars = Object.keys(avatars);

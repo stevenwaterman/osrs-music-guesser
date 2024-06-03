@@ -1,4 +1,3 @@
-import { Avatar } from "../../avatars.js";
 import { Song } from "../../songTypes.js";
 import { mapValues, pick, shuffle } from "../../util.js";
 import { StateStore } from "../store/store.js";
@@ -19,6 +18,7 @@ type Cfg = AbstractCfg<
 const keys = abstractKeys.active({
   publicGame: ["song"],
 } as const);
+const a = keys.publicGame;
 
 export class RoundOver extends BaseState<
   RoundOver,
@@ -52,7 +52,7 @@ export class RoundOver extends BaseState<
         newSpectators[userName] = this.convertUserToSpectator(user);
       } else {
         newUsers[userName] = {
-          ...pick(user, "avatar", "transport", "health"),
+          ...pick(user, "name", "transport", "health"),
           guessed: false,
           guess: undefined,
           guessTime: undefined,
@@ -78,7 +78,7 @@ export class RoundOver extends BaseState<
           "round",
           "roundHistory"
         ),
-        users: mapValues(newUsers, user => pick(user, "avatar", "transport")),
+        users: mapValues(newUsers, user => pick(user, "name", "transport")),
         spectators: newSpectators,
       });
     } else {
@@ -127,7 +127,7 @@ export class RoundOver extends BaseState<
     return new RoundOver(this.store, data);
   }
 
-  public createSpectator(avatar: Avatar, transport: Transport) {
-    return { avatar, transport, roundHistory: {} };
+  public createSpectator(name: string, transport: Transport) {
+    return { name, transport, roundHistory: {} };
   }
 }

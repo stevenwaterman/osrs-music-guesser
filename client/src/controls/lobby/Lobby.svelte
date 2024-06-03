@@ -38,13 +38,13 @@
 <Buttons column="1 / 4">
   {#if state.game.type === "private"}
     {#if "share" in navigator && navigator.canShare({ url: inviteUrl })}
-      <Button on:mousedown={() => navigator.share({ url: inviteUrl })}
+      <Button on:clicked={() => navigator.share({ url: inviteUrl })}
         >Share Invite</Button
       >
     {:else if "clipboard" in navigator}
       <Button
         style="width: 8.5em;"
-        on:mousedown={() =>
+        on:clicked={() =>
           navigator.clipboard.writeText(
             `${location.protocol}//${location.host}${inviteUrl}`
           )}><span class="copy"></span></Button
@@ -58,7 +58,7 @@
       mode={state.game.type === "singleplayer" || players > 1
         ? "enabled"
         : "disabled"}
-      on:mousedown={() =>
+      on:clicked={() =>
         state.send({
           action: "start",
         })}>Start Game</Button
@@ -87,7 +87,10 @@
   <div class="difficultyHeader">
     <h2>Difficulty</h2>
     <select
+      on:pointerdown|stopPropagation
       on:mousedown|stopPropagation
+      on:touchstart|stopPropagation
+      on:dblclick|stopPropagation
       bind:value={difficulty}
       disabled={!myLobby}
     >
@@ -98,7 +101,7 @@
     </select>
   </div>
 
-  <div class="scroll" on:wheel|stopPropagation>
+  <div class="scroll" on:scroll|stopPropagation on:wheel|stopPropagation on:touchstart|stopPropagation>
     {#each difficultyConfig.description as line}
       <div>{line}</div>
     {/each}
@@ -152,8 +155,6 @@
     overflow-y: auto;
     max-height: 100%;
     margin-top: 1em;
-    padding-right: 1em;
-    margin-right: -1em;
 
     display: flex;
     flex-direction: column;

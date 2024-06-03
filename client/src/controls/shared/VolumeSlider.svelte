@@ -6,7 +6,10 @@
   <div class="container">
     <span class="left"><strong>Volume:</strong></span>
     <input
+      on:pointerdown|stopPropagation
       on:mousedown|stopPropagation
+      on:touchstart|stopPropagation
+      on:dblclick|stopPropagation
       bind:value={$volumeStore}
       class="volume"
       type="range"
@@ -49,7 +52,6 @@
     min-width: 4em;
     max-width: 100%;
     margin-left: 2em;
-    margin-right: 2em;
     box-sizing: border-box;
   }
 

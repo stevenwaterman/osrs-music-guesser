@@ -22,12 +22,12 @@
 
 <Buttons>
   <Button
-    on:mousedown={() => {
+    on:clicked={() => {
       dispatch("back");
     }}>←</Button
   >
   <Button
-    on:mousedown={() => {
+    on:clicked={() => {
       state.privateMultiplayer(id);
     }}>Join Game</Button
   >

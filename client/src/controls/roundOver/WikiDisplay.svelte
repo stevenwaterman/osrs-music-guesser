@@ -23,7 +23,9 @@
         <img class="head" src="/modEd.png" title="Certified Mod Ed Banger™" />
       {/if}
     </div>
-    <div class="info">
+    <div class="info" on:scroll|stopPropagation
+    on:wheel|stopPropagation
+    on:touchstart|stopPropagation>
       <!-- <p>Difficulty: {song.difficulty}</p> -->
       {#each song.description as line}
         <p>{line}</p>
@@ -109,7 +111,7 @@
     }
 
     .wrapper {
-      width: 100;
+      width: auto;
       grid-column: 1 / 4;
       grid-row: 2;
       justify-self: center;

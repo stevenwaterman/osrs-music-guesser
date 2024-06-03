@@ -1,6 +1,6 @@
 import { AvatarLibrary } from "../../avatars.js";
 import { Song } from "../../songTypes.js";
-import { mapValues, pick } from "../../util.js";
+import { mapValues } from "../../util.js";
 import { GameOver, RoundActive, RoundOver } from "../index.js";
 import { Lobby } from "../concrete/lobby.js";
 import { Diff, generatePartialDiff, applyPartialDiff } from "./diff.js";
@@ -58,7 +58,7 @@ export class StateStore {
   private lastMeStateData: Record<string, ClientStateData["me"]> = {};
 
   private _state: AnyServerState | null = null;
-  public readonly avatarLibrary = new AvatarLibrary();
+  private readonly avatarLibrary = new AvatarLibrary();
 
   public get state(): AnyServerState | null {
     return this._state;
@@ -67,6 +67,10 @@ export class StateStore {
     this._state = state;
     this.onTransition(state);
     this.sendStateDiff(state);
+
+    if (state instanceof Lobby) {
+      this.avatarLibrary.releaseUnused(state);
+    }
   }
 
   constructor(
@@ -122,7 +126,7 @@ export class StateStore {
       );
     }
     const meStateDiffs = mapValues(meStateData, (data) => {
-      const oldData = this.lastMeStateData[data.avatar.name];
+      const oldData = this.lastMeStateData[data.name];
       return getMeDiff(oldData, data);
     });
 
@@ -158,8 +162,8 @@ export class StateStore {
   }
 
   public join(transport: Transport) {
-    const avatar = this.avatarLibrary.take();
-    if (avatar === undefined) {
+    const name = this.avatarLibrary.take();
+    if (name === undefined) {
       // TODO error handling
       transport.close(1000);
       return;
@@ -177,20 +181,20 @@ export class StateStore {
         const parsedMessage: ClientActions = JSON.parse(message);
         if ("action" in parsedMessage) {
           if (parsedMessage.action === "getState") {
-            this.sendFullState(avatar.name);
+            this.sendFullState(name);
           }
 
           // TODO error handling
-          this.state?.onMessage(avatar.name, parsedMessage);
+          this.state?.onMessage(name, parsedMessage);
         }
       }
     });
 
     transport.addEventListener("close", () => {
-      this.leave(avatar.name);
+      this.leave(name);
     });
 
-    this.state = this.state.withAddedSpectator(avatar, transport);
+    this.state = this.state.withAddedSpectator(name, transport);
   }
 
   private leave(name: string) {
@@ -202,8 +206,6 @@ export class StateStore {
       console.warn(`${name} tried to leave a game they weren't in`);
       return;
     }
-
-    this.avatarLibrary.release(name);
 
     const playerCount =
       Object.keys(this.state.users).length +

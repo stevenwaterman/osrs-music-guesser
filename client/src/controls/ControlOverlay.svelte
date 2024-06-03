@@ -60,7 +60,7 @@
 
 <style>
   .grid {
-    position: fixed;
+    position: absolute;
     top: 0;
     right: 0;
     bottom: 0;
@@ -71,7 +71,7 @@
 
     display: grid;
     grid-template-columns: 1fr 3fr 1fr;
-    grid-template-rows: auto fit-content(40vmax) 1fr auto auto;
+    grid-template-rows: auto fit-content(25dvh) 1fr auto auto;
     gap: 1em;
 
     align-items: center;

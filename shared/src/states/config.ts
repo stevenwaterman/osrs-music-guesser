@@ -1,4 +1,3 @@
-import { Avatar } from "../avatars.js";
 import { Song } from "../songTypes.js";
 import { DataConfig, KeysFor } from "./baseState.js";
 import { Transport } from "./store/transport.js";
@@ -101,14 +100,14 @@ type BaseCfg = {
     difficulty: "tutorial" | "normal" | "hard" | "extreme";
   };
   user: {
-    avatar: Avatar;
+    name: string;
     transport: Transport;
   };
 };
 const baseKeys = mergeKeys(noKeys, {
   publicGame: ["id", "owner", "type", "difficulty"],
-  publicUsers: ["avatar"],
-  publicSpectators: ["avatar"],
+  publicUsers: ["name"],
+  publicSpectators: ["name"],
   secretSpectators: ["transport"],
 } as const);
 

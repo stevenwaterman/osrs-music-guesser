@@ -1,4 +1,3 @@
-import { Avatar } from "../../avatars.js";
 import { mapValues, pick, sample } from "../../util.js";
 import { Difficulty } from "../difficulty.js";
 import { StateStore } from "../store/store.js";
@@ -126,8 +125,7 @@ export class Lobby extends BaseState<Lobby, "Lobby", Cfg, typeof keys> {
       },
       users: mapValues(this.spectators, (spectator) => {
         return {
-          avatar: spectator.avatar,
-          transport: spectator.transport,
+          ...pick(spectator, "name", "transport"),
           health: 99,
           spectator: false,
           guess: undefined,
@@ -166,7 +164,7 @@ export class Lobby extends BaseState<Lobby, "Lobby", Cfg, typeof keys> {
     return new Lobby(this.store, data);
   }
 
-  public createSpectator(avatar: Avatar, transport: Transport) {
-    return { avatar, transport };
+  public createSpectator(name: string, transport: Transport) {
+    return { name, transport };
   }
 }

@@ -1,4 +1,3 @@
-import { Avatar } from "../../avatars.js";
 import { mapValues, pick } from "../../util.js";
 import { StateStore } from "../store/store.js";
 import { ClientActions, Transport } from "../store/transport.js";
@@ -44,11 +43,7 @@ export class GameOver extends BaseState<
       users: {},
       spectators: {
         ...this.spectators,
-        ...mapValues(this.users, (user) => ({
-          avatar: user.avatar,
-          transport: user.transport,
-          spectator: true,
-        })),
+        ...mapValues(this.users, (user) => pick(user, "name", "transport")),
       },
     });
   }
@@ -64,9 +59,9 @@ export class GameOver extends BaseState<
   }
 
   public createSpectator(
-    avatar: Avatar,
+    name: string,
     transport: Transport
   ): GameOver["spectators"][string] {
-    return { avatar, transport };
+    return { name, transport };
   }
 }

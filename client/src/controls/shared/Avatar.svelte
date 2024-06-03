@@ -1,8 +1,8 @@
 <script lang="ts">
-  import { avatarThumbnailSrc, type Avatar } from "tunescape07-shared";
+  import { avatarThumbnailSrc } from "tunescape07-shared";
   import Health from "./Health.svelte";
 
-  export let avatar: Avatar;
+  export let name: string;
   export let health: number | undefined = undefined;
   export let me: boolean = false;
   export let owner: boolean = false;
@@ -16,8 +16,8 @@
     <Health {health} />
   {/if}
   <!-- svelte-ignore a11y-missing-attribute -->
-  <img on:dragstart|preventDefault src={avatarThumbnailSrc(avatar)} />
-  <p class="name" class:owner>{avatar.name}{suffix}</p>
+  <img on:dragstart|preventDefault src={avatarThumbnailSrc(name)} />
+  <p class="name" class:owner>{name}{suffix}</p>
 </div>
 
 <style>

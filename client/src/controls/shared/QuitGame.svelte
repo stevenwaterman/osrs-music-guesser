@@ -10,7 +10,8 @@
 </script>
 
 <Button
-  on:mousedown={() => exit()}
+  on:clicked={() => exit()}
+  small
   style="grid-column: 1; grid-row: 1; align-self: flex-start; justify-self: flex-start;"
   >Quit</Button
 >

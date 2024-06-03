@@ -1,7 +1,6 @@
 <script lang="ts">
   import { type ActiveState } from "../../lib/clientState";
   import { createEventDispatcher, onMount } from "svelte";
-  import Audio from "../shared/Audio.svelte";
   import Hitsplat from "./Hitsplat.svelte";
   import Health from "../shared/Health.svelte";
   import { avatarImageSrc } from "tunescape07-shared";
@@ -9,13 +8,12 @@
   import { sounds } from "../../lib/sounds";
 
   export let state: ActiveState<"RoundOver">;
-  export let user: string;
+  export let name: string;
 
-  $: avatar = state.users[user]?.avatar ?? state.spectators[user].avatar;
-  $: roundResult = state.game.roundHistory[state.game.round].players[user];
+  $: roundResult = state.game.roundHistory[state.game.round].players[name];
 
-  $: me = user === state.myName;
-  $: owner = user === state.game.owner;
+  $: me = name === state.myName;
+  $: owner = name === state.game.owner;
   $: suffix = me ? " (Me)" : "";
 
   $: health = roundResult.healthBefore;
@@ -89,7 +87,7 @@
   }
 </script>
 
-{#key user}
+{#key name}
   {#if show}
     <div
       class="container"
@@ -101,7 +99,7 @@
       {/if}
       <div class="imageWrapper">
         <!-- svelte-ignore a11y-missing-attribute -->
-        <img src={avatarImageSrc(avatar)} class:dead on:load={loaded} />
+        <img src={avatarImageSrc(name)} class:dead on:load={loaded} />
         {#if showVenom && roundResult.damage.venom > 0}
           <div
             class="hitContainer"
@@ -133,7 +131,7 @@
         {/if}
       </div>
       {#if render}
-        <p class="name" class:owner>{user}{suffix}</p>
+        <p class="name" class:owner>{name}{suffix}</p>
       {/if}
     </div>
   {/if}

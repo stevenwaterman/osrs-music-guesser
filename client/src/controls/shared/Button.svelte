@@ -14,16 +14,26 @@
   in:scale|global
   {...$$restProps}
   on:click={(ev) => {
+    if (mode === "enabled" && !selected) {
+      sounds.click();
+      dispatch("clicked", ev);
+    }
+
+    if (mode !== "clickThrough") {
+      ev.stopPropagation();
+    }
+  }}
+  on:pointerdown={(ev) => {
     if (mode !== "clickThrough") {
       ev.stopPropagation();
     }
   }}
   on:mousedown={(ev) => {
-    if (mode === "enabled" && !selected) {
-      sounds.click();
-      dispatch("mousedown", ev);
+    if (mode !== "clickThrough") {
+      ev.stopPropagation();
     }
-
+  }}
+  on:touchstart={(ev) => {
     if (mode !== "clickThrough") {
       ev.stopPropagation();
     }
@@ -92,21 +102,22 @@
     border-color: red;
   }
 
+  .small {
+    font-size: 1em;
+    padding: 0 0.8em;
+  }
+
   .noPadding {
     padding: 0;
   }
 
-  .small {
-    font-size: 1em;
-  }
-
   @media only screen and (max-width: 750px) {
-    .button {
-      font-size: 1em;
+    button {
+      font-size: 1.25em;
     }
 
     .small {
-      font-size: 0.7em;
+      font-size: 1em;
     }
   }
 </style>

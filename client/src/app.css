@@ -98,7 +98,6 @@ select:not(:disabled):hover {
   line-height: unset;
   background: unset;
   outline-offset: unset;
-  overflow: unset;
 }
 
 .leaflet-container a {

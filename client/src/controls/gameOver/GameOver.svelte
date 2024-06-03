@@ -25,26 +25,35 @@
     if (lastDigit === 3) return `${rank}rd`;
     return `${rank}th`;
   }
+
+  $: showRank = summary.played && state.game.type === "singleplayer";
 </script>
 
-<h1>Game Over</h1>
+<h1 class="title" class:showRank>Game Over</h1>
 
-{#if summary.played && state.game.type !== "singleplayer"}
-  <h2>{formatRank(summary.myRank)} place</h2>
+{#if summary.played && showRank}
+  <h2 class="rank">{formatRank(summary.myRank)} place</h2>
 {/if}
 
 <div class="rounds" in:scale>
   <h2>Rounds</h2>
 
-  <div class="roundsScroll" on:wheel|stopPropagation>
-    {#each summary.songs as song, idx}
-      <RoundSummary
-        roundIdx={idx}
-        name={state.myName}
-        {song}
-        players={state.game.roundHistory[idx].players}
-      />
-    {/each}
+  <div
+    class="roundsScroll"
+    on:scroll|stopPropagation
+    on:wheel|stopPropagation
+    on:touchstart|stopPropagation
+  >
+    <div class="roundsFlex">
+      {#each summary.songs as song, idx}
+        <RoundSummary
+          roundIdx={idx}
+          name={state.myName}
+          {song}
+          players={state.game.roundHistory[idx].players}
+        />
+      {/each}
+    </div>
   </div>
 </div>
 
@@ -54,13 +63,18 @@
 
 {#if state.game.owner === state.myName}
   <Buttons row="4">
-    <Button on:mousedown={() => playAgain()}>Play Again</Button>
+    <Button on:clicked={() => playAgain()}>Play Again</Button>
   </Buttons>
 {/if}
 
 <GameOverAudio songs={summary.songs} />
 
 <style>
+  .title {
+    grid-column: 2;
+    grid-row: 1;
+  }
+
   .rounds {
     display: flex;
     flex-direction: column;
@@ -73,15 +87,58 @@
     justify-self: flex-start;
 
     max-height: 100%;
+    max-width: 100%;
   }
 
   .roundsScroll {
+    min-width: 0;
+    max-width: 100%;
+    min-height: 0;
+    max-height: 100%;
+
+    overflow: auto;
+    pointer-events: initial;
+  }
+
+  .roundsFlex {
     display: flex;
     flex-direction: column;
     gap: 0.5em;
-    overflow-y: auto;
-    padding-right: 1em;
-    margin-right: -1em;
-    pointer-events: initial;
+    margin: auto;
+    width: fit-content;
+  }
+
+  .rank {
+    grid-column: 2;
+    grid-row: 2;
+    white-space: pre;
+  }
+
+  @media only screen and (max-width: 750px) {
+    .title.showRank {
+      display: none;
+    }
+
+    .rounds {
+      grid-column: 1 / 4;
+      grid-row: 2;
+      width: 100%;
+      font-size: 0.8em;
+    }
+
+    .rounds h2 {
+      display: none;
+    }
+
+    .roundsFlex {
+      flex-direction: row;
+      justify-content: flex-start;
+      align-items: flex-start;
+    }
+
+    .rank {
+      grid-column: 2;
+      grid-row: 1;
+    }
   }
 </style>

@@ -7,7 +7,7 @@
   >;
 
   $: players = Object.values(state.spectators).map((user) => ({
-    avatar: user.avatar,
+    name: user.name,
   }));
 </script>
 

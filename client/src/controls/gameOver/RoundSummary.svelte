@@ -73,13 +73,13 @@
   noPadding
   small
   selected={roundIdx === $gameOverRoundIndexStore}
-  on:mousedown={() => gameOverRoundIndexStore.set(roundIdx)}
+  on:clicked={() => gameOverRoundIndexStore.set(roundIdx)}
 >
   <div class="container" class:selected={$gameOverRoundIndexStore === roundIdx}>
     <h3>{song.name}</h3>
 
     {#if myRoundResult === undefined}
-      <p>Dead</p>
+      <p>Spectating</p>
     {:else if myRoundResult.guessed === false}
       <p>Didn't guess</p>
     {:else if myRoundResult.distance === 0}

@@ -1,4 +1,3 @@
-import { Avatar } from "../../avatars.js";
 import { Coordinate, Polygon, convertFlatten } from "../../coordinates.js";
 import { Song } from "../../songTypes.js";
 import { mapValues, pick } from "../../util.js";
@@ -113,7 +112,7 @@ export class RoundActive extends BaseState<
       [userName]: {
         ...pick(
           this.users[userName],
-          "avatar",
+          "name",
           "transport",
           "health",
         ),
@@ -142,9 +141,9 @@ export class RoundActive extends BaseState<
 
     const roundResults = calculateRoundResults(this);
     const newUserState: RoundOver["users"] = mapValues(this.users, (user) => {
-      const result = roundResults[user.avatar.name];
+      const result = roundResults[user.name];
       return {
-        ...pick(user, "avatar", "transport"),
+        ...pick(user, "name", "transport"),
         health: Math.max(0, Math.min(result.healthAfter, 99))
       };
     });
@@ -191,8 +190,8 @@ export class RoundActive extends BaseState<
     return new RoundActive(this.store, data);
   }
 
-  public createSpectator(avatar: Avatar, transport: Transport) {
-    return { avatar, transport, roundHistory: {} };
+  public createSpectator(name: string, transport: Transport) {
+    return { name, transport, roundHistory: {} };
   }
 }
 
@@ -315,11 +314,11 @@ export function calculateRoundResults(
 
   const damages = mapValues(state.users, (user) => {
     const wasFirstPerfect =
-      bestGuess?.userName === user.avatar.name && bestGuess.distance === 0;
+      bestGuess?.userName === user.name && bestGuess.distance === 0;
     const healing = wasFirstPerfect ? healingAmount : 0;
     const venom = venomAmount;
 
-    const myGuess = guessResults[user.avatar.name];
+    const myGuess = guessResults[user.name];
     const distance = myGuess?.distance ?? Number.MAX_SAFE_INTEGER;
     const maxHit = getMaxHit(distance, difficultyConfig.damageScaling);
 
@@ -334,8 +333,8 @@ export function calculateRoundResults(
   });
 
   return mapValues(state.users, (user) => {
-    const guessResult = guessResults[user.avatar.name];
-    const damage = damages[user.avatar.name];
+    const guessResult = guessResults[user.name];
+    const damage = damages[user.name];
     const healthBefore = user.health;
     const healthAfter = healthBefore + damage.healing - damage.hit - damage.venom;
 

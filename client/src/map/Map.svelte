@@ -8,13 +8,6 @@
 
   $: state = $stateStore;
   let map: L.Map;
-
-  export let zoom: number = 0;
-  $: map?.on("zoomstart", (event) => {
-    setTimeout(() => {
-      zoom = event.target.getZoom();
-    });
-  });
 </script>
 
 <BaseMap bind:map ><slot/></BaseMap>

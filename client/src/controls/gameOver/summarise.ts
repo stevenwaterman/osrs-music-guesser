@@ -1,13 +1,8 @@
 import type { Avatar, Song, StateInterface } from "tunescape07-shared";
 import type { ActiveState } from "../../lib/clientState";
 
-type RoundSuperlative = {
-  round: number;
-  result: StateInterface.RoundResult & { guessed: true };
-};
-
 type Placement = {
-  avatar: Avatar;
+  name: string;
   round: number;
   healthAfter: number;
 };
@@ -32,7 +27,7 @@ export function summariseGame(state: ActiveState<"GameOver">): GameSummary {
   const songs = summariseSongs(state);
   const ranking = summariseRanking(state);
   const myRank =
-    ranking.findIndex((placement) => placement.avatar.name === state.myName) +
+    ranking.findIndex((placement) => placement.name === state.myName) +
     1;
 
   if (myRank === 0)
@@ -89,7 +84,7 @@ function summariseRanking(state: ActiveState<"GameOver">): Placement[] {
     const placements = players
       .filter(([_, result]) => finalRound || result.healthAfter <= 0)
       .map(([name, result]) => ({
-        avatar: state.users[name]?.avatar ?? state.spectators[name].avatar,
+        name,
         healthAfter: result.healthAfter,
         round: i,
       }));

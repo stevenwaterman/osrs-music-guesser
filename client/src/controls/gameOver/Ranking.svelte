@@ -7,7 +7,7 @@
   export let myName: string;
 
   $: players = summary.ranking.map((placement) => ({
-    avatar: placement.avatar,
+    name: placement.name,
   }));
 </script>
 
@@ -25,14 +25,14 @@
 
     min-height: 0;
     max-height: 100%;
+    min-width: 0;
+    max-width: 100%;
     border-radius: 0.5em;
 
     display: flex;
     flex-direction: column;
     row-gap: 0.5em;
     column-gap: 0.5em;
-
-    min-width: 0;
 
     justify-content: flex-start;
     align-items: center;

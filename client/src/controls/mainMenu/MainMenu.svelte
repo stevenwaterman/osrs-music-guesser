@@ -15,7 +15,7 @@
 
 <div class="info">
   <h2>Rules</h2>
-  <div class="scroll" on:wheel|stopPropagation>
+  <div class="scroll" on:scroll|stopPropagation on:wheel|stopPropagation on:touchstart|stopPropagation>
     <p>Click where you think the song plays.</p>
     <p>Closest guess wins, everyone else takes damage.</p>
     <p>Be the first to make a perfect guess to heal some health.</p>
@@ -25,26 +25,26 @@
 
 <Buttons column="1 / 4">
   {#if menu === "main"}
-    <Button on:mousedown={() => state.singlePlayer()}>Single Player</Button>
-    <Button on:mousedown={() => (menu = "multiplayer")}>Multiplayer</Button>
+    <Button on:clicked={() => state.singlePlayer()}>Single Player</Button>
+    <Button on:clicked={() => (menu = "multiplayer")}>Multiplayer</Button>
   {/if}
 
   {#if menu === "multiplayer"}
-    <Button on:mousedown={() => (menu = "main")}>←</Button>
-    <Button on:mousedown={() => (menu = "private")}>Private</Button>
-    <Button on:mousedown={() => state.publicMultiplayer()}>Public</Button>
+    <Button on:clicked={() => (menu = "main")}>←</Button>
+    <Button on:clicked={() => (menu = "private")}>Private</Button>
+    <Button on:clicked={() => state.publicMultiplayer()}>Public</Button>
   {/if}
 
   {#if menu === "private"}
     <Button
-      on:mousedown={() => {
+      on:clicked={() => {
         menu = "multiplayer";
         privateGameId = "";
       }}>←</Button
     >
 
     <Button
-      on:mousedown={() => state.privateMultiplayer(privateGameId.trim())}
+      on:clicked={() => state.privateMultiplayer(privateGameId.trim())}
       mode={privateGameId.trim().length > 0 ? "enabled" : "disabled"}
       >Join Game</Button
     >
@@ -54,7 +54,7 @@
 <div class="privateGameNameInputContainer" class:invisible={menu !== "private"}>
   <h2>Game&nbsp;Name:</h2>
   <input
-    on:mousedown|stopPropagation
+    on:click|stopPropagation
     class="privateGameNameInput"
     type="text"
     bind:value={privateGameId}
@@ -94,7 +94,6 @@
     gap: 0.5em;
 
     padding-top: 1em;
-    padding-right: 0.5em;
     padding-bottom: 1em;
     padding-left: 1.5em;
   }
@@ -102,7 +101,6 @@
   .scroll {
     overflow-y: auto;
     pointer-events: initial;
-    padding-right: 1em;
   }
 
   .scroll p {
