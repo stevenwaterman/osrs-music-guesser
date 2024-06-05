@@ -1,9 +1,9 @@
-Muted / Low volume warning
 don't crash the entire server when there's an error
 remove pointer events none default
 remove all the on:scroll|stopPropagation using `use` or styled components
 How to play
 GitHub link
+
 
 Varlamore
 Prevent cheating
