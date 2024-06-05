@@ -1,6 +1,5 @@
 <script lang="ts">
   import type { Song, StateInterface } from "tunescape07-shared";
-  import type { GameSummary } from "./summarise";
   import Button from "../shared/Button.svelte";
   import { gameOverRoundIndexStore } from "../../lib/stores";
 
@@ -67,13 +66,24 @@
       return `${count} ${thing}s`;
     }
   }
+
+  function onClicked(
+    ev: CustomEvent<MouseEvent & { currentTarget: HTMLButtonElement }>
+  ) {
+    gameOverRoundIndexStore.set(roundIdx);
+    ev.detail.currentTarget.scrollIntoView({
+      block: "center",
+      inline: "center",
+      behavior: "smooth",
+    });
+  }
 </script>
 
 <Button
   noPadding
   small
   selected={roundIdx === $gameOverRoundIndexStore}
-  on:clicked={() => gameOverRoundIndexStore.set(roundIdx)}
+  on:clicked={(ev) => onClicked(ev)}
 >
   <div class="container" class:selected={$gameOverRoundIndexStore === roundIdx}>
     <h3>{song.name}</h3>

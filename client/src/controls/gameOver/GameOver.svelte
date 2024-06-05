@@ -7,6 +7,7 @@
   import Ranking from "./Ranking.svelte";
   import RoundSummary from "./RoundSummary.svelte";
   import { summariseGame } from "./summarise";
+  import GameOverWikiDisplay from "./GameOverWikiDisplay.svelte";
 
   export let state: ActiveState<"GameOver">;
   $: summary = summariseGame(state);
@@ -26,7 +27,7 @@
     return `${rank}th`;
   }
 
-  $: showRank = summary.played && state.game.type === "singleplayer";
+  $: showRank = summary.played && state.game.type !== "singleplayer";
 </script>
 
 <h1 class="title" class:showRank>Game Over</h1>
@@ -68,11 +69,15 @@
 {/if}
 
 <GameOverAudio songs={summary.songs} />
+<GameOverWikiDisplay songs={summary.songs} singleplayer={state.game.type === "singleplayer"} />
 
 <style>
   .title {
     grid-column: 2;
     grid-row: 1;
+  }
+  .title.showRank {
+    display: none;
   }
 
   .rounds {
@@ -110,15 +115,11 @@
 
   .rank {
     grid-column: 2;
-    grid-row: 2;
+    grid-row: 1;
     white-space: pre;
   }
 
   @media only screen and (max-width: 750px) {
-    .title.showRank {
-      display: none;
-    }
-
     .rounds {
       grid-column: 1 / 4;
       grid-row: 2;
@@ -134,11 +135,6 @@
       flex-direction: row;
       justify-content: flex-start;
       align-items: flex-start;
-    }
-
-    .rank {
-      grid-column: 2;
-      grid-row: 1;
     }
   }
 </style>

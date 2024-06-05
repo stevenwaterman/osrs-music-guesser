@@ -135,8 +135,17 @@
     }
 
     .difficultyPanel .scroll {
+      display: block;
       margin-top: 0.5em;
       gap: 0.5em;
+    }
+
+    .scroll div {
+      display: inline;
+    }
+
+    .scroll div::after {
+      content: " ";
     }
   }
 </style>

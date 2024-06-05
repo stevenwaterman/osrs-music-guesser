@@ -3,7 +3,7 @@
   import { type ActiveState } from "../../lib/clientState";
   import HealthLeaderboard from "./HealthLeaderboard.svelte";
   import LargeAvatarDamage from "./LargeAvatarDamage.svelte";
-  import WikiDisplay from "./WikiDisplay.svelte";
+  import WikiDisplay from "./RoundOverWikiDisplay.svelte";
   import Button from "../shared/Button.svelte";
 
   export let state: ActiveState<"RoundOver">;
