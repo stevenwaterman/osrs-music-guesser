@@ -256,6 +256,10 @@ export class ActiveState<Name extends keyof StateInterface.ServerStates> {
     return this.me.name;
   }
 
+  public get myLobby() {
+    return this.game.owner === this.myName;
+  }
+
   constructor(
     public readonly data: StateInterface.ClientStateData<Name>,
     private readonly transport: StateInterface.Transport

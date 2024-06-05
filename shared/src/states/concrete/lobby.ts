@@ -110,6 +110,8 @@ export class Lobby extends BaseState<Lobby, "Lobby", Cfg, typeof keys> {
     const maxSongStartFraction = this.difficultyConfig.songRandomStart
       ? 0.9
       : 0;
+
+
     this.store.state = new RoundActive(this.store, {
       game: {
         ...pick(this.game, "id", "owner", "type", "difficulty"),
@@ -123,17 +125,13 @@ export class Lobby extends BaseState<Lobby, "Lobby", Cfg, typeof keys> {
         timerId: undefined,
         roundHistory: {},
       },
-      users: mapValues(this.spectators, (spectator) => {
-        return {
-          ...pick(spectator, "name", "transport"),
-          health: 99,
-          spectator: false,
-          guess: undefined,
-          guessTime: undefined,
-          guessed: false,
-          roundHistory: {},
-        };
-      }),
+      users: mapValues(this.spectators, (spectator) => ({
+        ...pick(spectator, "name", "transport"),
+        health: 99,
+        guess: undefined,
+        guessTime: undefined,
+        guessed: false,
+      })),
       spectators: {},
     });
   }

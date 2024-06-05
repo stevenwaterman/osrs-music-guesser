@@ -61,7 +61,7 @@
   <Ranking {summary} myName={state.myName} />
 {/if}
 
-{#if state.game.owner === state.myName}
+{#if state.myLobby}
   <Buttons row="4">
     <Button on:clicked={() => playAgain()}>Play Again</Button>
   </Buttons>

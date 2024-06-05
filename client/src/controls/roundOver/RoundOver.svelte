@@ -7,18 +7,17 @@
   import Button from "../shared/Button.svelte";
 
   export let state: ActiveState<"RoundOver">;
-  $: owner = state.myName === state.game.owner;
 
   let render = false;
   let alive = state.me.type === "user";
   let showAll: boolean = !alive;
 
-  $: emainingUsers = Object.values(state.users).filter(
+  $: remainingUsers = Object.values(state.users).filter(
     (user) => user.health > 0
   ).length;
   $: gameOver =
-    (state.game.type !== "singleplayer" && emainingUsers <= 1) ||
-    emainingUsers === 0;
+    (state.game.type !== "singleplayer" && remainingUsers <= 1) ||
+    remainingUsers === 0;
 
   onMount(() => {
     const timeout = setTimeout(() => {
@@ -64,7 +63,7 @@
     </div>
   {/if}
 
-  {#if owner}
+  {#if state.myLobby}
     {#if gameOver}
       <Button style="grid-column: 2; grid-row: 4;" on:clicked={nextRound}
         >Show&nbsp;Results</Button

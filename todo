@@ -1,10 +1,11 @@
-Track difficulty in localstorage
 Muted / Low volume warning
 Dynamic imports to reduce chunk size
 Let players choose to spectate instead
 don't crash the entire server when there's an error
 Show wiki display somewhere in game over
-Check mobile design again
+remove pointer events none default
+remove all the on:scroll|stopPropagation using `use` or styled components
+rank missing from game over screen
 
 How to play
 GitHub link
@@ -16,5 +17,6 @@ Share link to same songs
 Way to report bugs / song issues
 
 
+smaller mobile layout
 test visuals at
 4k / 1080p / 760px / 740px / 500px / 305px / 295px / 200px
