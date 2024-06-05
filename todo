@@ -3,6 +3,7 @@ remove pointer events none default
 remove all the on:scroll|stopPropagation using `use` or styled components
 How to play
 GitHub link
+load testing
 
 
 Varlamore
