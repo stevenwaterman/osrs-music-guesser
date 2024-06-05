@@ -4,7 +4,9 @@ remove all the on:scroll|stopPropagation using `use` or styled components
 How to play
 GitHub link
 load testing
-
+google / social media headers
+other osrs font
+restyle buttons to be more like osrs?
 
 Varlamore
 Prevent cheating
@@ -17,7 +19,6 @@ show current rank in round active
 scroll windows should have gradient at end
 Dynamic imports to reduce chunk size
 animations
-
 
 smaller mobile layout
 test visuals at
