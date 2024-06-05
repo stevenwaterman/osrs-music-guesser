@@ -2,6 +2,7 @@
   import { scale } from "svelte/transition";
   import Players from "../shared/Players.svelte";
   import type { GameSummary } from "./summarise";
+  import Scroll from "../shared/Scroll.svelte";
 
   export let summary: GameSummary;
   export let myName: string;
@@ -12,8 +13,9 @@
 </script>
 
 <div class="container" in:scale>
-  <h2>Ranking</h2>
-  <Players disabled {players} me={myName} />
+  <Scroll mobile="horizontal">
+    <Players disabled {players} me={myName} />
+  </Scroll>
 </div>
 
 <style>
@@ -31,23 +33,27 @@
 
     display: flex;
     flex-direction: column;
-    row-gap: 0.5em;
-    column-gap: 0.5em;
+    gap: 0.5em;
 
     justify-content: flex-start;
     align-items: center;
+
+    margin-top: -1em;
   }
 
   @media only screen and (max-width: 750px) {
     .container {
       grid-column: 1 / 4;
       grid-row: 3;
+
       align-self: flex-start;
       justify-self: center;
-    }
 
-    .container h2 {
-      display: none;
+      margin-left: -1em;
+      margin-right: -1em;
+      max-width: 100dvw;
+      
+      margin-top: 0.5em;
     }
   }
 </style>

@@ -1,5 +1,6 @@
 <script lang="ts">
   import type { Song } from "tunescape07-shared";
+  import Scroll from "./Scroll.svelte";
 
   export let song: Song;
 </script>
@@ -15,16 +16,14 @@
       <img class="head" src="/modEd.png" title="Certified Mod Ed Banger™" />
     {/if}
   </div>
-  <div
-    class="info"
-    on:scroll|stopPropagation
-    on:wheel|stopPropagation
-    on:touchstart|stopPropagation
-  >
-    <!-- <p>Difficulty: {song.difficulty}</p> -->
-    {#each song.description as line}
-      <p>{line}</p>
-    {/each}
+  <div class="descriptionContainer">
+    <Scroll mobileMargin="0.5em" desktopMargin="0.5em">
+      <div class="description">
+        {#each song.description as line}
+          <div class="line">{line}</div>
+        {/each}
+      </div>
+    </Scroll>
   </div>
 </div>
 
@@ -45,16 +44,9 @@
 
     display: flex;
     flex-direction: column;
+    justify-content: flex-start;
 
     border-radius: 0.5em;
-  }
-
-  .info {
-    padding-left: 0.8em;
-    padding-right: 0.8em;
-    overflow-y: auto;
-    max-height: 100%;
-    flex-shrink: 1;
   }
 
   .title {
@@ -77,18 +69,21 @@
     position: relative;
   }
 
+  .descriptionContainer {
+    padding: 0 1em;
+    min-height: 0;
+    max-height: 100%;
+  }
+
+  .description {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5em;
+  }
+
   @media only screen and (max-width: 750px) {
     .title {
       font-size: 1.2em;
-    }
-
-    .info {
-      font-size: 0.8em;
-    }
-
-    p {
-      margin-block-start: 0.5em;
-      margin-block-end: 0.5em;
     }
 
     .head {

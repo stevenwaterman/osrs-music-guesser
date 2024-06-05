@@ -85,8 +85,8 @@ const difficulties: Record<
       name: "extreme",
       description: [
         "Not recommended for anyone. Everything in hard, plus:",
-        "All songs are enabled, including ridiculously obscure songs that only play once during an instanced quest cutscene",
-        "Only 20s per round, and double damage",
+        "All songs are enabled, including ridiculously obscure songs that only play once during an instanced quest cutscene.",
+        "Only 20s per round, and double damage.",
       ],
       damageScaling: 1,
       songDifficulty: {
@@ -107,7 +107,7 @@ const difficulties: Record<
       description: [
         "Recommended for your first game.",
         "Take half damage, with only the easiest and most well-known songs.",
-        "After the first person guesses, everyone else has 30s to guess",
+        "After the first person guesses, everyone else has 30s to guess.",
       ],
       damageScaling: 0.5,
       songDifficulty: {
@@ -163,9 +163,9 @@ const difficulties: Record<
       name: "extreme",
       description: [
         "Not recommended for anyone. Everything in hard, plus:",
-        "All songs are enabled, including ridiculously obscure songs that only play once during an instanced quest cutscene",
-        "After the first person guesses, everyone else has 10s to guess",
-        "Double damage",
+        "All songs are enabled, including ridiculously obscure songs that only play once during an instanced quest cutscene.",
+        "After the first person guesses, everyone else has 10s to guess.",
+        "Double damage.",
       ],
       damageScaling: 1,
       songDifficulty: {

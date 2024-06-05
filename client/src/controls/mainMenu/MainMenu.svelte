@@ -3,6 +3,8 @@
   import Button from "../shared/Button.svelte";
   import Buttons from "../shared/Buttons.svelte";
   import Logo from "../shared/Logo.svelte";
+  import Scroll from "../shared/Scroll.svelte";
+  import StopPropagation from "../shared/StopPropagation.svelte";
 
   export let state: InactiveState;
 
@@ -15,12 +17,14 @@
 
 <div class="info">
   <h2>Rules</h2>
-  <div class="scroll" on:scroll|stopPropagation on:wheel|stopPropagation on:touchstart|stopPropagation>
-    <p>Click where you think the song plays.</p>
-    <p>Closest guess wins, everyone else takes damage.</p>
-    <p>Be the first to make a perfect guess to heal some health.</p>
-    <p>Win by being the last player alive.</p>
-  </div>
+  <Scroll>
+    <div class="rulesFlex">
+      <div>Click where you think the song plays.</div>
+      <div>Closest guess wins, everyone else takes damage.</div>
+      <div>Be the first to make a perfect guess to heal some health.</div>
+      <div>Win by being the last player alive.</div>
+    </div>
+  </Scroll>
 </div>
 
 <Buttons column="1 / 4">
@@ -53,17 +57,18 @@
 
 <div class="privateGameNameInputContainer" class:invisible={menu !== "private"}>
   <h2>Game&nbsp;Name:</h2>
-  <input
-    on:click|stopPropagation
-    class="privateGameNameInput"
-    type="text"
-    bind:value={privateGameId}
-    on:keypress={(ev) => {
-      if (ev.key === "Enter" && privateGameId.trim().length > 0) {
-        state.privateMultiplayer(privateGameId.trim());
-      }
-    }}
-  />
+  <StopPropagation>
+    <input
+      class="privateGameNameInput"
+      type="text"
+      bind:value={privateGameId}
+      on:keypress={(ev) => {
+        if (ev.key === "Enter" && privateGameId.trim().length > 0) {
+          state.privateMultiplayer(privateGameId.trim());
+        }
+      }}
+    />
+  </StopPropagation>
 </div>
 
 <style>
@@ -93,24 +98,18 @@
     flex-direction: column;
     gap: 0.5em;
 
-    padding-top: 1em;
-    padding-bottom: 1em;
-    padding-left: 1.5em;
-  }
-
-  .scroll {
-    overflow-y: auto;
-    pointer-events: initial;
-  }
-
-  .scroll p {
-    margin: 0;
-    margin-block-end: 0.5em;
+    padding: 1em;
   }
 
   .invisible {
     opacity: 0;
     pointer-events: none;
+  }
+
+  .rulesFlex {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5em;
   }
 
   @media only screen and (max-width: 750px) {

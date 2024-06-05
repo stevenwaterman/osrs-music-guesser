@@ -11,6 +11,7 @@
       maxBounds: mapBounds,
       zoomControl: false,
       zoomSnap: 0,
+      doubleClickZoom: false,
     });
   }
 

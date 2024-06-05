@@ -12,40 +12,32 @@
   const dispatch = createEventDispatcher();
 </script>
 
-<div
-  class="scroll"
-  class:row
-  on:scroll|stopPropagation
-  on:wheel|stopPropagation
-  on:touchstart|stopPropagation
->
-  <div class="flex" class:row>
-    {#each players as player, idx (player.name)}
-      <Button
-        noPadding
-        small
-        mode={disabled ? "clickThrough" : "enabled"}
-        title={player.health === undefined
-          ? undefined
-          : `${player.name}\nRank ${idx + 1}\nHealth ${player.health} / 99`}
-        on:clicked={() => {
-          if (!disabled) {
-            dispatch("clickAvatar", { name: player.name });
-          }
-        }}
-      >
-        <div class="avatarContainer">
-          <span class="label">{idx + 1}.</span>
-          <AvatarDisplay
-            name={player.name}
-            health={player.health}
-            me={player.name === me}
-            owner={player.name === owner}
-          />
-        </div>
-      </Button>
-    {/each}
-  </div>
+<div class="flex" class:row>
+  {#each players as player, idx (player.name)}
+    <Button
+      noPadding
+      small
+      mode={disabled ? "clickThrough" : "enabled"}
+      title={player.health === undefined
+        ? undefined
+        : `${player.name}\nRank ${idx + 1}\nHealth ${player.health} / 99`}
+      on:clicked={() => {
+        if (!disabled) {
+          dispatch("clickAvatar", { name: player.name });
+        }
+      }}
+    >
+      <div class="avatarContainer">
+        <span class="label">{idx + 1}.</span>
+        <AvatarDisplay
+          name={player.name}
+          health={player.health}
+          me={player.name === me}
+          owner={player.name === owner}
+        />
+      </div>
+    </Button>
+  {/each}
 </div>
 
 <style>
@@ -58,16 +50,6 @@
     top: 0;
     left: 0;
     font-weight: bold;
-  }
-
-  .scroll {
-    overflow-y: auto;
-    pointer-events: initial;
-
-    min-height: 0;
-    max-height: 100%;
-    min-width: 0;
-    max-width: 100%;
   }
 
   .flex {
@@ -86,13 +68,9 @@
   }
 
   @media only screen and (max-width: 750px) {
-    .scroll {
-      overflow-x: auto;
-    }
-
     .flex {
       flex-direction: row;
-      align-items: flex-start;
+      align-items: flex-end;
       justify-content: flex-start;
       font-size: 0.7em;
     }

@@ -30,7 +30,7 @@
       >
     {:else if "clipboard" in navigator}
       <Button
-        style="width: 8.5em;"
+        style="width: 8em;"
         on:clicked={() =>
           navigator.clipboard.writeText(
             `${location.protocol}//${location.host}${inviteUrl}`
@@ -70,7 +70,7 @@
   />
 {/if}
 
-<DifficultyPanel {state}/>
+<DifficultyPanel {state} />
 
 <style>
   h1 {

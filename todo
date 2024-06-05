@@ -1,5 +1,4 @@
 don't crash the entire server when there's an error
-remove pointer events none default
 remove all the on:scroll|stopPropagation using `use` or styled components
 How to play
 GitHub link
@@ -7,6 +6,7 @@ load testing
 google / social media headers
 other osrs font
 restyle buttons to be more like osrs?
+disable double click zoom
 
 Varlamore
 Prevent cheating
@@ -19,6 +19,9 @@ show current rank in round active
 scroll windows should have gradient at end
 Dynamic imports to reduce chunk size
 animations
+label every poly with the reason why it is a valid answer
+switch to div-based markers
+generate my own map without icons except the important ones
 
 smaller mobile layout
 test visuals at

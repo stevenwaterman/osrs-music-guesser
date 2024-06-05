@@ -22,7 +22,6 @@
     justify-self: center;
     min-height: 0;
     max-height: 100%;
-    pointer-events: initial;
 
     display: flex;
   }

@@ -8,6 +8,7 @@
   import RoundSummary from "./RoundSummary.svelte";
   import { summariseGame } from "./summarise";
   import GameOverWikiDisplay from "./GameOverWikiDisplay.svelte";
+  import Scroll from "../shared/Scroll.svelte";
 
   export let state: ActiveState<"GameOver">;
   $: summary = summariseGame(state);
@@ -37,14 +38,7 @@
 {/if}
 
 <div class="rounds" in:scale>
-  <h2>Rounds</h2>
-
-  <div
-    class="roundsScroll"
-    on:scroll|stopPropagation
-    on:wheel|stopPropagation
-    on:touchstart|stopPropagation
-  >
+  <Scroll mobile="horizontal">
     <div class="roundsFlex">
       {#each summary.songs as song, idx}
         <RoundSummary
@@ -55,7 +49,7 @@
         />
       {/each}
     </div>
-  </div>
+  </Scroll>
 </div>
 
 {#if state.game.type !== "singleplayer"}
@@ -69,7 +63,10 @@
 {/if}
 
 <GameOverAudio songs={summary.songs} />
-<GameOverWikiDisplay songs={summary.songs} singleplayer={state.game.type === "singleplayer"} />
+<GameOverWikiDisplay
+  songs={summary.songs}
+  singleplayer={state.game.type === "singleplayer"}
+/>
 
 <style>
   .title {
@@ -81,36 +78,30 @@
   }
 
   .rounds {
+    grid-column: 1;
+    grid-row: 2 / 6;
+    align-self: flex-start;
+    justify-self: flex-start;
+
+    min-height: 0;
+    max-height: 100%;
+    min-width: 0;
+    max-width: 100%;
+
     display: flex;
     flex-direction: column;
     gap: 0.5em;
 
-    grid-column: 1;
-    grid-row: 2 / 6;
+    justify-content: center;
+    align-items: flex-start;
 
-    align-self: flex-start;
-    justify-self: flex-start;
-
-    max-height: 100%;
-    max-width: 100%;
-  }
-
-  .roundsScroll {
-    min-width: 0;
-    max-width: 100%;
-    min-height: 0;
-    max-height: 100%;
-
-    overflow: auto;
-    pointer-events: initial;
+    margin-top: -1em;
   }
 
   .roundsFlex {
     display: flex;
     flex-direction: column;
     gap: 0.5em;
-    margin: auto;
-    width: fit-content;
   }
 
   .rank {
@@ -123,12 +114,15 @@
     .rounds {
       grid-column: 1 / 4;
       grid-row: 2;
-      width: 100%;
-      font-size: 0.8em;
-    }
 
-    .rounds h2 {
-      display: none;
+      align-self: flex-start;
+      justify-self: center;
+      font-size: 0.8em;
+      margin-top: 0;
+
+      margin-left: -1em;
+      margin-right: -1em;
+      max-width: 100dvw;
     }
 
     .roundsFlex {

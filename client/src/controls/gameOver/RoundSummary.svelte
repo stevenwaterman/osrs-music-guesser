@@ -125,8 +125,10 @@
 <style>
   .container {
     font-weight: normal;
-    padding: 0.5em;
     min-height: fit-content;
+    position: relative;
+    margin: 0.5em;
+    width: 8em;
   }
 
   p {
