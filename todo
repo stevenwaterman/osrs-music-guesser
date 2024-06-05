@@ -1,19 +1,21 @@
 Muted / Low volume warning
-Dynamic imports to reduce chunk size
 don't crash the entire server when there's an error
 remove pointer events none default
 remove all the on:scroll|stopPropagation using `use` or styled components
-animations
-scroll windows should have gradient at end
-
 How to play
 GitHub link
+
 Varlamore
 Prevent cheating
 song release date
 Singleplayer highscores
 Share link to same songs
 Way to report bugs / song issues
+highlight and scroll ranking / leaderboard entry into view when you hover / tap over one of their markers, and vice-versa
+show current rank in round active
+scroll windows should have gradient at end
+Dynamic imports to reduce chunk size
+animations
 
 
 smaller mobile layout
