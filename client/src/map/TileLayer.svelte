@@ -14,7 +14,7 @@
       x <= 71
     ) {
       // Priff
-      return `https://maps.runescape.wiki/osrs/versions/2024-05-15_a/tiles/rendered/29/${zoom}/0_${
+      return `https://maps.runescape.wiki/osrs/versions/2024-10-16_b/tiles/rendered/29/${zoom}/0_${
         x + 32
       }_${adjustedY + 86}.png`;
     }
@@ -26,14 +26,14 @@
       x <= 35
     ) {
       // Priff
-      return `https://maps.runescape.wiki/osrs/versions/2024-05-15_a/tiles/rendered/29/${zoom}/0_${
+      return `https://maps.runescape.wiki/osrs/versions/2024-10-16_b/tiles/rendered/29/${zoom}/0_${
         x + 16
       }_${adjustedY + 43}.png`;
     }
 
     let layer = 0;
 
-    return `https://maps.runescape.wiki/osrs/versions/2024-05-15_a/tiles/rendered/${layer}/${zoom}/0_${x}_${adjustedY}.png`;
+    return `https://maps.runescape.wiki/osrs/versions/2024-10-16_b/tiles/rendered/${layer}/${zoom}/0_${x}_${adjustedY}.png`;
   }
 
   $: tileLayer = L.tileLayer("{tileUrl}", {

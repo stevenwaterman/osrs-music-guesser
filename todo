@@ -1,12 +1,11 @@
 don't crash the entire server when there's an error
-remove all the on:scroll|stopPropagation using `use` or styled components
 How to play
 GitHub link
 load testing
 google / social media headers
 other osrs font
 restyle buttons to be more like osrs?
-disable double click zoom
+quitting should make you lose
 
 Varlamore
 Prevent cheating
